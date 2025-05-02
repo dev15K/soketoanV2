@@ -12,6 +12,11 @@
             </ol>
         </nav>
     </div>
+    @if(session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <section class="section">
         <div class="col-12">
             <div class="card recent-sales overflow-auto">

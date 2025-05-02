@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\admin\AdminHomeController;
+use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
 use App\Http\Controllers\admin\AdminSettingController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,14 @@ Route::group(['prefix' => 'nha-cung-cap'], function () {
     Route::post('/store', [AdminNhaCungCapController::class, 'store'])->name('admin.nha.cung.cap.store');
     Route::put('/update/{id}', [AdminNhaCungCapController::class, 'update'])->name('admin.nha.cung.cap.update');
     Route::delete('/delete/{id}', [AdminNhaCungCapController::class, 'delete'])->name('admin.nha.cung.cap.delete');
+});
+
+Route::group(['prefix' => 'nguyen-lieu-tho'], function () {
+    Route::get('/index', [AdminNguyenLieuThoController::class, 'index'])->name('admin.nguyen.lieu.tho.index');
+    Route::get('/detail/{id}', [AdminNguyenLieuThoController::class, 'detail'])->name('admin.nguyen.lieu.tho.detail');
+    Route::post('/store', [AdminNguyenLieuThoController::class, 'store'])->name('admin.nguyen.lieu.tho.store');
+    Route::put('/update/{id}', [AdminNguyenLieuThoController::class, 'update'])->name('admin.nguyen.lieu.tho.update');
+    Route::delete('/delete/{id}', [AdminNguyenLieuThoController::class, 'delete'])->name('admin.nguyen.lieu.tho.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {

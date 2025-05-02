@@ -15,7 +15,7 @@
             </a>
             <ul id="categories-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a href="{{ route('admin.nguyen.lieu.tho.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Thô</span>
                     </a>
                 </li>

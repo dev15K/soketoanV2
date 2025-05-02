@@ -26,11 +26,11 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên khách hàng</label></h5>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nhà cung cấp</label></h5>
                     <div class="col-md-4">
                         <div class="input-group mb-2">
                             <input type="text" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm theo tên khách hàng">
+                                   placeholder="Tìm kiếm theo tên nhà cung cấp">
                             <div class="input-group-prepend">
                                 <button type="button" class="input-group-text">
                                     <i class="bi bi-search"></i>
