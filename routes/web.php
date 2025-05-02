@@ -39,9 +39,9 @@ Route::group(['prefix' => ''], function () {
     require_once __DIR__ . '/webapp/main.php';
 });
 
-Route::middleware(['auth'])->group(function () {
-    require_once __DIR__ . '/webapp/auth.php';
-});
+//Route::middleware(['auth'])->group(function () {
+//    require_once __DIR__ . '/webapp/auth.php';
+//});
 
 Route::group(['prefix' => 'admin', 'middleware' => ['webapp.admin']], function () {
     require_once __DIR__ . '/webapp/admin.php';

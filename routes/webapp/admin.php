@@ -11,22 +11,24 @@
 |
 */
 
-use App\Http\Controllers\admin\AdminAttributeController;
-use App\Http\Controllers\admin\AdminCategoryController;
-use App\Http\Controllers\admin\AdminConsultantController;
 use App\Http\Controllers\admin\AdminHomeController;
-use App\Http\Controllers\admin\AdminOrderController;
-use App\Http\Controllers\admin\AdminProductController;
-use App\Http\Controllers\admin\AdminPropertyController;
-use App\Http\Controllers\admin\AdminPurchaseController;
+use App\Http\Controllers\admin\AdminNhaCungCapController;
 use App\Http\Controllers\admin\AdminSettingController;
-use App\Http\Controllers\admin\AdminUserController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('admin.home');
 
 Route::group(['prefix' => 'app-settings'], function () {
     Route::get('/index', [AdminSettingController::class, 'index'])->name('admin.app.setting.index');
     Route::post('/store', [AdminSettingController::class, 'appSetting'])->name('admin.app.setting.store');
+});
+
+Route::group(['prefix' => 'nha-cung-cap'], function () {
+    Route::get('/index', [AdminNhaCungCapController::class, 'index'])->name('admin.nha.cung.cap.index');
+    Route::get('/detail/{id}', [AdminNhaCungCapController::class, 'detail'])->name('admin.nha.cung.cap.detail');
+    Route::post('/store', [AdminNhaCungCapController::class, 'store'])->name('admin.nha.cung.cap.store');
+    Route::put('/update/{id}', [AdminNhaCungCapController::class, 'update'])->name('admin.nha.cung.cap.update');
+    Route::delete('/delete/{id}', [AdminNhaCungCapController::class, 'delete'])->name('admin.nha.cung.cap.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {

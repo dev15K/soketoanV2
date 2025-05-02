@@ -7,11 +7,13 @@ use BenSampo\Enum\Enum;
 /**
  * @method static static ACTIVE()
  * @method static static INACTIVE()
+ * @method static static BLOCKED()
  * @method static static DELETED()
  */
-final class AttributeStatus extends Enum
+final class TrangThaiNhaCungCap extends Enum
 {
-    const ACTIVE = 'ĐANG HOẠT ĐỘNG';
+    const ACTIVE = 'HOẠT ĐỘNG';
     const INACTIVE = 'KHÔNG HOẠT ĐỘNG';
+    const BLOCKED = 'ĐÃ KHOÁ';
     const DELETED = 'ĐÃ XOÁ';
 }
