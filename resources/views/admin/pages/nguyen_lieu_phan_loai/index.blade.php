@@ -128,7 +128,9 @@
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
-
+                @php
+                    $total_nu_cao_cap = $total_nu_vip = $total_nhang = $total_vong = $total_tam_tre = $total_keo = $total_nau_dau = $total_ghi_chu = 0;
+                @endphp
                 <div class="card-body">
 
                     <table class="table table-hover">
@@ -204,6 +206,25 @@
                             </tr>
                         @endforeach
                         </tbody>
+                        <tfoot class="bg-primary bg-opacity-10">
+                        <tr>
+                            <th scope="col">Tổng:</th>
+                            <th scope="col">{{ number_format($datas->sum('nu_cao_cap')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nu_vip')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nhang')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('vong')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('tam_tre')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('keo')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nau_dau')) }} kg</th>
+                            <th scope="col"></th>
+                            <th scope="col">{{ number_format($datas->sum('tong_khoi_luong')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('khoi_luong_ban_dau')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('khoi_luong_hao_hut')) }} kg</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                        </tfoot>
                     </table>
 
                     {{ $datas->links('pagination::bootstrap-5') }}
