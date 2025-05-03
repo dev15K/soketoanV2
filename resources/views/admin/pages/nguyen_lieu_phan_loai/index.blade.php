@@ -26,7 +26,8 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu phân loại</label>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu phân
+                            loại</label>
                     </h5>
                     <div class="col-md-4">
                         <div class="input-group mb-2">
@@ -50,21 +51,16 @@
 
                 <div class="card-body">
                     <h5 class="card-title">Thêm mới Kho nguyên liệu phân loại</h5>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.tho.store') }}">
+                    <form method="post" action="{{ route('admin.nguyen.lieu.phan.loai.store') }}">
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
-                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
-                                   required>
-                        </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="nha_cung_cap_id">Nhà cung cấp</label>
-                                <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control">
+                                <label for="nguyen_lieu_tho_id">Nguyên liệu thô</label>
+                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
                                     @foreach($nlthos as $nltho)
                                         <option value="{{ $nltho->id }}">{{ $nltho->ten_nguyen_lieu }}</option>
                                     @endforeach
@@ -72,72 +68,49 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="loai">Loại</label>
-                                <input type="text" class="form-control" id="loai" name="loai" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="dieu_kien_luu_tru">Điều kiện lưu trữ</label>
-                                <input type="text" class="form-control" id="dieu_kien_luu_tru" name="dieu_kien_luu_tru"
+                            <div class="form-group col-md-3">
+                                <label for="nu_cao_cap">Nụ cao cấp NCC</label>
+                                <input type="number" min="0" class="form-control" id="nu_cao_cap" name="nu_cao_cap"
                                        required>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="nguon_goc">Nguồn gốc</label>
-                                <input type="text" class="form-control" id="nguon_goc" name="nguon_goc" required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="khoi_luong">Khối lượng(kg)</label>
-                                <input type="number" min="0" class="form-control" id="khoi_luong" name="khoi_luong"
+                            <div class="form-group col-md-3">
+                                <label for="nu_vip">Nụ VIP(NVIP)</label>
+                                <input type="number" min="0" class="form-control" id="nu_vip" name="nu_vip"
                                        required>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="kich_thuoc">Kích thước</label>
-                                <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc"
-                                       required>
+                            <div class="form-group col-md-3">
+                                <label for="nhang">Nhang(NLN)</label>
+                                <input type="number" min="0" class="form-control" id="nhang" name="nhang" required>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="do_kho">Độ khô</label>
-                                <input type="number" max="100" min="0" class="form-control" id="do_kho" name="do_kho"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="chi_phi_mua">Chi phí mua</label>
-                                <input type="number" class="form-control" id="chi_phi_mua" name="chi_phi_mua"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
-                                <input type="text" class="form-control" id="phuong_thuc_thanh_toan"
-                                       name="phuong_thuc_thanh_toan"
+                            <div class="form-group col-md-3">
+                                <label for="vong">Vòng(NLV)</label>
+                                <input type="number" min="0" class="form-control" id="vong" name="vong"
                                        required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label for="cong_no">Công nợ</label>
-                                <input type="number" class="form-control" id="cong_no" name="cong_no" required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="nhan_su_xu_li">Nhân sự xử lý</label>
-                                <input type="text" class="form-control" id="nhan_su_xu_li" name="nhan_su_xu_li"
+                                <label for="tam_tre">Tăm tre</label>
+                                <input type="number" min="0" class="form-control" id="tam_tre" name="tam_tre"
                                        required>
                             </div>
                             <div class="form-group col-md-3">
-                                <label for="thoi_gian_phan_loai">Thời gian phân loại</label>
-                                <input type="date" class="form-control" id="thoi_gian_phan_loai"
-                                       name="thoi_gian_phan_loai" required>
+                                <label for="keo">Keo</label>
+                                <input type="number" min="0" class="form-control" id="keo" name="keo"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="nau_dau">Nấu dầu</label>
+                                <input type="number" min="0" class="form-control" id="nau_dau" name="nau_dau"
+                                       required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}</option>
                                     <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
@@ -161,26 +134,36 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="8%">
+                            <col width="8%">
+                            <col width="8%">
+                            <col width="8%">
+                            <col width="8%">
                             <col width="x">
                             <col width="8%">
                             <col width="8%">
-                            <col width="8%">
-                            <col width="8%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="8%">
-                            <col width="10%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Tên nguyên liệu</th>
-                            <th scope="col">Nguồn gốc</th>
-                            <th scope="col">Khối lượng</th>
-                            <th scope="col">Kích thước</th>
-                            <th scope="col">Công nợ</th>
+                            <th scope="col">Nụ cao cấp</th>
+                            <th scope="col">Nụ VIP</th>
+                            <th scope="col">Nhang</th>
+                            <th scope="col">Vòng</th>
+                            <th scope="col">Tăm tre</th>
+                            <th scope="col">Keo</th>
+                            <th scope="col">Nấu dầu</th>
                             <th scope="col">Chi phí mua</th>
-                            <th scope="col">Phương thức thanh toán</th>
+                            <th scope="col">Tổng khối lượng</th>
+                            <th scope="col">Khối lượng ban đầu</th>
+                            <th scope="col">Khối lượng hao hụt</th>
+                            <th scope="col">Giá sau phân loại</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
@@ -189,21 +172,26 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->ten_nguyen_lieu }}</td>
-                                <td>{{ $data->nguon_goc }}</td>
-                                <td>{{ number_format($data->khoi_luong) }} kg</td>
-                                <td>{{ $data->kich_thuoc }}</td>
-                                <td>{{ number_format($data->cong_no) }} VND</td>
+                                <td>{{ number_format($data->nu_cao_cap) }} kg</td>
+                                <td>{{ number_format($data->nu_vip) }} kg</td>
+                                <td>{{ number_format($data->nhang) }} kg</td>
+                                <td>{{ number_format($data->vong) }} kg</td>
+                                <td>{{ number_format($data->tam_tre) }} kg</td>
+                                <td>{{ number_format($data->keo) }} kg</td>
+                                <td>{{ number_format($data->nau_dau) }} kg</td>
                                 <td>{{ number_format($data->chi_phi_mua) }} VND</td>
-                                <td>{{ $data->phuong_thuc_thanh_toan }}</td>
+                                <td>{{ number_format($data->tong_khoi_luong) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong_ban_dau) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong_hao_hut) }} kg</td>
+                                <td>{{ number_format($data->gia_sau_phan_loai) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.nguyen.lieu.tho.detail', $data->id) }}"
+                                        <a href="{{ route('admin.nguyen.lieu.phan.loai.detail', $data->id) }}"
                                            class="btn btn-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="{{ route('admin.nguyen.lieu.tho.delete', $data->id) }}"
+                                        <form action="{{ route('admin.nguyen.lieu.phan.loai.delete', $data->id) }}"
                                               method="post">
                                             @csrf
                                             @method('DELETE')

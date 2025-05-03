@@ -105,7 +105,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
             $nguyen_lieu_phan_loai = $this->saveData($nguyen_lieu_phan_loai, $request);
             $nguyen_lieu_phan_loai->save();
 
-            return redirect()->route('admin.nguyen.lieu.tho.index')->with('success', 'Chỉnh sửa nguyên liệu phân loại thành công');
+            return redirect()->route('admin.nguyen.lieu.phan.loai.index')->with('success', 'Chỉnh sửa nguyên liệu phân loại thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
