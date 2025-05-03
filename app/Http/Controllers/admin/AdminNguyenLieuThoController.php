@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuTho;
+use App\Enums\TrangThaiNhaCungCap;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuTho;
 use App\Models\NhaCungCaps;
@@ -17,7 +18,7 @@ class AdminNguyenLieuThoController extends Controller
             ->orderByDesc('id')
             ->paginate(20);
 
-        $nccs = NhaCungCaps::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+        $nccs = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
             ->orderByDesc('id')
             ->get();
         return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs'));
@@ -30,7 +31,7 @@ class AdminNguyenLieuThoController extends Controller
             return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thô');
         }
 
-        $nccs = NhaCungCaps::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+        $nccs = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
             ->orderByDesc('id')
             ->get();
         return view('admin.pages.nguyen_lieu_tho.detail', compact('nguyen_lieu_tho', 'nccs'));

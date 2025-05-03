@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ route('admin.nguyen.lieu.phan.loai.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Phân loại</span>
                     </a>
                 </li>
