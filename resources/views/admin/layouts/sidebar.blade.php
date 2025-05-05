@@ -3,39 +3,48 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('admin.home') }}">
+            <a class="nav-link {{ Request::routeIs('admin.home') ? 'active' : 'collapsed' }}"
+               href="{{ route('admin.home') }}">
                 <i class="bi bi-grid"></i>
                 <span>Trang quản trị</span>
             </a>
         </li><!-- End Dashboard Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#categories-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ Request::routeIs('admin.nguyen.lieu.*') ? '' : 'collapsed' }}"
+               data-bs-target="#categories-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-card-list"></i><span>Quản lý kho</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="categories-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="categories-nav"
+                class="nav-content collapse {{ Request::routeIs('admin.nguyen.lieu.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ route('admin.nguyen.lieu.tho.index') }}">
+                    <a class="{{ Request::routeIs('admin.nguyen.lieu.tho.index') || Request::routeIs('admin.nguyen.lieu.tho.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.nguyen.lieu.tho.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Thô</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.nguyen.lieu.phan.loai.index') }}">
+                    <a class="{{ Request::routeIs('admin.nguyen.lieu.phan.loai.index') || Request::routeIs('admin.nguyen.lieu.phan.loai.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.nguyen.lieu.phan.loai.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Phân loại</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.nguyen.lieu.tinh.index') }}">
+                    <a class="{{ Request::routeIs('admin.nguyen.lieu.tinh.index') || Request::routeIs('admin.nguyen.lieu.tinh.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.nguyen.lieu.tinh.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Tinh</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.nguyen.lieu.san.xuat.index') }}">
+                    <a class="{{ Request::routeIs('admin.nguyen.lieu.san.xuat.index') || Request::routeIs('admin.nguyen.lieu.san.xuat.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.nguyen.lieu.san.xuat.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Sản xuất</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a class="{{ Request::routeIs('admin.nguyen.lieu.thanh.pham.index') || Request::routeIs('admin.nguyen.lieu.thanh.pham.detail') ? 'active' : '' }}"
+                       href="#">
                         <i class="bi bi-circle"></i><span>Kho NL Thành phẩm</span>
                     </a>
                 </li>
@@ -43,13 +52,14 @@
         </li><!-- End Categories Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#attributes-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ Request::routeIs('admin.categories.*') ? '' : 'collapsed' }}"
+               data-bs-target="#attributes-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>Quản lý sản phẩm</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="attributes-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="">
+                    <a href="#">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
@@ -57,13 +67,17 @@
         </li><!-- End Attributes Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#properties-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ Request::routeIs('admin.nha.cung.cap.*') ? '' : 'collapsed' }}"
+               data-bs-target="#properties-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-journal-text"></i><span>Quản lí nhà cung cấp</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="properties-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="properties-nav"
+                class="nav-content collapse {{ Request::routeIs('admin.nha.cung.cap.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ route('admin.nha.cung.cap.index') }}">
+                    <a class="{{ Request::routeIs('admin.nha.cung.cap.index') || Request::routeIs('admin.nha.cung.cap.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.nha.cung.cap.index') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
@@ -71,13 +85,14 @@
         </li><!-- End Properties Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ Request::routeIs('admin.categories.*') ? '' : 'collapsed' }}"
+               data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Bán hàng</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="products-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="">
+                    <a href="#">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
@@ -85,12 +100,16 @@
         </li><!-- End Products Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#orders-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-person-vcard"></i><span>Quản lý khách hàng</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link {{ Request::routeIs('admin.khach.hang.*') ? '' : 'collapsed' }}"
+               data-bs-target="#orders-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-person-vcard"></i><span>Quản lý khách hàng</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="orders-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="orders-nav" class="nav-content collapse {{ Request::routeIs('admin.khach.hang.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ route('admin.khach.hang.index') }}">
+                    <a class="{{ Request::routeIs('admin.khach.hang.index') || Request::routeIs('admin.khach.hang.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.khach.hang.index') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
@@ -98,7 +117,8 @@
         </li><!-- End Orders Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#news-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ Request::routeIs('admin.categories.*') ? '' : 'collapsed' }}"
+               data-bs-target="#news-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-newspaper"></i><span>Sổ quỹ</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="news-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
@@ -111,17 +131,22 @@
         </li><!-- End News Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#purchases-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ Request::routeIs('admin.nhan.vien.*') ? '' : 'collapsed' }}"
+               data-bs-target="#purchases-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-people"></i><span>Quản lý nhân sự</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="purchases-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="purchases-nav"
+                class="nav-content collapse {{ Request::routeIs('admin.nhan.vien.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ route('admin.nhan.vien.list') }}">
+                    <a class="{{ Request::routeIs('admin.nhan.vien.list') || Request::routeIs('admin.nhan.vien.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.nhan.vien.list') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.nhan.vien.create') }}">
+                    <a class="{{ Request::routeIs('admin.nhan.vien.create') ? 'active' : '' }}"
+                       href="{{ route('admin.nhan.vien.create') }}">
                         <i class="bi bi-circle"></i><span>Thêm mới</span>
                     </a>
                 </li>
@@ -129,13 +154,14 @@
         </li><!-- End Purchases Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#consultants-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ Request::routeIs('admin.categories.*') ? '' : 'collapsed' }}"
+               data-bs-target="#consultants-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-question-circle"></i><span>Lương + OKR</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="consultants-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="">
+                    <a href="#">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
@@ -143,7 +169,8 @@
         </li><!-- End Consultants Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('admin.app.setting.index') }}">
+            <a class="nav-link {{ Request::routeIs('admin.app.setting.index') ? '' : 'collapsed' }}"
+               href="{{ route('admin.app.setting.index') }}">
                 <i class="bi bi-gear"></i>
                 <span>Cài đặt website</span>
             </a>
@@ -152,14 +179,16 @@
         <li class="nav-heading">Trang</li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('admin.profile.index') }}">
+            <a class="nav-link {{ Request::routeIs('admin.profile.index') ? '' : 'collapsed' }}"
+               href="{{ route('admin.profile.index') }}">
                 <i class="bi bi-person"></i>
                 <span>Trang cá nhân</span>
             </a>
         </li><!-- End Profile Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('auth.logout') }}">
+            <a class="nav-link {{ Request::routeIs('auth.logout') ? '' : 'collapsed' }}"
+               href="{{ route('auth.logout') }}">
                 <i class="bi bi-box-arrow-in-right"></i>
                 <span>Đăng xuất</span>
             </a>
