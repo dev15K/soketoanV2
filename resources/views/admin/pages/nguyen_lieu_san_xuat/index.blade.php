@@ -1,16 +1,14 @@
-@php use App\Enums\TrangThaiNguyenLieuTho; @endphp
-@php use Carbon\Carbon; @endphp
 @extends('admin.layouts.master')
 @section('title')
-    Kho nguyên liệu tinh
+    Kho nguyên liệu sản xuất
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Kho nguyên liệu tinh</h1>
+        <h1>Kho nguyên liệu sản xuất</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active"> Kho nguyên liệu tinh</li>
+                <li class="breadcrumb-item active"> Kho nguyên liệu sản xuất</li>
             </ol>
         </nav>
     </div>
@@ -28,12 +26,12 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu tinh</label>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu sản xuất</label>
                     </h5>
                     <div class="col-md-4">
                         <div class="input-group mb-2">
                             <input type="text" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm theo tên nguyên liệu tinh">
+                                   placeholder="Tìm kiếm theo tên nguyên liệu sản xuất">
                             <div class="input-group-prepend">
                                 <button type="button" class="input-group-text">
                                     <i class="bi bi-search"></i>
@@ -51,8 +49,8 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Thêm mới Kho nguyên liệu tinh</h5>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.tinh.store') }}">
+                    <h5 class="card-title">Thêm mới Kho nguyên liệu sản xuất</h5>
+                    <form method="post" action="{{ route('admin.nguyen.lieu.san.xuat.store') }}">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -63,9 +61,9 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        value="{{ TrangThaiNguyenLieuTho::ACTIVE() }}">{{ TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
                                     <option
-                                        value="{{ TrangThaiNguyenLieuTho::INACTIVE() }}">{{ TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
@@ -80,15 +78,17 @@
                             </div>
                             <table class="table table-bordered">
                                 <colgroup>
-                                    <col width="40%">
-                                    <col width="40%">
+                                    <col width="10%">
+                                    <col width="35%">
+                                    <col width="35%">
                                     <col width="15%">
                                     <col width="x">
                                 </colgroup>
                                 <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Nguyên liệu phân loại</th>
-                                    <th scope="col">Tên NVL sau phân loại</th>
+                                    <th scope="col">Loại nguyên liệu</th>
+                                    <th scope="col">Nguyên liệu</th>
+                                    <th scope="col">Thành phần</th>
                                     <th scope="col">Khối lượng</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -96,10 +96,16 @@
                                 <tbody id="tbodyListNL" class="text-center">
                                 <tr>
                                     <td>
+                                        <select class="form-control" name="loai_nguyen_lieu_ids[]">
+                                            <option value="nguyen_lieu_tinh">Nguyên liệu Tinh</option>
+                                            <option value="nguyen_lieu_phan_loai">Nguyên liệu Phân loại</option>
+                                        </select>
+                                    </td>
+                                    <td>
                                         <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
                                             @foreach($nlphanloais as $nlphanloai)
                                                 <option
-                                                    value="{{ $nlphanloai->id }}">{{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
+                                                        value="{{ $nlphanloai->id }}">{{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
                                                     / {{ number_format($nlphanloai->tong_khoi_luong) }} kg
                                                     ~ {{ number_format($nlphanloai->gia_sau_phan_loai) }} VND
                                                 </option>
@@ -130,30 +136,7 @@
         </div>
 
         <script>
-            const baseHtml = `<tr>
-                                    <td>
-                                        <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
-                                            @foreach($nlphanloais as $nlphanloai)
-            <option
-                value="{{ $nlphanloai->id }}">{{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
-            / {{ number_format($nlphanloai->tong_khoi_luong) }} kg
-                                                    ~ {{ number_format($nlphanloai->gia_sau_phan_loai) }} VND
-                                                </option>
-                                            @endforeach
-            </select>
-        </td>
-        <td>
-            <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
-        </td>
-        <td>
-            <input type="number" min="0" name="khoi_luongs[]" class="form-control" required>
-        </td>
-        <td>
-            <button type="button" class="btn btn-danger btn-sm" onclick="removeItems(this)">
-                <i class="bi bi-trash"></i>
-            </button>
-        </td>
-    </tr>`;
+            const baseHtml = ``;
 
             $(document).ready(function () {
 
@@ -198,18 +181,18 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
                                 <td>{{ number_format($data->tong_khoi_luong) }} kg</td>
                                 <td>{{ number_format($data->gia_tien) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.nguyen.lieu.tinh.detail', $data->id) }}"
+                                        <a href="{{ route('admin.nguyen.lieu.san.xuat.detail', $data->id) }}"
                                            class="btn btn-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="{{ route('admin.nguyen.lieu.tinh.delete', $data->id) }}"
+                                        <form action="{{ route('admin.nguyen.lieu.san.xuat.delete', $data->id) }}"
                                               method="post">
                                             @csrf
                                             @method('DELETE')

@@ -30,7 +30,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ route('admin.nguyen.lieu.san.xuat.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Sản xuất</span>
                     </a>
                 </li>

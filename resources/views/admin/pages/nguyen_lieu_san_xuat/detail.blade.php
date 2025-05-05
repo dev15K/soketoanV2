@@ -1,16 +1,14 @@
-@php use Carbon\Carbon; @endphp
-@php use App\Enums\TrangThaiNguyenLieuTho; @endphp
 @extends('admin.layouts.master')
 @section('title')
-    Chỉnh sửa Kho nguyên liệu tinh
+    Chỉnh sửa Kho nguyên liệu sản xuất
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Chỉnh sửa Kho nguyên liệu tinh</h1>
+        <h1>Chỉnh sửa Kho nguyên liệu sản xuất</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active">Chỉnh sửa Kho nguyên liệu tinh</li>
+                <li class="breadcrumb-item active">Chỉnh sửa Kho nguyên liệu sản xuất</li>
             </ol>
         </nav>
     </div>
@@ -24,7 +22,7 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Chỉnh sửa Kho nguyên liệu tinh</h5>
+                    <h5 class="card-title">Chỉnh sửa Kho nguyên liệu sản xuất</h5>
                     <form method="post" action="{{ route('admin.nguyen.lieu.tinh.update', $nguyen_lieu_tinh) }}">
                         @method('PUT')
                         @csrf
@@ -32,18 +30,18 @@
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ Carbon::parse($nguyen_lieu_tinh->ngay)->format('Y-m-d') }}"
+                                       value="{{ \Carbon\Carbon::parse($nguyen_lieu_tinh->ngay)->format('Y-m-d') }}"
                                        required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        {{ $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}
-                                        value="{{ TrangThaiNguyenLieuTho::ACTIVE() }}">{{ TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                        {{ $nguyen_lieu_tinh->trang_thai == \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
                                     <option
-                                        {{ $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}
-                                        value="{{ TrangThaiNguyenLieuTho::INACTIVE() }}">{{ TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                        {{ $nguyen_lieu_tinh->trang_thai == \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>

@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\admin\AdminHomeController;
 use App\Http\Controllers\admin\AdminNguyenLieuPhanLoaiController;
+use App\Http\Controllers\admin\AdminNguyenLieuSanXuatController;
 use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNguyenLieuTinhController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
@@ -56,6 +57,14 @@ Route::group(['prefix' => 'nguyen-lieu-tinh'], function () {
     Route::post('/store', [AdminNguyenLieuTinhController::class, 'store'])->name('admin.nguyen.lieu.tinh.store');
     Route::put('/update/{id}', [AdminNguyenLieuTinhController::class, 'update'])->name('admin.nguyen.lieu.tinh.update');
     Route::delete('/delete/{id}', [AdminNguyenLieuTinhController::class, 'delete'])->name('admin.nguyen.lieu.tinh.delete');
+});
+
+Route::group(['prefix' => 'nguyen-lieu-san-xuat'], function () {
+    Route::get('/index', [AdminNguyenLieuSanXuatController::class, 'index'])->name('admin.nguyen.lieu.san.xuat.index');
+    Route::get('/detail/{id}', [AdminNguyenLieuSanXuatController::class, 'detail'])->name('admin.nguyen.lieu.san.xuat.detail');
+    Route::post('/store', [AdminNguyenLieuSanXuatController::class, 'store'])->name('admin.nguyen.lieu.san.xuat.store');
+    Route::put('/update/{id}', [AdminNguyenLieuSanXuatController::class, 'update'])->name('admin.nguyen.lieu.san.xuat.update');
+    Route::delete('/delete/{id}', [AdminNguyenLieuSanXuatController::class, 'delete'])->name('admin.nguyen.lieu.san.xuat.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {
