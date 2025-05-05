@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Schema;
 
@@ -37,6 +39,23 @@ if (!function_exists('setting')) {
     {
         if (Schema::hasTable('settings')) {
             return Setting::first();
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('getRoleUser')) {
+    function getRoleUser()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            $role_user = RoleUser::where('user_id', $user->id)->first();
+            if ($role_user) {
+                $role = Role::where('id', $role_user->role_id)->first();
+                return $role->name;
+            }
         }
 
         return null;

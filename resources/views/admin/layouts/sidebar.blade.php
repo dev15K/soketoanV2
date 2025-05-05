@@ -86,11 +86,11 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#orders-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-bar-chart"></i><span>Quản lý khách hàng</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-person-vcard"></i><span>Quản lý khách hàng</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="orders-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="">
+                    <a href="{{ route('admin.khach.hang.index') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
@@ -147,7 +147,7 @@
         <li class="nav-heading">Trang</li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
+            <a class="nav-link collapsed" href="{{ route('admin.profile.index') }}">
                 <i class="bi bi-person"></i>
                 <span>Trang cá nhân</span>
             </a>

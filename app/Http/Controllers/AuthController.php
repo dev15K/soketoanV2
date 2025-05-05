@@ -17,7 +17,7 @@ class AuthController extends Controller
     public function processLogin(Request $request)
     {
         if (Auth::check()) {
-            return redirect(route('home'));
+            return redirect(route('admin.home'));
         }
         $url_callback = $request->input('url_callback');
         return view('auth.login', compact('url_callback'));

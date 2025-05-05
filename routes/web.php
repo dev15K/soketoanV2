@@ -24,8 +24,6 @@ Route::fallback(function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::get('/login', [AuthController::class, 'processLogin'])->name('auth.processLogin');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-    Route::get('/register', [AuthController::class, 'processRegister'])->name('auth.processRegister');
-    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
 

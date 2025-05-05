@@ -12,12 +12,14 @@
 */
 
 use App\Http\Controllers\admin\AdminHomeController;
+use App\Http\Controllers\admin\AdminKhachHangController;
 use App\Http\Controllers\admin\AdminNguyenLieuPhanLoaiController;
 use App\Http\Controllers\admin\AdminNguyenLieuSanXuatController;
 use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNguyenLieuTinhController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
 use App\Http\Controllers\admin\AdminSettingController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('admin.home');
@@ -65,6 +67,20 @@ Route::group(['prefix' => 'nguyen-lieu-san-xuat'], function () {
     Route::post('/store', [AdminNguyenLieuSanXuatController::class, 'store'])->name('admin.nguyen.lieu.san.xuat.store');
     Route::put('/update/{id}', [AdminNguyenLieuSanXuatController::class, 'update'])->name('admin.nguyen.lieu.san.xuat.update');
     Route::delete('/delete/{id}', [AdminNguyenLieuSanXuatController::class, 'delete'])->name('admin.nguyen.lieu.san.xuat.delete');
+});
+
+Route::group(['prefix' => 'khach-hang'], function () {
+    Route::get('/index', [AdminKhachHangController::class, 'index'])->name('admin.khach.hang.index');
+    Route::get('/detail/{id}', [AdminKhachHangController::class, 'detail'])->name('admin.khach.hang.detail');
+    Route::post('/store', [AdminKhachHangController::class, 'store'])->name('admin.khach.hang.store');
+    Route::put('/update/{id}', [AdminKhachHangController::class, 'update'])->name('admin.khach.hang.update');
+    Route::delete('/delete/{id}', [AdminKhachHangController::class, 'delete'])->name('admin.khach.hang.delete');
+});
+
+Route::group(['prefix' => 'profile'], function () {
+    Route::get('/index', [UserController::class, 'index'])->name('admin.profile.index');
+    Route::post('/change-info', [UserController::class, 'changeInfo'])->name('admin.profile.change.info');
+    Route::post('/change-password', [UserController::class, 'changePassword'])->name('admin.profile.change.password');
 });
 
 Route::group(['prefix' => 'api'], function () {
