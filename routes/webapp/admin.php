@@ -19,6 +19,7 @@ use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNguyenLieuTinhController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
 use App\Http\Controllers\admin\AdminSettingController;
+use App\Http\Controllers\admin\AdminThongTinController;
 use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -91,6 +92,14 @@ Route::group(['prefix' => 'nhan-vien'], function () {
     Route::post('/store', [AdminUserController::class, 'store'])->name('admin.nhan.vien.store');
     Route::put('/update/{id}', [AdminUserController::class, 'update'])->name('admin.nhan.vien.update');
     Route::delete('/delete/{id}', [AdminUserController::class, 'delete'])->name('admin.nhan.vien.delete');
+});
+
+Route::group(['prefix' => 'thong-tin'], function () {
+    Route::get('/index', [AdminThongTinController::class, 'index'])->name('admin.thong.tin.index');
+    Route::get('/detail/{id}', [AdminThongTinController::class, 'detail'])->name('admin.thong.tin.detail');
+    Route::post('/store', [AdminThongTinController::class, 'store'])->name('admin.thong.tin.store');
+    Route::put('/update/{id}', [AdminThongTinController::class, 'update'])->name('admin.thong.tin.update');
+    Route::delete('/delete/{id}', [AdminThongTinController::class, 'delete'])->name('admin.thong.tin.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {

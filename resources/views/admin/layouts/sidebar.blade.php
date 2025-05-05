@@ -154,14 +154,17 @@
         </li><!-- End Purchases Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('admin.categories.*') ? '' : 'collapsed' }}"
+            <a class="nav-link {{ Request::routeIs('admin.thong.tin.*') ? '' : 'collapsed' }}"
                data-bs-target="#consultants-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-question-circle"></i><span>Lương + OKR</span><i
                     class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="consultants-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="consultants-nav"
+                class="nav-content collapse {{ Request::routeIs('admin.thong.tin.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a class="{{ Request::routeIs('admin.thong.tin.index') || Request::routeIs('admin.thong.tin.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.thong.tin.index') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
