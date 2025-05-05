@@ -1,62 +1,77 @@
 @extends('admin.layouts.master')
 @section('title')
-    Dashboard
+    Chỉnh sửa nhân viên
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Dashboard</h1>
+        <h1>Chỉnh sửa nhân viên</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
+                <li class="breadcrumb-item active">Chỉnh sửa nhân viên</li>
             </ol>
         </nav>
     </div>
     <section class="section">
-        <form method="post" action="" enctype="multipart/form-data">
+        <form method="post" action="{{ route('admin.nhan.vien.update', $user) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="inputPassword4">Password</label>
-                    <input type="password" class="form-control" id="inputPassword4">
-                </div>
-            </div>
             <div class="form-group">
-                <label for="inputAddress">Address</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-            </div>
-            <div class="form-group">
-                <label for="inputAddress2">Address 2</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                <label for="full_name">Họ và tên</label>
+                <input type="text" class="form-control" id="full_name" name="full_name"
+                       value="{{ $user->full_name }}" required>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="inputCity">City</label>
-                    <input type="text" class="form-control" id="inputCity">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                           value="{{ $user->email }}" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="phone">Số điện thoại</label>
+                    <input type="text" class="form-control" id="phone" name="phone"
+                           value="{{ $user->phone }}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="password_confirm">Xác nhận mật khẩu</label>
+                    <input type="password" class="form-control" id="password_confirm" name="password_confirm">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address">Địa chỉ</label>
+                <input type="text" class="form-control" id="address" name="address" value="{{ $user->address }}">
+            </div>
+            <div class="form-group">
+                <label for="about">Giới thiệu</label>
+                <input type="text" class="form-control" id="about" name="about" value="{{ $user->about }}">
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="avatar">Ảnh</label>
+                    <input type="file" accept="image/*" class="form-control" id="avatar" name="avatar">
+                    <img src="{{ $user->avatar }}" alt="" width="100px" height="100px" class="mt-2">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="inputState">State</label>
-                    <select id="inputState" class="form-control">
-                        <option selected>Choose...</option>
-                        <option>...</option>
+                    <label for="room">Phòng ban</label>
+                    <input type="text" class="form-control" id="room" name="room"
+                           value="{{ $user->room }}" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="status">Trạng thái</label>
+                    <select id="status" name="status" class="form-control">
+                        <option {{ $user->status == \App\Enums\UserStatus::ACTIVE() ? 'selected' : '' }}
+                                value="{{ \App\Enums\UserStatus::ACTIVE() }}">{{ \App\Enums\UserStatus::ACTIVE() }}</option>
+                        <option {{ $user->status == \App\Enums\UserStatus::INACTIVE() ? 'selected' : '' }}
+                                value="{{ \App\Enums\UserStatus::INACTIVE() }}">{{ \App\Enums\UserStatus::INACTIVE() }}</option>
+                        <option {{ $user->status == \App\Enums\UserStatus::BLOCKED() ? 'selected' : '' }}
+                                value="{{ \App\Enums\UserStatus::BLOCKED() }}">{{ \App\Enums\UserStatus::BLOCKED() }}</option>
                     </select>
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="inputZip">Zip</label>
-                    <input type="text" class="form-control" id="inputZip">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                    <label class="form-check-label" for="gridCheck">
-                        Check me out
-                    </label>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Enums\RoleName;
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,7 @@ class AdminUserController extends Controller
             ->where('roles.name', '!=', RoleName::ADMIN())
             ->orderByDesc('users.id')
             ->select('users.*', 'roles.name as role_name')
-            ->get();
+            ->paginate(20);
         return view('admin.pages.users.list', compact('users'));
     }
 
@@ -41,6 +42,7 @@ class AdminUserController extends Controller
 
     public function store(Request $request)
     {
+        $newController = (new MainController());
         try {
             $user = new User();
 
@@ -51,31 +53,33 @@ class AdminUserController extends Controller
 
             $is_valid = User::checkEmail($email);
             if (!$is_valid) {
-                toast('Email has been used!', 'error', 'top-right');
+                toast('Email đã được sử dụng!', 'error', 'top-right');
                 return redirect()->back();
             }
 
             $is_valid = User::checkPhone($phone);
             if (!$is_valid) {
-                toast('Phone has been used!', 'error', 'top-right');
+                toast('Điện thoại đã được sử dụng!', 'error', 'top-right');
                 return redirect()->back();
             }
 
             if ($password != $password_confirm) {
-                toast('Passwords do not match!', 'error', 'top-right');
+                toast('Mật khẩu không khớp!', 'error', 'top-right');
                 return redirect()->back();
             }
 
             if (strlen($password) < 5) {
-                toast('Password must be at least 5 characters!', 'error', 'top-right');
+                toast('Mật khẩu phải có ít nhất 5 ký tự!', 'error', 'top-right');
                 return redirect()->back();
             }
 
             $user = $this->saveUser($request, $user);
             $user->save();
 
-            toast('User created successfully!', 'success', 'top-right');
-            return redirect()->route('admin.users.detail', ['id' => $user->id]);
+            $newController->saveRoleUser($user->id);
+
+            toast('Nhân viên đã được tạo thành công!', 'success', 'top-right');
+            return redirect()->route('admin.nhan.vien.list');
         } catch (\Exception $e) {
             toast($e->getMessage(), 'error', 'top-right');
             return redirect()->back();
@@ -100,7 +104,7 @@ class AdminUserController extends Controller
             if ($user->email != $email) {
                 $is_valid = User::checkEmail($email);
                 if (!$is_valid) {
-                    toast('Email has been used!', 'error', 'top-right');
+                    toast('Email đã được sử dụng!', 'error', 'top-right');
                     return redirect()->back();
                 }
             }
@@ -108,19 +112,19 @@ class AdminUserController extends Controller
             if ($user->phone != $phone) {
                 $is_valid = User::checkPhone($phone);
                 if (!$is_valid) {
-                    toast('Phone has been used!', 'error', 'top-right');
+                    toast('Điện thoại đã được sử dụng!', 'error', 'top-right');
                     return redirect()->back();
                 }
             }
 
             if ($password || $password_confirm) {
                 if ($password != $password_confirm) {
-                    toast('Passwords do not match!', 'error', 'top-right');
+                    toast('Mật khẩu không khớp!', 'error', 'top-right');
                     return redirect()->back();
                 }
 
                 if (strlen($password) < 5) {
-                    toast('Password must be at least 5 characters!', 'error', 'top-right');
+                    toast('Mật khẩu phải có ít nhất 5 ký tự!', 'error', 'top-right');
                     return redirect()->back();
                 }
             }
@@ -128,8 +132,8 @@ class AdminUserController extends Controller
             $user = $this->saveUser($request, $user);
             $user->save();
 
-            toast('User updated successfully!', 'success', 'top-right');
-            return redirect()->route('admin.users.list');
+            toast('Nhân viên đã cập nhật thành công!', 'success', 'top-right');
+            return redirect()->route('admin.nhan.vien.list');
         } catch (\Exception $e) {
             toast($e->getMessage(), 'error', 'top-right');
             return redirect()->back();
@@ -149,8 +153,8 @@ class AdminUserController extends Controller
             $user->status = UserStatus::DELETED();
             $user->save();
 
-            toast('User deleted successfully!', 'success', 'top-right');
-            return redirect()->route('admin.users.list');
+            toast('Nhân viên đã bị xóa thành công!', 'success', 'top-right');
+            return redirect()->route('admin.nhan.vien.list');
         } catch (\Exception $e) {
             toast($e->getMessage(), 'error', 'top-right');
             return redirect()->back();
@@ -159,14 +163,15 @@ class AdminUserController extends Controller
 
     private function saveUser(Request $request, User $user)
     {
-        $full_name = $request->input('full_name');
-        $username = $request->input('username');
-        $phone = $request->input('phone');
         $email = $request->input('email');
+        $phone = $request->input('phone');
         $password = $request->input('password');
+        $full_name = $request->input('full_name');
+        $username = $request->input('username') ?? $email;
         $address = $request->input('address');
         $about = $request->input('about');
         $status = $request->input('status');
+        $room = $request->input('room');
 
         $avatar_path = $user->avatar ?? '';
 
@@ -190,6 +195,7 @@ class AdminUserController extends Controller
         $user->address = $address;
         $user->about = $about;
         $user->status = $status;
+        $user->room = $room;
 
         return $user;
     }

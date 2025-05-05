@@ -116,8 +116,13 @@
             </a>
             <ul id="purchases-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="">
+                    <a href="{{ route('admin.nhan.vien.list') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.nhan.vien.create') }}">
+                        <i class="bi bi-circle"></i><span>Thêm mới</span>
                     </a>
                 </li>
             </ul>

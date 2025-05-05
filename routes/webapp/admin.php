@@ -19,6 +19,7 @@ use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNguyenLieuTinhController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
 use App\Http\Controllers\admin\AdminSettingController;
+use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -81,6 +82,15 @@ Route::group(['prefix' => 'profile'], function () {
     Route::get('/index', [UserController::class, 'index'])->name('admin.profile.index');
     Route::post('/change-info', [UserController::class, 'changeInfo'])->name('admin.profile.change.info');
     Route::post('/change-password', [UserController::class, 'changePassword'])->name('admin.profile.change.password');
+});
+
+Route::group(['prefix' => 'nhan-vien'], function () {
+    Route::get('/list', [AdminUserController::class, 'list'])->name('admin.nhan.vien.list');
+    Route::get('/detail/{id}', [AdminUserController::class, 'detail'])->name('admin.nhan.vien.detail');
+    Route::get('/create', [AdminUserController::class, 'create'])->name('admin.nhan.vien.create');
+    Route::post('/store', [AdminUserController::class, 'store'])->name('admin.nhan.vien.store');
+    Route::put('/update/{id}', [AdminUserController::class, 'update'])->name('admin.nhan.vien.update');
+    Route::delete('/delete/{id}', [AdminUserController::class, 'delete'])->name('admin.nhan.vien.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {
