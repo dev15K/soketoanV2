@@ -80,6 +80,7 @@ class AdminNguyenLieuSanXuatController extends Controller
     private function saveData(NguyenLieuSanXuat $nguyenLieuSanXuat, Request $request)
     {
         $ngay = $request->input('ngay');
+        $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
 
         $tong_khoi_luong = 0;
         $gia_tien = 0;
@@ -94,11 +95,11 @@ class AdminNguyenLieuSanXuatController extends Controller
 
         $trang_thai = $request->input('trang_thai');
 
+        $nguyenLieuSanXuat->ten_nguyen_lieu = $ten_nguyen_lieu;
         $nguyenLieuSanXuat->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $nguyenLieuSanXuat->trang_thai = $trang_thai;
 
         $nguyenLieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
-        $nguyenLieuSanXuat->gia_tien = $gia_tien;
 
         return $nguyenLieuSanXuat;
     }

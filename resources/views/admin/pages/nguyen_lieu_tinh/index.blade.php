@@ -54,6 +54,11 @@
                     <h5 class="card-title">Thêm mới Kho nguyên liệu tinh</h5>
                     <form method="post" action="{{ route('admin.nguyen.lieu.tinh.store') }}">
                         @csrf
+                        <div class="form-group">
+                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
+                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
+                                   value="" required>
+                        </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
@@ -99,7 +104,7 @@
                                         <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
                                             @foreach($nlphanloais as $nlphanloai)
                                                 <option
-                                                    value="{{ $nlphanloai->id }}">{{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
+                                                    value="{{ $nlphanloai->id }}">{{ $nlphanloai->ten_nguyen_lieu }}
                                                     / {{ number_format($nlphanloai->tong_khoi_luong) }} kg
                                                     ~ {{ number_format($nlphanloai->gia_sau_phan_loai) }} VND
                                                 </option>
@@ -176,9 +181,10 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
-                            <col width="10%">
-                            <col width="10%">
                             <col width="25%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="15%">
                             <col width="x">
                             <col width="10%">
                             <col width="10%">
@@ -186,6 +192,7 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col">Tên nguyên liệu</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Tổng khối lượng</th>
@@ -198,6 +205,7 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
+                                <td>{{ $data->ten_nguyen_lieu }}</td>
                                 <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
                                 <td>{{ number_format($data->tong_khoi_luong) }} kg</td>

@@ -61,6 +61,7 @@ class AdminNguyenLieuTinhController extends Controller
     private function saveData(NguyenLieuTinh $NguyenLieuTinh, Request $request)
     {
         $ngay = $request->input('ngay');
+        $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
 
         $tong_khoi_luong = 0;
         $gia_tien = 0;
@@ -75,6 +76,7 @@ class AdminNguyenLieuTinhController extends Controller
 
         $trang_thai = $request->input('trang_thai');
 
+        $NguyenLieuTinh->ten_nguyen_lieu = $ten_nguyen_lieu;
         $NguyenLieuTinh->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $NguyenLieuTinh->trang_thai = $trang_thai;
 

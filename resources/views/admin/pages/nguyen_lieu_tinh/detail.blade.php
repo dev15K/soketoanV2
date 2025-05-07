@@ -28,6 +28,11 @@
                     <form method="post" action="{{ route('admin.nguyen.lieu.tinh.update', $nguyen_lieu_tinh) }}">
                         @method('PUT')
                         @csrf
+                        <div class="form-group">
+                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
+                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
+                                   value="{{ $nguyen_lieu_tinh->ten_nguyen_lieu }}" required>
+                        </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>

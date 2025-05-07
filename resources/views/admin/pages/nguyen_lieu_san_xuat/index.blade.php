@@ -26,7 +26,8 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu sản xuất</label>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu sản
+                            xuất</label>
                     </h5>
                     <div class="col-md-4">
                         <div class="input-group mb-2">
@@ -52,6 +53,11 @@
                     <h5 class="card-title">Thêm mới Kho nguyên liệu sản xuất</h5>
                     <form method="post" action="{{ route('admin.nguyen.lieu.san.xuat.store') }}">
                         @csrf
+                        <div class="form-group">
+                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
+                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
+                                   value="" required>
+                        </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
@@ -61,9 +67,9 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
                                     <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
@@ -96,20 +102,15 @@
                                 <tbody id="tbodyListNL" class="text-center">
                                 <tr>
                                     <td>
-                                        <select class="form-control" name="loai_nguyen_lieu_ids[]">
+                                        <select class="form-control" name="loai_nguyen_lieu_ids[]"
+                                                onchange="changeLoaiNguyenLieu(this)">
                                             <option value="nguyen_lieu_tinh">Nguyên liệu Tinh</option>
                                             <option value="nguyen_lieu_phan_loai">Nguyên liệu Phân loại</option>
                                         </select>
                                     </td>
                                     <td>
                                         <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
-                                            @foreach($nlphanloais as $nlphanloai)
-                                                <option
-                                                        value="{{ $nlphanloai->id }}">{{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
-                                                    / {{ number_format($nlphanloai->tong_khoi_luong) }} kg
-                                                    ~ {{ number_format($nlphanloai->gia_sau_phan_loai) }} VND
-                                                </option>
-                                            @endforeach
+
                                         </select>
                                     </td>
                                     <td>
@@ -141,6 +142,53 @@
             $(document).ready(function () {
 
             })
+
+            async function changeLoaiNguyenLieu(el) {
+                const value = $(el).val();
+                if (value === 'nguyen_lieu_tinh') {
+                    await listNguyenLieuTinh(el);
+                } else {
+                    await listNguyenLieuPhanLoai(el);
+                }
+            }
+
+            async function listNguyenLieuTinh(el) {
+                let url = `{{ route('api.nguyen.lieu.tinh.list') }}`;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        renderData(el, data.data);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
+                    }
+                });
+            }
+
+            async function listNguyenLieuPhanLoai(el) {
+                let url = `{{ route('api.nguyen.lieu.phan.loai.list') }}`;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        renderData(el, data.data);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
+                    }
+                });
+            }
+
+            function renderData(el, data) {
+                console.log(data)
+            }
 
             function plusItem() {
                 $('#tbodyListNL').append(baseHtml);

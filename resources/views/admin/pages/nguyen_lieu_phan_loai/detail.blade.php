@@ -28,6 +28,11 @@
                         @method('PUT')
                         @csrf
                         @csrf
+                        <div class="form-group">
+                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
+                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
+                                   value="{{ $nguyen_lieu_phan_loai->ten_nguyen_lieu }}" required>
+                        </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
@@ -40,8 +45,8 @@
                                 <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
                                     @foreach($nlthos as $nltho)
                                         <option
-                                                {{ $nltho->id == $nguyen_lieu_phan_loai->nguyen_lieu_tho_id ? 'selected' : '' }}
-                                                value="{{ $nltho->id }}">{{ $nltho->ten_nguyen_lieu }}</option>
+                                            {{ $nltho->id == $nguyen_lieu_phan_loai->nguyen_lieu_tho_id ? 'selected' : '' }}
+                                            value="{{ $nltho->id }}">{{ $nltho->ten_nguyen_lieu }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -88,11 +93,11 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                            {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() ? 'selected' : '' }}
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}</option>
+                                        {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() ? 'selected' : '' }}
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}</option>
                                     <option
-                                            {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() ? 'selected' : '' }}
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}</option>
+                                        {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() ? 'selected' : '' }}
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>

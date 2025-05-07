@@ -1,14 +1,14 @@
 @extends('admin.layouts.master')
 @section('title')
-    App Setting
+    Cài đặt website
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>App Setting</h1>
+        <h1>Cài đặt website</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active">App Setting</li>
+                <li class="breadcrumb-item active">Cài đặt website</li>
             </ol>
         </nav>
     </div>
@@ -25,7 +25,7 @@
                 <tbody>
                 <tr>
                     <td colspan="4">
-                        SEO Information
+                        Thông tin SEO
                     </td>
                 </tr>
                 <tr>
@@ -36,7 +36,7 @@
                         <div class="d-flex justify-content-between flex-wrap">
                             <input type="file" name="logo" id="logo" class="form-control w-75">
                             <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#exampleLogo">View Logo
+                                    data-bs-target="#exampleLogo">Xem Logo
                             </button>
                         </div>
                     </td>
@@ -47,7 +47,7 @@
                         <div class="d-flex justify-content-between flex-wrap">
                             <input type="file" name="favicon" id="favicon" class="form-control w-75">
                             <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#exampleFavicon">View Favicon
+                                    data-bs-target="#exampleFavicon">Xem Favicon
                             </button>
                         </div>
                     </td>
@@ -96,7 +96,7 @@
                         <div class="d-flex justify-content-between flex-wrap">
                             <input type="file" name="og_img" id="og_img" class="form-control w-75">
                             <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#exampleog_img">View og_img
+                                    data-bs-target="#exampleog_img">Xem og_img
                             </button>
                         </div>
                     </td>
@@ -107,7 +107,7 @@
                         <div class="d-flex justify-content-between flex-wrap">
                             <input type="file" multiple name="thumbnail[]" id="thumbnail" class="form-control w-75">
                             <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#examplethumbnail">View thumbnail
+                                    data-bs-target="#examplethumbnail">Xem thumbnail
                             </button>
                         </div>
                     </td>
@@ -376,7 +376,7 @@
                         <div class="d-flex justify-content-between flex-wrap">
                             <input type="file" name="qr_code" id="qr_code" class="form-control w-75">
                             <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#exampleqrcode">View qr_code
+                                    data-bs-target="#exampleqrcode">Xem qr_code
                             </button>
                         </div>
                     </td>
@@ -418,7 +418,7 @@
                         <div class="d-flex justify-content-between flex-wrap">
                             <input type="file" name="qr_code_02" id="qr_code_02" class="form-control w-75">
                             <button class="btn btn-warning btn-sm" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#exampleqrcode02">View qr_code_02
+                                    data-bs-target="#exampleqrcode02">Xem qr_code_02
                             </button>
                         </div>
                     </td>
@@ -434,14 +434,14 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleFaviconLabel">View Favicon</h1>
+                    <h1 class="modal-title fs-5" id="exampleFaviconLabel">Xem Favicon</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <img src="{{ $setting ? $setting->favicon : '' }}" alt="">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
@@ -452,14 +452,14 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleLogoLabel">View Logo</h1>
+                    <h1 class="modal-title fs-5" id="exampleLogoLabel">Xem Logo</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <img src="{{ $setting ? $setting->logo : '' }}" alt="">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
@@ -477,7 +477,7 @@
                     <img src="{{ $setting ? $setting->og_img : '' }}" alt="">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
@@ -489,14 +489,14 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="examplethumbnailLabel">View thumbnail</h1>
+                    <h1 class="modal-title fs-5" id="examplethumbnailLabel">Xem thumbnail</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
@@ -507,14 +507,14 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleqrcodeLabel">View qrcode</h1>
+                    <h1 class="modal-title fs-5" id="exampleqrcodeLabel">Xem qrcode</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <img src="{{ $setting ? $setting->qr_code : '' }}" alt="">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
@@ -525,14 +525,14 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleqrcode02Label">View qrcode02</h1>
+                    <h1 class="modal-title fs-5" id="exampleqrcode02Label">Xem qrcode02</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <img src="{{ $setting ? $setting->qr_code_02 : '' }}" alt="">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>

@@ -53,6 +53,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
     private function saveData(NguyenLieuPhanLoai $NguyenLieuPhanLoai, Request $request)
     {
+        $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
         $ngay = $request->input('ngay');
         $nguyen_lieu_tho_id = $request->input('nguyen_lieu_tho_id');
         $nu_cao_cap = $request->input('nu_cao_cap');
@@ -65,6 +66,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         $ghi_chu = $request->input('ghi_chu');
         $trang_thai = $request->input('trang_thai');
 
+        $NguyenLieuPhanLoai->ten_nguyen_lieu = $ten_nguyen_lieu;
         $NguyenLieuPhanLoai->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $NguyenLieuPhanLoai->nguyen_lieu_tho_id = $nguyen_lieu_tho_id;
         $NguyenLieuPhanLoai->nu_cao_cap = $nu_cao_cap;

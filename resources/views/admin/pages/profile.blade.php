@@ -119,7 +119,7 @@
                                             Ảnh đại diện
                                         </label>
                                         <div class="col-md-8 col-lg-9">
-                                            <img src="{{ Auth::user()->about }}" alt="Profile" id="imagePreview">
+                                            <img src="{{ Auth::user()->avatar }}" alt="Profile" id="imagePreview">
                                             <div class="pt-2">
                                                 <a href="#" class="btn btn-primary btn-sm btnUpload"
                                                    title="Upload new profile image"><i class="bi bi-upload"></i></a>
