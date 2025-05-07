@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nguyen_lieu_san_xuat_chi_tiets', function (Blueprint $table) {
+        Schema::create('phieu_san_xuat_chi_tiets', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('nguyen_lieu_san_xuat_id');
-            $table->foreign('nguyen_lieu_san_xuat_id')->references('id')->on('nguyen_lieu_san_xuats')->onDelete('cascade');
+            $table->unsignedBigInteger('phieu_san_xuat_id');
+            $table->foreign('phieu_san_xuat_id')->references('id')->on('phieu_san_xuats')->onDelete('cascade');
 
             $table->string('type')->nullable();
 
@@ -39,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nguyen_lieu_san_xuat_chi_tiets');
+        Schema::dropIfExists('phieu_san_xuat_chi_tiets');
     }
 };

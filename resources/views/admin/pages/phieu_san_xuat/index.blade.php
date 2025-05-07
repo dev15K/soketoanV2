@@ -1,14 +1,14 @@
 @extends('admin.layouts.master')
 @section('title')
-    Kho nguyên liệu sản xuất
+    Phiếu sản xuất
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Kho nguyên liệu sản xuất</h1>
+        <h1>Phiếu sản xuất</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active"> Kho nguyên liệu sản xuất</li>
+                <li class="breadcrumb-item active"> Phiếu sản xuất</li>
             </ol>
         </nav>
     </div>
@@ -26,13 +26,13 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu sản
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên phiếu sản
                             xuất</label>
                     </h5>
                     <div class="col-md-4">
                         <div class="input-group mb-2">
                             <input type="text" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm theo tên nguyên liệu sản xuất">
+                                   placeholder="Tìm kiếm theo tên phiếu sản xuất">
                             <div class="input-group-prepend">
                                 <button type="button" class="input-group-text">
                                     <i class="bi bi-search"></i>
@@ -50,12 +50,12 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Thêm mới Kho nguyên liệu sản xuất</h5>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.san.xuat.store') }}">
+                    <h5 class="card-title">Thêm mới Phiếu sản xuất</h5>
+                    <form method="post" action="{{ route('admin.phieu.san.xuat.store') }}">
                         @csrf
                         <div class="form-group">
-                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
-                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
+                            <label for="ten_phieu">Tên phiếu</label>
+                            <input type="text" class="form-control" id="ten_phieu" name="ten_phieu"
                                    value="" required>
                         </div>
                         <div class="row">
@@ -207,9 +207,10 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
-                            <col width="10%">
-                            <col width="10%">
                             <col width="25%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="15%">
                             <col width="x">
                             <col width="10%">
                             <col width="10%">
@@ -217,6 +218,7 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col">Tên phiếu</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Tổng khối lượng</th>
@@ -236,11 +238,11 @@
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.nguyen.lieu.san.xuat.detail', $data->id) }}"
+                                        <a href="{{ route('admin.phieu.san.xuat.detail', $data->id) }}"
                                            class="btn btn-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="{{ route('admin.nguyen.lieu.san.xuat.delete', $data->id) }}"
+                                        <form action="{{ route('admin.phieu.san.xuat.delete', $data->id) }}"
                                               method="post">
                                             @csrf
                                             @method('DELETE')

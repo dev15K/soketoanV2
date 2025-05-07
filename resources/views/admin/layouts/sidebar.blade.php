@@ -11,12 +11,12 @@
         </li><!-- End Dashboard Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('admin.nguyen.lieu.*') ? '' : 'collapsed' }}"
+            <a class="nav-link {{ Request::routeIs('admin.nguyen.lieu.*') || Request::routeIs('admin.phieu.*') ? '' : 'collapsed' }}"
                data-bs-target="#categories-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-card-list"></i><span>Quản lý kho</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="categories-nav"
-                class="nav-content collapse {{ Request::routeIs('admin.nguyen.lieu.*') ? 'show' : '' }}"
+                class="nav-content collapse {{ Request::routeIs('admin.nguyen.lieu.*') || Request::routeIs('admin.phieu.*') ? 'show' : '' }}"
                 data-bs-parent="#sidebar-nav">
                 <li>
                     <a class="{{ Request::routeIs('admin.nguyen.lieu.tho.index') || Request::routeIs('admin.nguyen.lieu.tho.detail') ? 'active' : '' }}"
@@ -34,6 +34,12 @@
                     <a class="{{ Request::routeIs('admin.nguyen.lieu.tinh.index') || Request::routeIs('admin.nguyen.lieu.tinh.detail') ? 'active' : '' }}"
                        href="{{ route('admin.nguyen.lieu.tinh.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Tinh</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ Request::routeIs('admin.phieu.san.xuat.index') || Request::routeIs('admin.phieu.san.xuat.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.phieu.san.xuat.index') }}">
+                        <i class="bi bi-circle"></i><span>Phiếu Sản xuất</span>
                     </a>
                 </li>
                 <li>

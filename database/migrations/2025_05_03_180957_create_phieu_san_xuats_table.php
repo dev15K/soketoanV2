@@ -12,9 +12,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('nguyen_lieu_san_xuats', function (Blueprint $table) {
+        Schema::create('phieu_san_xuats', function (Blueprint $table) {
             $table->id();
-
+            $table->string('ten_phieu')->nullable();
             $table->timestamp('ngay')->default(Carbon::now())->nullable();
 
             $table->string('code')->unique();
@@ -31,6 +31,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('nguyen_lieu_san_xuats');
+        Schema::dropIfExists('phieu_san_xuats');
     }
 };

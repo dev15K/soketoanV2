@@ -2,9 +2,20 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Enums\TrangThaiNguyenLieuPhanLoai;
+use App\Enums\TrangThaiNguyenLieuSanXuat;
+use App\Enums\TrangThaiPhieuSanXuat;
+use App\Enums\TrangThaiNguyenLieuTho;
 use App\Http\Controllers\Controller;
+use App\Models\NguyenLieuPhanLoai;
+use App\Models\NguyenLieuTinh;
+use App\Models\PhieuSanXuat;
+use App\Models\PhieuSanXuatChiTiet;
+use App\Models\NguyenLieuTho;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
-class AdminNguyenLieuSanXuatController extends Controller
+class AdminPhieuSanXuatController extends Controller
 {
     public function index()
     {
