@@ -27,7 +27,6 @@
                           action="{{ route('admin.nguyen.lieu.phan.loai.update', $nguyen_lieu_phan_loai->id) }}">
                         @method('PUT')
                         @csrf
-                        @csrf
                         <div class="form-group">
                             <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
                             <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
