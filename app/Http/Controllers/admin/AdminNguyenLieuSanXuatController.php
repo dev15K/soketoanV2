@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuSanXuat;
+use App\Enums\TrangThaiPhieuSanXuat;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuSanXuat;
+use App\Models\PhieuSanXuat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -16,7 +18,11 @@ class AdminNguyenLieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->paginate(20);
 
-        return view('admin.pages.nguyen_lieu_san_xuat.index', compact('datas'));
+        $phieu_san_xuats = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.pages.nguyen_lieu_san_xuat.index', compact('datas', 'phieu_san_xuats'));
     }
 
     public function detail($id)
@@ -26,7 +32,11 @@ class AdminNguyenLieuSanXuatController extends Controller
             return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
         }
 
-        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat'));
+        $phieu_san_xuats = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat', 'phieu_san_xuats'));
     }
 
     public function store(Request $request)
