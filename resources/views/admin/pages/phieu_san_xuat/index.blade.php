@@ -109,8 +109,10 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
-
+                                        <select class="form-control" name="nguyen_lieu_ids[]">
+                                            @foreach($nltinhs as $nltinh)
+                                                <option value="{{ $nltinh->id }}">{{ $nltinh->ten_nguyen_lieu }}</option>
+                                            @endforeach
                                         </select>
                                     </td>
                                     <td>
@@ -137,11 +139,33 @@
         </div>
 
         <script>
-            const baseHtml = ``;
-
-            $(document).ready(function () {
-
-            })
+            const baseHtml = `<tr>
+                                    <td>
+                                        <select class="form-control" name="loai_nguyen_lieu_ids[]"
+                                                onchange="changeLoaiNguyenLieu(this)">
+                                            <option value="nguyen_lieu_tinh">Nguyên liệu Tinh</option>
+                                            <option value="nguyen_lieu_phan_loai">Nguyên liệu Phân loại</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" name="nguyen_lieu_ids[]">
+                                            @foreach($nltinhs as $nltinh)
+            <option value="{{ $nltinh->id }}">{{ $nltinh->ten_nguyen_lieu }}</option>
+                                            @endforeach
+            </select>
+        </td>
+        <td>
+            <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
+        </td>
+        <td>
+            <input type="number" min="0" name="khoi_luongs[]" class="form-control" required>
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm disabled">
+                <i class="bi bi-trash"></i>
+            </button>
+        </td>
+    </tr>`;
 
             async function changeLoaiNguyenLieu(el) {
                 const value = $(el).val();
@@ -187,7 +211,11 @@
             }
 
             function renderData(el, data) {
-                console.log(data)
+                let html = '';
+                data.forEach((item) => {
+                    html += `<option value="${item.id}">${item.ten_nguyen_lieu}</option>`;
+                });
+                $(el).parent().next().find('select').html(html);
             }
 
             function plusItem() {
@@ -210,7 +238,6 @@
                             <col width="25%">
                             <col width="10%">
                             <col width="10%">
-                            <col width="15%">
                             <col width="x">
                             <col width="10%">
                             <col width="10%">
@@ -222,7 +249,6 @@
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Tổng khối lượng</th>
-                            <th scope="col">Đơn giá</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
@@ -231,10 +257,10 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
+                                <td>{{ $data->ten_phieu }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
                                 <td>{{ number_format($data->tong_khoi_luong) }} kg</td>
-                                <td>{{ number_format($data->gia_tien) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">

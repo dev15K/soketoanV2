@@ -2,65 +2,42 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Enums\TrangThaiNguyenLieuSanXuat;
 use App\Http\Controllers\Controller;
+use App\Models\NguyenLieuSanXuat;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class AdminNguyenLieuSanXuatController extends Controller
 {
     public function index()
     {
-        $datas = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
+        $datas = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
             ->orderByDesc('id')
             ->paginate(20);
 
-        $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiphieuSanXuat::DELETED())
-            ->orderByDesc('id')
-            ->get();
-
-        $nlthos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
-            ->orderByDesc('id')
-            ->get();
-
-        $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
-            ->orderByDesc('id')
-            ->get();
-
-        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'nlphanloais', 'nltinhs', 'nlthos'));
+        return view('admin.pages.nguyen_lieu_san_xuat.index', compact('datas'));
     }
 
     public function detail($id)
     {
-        $phieu_san_xuat = PhieuSanXuat::find($id);
-        if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::DELETED()) {
+        $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
+        if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
             return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
         }
 
-        $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiphieuSanXuat::DELETED())
-            ->orderByDesc('id')
-            ->get();
-
-        $nlthos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
-            ->orderByDesc('id')
-            ->get();
-
-        $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
-            ->orderByDesc('id')
-            ->get();
-
-        $dsNLSXChiTiet = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)
-            ->orderByDesc('id')
-            ->get();
-        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiet', 'nltinhs', 'nlthos'));
+        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat'));
     }
 
     public function store(Request $request)
     {
         try {
-            $phieu_san_xuat = new PhieuSanXuat();
+            $nguyen_lieu_san_xuat = new NguyenLieuSanXuat();
 
-            $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
-            $phieu_san_xuat->save();
+            $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
+            $nguyen_lieu_san_xuat->save();
 
-            $this->saveDataChiTiet($phieu_san_xuat, $request);
+            $this->saveDataChiTiet($nguyen_lieu_san_xuat, $request);
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu tinh thành công');
         } catch (\Exception $e) {
@@ -68,7 +45,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         }
     }
 
-    private function saveData(PhieuSanXuat $phieuSanXuat, Request $request)
+    private function saveData(NguyenLieuSanXuat $phieuSanXuat, Request $request)
     {
         $ngay = $request->input('ngay');
         $ten_phieu = $request->input('ten_phieu');
@@ -79,7 +56,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         if (!$phieuSanXuat->code) {
             do {
                 $code = $this->generateRandomString(8);
-            } while (NguyenLieuTinh::where('code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
+            } while (NguyenLieuSanXuat::where('code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
 
             $phieuSanXuat->code = $code;
         }
@@ -106,65 +83,16 @@ class AdminNguyenLieuSanXuatController extends Controller
         return $randomString;
     }
 
-    private function saveDataChiTiet(PhieuSanXuat $phieuSanXuat, Request $request)
-    {
-        $nguyen_lieu_phan_loai_ids = $request->input('nguyen_lieu_phan_loai_ids');
-        $ten_phieus = $request->input('ten_phieus');
-        $khoi_luongs = $request->input('khoi_luongs');
-
-        $tong_khoi_luong = 0;
-        $gia_tien = 0;
-
-        PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
-            ->whereNotIn('nguyen_lieu_phan_loai_id', $nguyen_lieu_phan_loai_ids)
-            ->delete();
-
-        for ($i = 0; $i < count($nguyen_lieu_phan_loai_ids); $i++) {
-            $nguyen_lieu_phan_loai_id = $nguyen_lieu_phan_loai_ids[$i];
-            $ten_phieu = $ten_phieus[$i];
-            $khoi_luong = $khoi_luongs[$i];
-
-            $ngyen_lieu_phan_loai = NguyenLieuPhanLoai::find($nguyen_lieu_phan_loai_id);
-            $so_tien = $khoi_luong * $ngyen_lieu_phan_loai->gia_sau_phan_loai;
-
-            $oldData = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
-                ->where('nguyen_lieu_phan_loai_id', $nguyen_lieu_phan_loai_id)
-                ->first();
-
-
-            if ($oldData) {
-                $phieuSanXuatChiTiet = $oldData;
-            } else {
-                $phieuSanXuatChiTiet = new PhieuSanXuatChiTiet();
-            }
-
-            $phieuSanXuatChiTiet->phieu_san_xuat_id = $phieuSanXuat->id;
-            $phieuSanXuatChiTiet->nguyen_lieu_phan_loai_id = $nguyen_lieu_phan_loai_id;
-            $phieuSanXuatChiTiet->ten_phieu = $ten_phieu;
-            $phieuSanXuatChiTiet->khoi_luong = $khoi_luong;
-            $phieuSanXuatChiTiet->so_tien = $so_tien;
-
-            $phieuSanXuatChiTiet->save();
-
-            $tong_khoi_luong += $khoi_luong;
-            $gia_tien += $so_tien;
-        }
-
-        $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
-
-        $phieuSanXuat->save();
-    }
-
     public function delete($id)
     {
         try {
-            $phieu_san_xuat = PhieuSanXuat::find($id);
-            if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiphieuSanXuat::DELETED()) {
+            $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
+            if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
             }
 
-            $phieu_san_xuat->trang_thai = TrangThaiphieuSanXuat::DELETED();
-            $phieu_san_xuat->save();
+            $nguyen_lieu_san_xuat->trang_thai = TrangThaiNguyenLieuSanXuat::DELETED();
+            $nguyen_lieu_san_xuat->save();
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu tinh thành công');
         } catch (\Exception $e) {
@@ -175,15 +103,15 @@ class AdminNguyenLieuSanXuatController extends Controller
     public function update($id, Request $request)
     {
         try {
-            $phieu_san_xuat = PhieuSanXuat::find($id);
-            if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiphieuSanXuat::DELETED()) {
+            $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
+            if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
             }
 
-            $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
-            $phieu_san_xuat->save();
+            $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
+            $nguyen_lieu_san_xuat->save();
 
-            $this->saveDataChiTiet($phieu_san_xuat, $request);
+            $this->saveDataChiTiet($nguyen_lieu_san_xuat, $request);
 
             return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
         } catch (\Exception $e) {

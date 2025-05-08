@@ -19,11 +19,7 @@ return new class extends Migration
 
             $table->string('type')->nullable();
 
-            $table->unsignedBigInteger('nguyen_lieu_tinh_id')->nullable();
-            $table->foreign('nguyen_lieu_tinh_id')->references('id')->on('nguyen_lieu_tinhs')->onDelete('cascade');
-
-            $table->unsignedBigInteger('nguyen_lieu_phan_loai_id')->nullable();
-            $table->foreign('nguyen_lieu_phan_loai_id')->references('id')->on('nguyen_lieu_phan_loais')->onDelete('cascade');
+            $table->unsignedBigInteger('nguyen_lieu_id')->nullable();
 
             $table->string('ten_nguyen_lieu');
             $table->float('khoi_luong')->default(0);

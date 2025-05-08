@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\TrangThaiNguyenLieuPhanLoai;
 use App\Enums\TrangThaiNguyenLieuSanXuat;
+use App\Enums\TrangThaiNguyenLieuTinh;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuSanXuat;
+use App\Models\NguyenLieuTinh;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +23,7 @@ class HomeController extends Controller
 
     public function listNguyenLieuTinh()
     {
-        $nltinhs = nguyenLieuSanXuat::where('trang_thai', '!=', TrangThainguyenLieuSanXuat::DELETED())
+        $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
             ->orderByDesc('id')
             ->get();
 

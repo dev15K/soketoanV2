@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuPhanLoai;
 use App\Enums\TrangThaiNguyenLieuSanXuat;
+use App\Enums\TrangThaiNguyenLieuTinh;
 use App\Enums\TrangThaiPhieuSanXuat;
 use App\Enums\TrangThaiNguyenLieuTho;
 use App\Http\Controllers\Controller;
@@ -23,7 +24,7 @@ class AdminPhieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->paginate(20);
 
-        $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiphieuSanXuat::DELETED())
+        $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
             ->orderByDesc('id')
             ->get();
 
@@ -45,7 +46,7 @@ class AdminPhieuSanXuatController extends Controller
             return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
         }
 
-        $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiphieuSanXuat::DELETED())
+        $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
             ->orderByDesc('id')
             ->get();
 
@@ -90,7 +91,7 @@ class AdminPhieuSanXuatController extends Controller
         if (!$phieuSanXuat->code) {
             do {
                 $code = $this->generateRandomString(8);
-            } while (NguyenLieuTinh::where('code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
+            } while (PhieuSanXuat::where('code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
 
             $phieuSanXuat->code = $code;
         }
@@ -119,29 +120,28 @@ class AdminPhieuSanXuatController extends Controller
 
     private function saveDataChiTiet(PhieuSanXuat $phieuSanXuat, Request $request)
     {
-        $nguyen_lieu_phan_loai_ids = $request->input('nguyen_lieu_phan_loai_ids');
-        $ten_phieus = $request->input('ten_phieus');
+        $loai_nguyen_lieu_ids = $request->input('loai_nguyen_lieu_ids');
+        $nguyen_lieu_ids = $request->input('nguyen_lieu_ids');
+        $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
         $khoi_luongs = $request->input('khoi_luongs');
 
         $tong_khoi_luong = 0;
-        $gia_tien = 0;
 
         PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
-            ->whereNotIn('nguyen_lieu_phan_loai_id', $nguyen_lieu_phan_loai_ids)
+            ->whereNotIn('nguyen_lieu_id', $nguyen_lieu_ids)
             ->delete();
 
-        for ($i = 0; $i < count($nguyen_lieu_phan_loai_ids); $i++) {
-            $nguyen_lieu_phan_loai_id = $nguyen_lieu_phan_loai_ids[$i];
-            $ten_phieu = $ten_phieus[$i];
+        for ($i = 0; $i < count($loai_nguyen_lieu_ids); $i++) {
+            $nguyen_lieu_phan_loai_id = $nguyen_lieu_ids[$i];
+            $ten_nguyen_lieu = $ten_nguyen_lieus[$i];
             $khoi_luong = $khoi_luongs[$i];
 
             $ngyen_lieu_phan_loai = NguyenLieuPhanLoai::find($nguyen_lieu_phan_loai_id);
             $so_tien = $khoi_luong * $ngyen_lieu_phan_loai->gia_sau_phan_loai;
 
             $oldData = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
-                ->where('nguyen_lieu_phan_loai_id', $nguyen_lieu_phan_loai_id)
+                ->where('nguyen_lieu_id', $nguyen_lieu_phan_loai_id)
                 ->first();
-
 
             if ($oldData) {
                 $phieuSanXuatChiTiet = $oldData;
@@ -150,15 +150,14 @@ class AdminPhieuSanXuatController extends Controller
             }
 
             $phieuSanXuatChiTiet->phieu_san_xuat_id = $phieuSanXuat->id;
-            $phieuSanXuatChiTiet->nguyen_lieu_phan_loai_id = $nguyen_lieu_phan_loai_id;
-            $phieuSanXuatChiTiet->ten_phieu = $ten_phieu;
+            $phieuSanXuatChiTiet->nguyen_lieu_id = $nguyen_lieu_phan_loai_id;
+            $phieuSanXuatChiTiet->ten_nguyen_lieu = $ten_nguyen_lieu;
             $phieuSanXuatChiTiet->khoi_luong = $khoi_luong;
-            $phieuSanXuatChiTiet->so_tien = $so_tien;
+            $phieuSanXuatChiTiet->so_tien = $so_tien ?? 0;
 
             $phieuSanXuatChiTiet->save();
 
             $tong_khoi_luong += $khoi_luong;
-            $gia_tien += $so_tien;
         }
 
         $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
