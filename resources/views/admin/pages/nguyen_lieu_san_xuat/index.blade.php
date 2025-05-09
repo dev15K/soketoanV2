@@ -59,8 +59,8 @@
                                    required>
                         </div>
                         <div class="form-group ">
-                            <label for="phieu_san_xuat_id ">Phiếu sản xuất</label>
-                            <select id="phieu_san_xuat_id " name="phieu_san_xuat_id " class="form-control">
+                            <label for="phieu_san_xuat_id">Phiếu sản xuất</label>
+                            <select id="phieu_san_xuat_id" name="phieu_san_xuat_id" class="form-control">
                                 @foreach($phieu_san_xuats as $phieu_san_xuat)
                                     <option value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->ten_phieu }}</option>
                                 @endforeach
