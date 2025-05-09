@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TrangThaiNguyenLieuThanhPham;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Carbon;
@@ -17,8 +18,8 @@ return new class extends Migration {
             $table->string('product_code')->unique();
             $table->timestamp('ngay')->default(Carbon::now())->nullable();
             $table->string('type')->nullable();
-            $table->unsignedBigInteger('nguyen_lieu_san_xuat_id');
-            $table->foreign('nguyen_lieu_san_xuat_id')->references('id')->on('nguyen_lieu_san_xuats')->onDelete('cascade');
+            $table->unsignedBigInteger('nguyen_lieu_id');
+//            $table->foreign('nguyen_lieu_san_xuat_id')->references('id')->on('nguyen_lieu_san_xuats')->onDelete('cascade');
             $table->float('khoi_luong')->comment('KL rieng gr')->default(0);
             $table->string('don_vi_tinh');
             $table->float('so_luong')->comment('Số lượng (cái/hộp)')->nullable();
@@ -26,6 +27,8 @@ return new class extends Migration {
             $table->decimal('total_price', 15, 0)->comment('Tổng ')->default(0);
             $table->timestamp('ngay_san_xuat')->default(null)->nullable();
             $table->timestamp('han_su_dung')->default(null)->nullable();
+            $table->longText('ghi_chu')->nullable();
+            $table->string('trang_thai')->default(TrangThaiNguyenLieuThanhPham::ACTIVE());
             $table->timestamps();
         });
     }

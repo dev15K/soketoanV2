@@ -23,112 +23,110 @@
 
                 <div class="card-body">
                     <h5 class="card-title">Chỉnh sửa Kho nguyên liệu Thô</h5>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.tho.update', $nguyen_lieu_tho->id) }}">
+                    <form method="post"
+                          action="{{ route('admin.nguyen.lieu.thanh.pham.update', $nguyenLieuThanhPham->id) }}">
                         @method('PUT')
                         @csrf
                         <div class="form-group">
-                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
-                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
-                                   value="{{ $nguyen_lieu_tho->ten_nguyen_lieu }}" required>
+                            <label for="ten_san_pham">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="ten_san_pham" name="ten_san_pham"
+                                   value="{{ $nguyenLieuThanhPham->ten_san_pham }}" required>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="ngay">Ngày nhập kho</label>
+                                <input type="date" class="form-control" id="ngay" name="ngay"
+                                       value="{{ \Carbon\Carbon::parse($nguyenLieuThanhPham->ngay)->format('Y-m-d') }}"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="ngay_san_xuat">Ngày sản xuất</label>
+                                <input type="date" class="form-control" id="ngay_san_xuat" name="ngay_san_xuat"
+                                       value="{{ \Carbon\Carbon::parse($nguyenLieuThanhPham->ngay_san_xuat)->format('Y-m-d') }}"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="han_su_dung">Hạn sử dụng</label>
+                                <input type="date" class="form-control" id="han_su_dung" name="han_su_dung"
+                                       value="{{ \Carbon\Carbon::parse($nguyenLieuThanhPham->han_su_dung)->format('Y-m-d') }}"
+                                       required>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ \Carbon\Carbon::parse($nguyen_lieu_tho->ngay)->format('Y-m-d') }}"
-                                       required>
+                                <label for="type">Loại nguyên liệu</label>
+                                <select name="type" id="type" class="form-control">
+                                    <option
+                                        {{ $nguyenLieuThanhPham->type == 'san_xuat' ? 'selected' : '' }} value="san_xuat">
+                                        Nguyên liệu Sản xuất
+                                    </option>
+                                    <option {{ $nguyenLieuThanhPham->type == 'tho' ? 'selected' : '' }} value="tho">
+                                        Nguyên liệu Thô
+                                    </option>
+                                    <option
+                                        {{ $nguyenLieuThanhPham->type == 'phan_loai' ? 'selected' : '' }} value="phan_loai">
+                                        Nguyên liệu Phân loại
+                                    </option>
+                                    <option {{ $nguyenLieuThanhPham->type == 'tinh' ? 'selected' : '' }} value="tinh">
+                                        Nguyên liệu Tinh
+                                    </option>
+                                </select>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="nha_cung_cap_id">Kho nguyên liệu Thô</label>
-                                <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control">
-                                    @foreach($nccs as $ncc)
-                                        <option {{ $nguyen_lieu_tho->nha_cung_cap_id == $ncc->id ? 'selected' : '' }}
-                                                value="{{ $ncc->id }}">{{ $ncc->ten }}</option>
+                                <label for="nguyen_lieu_id">Tên nguyên liệu</label>
+                                <select name="nguyen_lieu_id" id="nguyen_lieu_id" class="form-control">
+                                    @foreach($nlsanxuats as $nlsanxuat)
+                                        <option
+                                            {{ $nlsanxuat->id == $nguyenLieuThanhPham->nguyen_lieu_id ? 'selected' : '' }}
+                                            value="{{ $nlsanxuat->id }}">{{ $nlsanxuat->ten_nguyen_lieu }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="loai">Loại</label>
-                                <input type="text" class="form-control" id="loai" name="loai"
-                                       value="{{ $nguyen_lieu_tho->loai }}" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="dieu_kien_luu_tru">Điều kiện lưu trữ</label>
-                                <input type="text" class="form-control" id="dieu_kien_luu_tru" name="dieu_kien_luu_tru"
-                                       value="{{ $nguyen_lieu_tho->dieu_kien_luu_tru }}" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="nguon_goc">Nguồn gốc</label>
-                                <input type="text" class="form-control" id="nguon_goc" name="nguon_goc"
-                                       value="{{ $nguyen_lieu_tho->nguon_goc }}" required>
-                            </div>
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong">Khối lượng(kg)</label>
                                 <input type="number" min="0" class="form-control" id="khoi_luong" name="khoi_luong"
-                                       value="{{ $nguyen_lieu_tho->khoi_luong }}" required>
+                                       value="{{ $nguyenLieuThanhPham->khoi_luong }}" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="kich_thuoc">Kích thước</label>
-                                <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc"
-                                       value="{{ $nguyen_lieu_tho->kich_thuoc }}" required>
+                                <label for="don_vi_tinh">Đơn vị tính</label>
+                                <input type="text" class="form-control" id="don_vi_tinh" name="don_vi_tinh"
+                                       value="{{ $nguyenLieuThanhPham->don_vi_tinh }}" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="so_luong">Số lượng</label>
+                                <input type="text" class="form-control" id="so_luong" name="so_luong"
+                                       value="{{ $nguyenLieuThanhPham->so_luong }}" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <label for="do_kho">Độ khô</label>
-                                <input type="number" max="100" min="0" class="form-control" id="do_kho" name="do_kho"
-                                       value="{{ $nguyen_lieu_tho->do_kho }}" required>
+                                <label for="price">Giá xuất kho thương mại</label>
+                                <input type="number" class="form-control" id="price" name="price"
+                                       value="{{ $nguyenLieuThanhPham->price }}" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="chi_phi_mua">Chi phí mua</label>
-                                <input type="number" class="form-control" id="chi_phi_mua" name="chi_phi_mua"
-                                       value="{{ $nguyen_lieu_tho->chi_phi_mua }}" required>
+                                <label for="total_price">Tổng giá</label>
+                                <input type="number" class="form-control" id="total_price"
+                                       value="{{ $nguyenLieuThanhPham->total_price }}" name="total_price" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
-                                <input type="text" class="form-control" id="phuong_thuc_thanh_toan"
-                                       name="phuong_thuc_thanh_toan"
-                                       value="{{ $nguyen_lieu_tho->phuong_thuc_thanh_toan }}" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-3">
-                                <label for="cong_no">Công nợ</label>
-                                <input type="number" class="form-control" id="cong_no" name="cong_no"
-                                       value="{{ $nguyen_lieu_tho->cong_no }}" required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="nhan_su_xu_li">Nhân sự xử lý</label>
-                                <input type="text" class="form-control" id="nhan_su_xu_li" name="nhan_su_xu_li"
-                                       value="{{ $nguyen_lieu_tho->nhan_su_xu_li }}" required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="thoi_gian_phan_loai">Thời gian phân loại</label>
-                                <input type="date" class="form-control" id="thoi_gian_phan_loai"
-                                       name="thoi_gian_phan_loai"
-                                       value="{{ \Carbon\Carbon::parse($nguyen_lieu_tho->thoi_gian_phan_loai)->format('yY-m-d') }}"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-3">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        {{ $nguyen_lieu_tho->trang_thai == \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                        {{ $nguyenLieuThanhPham->trang_thai == \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() ? 'selected' : '' }}
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}</option>
                                     <option
-                                        {{ $nguyen_lieu_tho->trang_thai == \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                        {{ $nguyenLieuThanhPham->trang_thai == \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() ? 'selected' : '' }}
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="ghi_chu">Ghi chú</label>
                             <textarea name="ghi_chu" id="ghi_chu" class="form-control"
-                                      rows="5">{{ $nguyen_lieu_tho->ghi_chu }}</textarea>
+                                      rows="5">{{ $nguyenLieuThanhPham->ghi_chu }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
                     </form>

@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->string('mui_thom');
             $table->longText('chi_tiet_khac');
             $table->string('bao_quan');
+            $table->longText('ghi_chu')->nullable();
             $table->string('trang_thai')->default(TrangThaiNguyenLieuSanXuat::ACTIVE());
             $table->timestamps();
         });

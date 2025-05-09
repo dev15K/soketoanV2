@@ -15,6 +15,7 @@ use App\Http\Controllers\admin\AdminHomeController;
 use App\Http\Controllers\admin\AdminKhachHangController;
 use App\Http\Controllers\admin\AdminNguyenLieuPhanLoaiController;
 use App\Http\Controllers\admin\AdminNguyenLieuSanXuatController;
+use App\Http\Controllers\admin\AdminNguyenLieuThanhPhamController;
 use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNguyenLieuTinhController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
@@ -70,6 +71,14 @@ Route::group(['prefix' => 'phieu-san-xuat'], function () {
     Route::post('/store', [AdminPhieuSanXuatController::class, 'store'])->name('admin.phieu.san.xuat.store');
     Route::put('/update/{id}', [AdminPhieuSanXuatController::class, 'update'])->name('admin.phieu.san.xuat.update');
     Route::delete('/delete/{id}', [AdminPhieuSanXuatController::class, 'delete'])->name('admin.phieu.san.xuat.delete');
+});
+
+Route::group(['prefix' => 'nguyen-lieu-thanh-pham'], function () {
+    Route::get('/index', [AdminNguyenLieuThanhPhamController::class, 'index'])->name('admin.nguyen.lieu.thanh.pham.index');
+    Route::get('/detail/{id}', [AdminNguyenLieuThanhPhamController::class, 'detail'])->name('admin.nguyen.lieu.thanh.pham.detail');
+    Route::post('/store', [AdminNguyenLieuThanhPhamController::class, 'store'])->name('admin.nguyen.lieu.thanh.pham.store');
+    Route::put('/update/{id}', [AdminNguyenLieuThanhPhamController::class, 'update'])->name('admin.nguyen.lieu.thanh.pham.update');
+    Route::delete('/delete/{id}', [AdminNguyenLieuThanhPhamController::class, 'delete'])->name('admin.nguyen.lieu.thanh.pham.delete');
 });
 
 Route::group(['prefix' => 'nguyen-lieu-san-xuat'], function () {

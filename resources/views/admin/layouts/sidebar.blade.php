@@ -50,7 +50,7 @@
                 </li>
                 <li>
                     <a class="{{ Request::routeIs('admin.nguyen.lieu.thanh.pham.index') || Request::routeIs('admin.nguyen.lieu.thanh.pham.detail') ? 'active' : '' }}"
-                       href="#">
+                       href="{{ route('admin.nguyen.lieu.thanh.pham.index') }}">
                         <i class="bi bi-circle"></i><span>Kho NL Thành phẩm</span>
                     </a>
                 </li>
