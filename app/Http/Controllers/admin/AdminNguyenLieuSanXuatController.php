@@ -29,7 +29,7 @@ class AdminNguyenLieuSanXuatController extends Controller
     {
         $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
         if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
-            return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
+            return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
         }
 
         $phieu_san_xuats = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
@@ -47,39 +47,45 @@ class AdminNguyenLieuSanXuatController extends Controller
             $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
             $nguyen_lieu_san_xuat->save();
 
-            $this->saveDataChiTiet($nguyen_lieu_san_xuat, $request);
-
-            return redirect()->back()->with('success', 'Thêm mới nguyên liệu tinh thành công');
+            return redirect()->back()->with('success', 'Thêm mới nguyên liệu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
-    private function saveData(NguyenLieuSanXuat $phieuSanXuat, Request $request)
+    private function saveData(NguyenLieuSanXuat $nguyenLieuSanXuat, Request $request)
     {
+        $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
         $ngay = $request->input('ngay');
-        $ten_phieu = $request->input('ten_phieu');
-
-        $tong_khoi_luong = 0;
-        $gia_tien = 0;
-
-        if (!$phieuSanXuat->code) {
-            do {
-                $code = $this->generateRandomString(8);
-            } while (NguyenLieuSanXuat::where('code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
-
-            $phieuSanXuat->code = $code;
-        }
-
+        $phieu_san_xuat_id = $request->input('phieu_san_xuat_id');
+        $khoi_luong = $request->input('khoi_luong');
+        $don_vi_tinh = $request->input('don_vi_tinh');
+        $mau_sac = $request->input('mau_sac');
+        $mui_thom = $request->input('mui_thom');
+        $chi_tiet_khac = $request->input('chi_tiet_khac');
+        $bao_quan = $request->input('bao_quan');
         $trang_thai = $request->input('trang_thai');
 
-        $phieuSanXuat->ten_phieu = $ten_phieu;
-        $phieuSanXuat->ngay = Carbon::parse($ngay)->format('Y-m-d');
-        $phieuSanXuat->trang_thai = $trang_thai;
+        if (!$nguyenLieuSanXuat->code) {
+            do {
+                $code = $this->generateRandomString(8);
+            } while (NguyenLieuSanXuat::where('code', $code)->where('id', '!=', $nguyenLieuSanXuat->id)->exists());
 
-        $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
+            $nguyenLieuSanXuat->code = $code;
+        }
 
-        return $phieuSanXuat;
+        $nguyenLieuSanXuat->ten_nguyen_lieu = $ten_nguyen_lieu;
+        $nguyenLieuSanXuat->ngay = Carbon::parse($ngay)->format('Y-m-d');
+        $nguyenLieuSanXuat->phieu_san_xuat_id = $phieu_san_xuat_id;
+        $nguyenLieuSanXuat->khoi_luong = $khoi_luong;
+        $nguyenLieuSanXuat->don_vi_tinh = $don_vi_tinh;
+        $nguyenLieuSanXuat->mau_sac = $mau_sac;
+        $nguyenLieuSanXuat->mui_thom = $mui_thom;
+        $nguyenLieuSanXuat->chi_tiet_khac = $chi_tiet_khac;
+        $nguyenLieuSanXuat->bao_quan = $bao_quan;
+        $nguyenLieuSanXuat->trang_thai = $trang_thai;
+
+        return $nguyenLieuSanXuat;
     }
 
     private function generateRandomString($length)
@@ -98,13 +104,13 @@ class AdminNguyenLieuSanXuatController extends Controller
         try {
             $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
             if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
+                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
             }
 
             $nguyen_lieu_san_xuat->trang_thai = TrangThaiNguyenLieuSanXuat::DELETED();
             $nguyen_lieu_san_xuat->save();
 
-            return redirect()->back()->with('success', 'Đã xoá nguyên liệu tinh thành công');
+            return redirect()->back()->with('success', 'Đã xoá nguyên liệu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -115,15 +121,13 @@ class AdminNguyenLieuSanXuatController extends Controller
         try {
             $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
             if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
+                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
             }
 
             $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
             $nguyen_lieu_san_xuat->save();
 
-            $this->saveDataChiTiet($nguyen_lieu_san_xuat, $request);
-
-            return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
+            return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa nguyên liệu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
