@@ -257,7 +257,7 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->ten_phieu }}</td>
+                                <td>{{ $data->code }} - {{ $data->ten_phieu }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
                                 <td>{{ number_format($data->tong_khoi_luong) }} kg</td>

@@ -163,21 +163,27 @@
                             <col width="5%">
                             <col width="x">
                             <col width="8%">
+                            <col width="6%">
+                            <col width="8%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="8%">
+                            <col width="6%">
                             <col width="8%">
                             <col width="8%">
+                            <col width="6%">
                             <col width="8%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="8%">
-                            <col width="10%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Tên nguyên liệu</th>
+                            <th scope="col">Nhà cung cấp</th>
                             <th scope="col">Nguồn gốc</th>
+                            <th scope="col">Độ khô</th>
                             <th scope="col">Khối lượng</th>
                             <th scope="col">Kích thước</th>
+                            <th scope="col">Nhân sự</th>
                             <th scope="col">Công nợ</th>
                             <th scope="col">Chi phí mua</th>
                             <th scope="col">Phương thức thanh toán</th>
@@ -189,10 +195,13 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ $data->id }} - {{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ $data->NhaCungCap->ten }}</td>
                                 <td>{{ $data->nguon_goc }}</td>
+                                <td>{{ $data->do_kho }}%</td>
                                 <td>{{ number_format($data->khoi_luong) }} kg</td>
                                 <td>{{ $data->kich_thuoc }}</td>
+                                <td>{{ $data->nhan_su_xu_li }}</td>
                                 <td>{{ number_format($data->cong_no) }} VND</td>
                                 <td>{{ number_format($data->chi_phi_mua) }} VND</td>
                                 <td>{{ $data->phuong_thuc_thanh_toan }}</td>

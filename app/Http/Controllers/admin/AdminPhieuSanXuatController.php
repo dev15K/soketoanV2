@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuPhanLoai;
-use App\Enums\TrangThaiNguyenLieuSanXuat;
+use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNguyenLieuTinh;
 use App\Enums\TrangThaiPhieuSanXuat;
-use App\Enums\TrangThaiNguyenLieuTho;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuPhanLoai;
+use App\Models\NguyenLieuTho;
 use App\Models\NguyenLieuTinh;
 use App\Models\PhieuSanXuat;
 use App\Models\PhieuSanXuatChiTiet;
-use App\Models\NguyenLieuTho;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -43,7 +42,7 @@ class AdminPhieuSanXuatController extends Controller
     {
         $phieu_san_xuat = PhieuSanXuat::find($id);
         if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::DELETED()) {
-            return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
+            return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
         }
 
         $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
@@ -58,10 +57,10 @@ class AdminPhieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        $dsNLSXChiTiet = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)
+        $dsNLSXChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiet', 'nltinhs', 'nlthos'));
+        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiets', 'nltinhs', 'nlthos'));
     }
 
     public function store(Request $request)
@@ -74,7 +73,7 @@ class AdminPhieuSanXuatController extends Controller
 
             $this->saveDataChiTiet($phieu_san_xuat, $request);
 
-            return redirect()->back()->with('success', 'Thêm mới nguyên liệu tinh thành công');
+            return redirect()->back()->with('success', 'Thêm mới phiếu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -132,12 +131,10 @@ class AdminPhieuSanXuatController extends Controller
             ->delete();
 
         for ($i = 0; $i < count($loai_nguyen_lieu_ids); $i++) {
+            $loai_nguyen_lieu_id = $loai_nguyen_lieu_ids[$i];
             $nguyen_lieu_phan_loai_id = $nguyen_lieu_ids[$i];
             $ten_nguyen_lieu = $ten_nguyen_lieus[$i];
             $khoi_luong = $khoi_luongs[$i];
-
-            $ngyen_lieu_phan_loai = NguyenLieuPhanLoai::find($nguyen_lieu_phan_loai_id);
-            $so_tien = $khoi_luong * $ngyen_lieu_phan_loai->gia_sau_phan_loai;
 
             $oldData = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
                 ->where('nguyen_lieu_id', $nguyen_lieu_phan_loai_id)
@@ -149,11 +146,12 @@ class AdminPhieuSanXuatController extends Controller
                 $phieuSanXuatChiTiet = new PhieuSanXuatChiTiet();
             }
 
+            $phieuSanXuatChiTiet->type = $loai_nguyen_lieu_id;
             $phieuSanXuatChiTiet->phieu_san_xuat_id = $phieuSanXuat->id;
             $phieuSanXuatChiTiet->nguyen_lieu_id = $nguyen_lieu_phan_loai_id;
             $phieuSanXuatChiTiet->ten_nguyen_lieu = $ten_nguyen_lieu;
             $phieuSanXuatChiTiet->khoi_luong = $khoi_luong;
-            $phieuSanXuatChiTiet->so_tien = $so_tien ?? 0;
+            $phieuSanXuatChiTiet->so_tien = 0;
 
             $phieuSanXuatChiTiet->save();
 
@@ -170,13 +168,13 @@ class AdminPhieuSanXuatController extends Controller
         try {
             $phieu_san_xuat = PhieuSanXuat::find($id);
             if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiphieuSanXuat::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
+                return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
             $phieu_san_xuat->trang_thai = TrangThaiphieuSanXuat::DELETED();
             $phieu_san_xuat->save();
 
-            return redirect()->back()->with('success', 'Đã xoá nguyên liệu tinh thành công');
+            return redirect()->back()->with('success', 'Đã xoá phiếu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -187,7 +185,7 @@ class AdminPhieuSanXuatController extends Controller
         try {
             $phieu_san_xuat = PhieuSanXuat::find($id);
             if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiphieuSanXuat::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
+                return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
             $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
@@ -195,7 +193,7 @@ class AdminPhieuSanXuatController extends Controller
 
             $this->saveDataChiTiet($phieu_san_xuat, $request);
 
-            return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
+            return redirect()->route('admin.phieu.san.xuat.index')->with('success', 'Chỉnh sửa phiếu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -136,15 +136,19 @@
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
+                            <col width="8%">
+                            <col width="8%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Tên nguyên liệu</th>
+                            <th scope="col">Phiếu sản xuất</th>
                             <th scope="col">Khối lượng</th>
                             <th scope="col">Đơn vị tính</th>
                             <th scope="col">Màu sắc</th>
                             <th scope="col">Mùi thơm</th>
+                            <th scope="col">Bảo quản</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
@@ -153,11 +157,13 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ $data->code }}- {{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ $data->PhieuSanXuat->code }} - {{ $data->PhieuSanXuat->ten_phieu }}</td>
                                 <td>{{ number_format($data->khoi_luong) }} kg</td>
                                 <td>{{ $data->don_vi_tinh }}</td>
                                 <td>{{ $data->mau_sac }}</td>
                                 <td>{{ $data->mui_thom }}</td>
+                                <td>{{ $data->bao_quan }}</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">

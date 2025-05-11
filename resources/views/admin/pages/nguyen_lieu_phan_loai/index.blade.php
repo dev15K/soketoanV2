@@ -142,6 +142,7 @@
                         <colgroup>
                             <col width="5%">
                             <col width="10%">
+                            <col width="6%">
                             <col width="5%">
                             <col width="5%">
                             <col width="5%">
@@ -149,18 +150,19 @@
                             <col width="5%">
                             <col width="5%">
                             <col width="5%">
-                            <col width="7%">
-                            <col width="7%">
-                            <col width="7%">
-                            <col width="7%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
                             <col width="x">
-                            <col width="7%">
-                            <col width="7%">
+                            <col width="6%">
+                            <col width="6%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Tên nguyên liệu</th>
+                            <th scope="col">Nguyên liệu thô</th>
                             <th scope="col">Nụ cao cấp</th>
                             <th scope="col">Nụ VIP</th>
                             <th scope="col">Nhang</th>
@@ -181,7 +183,8 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ $data->id }} - {{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ $data->nguyenLieuTho->ten_nguyen_lieu }}</td>
                                 <td>{{ number_format($data->nu_cao_cap) }} kg</td>
                                 <td>{{ number_format($data->nu_vip) }} kg</td>
                                 <td>{{ number_format($data->nhang) }} kg</td>
@@ -217,6 +220,7 @@
                         <tfoot class="bg-primary bg-opacity-10">
                         <tr>
                             <th scope="col">Tổng:</th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col">{{ number_format($datas->sum('nu_cao_cap')) }} kg</th>
                             <th scope="col">{{ number_format($datas->sum('nu_vip')) }} kg</th>

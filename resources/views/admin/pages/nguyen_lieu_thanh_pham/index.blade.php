@@ -175,7 +175,7 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->ten_san_pham }}</td>
+                                <td>{{ $data->product_code }} - {{ $data->ten_san_pham }}</td>
                                 <td>
                                     @if($data->type == 'san_xuat')
                                         Nguyên liệu Sản xuất
