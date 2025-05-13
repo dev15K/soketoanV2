@@ -16,7 +16,7 @@
         <a href="{{ route('admin.nhan.vien.create') }}" class="btn btn-primary btn-sm">Tạo nhân viên</a>
     </div>
     <section class="section">
-        <table class="table table-hover">
+        <table class="table table-hover vw-100">
             <colgroup>
                 <col width="5%">
                 <col width="10%">

@@ -29,6 +29,12 @@
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <style>
+        .table-responsive {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
 </head>
 
 <body>
@@ -58,6 +64,22 @@
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
         class="bi bi-arrow-up-short"></i></a>
 
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.btnShowOrHide', function (e) {
+            e.preventDefault();
+            const text = $(this).text();
+            if (text === 'Mở rộng') {
+                $(this).text('Thu gọn');
+                $(this).parent().parent().find('form').removeClass('d-none');
+            } else {
+                $(this).text('Mở rộng');
+                $(this).parent().parent().find('form').addClass('d-none');
+            }
+        });
+    })
+</script>
+
 <!-- Vendor JS Files -->
 <script src="{{ asset('admin/vendor/apexcharts/apexcharts.min.js') }}"></script>
 <script src="{{ asset('admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -70,7 +92,6 @@
 
 <!-- Template Main JS File -->
 <script src="{{ asset('admin/js/main.js') }}"></script>
-
 </body>
 
 </html>

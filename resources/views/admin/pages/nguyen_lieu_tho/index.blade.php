@@ -28,18 +28,30 @@
                 <div class="card-body">
                     <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu thô</label>
                     </h5>
-                    <div class="col-md-4">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm theo tên nguyên liệu thô">
-                            <div class="input-group-prepend">
-                                <button type="button" class="input-group-text">
-                                    <i class="bi bi-search"></i>
-                                </button>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-start align-items-center gap-4 w-100">
+                            <div class="col-md-4 form-group">
+                                <div class="d-flex justify-content-start align-items-end gap-2">
+                                    <label for="ngay">Ngày: </label>
+                                    <input type="date" class="form-control" id="ngay" name="ngay">
+                                </div>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inlineFormInputGroup"
+                                           placeholder="Tìm kiếm theo tên nguyên liệu thô">
+                                    <div class="input-group-prepend">
+                                        <button type="button" class="input-group-text">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-md-2 d-flex justify-content-end align-items-center">
+                            <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                        </div>
                     </div>
-
                 </div>
 
             </div>
@@ -49,19 +61,24 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Thêm mới Kho nguyên liệu Thô</h5>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.tho.store') }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Thêm mới Kho nguyên liệu Thô</h5>
+                        <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
+                    </div>
+                    <form method="post" action="{{ route('admin.nguyen.lieu.tho.store') }}" class="d-none">
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
-                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
-                                   required>
-                        </div>
                         <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="code">Mã đơn hàng</label>
+                                <input type="text" readonly class="form-control" id="code" name="code"
+                                       value="{{ $code }}" disabled required>
+                            </div>
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay" required>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="nha_cung_cap_id">Nhà cung cấp</label>
                                 <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control">
@@ -70,11 +87,39 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
+                                <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
+                                       required>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="loai">Loại</label>
                                 <input type="text" class="form-control" id="loai" name="loai" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="nguon_goc">Nguồn gốc</label>
+                                <input type="text" class="form-control" id="nguon_goc" name="nguon_goc" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="khoi_luong">Khối lượng(kg)</label>
+                                <input type="text" min="0" class="form-control" id="khoi_luong" name="khoi_luong"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="kich_thuoc">Kích thước</label>
+                                <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="do_kho">Độ khô</label>
+                                <input type="text" max="100" min="0" class="form-control" id="do_kho" name="do_kho"
+                                       required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="dieu_kien_luu_tru">Điều kiện lưu trữ</label>
@@ -83,33 +128,12 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="nguon_goc">Nguồn gốc</label>
-                                <input type="text" class="form-control" id="nguon_goc" name="nguon_goc" required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="khoi_luong">Khối lượng(kg)</label>
-                                <input type="number" min="0" class="form-control" id="khoi_luong" name="khoi_luong"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="kich_thuoc">Kích thước</label>
-                                <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc"
-                                       required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="do_kho">Độ khô</label>
-                                <input type="number" max="100" min="0" class="form-control" id="do_kho" name="do_kho"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 <label for="chi_phi_mua">Chi phí mua</label>
-                                <input type="number" class="form-control" id="chi_phi_mua" name="chi_phi_mua"
+                                <input type="text" class="form-control" id="chi_phi_mua" name="chi_phi_mua"
                                        required>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
                                 <input type="text" class="form-control" id="phuong_thuc_thanh_toan"
                                        name="phuong_thuc_thanh_toan"
@@ -117,21 +141,32 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-6">
+                                <label for="so_tien_thanh_toan">Số tiền thanh toán</label>
+                                <input type="text" class="form-control" id="so_tien_thanh_toan"
+                                       name="so_tien_thanh_toan" required>
+                            </div>
+                            <div class="form-group col-md-6">
                                 <label for="cong_no">Công nợ</label>
-                                <input type="number" class="form-control" id="cong_no" name="cong_no" required>
+                                <input type="text" class="form-control" id="cong_no" name="cong_no" readonly disabled>
                             </div>
-                            <div class="form-group col-md-3">
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
                                 <label for="nhan_su_xu_li">Nhân sự xử lý</label>
-                                <input type="text" class="form-control" id="nhan_su_xu_li" name="nhan_su_xu_li"
-                                       required>
+                                <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
+                                    @foreach($nsus as $nsu)
+                                        <option value="{{ $nsu->full_name }}">{{ $nsu->full_name }}
+                                            /{{ $nsu->email }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label for="thoi_gian_phan_loai">Thời gian phân loại</label>
                                 <input type="date" class="form-control" id="thoi_gian_phan_loai"
                                        name="thoi_gian_phan_loai" required>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
@@ -158,21 +193,21 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover">
+                    <table class="table table-hover vw-100 small">
                         <colgroup>
-                            <col width="5%">
-                            <col width="x">
-                            <col width="8%">
-                            <col width="6%">
-                            <col width="8%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="8%">
-                            <col width="6%">
-                            <col width="8%">
-                            <col width="8%">
-                            <col width="6%">
-                            <col width="8%">
+                            <col width="50px">
+                            <col width="400px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="300px">
+                            <col width="100px">
+                            <col width="100px">
                         </colgroup>
                         <thead>
                         <tr>

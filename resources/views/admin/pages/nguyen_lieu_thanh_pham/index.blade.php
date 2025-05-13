@@ -146,7 +146,7 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover">
+                    <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="5%">
                             <col width="x">

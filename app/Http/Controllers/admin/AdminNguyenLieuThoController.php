@@ -4,9 +4,11 @@ namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNhaCungCap;
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuTho;
 use App\Models\NhaCungCaps;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -21,7 +23,26 @@ class AdminNguyenLieuThoController extends Controller
         $nccs = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs'));
+
+        do {
+            $code = $this->generateRandomString(8);
+        } while (NguyenLieuTho::where('code', $code)->exists());
+
+        $nsus = User::where('status', '!=', UserStatus::DELETED())
+            ->orderByDesc('id')
+            ->get();
+        return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs', 'code', 'nsus'));
+    }
+
+    private function generateRandomString($length)
+    {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     public function detail($id)
@@ -64,11 +85,12 @@ class AdminNguyenLieuThoController extends Controller
         $dieu_kien_luu_tru = $request->input('dieu_kien_luu_tru');
         $chi_phi_mua = $request->input('chi_phi_mua');
         $phuong_thuc_thanh_toan = $request->input('phuong_thuc_thanh_toan');
-        $cong_no = $request->input('cong_no');
+        $so_tien_thanh_toan = $request->input('so_tien_thanh_toan');
         $nhan_su_xu_li = $request->input('nhan_su_xu_li');
         $thoi_gian_phan_loai = $request->input('thoi_gian_phan_loai');
         $ghi_chu = $request->input('ghi_chu');
         $trang_thai = $request->input('trang_thai');
+        $code = $request->input('code');
 
         $nguyenLieuTho->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $nguyenLieuTho->nha_cung_cap_id = $nha_cung_cap_id;
@@ -81,11 +103,16 @@ class AdminNguyenLieuThoController extends Controller
         $nguyenLieuTho->dieu_kien_luu_tru = $dieu_kien_luu_tru;
         $nguyenLieuTho->chi_phi_mua = $chi_phi_mua;
         $nguyenLieuTho->phuong_thuc_thanh_toan = $phuong_thuc_thanh_toan;
-        $nguyenLieuTho->cong_no = $cong_no;
+        $nguyenLieuTho->so_tien_thanh_toan = $so_tien_thanh_toan;
+
+        $nguyenLieuTho->cong_no = $chi_phi_mua - $so_tien_thanh_toan;
         $nguyenLieuTho->nhan_su_xu_li = $nhan_su_xu_li;
         $nguyenLieuTho->thoi_gian_phan_loai = Carbon::parse($thoi_gian_phan_loai)->format('Y-m-d');
         $nguyenLieuTho->ghi_chu = $ghi_chu;
         $nguyenLieuTho->trang_thai = $trang_thai;
+        if ($code) {
+            $nguyenLieuTho->code = $code;
+        }
 
         return $nguyenLieuTho;
     }
