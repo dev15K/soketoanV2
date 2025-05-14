@@ -22,7 +22,28 @@ class AdminNguyenLieuTinhController extends Controller
         $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais'));
+
+        do {
+            $code = $this->generateRandomString(8);
+        } while (NguyenLieuTinh::where('code', $code)->exists());
+
+        do {
+            $ma_phieu = $this->generateRandomString(8);
+        } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->exists());
+
+
+        return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu'));
+    }
+
+    private function generateRandomString($length)
+    {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     public function detail($id)
@@ -39,7 +60,22 @@ class AdminNguyenLieuTinhController extends Controller
         $dsNLTChiTiet = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $id)
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_tinh.detail', compact('nguyen_lieu_tinh', 'nlphanloais', 'dsNLTChiTiet'));
+
+        $code = $nguyen_lieu_tinh->code;
+        if (!$nguyen_lieu_tinh->code) {
+            do {
+                $code = $this->generateRandomString(8);
+            } while (NguyenLieuTinh::where('code', $code)->exists());
+        }
+
+        $ma_phieu = $nguyen_lieu_tinh->ma_phieu;
+        if (!$nguyen_lieu_tinh->ma_phieu) {
+            do {
+                $ma_phieu = $this->generateRandomString(8);
+            } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->exists());
+        }
+
+        return view('admin.pages.nguyen_lieu_tinh.detail', compact('nguyen_lieu_tinh', 'nlphanloais', 'dsNLTChiTiet', 'code', 'ma_phieu'));
     }
 
     public function store(Request $request)
@@ -61,22 +97,35 @@ class AdminNguyenLieuTinhController extends Controller
     private function saveData(NguyenLieuTinh $NguyenLieuTinh, Request $request)
     {
         $ngay = $request->input('ngay');
-        $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
+        $code = $request->input('code');
+        $ma_phieu = $request->input('ma_phieu');
 
         $tong_khoi_luong = 0;
         $gia_tien = 0;
 
         if (!$NguyenLieuTinh->code) {
-            do {
-                $code = $this->generateRandomString(8);
-            } while (NguyenLieuTinh::where('code', $code)->where('id', '!=', $NguyenLieuTinh->id)->exists());
+            if (!$code) {
+                do {
+                    $code = $this->generateRandomString(8);
+                } while (NguyenLieuTinh::where('code', $code)->where('id', '!=', $NguyenLieuTinh->id)->exists());
+            }
 
             $NguyenLieuTinh->code = $code;
         }
 
+        if (!$NguyenLieuTinh->ma_phieu) {
+            if (!$ma_phieu) {
+                do {
+                    $ma_phieu = $this->generateRandomString(8);
+                } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->where('id', '!=', $NguyenLieuTinh->id)->exists());
+            }
+
+            $NguyenLieuTinh->ma_phieu = $ma_phieu;
+        }
+
         $trang_thai = $request->input('trang_thai');
 
-        $NguyenLieuTinh->ten_nguyen_lieu = $ten_nguyen_lieu;
+        $NguyenLieuTinh->ten_nguyen_lieu = '';
         $NguyenLieuTinh->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $NguyenLieuTinh->trang_thai = $trang_thai;
 
@@ -84,17 +133,6 @@ class AdminNguyenLieuTinhController extends Controller
         $NguyenLieuTinh->gia_tien = $gia_tien;
 
         return $NguyenLieuTinh;
-    }
-
-    private function generateRandomString($length)
-    {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     private function saveDataChiTiet(NguyenLieuTinh $NguyenLieuTinh, Request $request)
@@ -120,6 +158,7 @@ class AdminNguyenLieuTinhController extends Controller
 
             $oldData = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $NguyenLieuTinh->id)
                 ->where('nguyen_lieu_phan_loai_id', $nguyen_lieu_phan_loai_id)
+                ->where('ten_nguyen_lieu', $ten_nguyen_lieu)
                 ->first();
 
 
@@ -147,6 +186,23 @@ class AdminNguyenLieuTinhController extends Controller
         $NguyenLieuTinh->save();
     }
 
+    public function delete($id)
+    {
+        try {
+            $nguyen_lieu_tinh = NguyenLieuTinh::find($id);
+            if (!$nguyen_lieu_tinh || $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::DELETED()) {
+                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
+            }
+
+            $nguyen_lieu_tinh->trang_thai = TrangThaiNguyenLieuTinh::DELETED();
+            $nguyen_lieu_tinh->save();
+
+            return redirect()->back()->with('success', 'Đã xoá nguyên liệu tinh thành công');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function update($id, Request $request)
     {
         try {
@@ -161,23 +217,6 @@ class AdminNguyenLieuTinhController extends Controller
             $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
 
             return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
-
-    public function delete($id)
-    {
-        try {
-            $nguyen_lieu_tinh = NguyenLieuTinh::find($id);
-            if (!$nguyen_lieu_tinh || $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
-            }
-
-            $nguyen_lieu_tinh->trang_thai = TrangThaiNguyenLieuTinh::DELETED();
-            $nguyen_lieu_tinh->save();
-
-            return redirect()->back()->with('success', 'Đã xoá nguyên liệu tinh thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

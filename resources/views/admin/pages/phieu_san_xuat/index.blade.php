@@ -40,7 +40,7 @@
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên nguyên liệu thô">
+                                           placeholder="Tìm kiếm theo tên phiếu sản xuất">
                                     <div class="input-group-prepend">
                                         <button type="button" class="input-group-text">
                                             <i class="bi bi-search"></i>
@@ -245,7 +245,7 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover vw-100">
+                    <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
                             <col width="25%">

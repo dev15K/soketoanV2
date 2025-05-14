@@ -209,13 +209,13 @@
                             <col width="150px">
                             <col width="150px">
                             <col width="150px">
+                            <col width="250px">
+                            <col width="150px">
+                            <col width="250px">
+                            <col width="250px">
                             <col width="150px">
                             <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="300px">
+                            <col width="250px">
                             <col width="100px">
                             <col width="100px">
                         </colgroup>

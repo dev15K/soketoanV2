@@ -40,7 +40,7 @@
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên nguyên liệu thô">
+                                           placeholder="Tìm kiếm theo tên nguyên liệu phân loại">
                                     <div class="input-group-prepend">
                                         <button type="button" class="input-group-text">
                                             <i class="bi bi-search"></i>

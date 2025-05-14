@@ -40,7 +40,7 @@
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên nguyên liệu thô">
+                                           placeholder="Tìm kiếm theo tên nguyên liệu thành phẩm">
                                     <div class="input-group-prepend">
                                         <button type="button" class="input-group-text">
                                             <i class="bi bi-search"></i>
@@ -63,8 +63,11 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Thêm mới Kho nguyên liệu Thành phẩm</h5>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.thanh.pham.store') }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Thêm mới Kho nguyên liệu Thành phẩm</h5>
+                        <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
+                    </div>
+                    <form method="post" action="{{ route('admin.nguyen.lieu.thanh.pham.store') }}" class="d-none">
                         @csrf
                         <div class="form-group">
                             <label for="ten_san_pham">Tên sản phẩm</label>

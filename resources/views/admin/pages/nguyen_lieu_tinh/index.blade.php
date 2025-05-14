@@ -1,5 +1,5 @@
-@php use App\Enums\TrangThaiNguyenLieuTho; @endphp
-@php use Carbon\Carbon; @endphp
+@php use App\Enums\TrangThaiNguyenLieuTho;use Carbon\Carbon; @endphp
+@php @endphp
 @extends('admin.layouts.master')
 @section('title')
     Kho nguyên liệu tinh
@@ -41,7 +41,7 @@
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên nguyên liệu thô">
+                                           placeholder="Tìm kiếm theo tên nguyên liệu tinh">
                                     <div class="input-group-prepend">
                                         <button type="button" class="input-group-text">
                                             <i class="bi bi-search"></i>
@@ -64,13 +64,23 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Thêm mới Kho nguyên liệu tinh</h5>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.tinh.store') }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Thêm mới Kho nguyên liệu tinh</h5>
+                        <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
+                    </div>
+                    <form method="post" action="{{ route('admin.nguyen.lieu.tinh.store') }}" class="d-none">
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
-                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
-                                   value="" required>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="ma_phieu">Mã phiếu</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
+                                       name="ma_phieu" value="{{ $ma_phieu }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="code">Mã lô hàng</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
+                                       value="{{ $code }}" required>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -105,9 +115,9 @@
                                 </colgroup>
                                 <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Nguyên liệu phân loại</th>
-                                    <th scope="col">Tên NVL sau phân loại</th>
-                                    <th scope="col">Khối lượng</th>
+                                    <th scope="col">THÀNH PHẦN TRỘN TỪ MÃ ĐƠN HÀNG</th>
+                                    <th scope="col">Tên NVL</th>
+                                    <th scope="col">TỔNG KL</th>
                                     <th scope="col"></th>
                                 </tr>
                                 </thead>
@@ -116,19 +126,28 @@
                                     <td>
                                         <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
                                             @foreach($nlphanloais as $nlphanloai)
-                                                <option
-                                                    value="{{ $nlphanloai->id }}">{{ $nlphanloai->ten_nguyen_lieu }}
-                                                    / {{ number_format($nlphanloai->tong_khoi_luong) }} kg
-                                                    ~ {{ number_format($nlphanloai->gia_sau_phan_loai) }} VND
+                                                <option value="{{ $nlphanloai->id }}">
+                                                    {{ $nlphanloai->nguyenLieuTho->code }}
+                                                    - {{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
+                                        <select class="form-control" name="ten_nguyen_lieus[]">
+                                            <option value="Nguyên liệu nụ cao cấp (NCC)">Nguyên liệu nụ cao cấp (NCC)
+                                            </option>
+                                            <option value="Nguyên liệu nụ VIP (NVIP)">Nguyên liệu nụ VIP (NVIP)</option>
+                                            <option value="Nguyên liệu nhang (NLN)">Nguyên liệu nhang (NLN)</option>
+                                            <option value="Nguyên liệu vòng (NLV)">Nguyên liệu vòng (NLV)</option>
+                                            <option value="Tăm tre">Tăm tre</option>
+                                            <option value="Keo">Keo</option>
+                                            <option value="Nấu dầu">Nấu dầu</option>
+                                        </select>
                                     </td>
                                     <td>
-                                        <input type="number" min="0" name="khoi_luongs[]" class="form-control" required>
+                                        <input type="text" name="khoi_luongs[]" class="form-control onlyNumber"
+                                               required>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm disabled">
@@ -152,16 +171,22 @@
                                     <td>
                                         <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
                                             @foreach($nlphanloais as $nlphanloai)
-            <option
-                value="{{ $nlphanloai->id }}">{{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
-            / {{ number_format($nlphanloai->tong_khoi_luong) }} kg
-                                                    ~ {{ number_format($nlphanloai->gia_sau_phan_loai) }} VND
-                                                </option>
-                                            @endforeach
+            <option  value="{{ $nlphanloai->id }}">
+            {{ $nlphanloai->nguyenLieuTho->code }} - {{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
+            </option>
+@endforeach
             </select>
         </td>
         <td>
-            <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
+            <select class="form-control" name="ten_nguyen_lieus[]">
+                                            <option value="Nguyên liệu nụ cao cấp (NCC)">Nguyên liệu nụ cao cấp (NCC)</option>
+                                            <option value="Nguyên liệu nụ VIP (NVIP)">Nguyên liệu nụ VIP (NVIP)</option>
+                                            <option value="Nguyên liệu nhang (NLN)">Nguyên liệu nhang (NLN)</option>
+                                            <option value="Nguyên liệu vòng (NLV)">Nguyên liệu vòng (NLV)</option>
+                                            <option value="Tăm tre">Tăm tre</option>
+                                            <option value="Keo">Keo</option>
+                                            <option value="Nấu dầu">Nấu dầu</option>
+                                        </select>
         </td>
         <td>
             <input type="number" min="0" name="khoi_luongs[]" class="form-control" required>
@@ -191,7 +216,7 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover vw-100">
+                    <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
                             <col width="25%">
@@ -205,9 +230,9 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Tên nguyên liệu</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
+                            <th scope="col">Mã lô hàng</th>
                             <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Đơn giá</th>
                             <th scope="col">Trạng thái</th>
@@ -218,11 +243,11 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->code }} - {{ $data->ten_nguyen_lieu }}</td>
                                 <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
+                                <td>{{ $data->ma_phieu }}</td>
                                 <td>{{ $data->code }}</td>
-                                <td>{{ number_format($data->tong_khoi_luong) }} kg</td>
-                                <td>{{ number_format($data->gia_tien) }} VND</td>
+                                <td>{{ number_format($data->tong_khoi_luong, 3) }} kg</td>
+                                <td>{{ number_format($data->gia_tien, 3) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">

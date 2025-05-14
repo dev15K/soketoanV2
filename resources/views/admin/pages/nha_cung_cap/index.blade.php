@@ -48,8 +48,11 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Thêm mới nhà cung cấp</h5>
-                    <form method="post" action="{{ route('admin.nha.cung.cap.store') }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Thêm mới nhà cung cấp</h5>
+                        <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
+                    </div>
+                    <form method="post" action="{{ route('admin.nha.cung.cap.store') }}" class="d-none">
                         @csrf
                         <div class="form-group">
                             <label for="ten">Họ và tên</label>

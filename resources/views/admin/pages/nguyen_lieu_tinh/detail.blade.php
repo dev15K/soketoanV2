@@ -1,5 +1,5 @@
-@php use Carbon\Carbon; @endphp
-@php use App\Enums\TrangThaiNguyenLieuTho; @endphp
+@php use App\Enums\TrangThaiNguyenLieuTho;use Carbon\Carbon; @endphp
+@php @endphp
 @extends('admin.layouts.master')
 @section('title')
     Chỉnh sửa Kho nguyên liệu tinh
@@ -28,10 +28,17 @@
                     <form method="post" action="{{ route('admin.nguyen.lieu.tinh.update', $nguyen_lieu_tinh) }}">
                         @method('PUT')
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
-                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
-                                   value="{{ $nguyen_lieu_tinh->ten_nguyen_lieu }}" required>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="ma_phieu">Mã phiếu</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
+                                       name="ma_phieu" value="{{ $ma_phieu }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="code">Mã lô hàng</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
+                                       value="{{ $code }}" required>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -84,19 +91,54 @@
                                                 @foreach($nlphanloais as $nlphanloai)
                                                     <option
                                                         {{ $nlphanloai->id == $nltct->nguyen_lieu_phan_loai_id ? 'selected' : '' }}
-                                                        value="{{ $nlphanloai->id }}">{{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
-                                                        / {{ number_format($nlphanloai->tong_khoi_luong) }} kg
-                                                        ~ {{ number_format($nlphanloai->gia_sau_phan_loai) }} VND
+                                                        value="{{ $nlphanloai->id }}">
+                                                        {{ $nlphanloai->nguyenLieuTho->code }}
+                                                        - {{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" name="ten_nguyen_lieus[]" class="form-control"
-                                                   value="{{ $nltct->ten_nguyen_lieu }}" required>
+                                            <select class="form-control" name="ten_nguyen_lieus[]">
+                                                <option
+                                                    {{ $nltct->ten_nguyen_lieu == 'Nguyên liệu nụ cao cấp (NCC)' ? 'selected' : '' }}
+                                                    value="Nguyên liệu nụ cao cấp (NCC)">
+                                                    Nguyên liệu nụ cao cấp (NCC)
+                                                </option>
+                                                <option
+                                                    {{ $nltct->ten_nguyen_lieu == 'Nguyên liệu nụ VIP (NVIP)' ? 'selected' : '' }}
+                                                    value="Nguyên liệu nụ VIP (NVIP)">
+                                                    Nguyên liệu nụ VIP (NVIP)
+                                                </option>
+                                                <option
+                                                    {{ $nltct->ten_nguyen_lieu == 'Nguyên liệu nhang (NLN)' ? 'selected' : '' }}
+                                                    value="Nguyên liệu nhang (NLN)">
+                                                    Nguyên liệu nhang (NLN)
+                                                </option>
+                                                <option
+                                                    {{  $nltct->ten_nguyen_lieu == 'Nguyên liệu vòng (NLV)' ? 'selected' : '' }}
+                                                    value="Nguyên liệu vòng (NLV)">
+                                                    Nguyên liệu vòng (NLV)
+                                                </option>
+                                                <option
+                                                    {{ $nltct->ten_nguyen_lieu == 'Tăm tre' ? 'selected' : '' }}
+                                                    value="Tăm tre">
+                                                    Tăm tre
+                                                </option>
+                                                <option
+                                                    {{ $nltct->ten_nguyen_lieu == 'Keo' ? 'selected' : '' }}
+                                                    value="Keo">
+                                                    Keo
+                                                </option>
+                                                <option
+                                                    {{ $nltct->ten_nguyen_lieu == 'Nấu dầu' ? 'selected' : '' }}
+                                                    value="Nấu dầu">
+                                                    Nấu dầu
+                                                </option>
+                                            </select>
                                         </td>
                                         <td>
-                                            <input type="number" min="0" name="khoi_luongs[]" class="form-control"
+                                            <input type="text" name="khoi_luongs[]" class="form-control onlyNumber"
                                                    value="{{ $nltct->khoi_luong }}" required>
                                         </td>
                                         <td>
@@ -123,16 +165,23 @@
                                     <td>
                                         <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
                                             @foreach($nlphanloais as $nlphanloai)
-            <option
-                value="{{ $nlphanloai->id }}">{{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
-            / {{ number_format($nlphanloai->tong_khoi_luong) }} kg
-                                                    ~ {{ number_format($nlphanloai->gia_sau_phan_loai) }} VND
-                                                </option>
-                                            @endforeach
+            <option value="{{ $nlphanloai->id }}">
+               {{ $nlphanloai->nguyenLieuTho->code }}
+            - {{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
+            </option>
+@endforeach
             </select>
         </td>
         <td>
-            <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
+            <select class="form-control" name="ten_nguyen_lieus[]">
+                                            <option value="Nguyên liệu nụ cao cấp (NCC)">Nguyên liệu nụ cao cấp (NCC)</option>
+                                            <option value="Nguyên liệu nụ VIP (NVIP)">Nguyên liệu nụ VIP (NVIP)</option>
+                                            <option value="Nguyên liệu nhang (NLN)">Nguyên liệu nhang (NLN)</option>
+                                            <option value="Nguyên liệu vòng (NLV)">Nguyên liệu vòng (NLV)</option>
+                                            <option value="Tăm tre">Tăm tre</option>
+                                            <option value="Keo">Keo</option>
+                                            <option value="Nấu dầu">Nấu dầu</option>
+                                        </select>
         </td>
         <td>
             <input type="number" min="0" name="khoi_luongs[]" class="form-control" required>
