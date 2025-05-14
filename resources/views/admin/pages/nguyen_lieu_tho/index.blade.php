@@ -70,8 +70,9 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="code">Mã đơn hàng</label>
-                                <input type="text" readonly class="form-control" id="code" name="code"
-                                       value="{{ $code }}" disabled required>
+                                <input type="text" readonly class="form-control bg-secondary bg-opacity-10" id="code"
+                                       name="code"
+                                       value="{{ $code }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
@@ -106,7 +107,8 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="khoi_luong">Khối lượng(kg)</label>
-                                <input type="text" min="0" class="form-control" id="khoi_luong" name="khoi_luong"
+                                <input type="text" min="0" class="form-control onlyNumber" id="khoi_luong"
+                                       name="khoi_luong"
                                        required>
                             </div>
                             <div class="form-group col-md-6">
@@ -118,7 +120,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="do_kho">Độ khô</label>
-                                <input type="text" max="100" min="0" class="form-control" id="do_kho" name="do_kho"
+                                <input type="text" class="form-control" id="do_kho" name="do_kho"
                                        required>
                             </div>
                             <div class="form-group col-md-6">
@@ -130,7 +132,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="chi_phi_mua">Chi phí mua</label>
-                                <input type="text" class="form-control" id="chi_phi_mua" name="chi_phi_mua"
+                                <input type="text" class="form-control onlyNumber" id="chi_phi_mua" name="chi_phi_mua"
                                        required>
                             </div>
                             <div class="form-group col-md-6">
@@ -143,12 +145,13 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="so_tien_thanh_toan">Số tiền thanh toán</label>
-                                <input type="text" class="form-control" id="so_tien_thanh_toan"
+                                <input type="text" class="form-control onlyNumber" id="so_tien_thanh_toan"
                                        name="so_tien_thanh_toan" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="cong_no">Công nợ</label>
-                                <input type="text" class="form-control" id="cong_no" name="cong_no" readonly disabled>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10 onlyNumber"
+                                       id="cong_no" name="cong_no" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -193,18 +196,25 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover vw-100 small">
+                    <table class="table table-hover small" style="min-width: 3000px">
                         <colgroup>
                             <col width="50px">
-                            <col width="400px">
+                            <col width="100px">
+                            <col width="150px">
                             <col width="200px">
+                            <col width="300px">
                             <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
                             <col width="300px">
                             <col width="100px">
                             <col width="100px">
@@ -212,16 +222,23 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Tên nguyên liệu</th>
+                            <th scope="col">Ngày</th>
+                            <th scope="col">Mã đơn hàng</th>
                             <th scope="col">Nhà cung cấp</th>
+                            <th scope="col">Tên nguyên liệu</th>
+                            <th scope="col">Loại (đã làm sạch và phơi khô)</th>
                             <th scope="col">Nguồn gốc</th>
-                            <th scope="col">Độ khô</th>
-                            <th scope="col">Khối lượng</th>
+                            <th scope="col">Khối lượng(kg)</th>
                             <th scope="col">Kích thước</th>
-                            <th scope="col">Nhân sự</th>
-                            <th scope="col">Công nợ</th>
+                            <th scope="col">Độ khô</th>
+                            <th scope="col">Điều kiện lưu trữ</th>
                             <th scope="col">Chi phí mua</th>
                             <th scope="col">Phương thức thanh toán</th>
+                            <th scope="col">Số tiền thanh toán</th>
+                            <th scope="col">Công nợ</th>
+                            <th scope="col">Giao nhân sự xử lý</th>
+                            <th scope="col">Thời gian phân loại</th>
+                            <th scope="col">GHI CHÚ</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
@@ -230,16 +247,23 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->id }} - {{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ $data->code }}</td>
                                 <td>{{ $data->NhaCungCap->ten }}</td>
+                                <td>{{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ $data->loai }}</td>
                                 <td>{{ $data->nguon_goc }}</td>
-                                <td>{{ $data->do_kho }}%</td>
-                                <td>{{ number_format($data->khoi_luong) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong, 3) }} kg</td>
                                 <td>{{ $data->kich_thuoc }}</td>
-                                <td>{{ $data->nhan_su_xu_li }}</td>
-                                <td>{{ number_format($data->cong_no) }} VND</td>
-                                <td>{{ number_format($data->chi_phi_mua) }} VND</td>
+                                <td>{{ $data->do_kho }}</td>
+                                <td>{{ $data->dieu_kien_luu_tru }}</td>
+                                <td>{{ number_format($data->chi_phi_mua, 3) }} VND</td>
                                 <td>{{ $data->phuong_thuc_thanh_toan }}</td>
+                                <td>{{ number_format(floatval($data->so_tien_thanh_toan) ?? 0, 3) }} VND</td>
+                                <td>{{ number_format($data->cong_no, 3) }} VND</td>
+                                <td>{{ $data->nhan_su_xu_li }}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->thoi_gian_phan_loai)->format('d-m-Y') }}</td>
+                                <td>{{ $data->ghi_chu }}</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">

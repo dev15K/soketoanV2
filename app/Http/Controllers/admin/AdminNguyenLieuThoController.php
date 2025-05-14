@@ -55,7 +55,19 @@ class AdminNguyenLieuThoController extends Controller
         $nccs = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_tho.detail', compact('nguyen_lieu_tho', 'nccs'));
+
+        $code = $nguyen_lieu_tho->code;
+        if (!$code) {
+            do {
+                $code = $this->generateRandomString(8);
+            } while (NguyenLieuTho::where('code', $code)->exists());
+        }
+
+        $nsus = User::where('status', '!=', UserStatus::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.pages.nguyen_lieu_tho.detail', compact('nguyen_lieu_tho', 'nccs', 'code', 'nsus'));
     }
 
     public function store(Request $request)
