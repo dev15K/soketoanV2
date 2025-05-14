@@ -63,63 +63,62 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Thêm mới Kho nguyên liệu phân loại</h5>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.phan.loai.store') }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Thêm mới Kho nguyên liệu phân loại</h5>
+                        <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
+                    </div>
+                    <form method="post" action="{{ route('admin.nguyen.lieu.phan.loai.store') }}" class="d-none">
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
-                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
-                                   value="" required>
-                        </div>
                         <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="nguyen_lieu_tho_id">Mã đơn hàng</label>
+                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
+                                    @foreach($nlthos as $nltho)
+                                        <option value="{{ $nltho->id }}">{{ $nltho->code }} - {{ $nltho->ten_nguyen_lieu }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay" required>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="nguyen_lieu_tho_id">Nguyên liệu thô</label>
-                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
-                                    @foreach($nlthos as $nltho)
-                                        <option value="{{ $nltho->id }}">{{ $nltho->ten_nguyen_lieu }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label for="nu_cao_cap">Nụ cao cấp NCC</label>
-                                <input type="number" min="0" class="form-control" id="nu_cao_cap" name="nu_cao_cap"
+                                <label for="nu_cao_cap">Nguyên liệu nụ cao cấp (NCC)</label>
+                                <input type="text" class="onlyNumber form-control" id="nu_cao_cap" name="nu_cao_cap"
                                        required>
                             </div>
                             <div class="form-group col-md-3">
-                                <label for="nu_vip">Nụ VIP(NVIP)</label>
-                                <input type="number" min="0" class="form-control" id="nu_vip" name="nu_vip"
+                                <label for="nu_vip">Nguyên liệu nụ VIP (NVIP)</label>
+                                <input type="text" class="onlyNumber form-control" id="nu_vip" name="nu_vip"
                                        required>
                             </div>
                             <div class="form-group col-md-3">
-                                <label for="nhang">Nhang(NLN)</label>
-                                <input type="number" min="0" class="form-control" id="nhang" name="nhang" required>
+                                <label for="nhang">Nguyên liệu nhang (NLN)</label>
+                                <input type="text" class="onlyNumber form-control" id="nhang" name="nhang" required>
                             </div>
                             <div class="form-group col-md-3">
-                                <label for="vong">Vòng(NLV)</label>
-                                <input type="number" min="0" class="form-control" id="vong" name="vong"
+                                <label for="vong">Nguyên liệu vòng (NLV)</label>
+                                <input type="text" class="onlyNumber form-control" id="vong" name="vong"
                                        required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="tam_tre">Tăm tre</label>
-                                <input type="number" min="0" class="form-control" id="tam_tre" name="tam_tre"
+                                <input type="text" class="onlyNumber form-control" id="tam_tre" name="tam_tre"
                                        required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="keo">Keo</label>
-                                <input type="number" min="0" class="form-control" id="keo" name="keo"
+                                <input type="text" class="onlyNumber form-control" id="keo" name="keo"
                                        required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="nau_dau">Nấu dầu</label>
-                                <input type="number" min="0" class="form-control" id="nau_dau" name="nau_dau"
+                                <input type="text" class="onlyNumber form-control" id="nau_dau" name="nau_dau"
                                        required>
                             </div>
                             <div class="form-group col-md-3">
@@ -151,35 +150,35 @@
                 @endphp
                 <div class="card-body">
 
-                    <table class="table table-hover vw-100">
+                    <table class="table table-hover small" style="min-width: 2500px">
                         <colgroup>
-                            <col width="5%">
-                            <col width="10%">
-                            <col width="6%">
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="5%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="x">
-                            <col width="6%">
-                            <col width="6%">
+                            <col width="50px">
+                            <col width="150px">
+                            <col width="100px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="250px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="250px">
+                            <col width="100px">
+                            <col width="100px">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Tên nguyên liệu</th>
-                            <th scope="col">Nguyên liệu thô</th>
-                            <th scope="col">Nụ cao cấp</th>
-                            <th scope="col">Nụ VIP</th>
-                            <th scope="col">Nhang</th>
-                            <th scope="col">Vòng</th>
+                            <th scope="col">MÃ ĐH</th>
+                            <th scope="col">Ngày phân loại</th>
+                            <th scope="col">Nguyên liệu nụ cao cấp (NCC)</th>
+                            <th scope="col">Nguyên liệu nụ VIP (NVIP)</th>
+                            <th scope="col">Nguyên liệu nhang (NLN)</th>
+                            <th scope="col">Nguyên liệu vòng (NLV)</th>
                             <th scope="col">Tăm tre</th>
                             <th scope="col">Keo</th>
                             <th scope="col">Nấu dầu</th>
@@ -196,20 +195,20 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->id }} - {{ $data->ten_nguyen_lieu }}</td>
-                                <td>{{ $data->nguyenLieuTho->ten_nguyen_lieu }}</td>
-                                <td>{{ number_format($data->nu_cao_cap) }} kg</td>
-                                <td>{{ number_format($data->nu_vip) }} kg</td>
-                                <td>{{ number_format($data->nhang) }} kg</td>
-                                <td>{{ number_format($data->vong) }} kg</td>
-                                <td>{{ number_format($data->tam_tre) }} kg</td>
-                                <td>{{ number_format($data->keo) }} kg</td>
-                                <td>{{ number_format($data->nau_dau) }} kg</td>
-                                <td>{{ number_format($data->chi_phi_mua) }} VND</td>
-                                <td>{{ number_format($data->tong_khoi_luong) }} kg</td>
-                                <td>{{ number_format($data->khoi_luong_ban_dau) }} kg</td>
-                                <td>{{ number_format($data->khoi_luong_hao_hut) }} kg</td>
-                                <td>{{ number_format($data->gia_sau_phan_loai) }} VND</td>
+                                <td>{{ $data->nguyenLieuTho->code }}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ number_format($data->nu_cao_cap, 3) }} kg</td>
+                                <td>{{ number_format($data->nu_vip, 3) }} kg</td>
+                                <td>{{ number_format($data->nhang, 3) }} kg</td>
+                                <td>{{ number_format($data->vong, 3) }} kg</td>
+                                <td>{{ number_format($data->tam_tre, 3) }} kg</td>
+                                <td>{{ number_format($data->keo, 3) }} kg</td>
+                                <td>{{ number_format($data->nau_dau, 3) }} kg</td>
+                                <td>{{ number_format($data->chi_phi_mua, 3) }} VND</td>
+                                <td>{{ number_format($data->tong_khoi_luong, 3) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong_ban_dau, 3) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong_hao_hut, 3) }} kg</td>
+                                <td>{{ number_format($data->gia_sau_phan_loai, 3) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
@@ -235,17 +234,17 @@
                             <th scope="col">Tổng:</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
-                            <th scope="col">{{ number_format($datas->sum('nu_cao_cap')) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nu_vip')) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nhang')) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('vong')) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('tam_tre')) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('keo')) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nau_dau')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nu_cao_cap'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nu_vip'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nhang'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('vong'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('tam_tre'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('keo'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nau_dau'), 3) }} kg</th>
                             <th scope="col"></th>
-                            <th scope="col">{{ number_format($datas->sum('tong_khoi_luong')) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('khoi_luong_ban_dau')) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('khoi_luong_hao_hut')) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('tong_khoi_luong'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('khoi_luong_ban_dau'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('khoi_luong_hao_hut'), 3) }} kg</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>

@@ -80,12 +80,12 @@
 
         $('.onlyNumber').on('keypress', function (e) {
             const char = String.fromCharCode(e.which);
-            if (!/[0-9,]/.test(char)) {
+            if (!/[0-9.]/.test(char)) {
                 e.preventDefault(); // Chặn ký tự không hợp lệ
             }
         }).on('input', function () {
             $(this).val(function (i, val) {
-                return val.replace(/[^0-9,]/g, ''); // Xoá ký tự không hợp lệ
+                return val.replace(/[^0-9.]/g, ''); // Xoá ký tự không hợp lệ
             });
         });
     })
