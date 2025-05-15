@@ -68,7 +68,7 @@ class AdminNguyenLieuSanXuatController extends Controller
 
         if (!$nguyenLieuSanXuat->code) {
             do {
-                $code = $this->generateRandomString(8);
+                $code = generateRandomString(8);
             } while (NguyenLieuSanXuat::where('code', $code)->where('id', '!=', $nguyenLieuSanXuat->id)->exists());
 
             $nguyenLieuSanXuat->code = $code;
@@ -86,17 +86,6 @@ class AdminNguyenLieuSanXuatController extends Controller
         $nguyenLieuSanXuat->trang_thai = $trang_thai;
 
         return $nguyenLieuSanXuat;
-    }
-
-    private function generateRandomString($length)
-    {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     public function delete($id)

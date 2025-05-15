@@ -61,3 +61,16 @@ if (!function_exists('getRoleUser')) {
         return null;
     }
 }
+
+if (!function_exists('generateRandomString')) {
+    function generateRandomString($length)
+    {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+}

@@ -20,6 +20,7 @@ use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNguyenLieuTinhController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
 use App\Http\Controllers\admin\AdminPhieuSanXuatController;
+use App\Http\Controllers\admin\AdminSanPhamController;
 use App\Http\Controllers\admin\AdminSettingController;
 use App\Http\Controllers\admin\AdminThongTinController;
 use App\Http\Controllers\admin\AdminUserController;
@@ -118,6 +119,14 @@ Route::group(['prefix' => 'thong-tin'], function () {
     Route::post('/store', [AdminThongTinController::class, 'store'])->name('admin.thong.tin.store');
     Route::put('/update/{id}', [AdminThongTinController::class, 'update'])->name('admin.thong.tin.update');
     Route::delete('/delete/{id}', [AdminThongTinController::class, 'delete'])->name('admin.thong.tin.delete');
+});
+
+Route::group(['prefix' => 'san-pham'], function () {
+    Route::get('/index', [AdminSanPhamController::class, 'index'])->name('admin.san.pham.index');
+    Route::get('/detail/{id}', [AdminSanPhamController::class, 'detail'])->name('admin.san.pham.detail');
+    Route::post('/store', [AdminSanPhamController::class, 'store'])->name('admin.san.pham.store');
+    Route::put('/update/{id}', [AdminSanPhamController::class, 'update'])->name('admin.san.pham.update');
+    Route::delete('/delete/{id}', [AdminSanPhamController::class, 'delete'])->name('admin.san.pham.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {

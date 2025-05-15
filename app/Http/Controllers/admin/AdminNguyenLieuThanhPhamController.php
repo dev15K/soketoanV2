@@ -69,7 +69,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
 
         if (!$phieuSanXuat->product_code) {
             do {
-                $code = $this->generateRandomString(8);
+                $code = generateRandomString(8);
             } while (NguyenLieuThanhPham::where('product_code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
 
             $phieuSanXuat->product_code = $code;
@@ -89,17 +89,6 @@ class AdminNguyenLieuThanhPhamController extends Controller
         $phieuSanXuat->trang_thai = $trang_thai;
 
         return $phieuSanXuat;
-    }
-
-    private function generateRandomString($length)
-    {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     public function delete($id)

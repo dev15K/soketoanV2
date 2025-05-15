@@ -89,7 +89,7 @@ class AdminPhieuSanXuatController extends Controller
 
         if (!$phieuSanXuat->code) {
             do {
-                $code = $this->generateRandomString(8);
+                $code = generateRandomString(8);
             } while (PhieuSanXuat::where('code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
 
             $phieuSanXuat->code = $code;
@@ -104,17 +104,6 @@ class AdminPhieuSanXuatController extends Controller
         $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
 
         return $phieuSanXuat;
-    }
-
-    private function generateRandomString($length)
-    {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     private function saveDataChiTiet(PhieuSanXuat $phieuSanXuat, Request $request)

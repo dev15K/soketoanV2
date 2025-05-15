@@ -58,14 +58,17 @@
         </li><!-- End Categories Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('admin.categories.*') ? '' : 'collapsed' }}"
+            <a class="nav-link {{ Request::routeIs('admin.san.pham.*') ? '' : 'collapsed' }}"
                data-bs-target="#attributes-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>Quản lý sản phẩm</span><i
                     class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="attributes-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="attributes-nav"
+                class="nav-content collapse {{ Request::routeIs('admin.san.pham.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a class="{{ Request::routeIs('admin.san.pham.index') || Request::routeIs('admin.san.pham.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.san.pham.index') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>

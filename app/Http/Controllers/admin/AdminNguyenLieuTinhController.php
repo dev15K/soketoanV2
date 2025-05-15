@@ -24,26 +24,15 @@ class AdminNguyenLieuTinhController extends Controller
             ->get();
 
         do {
-            $code = $this->generateRandomString(8);
+            $code = generateRandomString(8);
         } while (NguyenLieuTinh::where('code', $code)->exists());
 
         do {
-            $ma_phieu = $this->generateRandomString(8);
+            $ma_phieu = generateRandomString(8);
         } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->exists());
 
 
         return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu'));
-    }
-
-    private function generateRandomString($length)
-    {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     public function detail($id)
@@ -64,14 +53,14 @@ class AdminNguyenLieuTinhController extends Controller
         $code = $nguyen_lieu_tinh->code;
         if (!$nguyen_lieu_tinh->code) {
             do {
-                $code = $this->generateRandomString(8);
+                $code = generateRandomString(8);
             } while (NguyenLieuTinh::where('code', $code)->exists());
         }
 
         $ma_phieu = $nguyen_lieu_tinh->ma_phieu;
         if (!$nguyen_lieu_tinh->ma_phieu) {
             do {
-                $ma_phieu = $this->generateRandomString(8);
+                $ma_phieu = generateRandomString(8);
             } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->exists());
         }
 
@@ -106,7 +95,7 @@ class AdminNguyenLieuTinhController extends Controller
         if (!$NguyenLieuTinh->code) {
             if (!$code) {
                 do {
-                    $code = $this->generateRandomString(8);
+                    $code = generateRandomString(8);
                 } while (NguyenLieuTinh::where('code', $code)->where('id', '!=', $NguyenLieuTinh->id)->exists());
             }
 
@@ -116,7 +105,7 @@ class AdminNguyenLieuTinhController extends Controller
         if (!$NguyenLieuTinh->ma_phieu) {
             if (!$ma_phieu) {
                 do {
-                    $ma_phieu = $this->generateRandomString(8);
+                    $ma_phieu = generateRandomString(8);
                 } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->where('id', '!=', $NguyenLieuTinh->id)->exists());
             }
 

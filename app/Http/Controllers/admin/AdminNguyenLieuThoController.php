@@ -25,24 +25,13 @@ class AdminNguyenLieuThoController extends Controller
             ->get();
 
         do {
-            $code = $this->generateRandomString(8);
+            $code = generateRandomString(8);
         } while (NguyenLieuTho::where('code', $code)->exists());
 
         $nsus = User::where('status', '!=', UserStatus::DELETED())
             ->orderByDesc('id')
             ->get();
         return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs', 'code', 'nsus'));
-    }
-
-    private function generateRandomString($length)
-    {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     public function detail($id)
@@ -59,7 +48,7 @@ class AdminNguyenLieuThoController extends Controller
         $code = $nguyen_lieu_tho->code;
         if (!$code) {
             do {
-                $code = $this->generateRandomString(8);
+                $code = generateRandomString(8);
             } while (NguyenLieuTho::where('code', $code)->exists());
         }
 
