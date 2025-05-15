@@ -11,8 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('phieu_san_xuats', function (Blueprint $table) {
-            $table->string('so_lo_san_xuat');
-            $table->string('ghi_chu')->nullable();
+            $table->unsignedBigInteger('nguyen_lieu_id')->nullable();
         });
     }
 
@@ -22,8 +21,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('phieu_san_xuats', function (Blueprint $table) {
-            $table->dropColumn('so_lo_san_xuat');
-            $table->dropColumn('ghi_chu');
+            $table->dropColumn('nguyen_lieu_id');
         });
     }
 };
