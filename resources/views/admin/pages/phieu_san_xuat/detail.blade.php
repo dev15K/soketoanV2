@@ -26,10 +26,17 @@
                     <form method="post" action="{{ route('admin.phieu.san.xuat.update', $phieu_san_xuat) }}">
                         @method('PUT')
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_phieu">Tên phiếu</label>
-                            <input type="text" class="form-control" id="ten_phieu" name="ten_phieu"
-                                   value="{{ $phieu_san_xuat->ten_phieu }}" required>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="code">Mã Phiếu</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
+                                       value="{{ $code }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="ma_lo_hang">Số LÔ SX</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_lo_hang"
+                                       name="ma_lo_hang" value="{{ $ma_lo_hang }}" required>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">

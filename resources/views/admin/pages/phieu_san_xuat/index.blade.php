@@ -63,13 +63,24 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Thêm mới Phiếu sản xuất</h5>
-                    <form method="post" action="{{ route('admin.phieu.san.xuat.store') }}">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Thêm mới Phiếu sản xuất</h5>
+                        <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
+                    </div>
+                    <form method="post" action="{{ route('admin.phieu.san.xuat.store') }}" class="d-none">
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_phieu">Tên phiếu</label>
-                            <input type="text" class="form-control" id="ten_phieu" name="ten_phieu"
-                                   value="" required>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="code">Mã Phiếu</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
+                                       value="{{ $code }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="ma_lo_hang">Số LÔ SX</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_lo_hang"
+                                       name="ma_lo_hang" value="{{ $ma_lo_hang }}" required>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -89,7 +100,7 @@
 
                         <div class="mt-2">
                             <div class="w-100 d-flex justify-content-between align-items-center">
-                                <h4 class="card-title">Danh sách nguyên liệu</h4>
+                                <h4 class="card-title">Danh sách</h4>
 
                                 <button type="button" class="btn btn-success btn-sm" onclick="plusItem()">
                                     <i class="bi bi-plus"></i>
@@ -105,7 +116,7 @@
                                 </colgroup>
                                 <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Loại nguyên liệu</th>
+                                    <th scope="col">Lựa chọn</th>
                                     <th scope="col">Nguyên liệu</th>
                                     <th scope="col">Thành phần</th>
                                     <th scope="col">Khối lượng</th>
@@ -124,7 +135,8 @@
                                     <td>
                                         <select class="form-control" name="nguyen_lieu_ids[]">
                                             @foreach($nltinhs as $nltinh)
-                                                <option value="{{ $nltinh->id }}">{{ $nltinh->ten_nguyen_lieu }}</option>
+                                                <option
+                                                    value="{{ $nltinh->id }}">{{ $nltinh->ma_phieu }}</option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -248,9 +260,9 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
-                            <col width="25%">
-                            <col width="10%">
-                            <col width="10%">
+                            <col width="15%">
+                            <col width="12%">
+                            <col width="12%">
                             <col width="x">
                             <col width="10%">
                             <col width="10%">
@@ -258,9 +270,9 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Tên phiếu</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
+                            <th scope="col">Số LÔ SX</th>
                             <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
@@ -270,9 +282,9 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->code }} - {{ $data->ten_phieu }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
+                                <td>{{ $data->ma_lo_hang }}</td>
                                 <td>{{ number_format($data->tong_khoi_luong) }} kg</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>

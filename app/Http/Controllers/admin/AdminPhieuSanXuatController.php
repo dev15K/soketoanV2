@@ -27,15 +27,15 @@ class AdminPhieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        $nlthos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
-            ->orderByDesc('id')
-            ->get();
+        do {
+            $code = generateRandomString(8);
+        } while (PhieuSanXuat::where('code', $code)->exists());
 
-        $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
-            ->orderByDesc('id')
-            ->get();
+        do {
+            $ma_lo_hang = generateRandomNumber(6);
+        } while (PhieuSanXuat::where('ma_lo_hang', $ma_lo_hang)->exists());
 
-        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'nlphanloais', 'nltinhs', 'nlthos'));
+        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'ma_lo_hang', 'nltinhs'));
     }
 
     public function detail($id)
@@ -48,10 +48,19 @@ class AdminPhieuSanXuatController extends Controller
         $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
             ->orderByDesc('id')
             ->get();
+        $code = $phieu_san_xuat->code;
+        if (empty($code)) {
+            do {
+                $code = generateRandomString(8);
+            } while (PhieuSanXuat::where('code', $code)->exists());
+        }
 
-        $nlthos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
-            ->orderByDesc('id')
-            ->get();
+        $ma_lo_hang = $phieu_san_xuat->ma_lo_hang;
+        if (empty($ma_lo_hang)) {
+            do {
+                $ma_lo_hang = generateRandomNumber(6);
+            } while (PhieuSanXuat::where('ma_lo_hang', $ma_lo_hang)->exists());
+        }
 
         $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
             ->orderByDesc('id')
@@ -60,7 +69,7 @@ class AdminPhieuSanXuatController extends Controller
         $dsNLSXChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiets', 'nltinhs', 'nlthos'));
+        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiets', 'nltinhs', 'code', 'ma_lo_hang'));
     }
 
     public function store(Request $request)
