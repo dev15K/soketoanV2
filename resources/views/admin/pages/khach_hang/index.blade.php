@@ -99,9 +99,10 @@
                     <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="5%">
-                            <col width="25%">
+                            <col width="20%">
                             <col width="10%">
                             <col width="x">
+                            <col width="20%">
                             <col width="10%">
                             <col width="10%">
                         </colgroup>
@@ -111,6 +112,7 @@
                             <th scope="col">Họ và tên</th>
                             <th scope="col">Số điện thoại</th>
                             <th scope="col">Địa chỉ</th>
+                            <th scope="col">Công nợ</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
@@ -122,6 +124,7 @@
                                 <td>{{ $data->ten }}</td>
                                 <td>{{ $data->so_dien_thoai }}</td>
                                 <td>{{ $data->dia_chi }}</td>
+                                <td>0 VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
