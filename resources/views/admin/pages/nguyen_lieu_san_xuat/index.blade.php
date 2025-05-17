@@ -26,8 +26,7 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu sản
-                            xuất</label>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm</label>
                     </h5>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">

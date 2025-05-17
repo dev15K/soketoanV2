@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Enums\TrangThaiNguyenLieuPhanLoai;
 use App\Enums\TrangThaiNguyenLieuSanXuat;
 use App\Enums\TrangThaiNguyenLieuTinh;
+use App\Enums\TrangThaiSanPham;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuSanXuat;
 use App\Models\NguyenLieuTinh;
+use App\Models\SanPham;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +40,17 @@ class HomeController extends Controller
             ->get();
 
         $data = returnMessage(1, $nlphanloais, 'Success!');
+        return response()->json($data);
+    }
+
+    public function thongTinSanPham(Request $request)
+    {
+        $id = $request->get('id');
+        $sanpham = SanPham::where('trang_thai', '!=', TrangThaiSanPham::DELETED())
+            ->where('id', $id)
+            ->first();
+
+        $data = returnMessage(1, $sanpham, 'Success!');
         return response()->json($data);
     }
 }

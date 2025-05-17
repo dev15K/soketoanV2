@@ -19,5 +19,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::group(['prefix' => 'api'], function () {
     Route::get('/nguyen-lieu-tinh/list', [HomeController::class, 'listNguyenLieuTinh'])->name('api.nguyen.lieu.tinh.list');
     Route::get('/nguyen-lieu-phan-loai/list', [HomeController::class, 'listNguyenLieuPhanLoai'])->name('api.nguyen.lieu.phan.loai.list');
+    Route::get('/thong-tin-san-pham/detail', [HomeController::class, 'thongTinSanPham'])->name('api.thong.tin.san.pham.detail');
 });
 

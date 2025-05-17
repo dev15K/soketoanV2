@@ -14,11 +14,27 @@ use Illuminate\Support\Carbon;
 
 class AdminNguyenLieuThanhPhamController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = NguyenLieuThanhPham::where('trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED())
-            ->orderByDesc('id')
-            ->paginate(20);
+        $ngay_search = $request->input('ngay');
+        $nguyen_lieu_san_xuat_id_search = $request->input('nguyen_lieu_san_xuat_id');
+        $san_pham_id_search = $request->input('san_pham_id');
+
+        $queries = NguyenLieuThanhPham::where('trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED());
+
+        if ($ngay_search) {
+            $queries->whereDate('ngay', Carbon::parse($ngay_search)->format('Y-m-d'));
+        }
+
+        if ($nguyen_lieu_san_xuat_id_search) {
+            $queries->where('nguyen_lieu_san_xuat_id', $nguyen_lieu_san_xuat_id_search);
+        }
+
+        if ($san_pham_id_search) {
+            $queries->where('san_pham_id', $san_pham_id_search);
+        }
+
+        $datas = $queries->orderByDesc('id')->paginate(20);
 
         $nlsanxuats = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
             ->orderByDesc('id')
@@ -28,7 +44,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_thanh_pham.index', compact('datas', 'nlsanxuats', 'products'));
+        return view('admin.pages.nguyen_lieu_thanh_pham.index', compact('datas', 'nlsanxuats', 'products', 'ngay_search', 'nguyen_lieu_san_xuat_id_search', 'san_pham_id_search'));
     }
 
     public function detail($id)

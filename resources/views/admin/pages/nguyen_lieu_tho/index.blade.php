@@ -54,7 +54,7 @@
                                         <option value="">Lựa chọn</option>
                                         @foreach($nccs as $ncc)
                                             <option {{ $ncc->id == $nha_cung_cap_id ? 'selected' : '' }}
-                                                value="{{ $ncc->id }}">{{ $ncc->ten }}</option>
+                                                    value="{{ $ncc->id }}">{{ $ncc->ten }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -92,8 +92,7 @@
                             <div class="form-group col-md-6">
                                 <label for="code">Mã đơn hàng</label>
                                 <input type="text" readonly class="form-control bg-secondary bg-opacity-10" id="code"
-                                       name="code"
-                                       value="{{ $code }}" required>
+                                       name="code" value="{{ $code }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>

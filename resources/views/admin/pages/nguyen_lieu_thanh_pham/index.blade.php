@@ -26,31 +26,45 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu thành
-                            phẩm</label>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm</label>
                     </h5>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">
                             <div class="col-md-4 form-group">
                                 <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="ngay">Ngày: </label>
-                                    <input type="date" class="form-control" id="ngay" name="ngay">
+                                    <input type="date" class="form-control" id="ngay_search"
+                                           value="{{ $ngay_search }}" name="ngay">
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên nguyên liệu thành phẩm">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="input-group-text">
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                                <select name="nguyen_lieu_san_xuat_id_search" id="nguyen_lieu_san_xuat_id_search"
+                                        class="form-control">
+                                    <option value="">Lựa chọn Lô SX</option>
+                                    @foreach($nlsanxuats as $nlsanxuat)
+                                        <option
+                                            {{ $nlsanxuat->id == $nguyen_lieu_san_xuat_id_search ? 'selected' : '' }}
+                                            value="{{ $nlsanxuat->id }}">
+                                            {{ $nlsanxuat->PhieuSanXuat->so_lo_san_xuat }}
+                                            - {{ $nlsanxuat->ten_nguyen_lieu }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <select name="san_pham_id_search" id="san_pham_id_search" class="form-control">
+                                    <option value="">Lựa chọn Mã sản phẩm</option>
+                                    @foreach($products as $product)
+                                        <option {{ $product->id == $san_pham_id_search ? 'selected' : '' }}
+                                                value="{{ $product->id }}">
+                                            {{ $product->ma_san_pham}} - {{ $product->ten_san_pham }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
 
@@ -58,6 +72,18 @@
 
             </div>
         </div>
+
+        <script>
+            function searchTable() {
+                const ngay_search = $('#ngay_search').val();
+                const nguyen_lieu_san_xuat_id_search = $('#nguyen_lieu_san_xuat_id_search').val();
+                const san_pham_id_search = $('#san_pham_id_search').val();
+
+                window.location.href = "{{ route('admin.nguyen.lieu.thanh.pham.index') }}?ngay=" + ngay_search
+                    + "&nguyen_lieu_san_xuat_id=" + nguyen_lieu_san_xuat_id_search
+                    + "&san_pham_id=" + san_pham_id_search;
+            }
+        </script>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
@@ -77,7 +103,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="nguyen_lieu_san_xuat_id">Lô SX</label>
-                                <select name="nguyen_lieu_san_xuat_id" id="nguyennguyen_lieu_san_xuat_id_lieu_id"
+                                <select name="nguyen_lieu_san_xuat_id" id="nguyen_lieu_san_xuat_id"
                                         class="form-control">
                                     @foreach($nlsanxuats as $nlsanxuat)
                                         <option value="{{ $nlsanxuat->id }}">
@@ -89,13 +115,31 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="san_pham_id">Mã sản phẩm</label>
-                                <select name="san_pham_id" id="san_pham_id" class="form-control">
+                                <select name="san_pham_id" id="san_pham_id" class="form-control"
+                                        onchange="changeSanPham()">
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">
                                             {{ $product->ma_san_pham}} - {{ $product->ten_san_pham }}
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="ten_san_pham">Tên sản phẩm</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ten_san_pham"
+                                       name="ten_san_pham" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="khoi_luong_rieng">KL rieng gr</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="khoi_luong_rieng"
+                                       name="khoi_luong_rieng" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="don_vi_tinh">Đơn vị tính</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="don_vi_tinh"
+                                       name="don_vi_tinh" required>
                             </div>
                         </div>
                         <div class="row">
@@ -119,13 +163,13 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}</option>
                                     <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="ngay_san_xuat">Ngày nhập kho</label>
+                                <label for="ngay_san_xuat">Hạn sử dụng</label>
                                 <input type="date" class="form-control" id="ngay_san_xuat" name="ngay_san_xuat"
                                        required>
                             </div>
@@ -141,6 +185,42 @@
 
             </div>
         </div>
+
+        <script>
+            changeSanPham();
+
+            async function changeSanPham() {
+                const product = $('#san_pham_id').val();
+                await thongTinSanPham(product);
+            }
+
+            async function thongTinSanPham(id) {
+                let url = `{{ route('api.thong.tin.san.pham.detail') }}?id=${id}`;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        renderData(data.data);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
+                    }
+                });
+            }
+
+            function renderData(data) {
+                const ten_san_pham = data.ten_san_pham;
+                const khoi_luong_rieng = data.khoi_luong_rieng;
+                const don_vi_tinh = data.don_vi_tinh;
+
+                $('#ten_san_pham').val(ten_san_pham);
+                $('#khoi_luong_rieng').val(khoi_luong_rieng);
+                $('#don_vi_tinh').val(don_vi_tinh);
+            }
+        </script>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
