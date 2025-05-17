@@ -77,9 +77,24 @@
                                        value="{{ $code }}" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="ma_lo_hang">Số LÔ SX</label>
-                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_lo_hang"
-                                       name="ma_lo_hang" value="{{ $ma_lo_hang }}" required>
+                                <label for="so_lo_san_xuat">Số LÔ SX</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="so_lo_san_xuat"
+                                       name="so_lo_san_xuat" value="{{ $so_lo_san_xuat }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="nguyen_lieu_id">Mã lô hàng</label>
+                                <select id="nguyen_lieu_id" name="nguyen_lieu_id" class="form-control">
+                                    @foreach($nltinhs as $nltinh)
+                                        <option value="{{ $nltinh->id }}">{{ $nltinh->code }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="tong_khoi_luong">Khối lượng</label>
+                                <input type="text" class="form-control onlyNumber" id="tong_khoi_luong"
+                                       name="tong_khoi_luong" value="" required>
                             </div>
                         </div>
                         <div class="row">
@@ -91,70 +106,14 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
                                     <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="mt-2">
-                            <div class="w-100 d-flex justify-content-between align-items-center">
-                                <h4 class="card-title">Danh sách</h4>
 
-                                <button type="button" class="btn btn-success btn-sm" onclick="plusItem()">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
-                            <table class="table table-bordered">
-                                <colgroup>
-                                    <col width="10%">
-                                    <col width="35%">
-                                    <col width="35%">
-                                    <col width="15%">
-                                    <col width="x">
-                                </colgroup>
-                                <thead>
-                                <tr class="text-center">
-                                    <th scope="col">Lựa chọn</th>
-                                    <th scope="col">Nguyên liệu</th>
-                                    <th scope="col">Thành phần</th>
-                                    <th scope="col">Khối lượng</th>
-                                    <th scope="col"></th>
-                                </tr>
-                                </thead>
-                                <tbody id="tbodyListNL" class="text-center">
-                                <tr>
-                                    <td>
-                                        <select class="form-control" name="loai_nguyen_lieu_ids[]"
-                                                onchange="changeLoaiNguyenLieu(this)">
-                                            <option value="nguyen_lieu_tinh">Nguyên liệu Tinh</option>
-                                            <option value="nguyen_lieu_phan_loai">Nguyên liệu Phân loại</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" name="nguyen_lieu_ids[]">
-                                            @foreach($nltinhs as $nltinh)
-                                                <option
-                                                    value="{{ $nltinh->id }}">{{ $nltinh->ma_phieu }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
-                                    </td>
-                                    <td>
-                                        <input type="number" min="0" name="khoi_luongs[]" class="form-control" required>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm disabled">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 
@@ -260,7 +219,8 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
-                            <col width="15%">
+                            <col width="12%">
+                            <col width="12%">
                             <col width="12%">
                             <col width="12%">
                             <col width="x">
@@ -273,6 +233,7 @@
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Số LÔ SX</th>
+                            <th scope="col">Mã lô hàng</th>
                             <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
@@ -284,7 +245,8 @@
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
-                                <td>{{ $data->ma_lo_hang }}</td>
+                                <td>{{ $data->so_lo_san_xuat }}</td>
+                                <td>{{ $data->nguyen_lieu_id ? $data->nguyenLieuTinh->code : ''}}</td>
                                 <td>{{ number_format($data->tong_khoi_luong) }} kg</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>

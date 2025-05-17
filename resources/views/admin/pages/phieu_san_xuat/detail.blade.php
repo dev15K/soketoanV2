@@ -33,9 +33,25 @@
                                        value="{{ $code }}" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="ma_lo_hang">Số LÔ SX</label>
-                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_lo_hang"
-                                       name="ma_lo_hang" value="{{ $ma_lo_hang }}" required>
+                                <label for="so_lo_san_xuat">Số LÔ SX</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="so_lo_san_xuat"
+                                       name="so_lo_san_xuat" value="{{ $so_lo_san_xuat }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="nguyen_lieu_id">Mã lô hàng</label>
+                                <select id="nguyen_lieu_id" name="nguyen_lieu_id" class="form-control">
+                                    @foreach($nltinhs as $nltinh)
+                                        <option {{ $nltinh->id == $phieu_san_xuat->nguyen_lieu_id ? 'selected' : '' }}
+                                                value="{{ $nltinh->id }}">{{ $nltinh->code }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="tong_khoi_luong">Khối lượng</label>
+                                <input type="text" class="form-control onlyNumber" id="tong_khoi_luong"
+                                       name="tong_khoi_luong" value="{{ $phieu_san_xuat->tong_khoi_luong }}" required>
                             </div>
                         </div>
                         <div class="row">
@@ -58,177 +74,11 @@
                             </div>
                         </div>
 
-                        <div class="mt-2">
-                            <div class="w-100 d-flex justify-content-between align-items-center">
-                                <h4 class="card-title">Danh sách nguyên liệu</h4>
-
-                                <button type="button" class="btn btn-success btn-sm" onclick="plusItem()">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
-                            <table class="table table-bordered">
-                                <colgroup>
-                                    <col width="10%">
-                                    <col width="35%">
-                                    <col width="35%">
-                                    <col width="15%">
-                                    <col width="x">
-                                </colgroup>
-                                <thead>
-                                <tr class="text-center">
-                                    <th scope="col">Loại nguyên liệu</th>
-                                    <th scope="col">Nguyên liệu</th>
-                                    <th scope="col">Thành phần</th>
-                                    <th scope="col">Khối lượng</th>
-                                    <th scope="col"></th>
-                                </tr>
-                                </thead>
-                                <tbody id="tbodyListNL" class="text-center">
-                                @foreach($dsNLSXChiTiets as $dsNLSXChiTiet)
-                                    <tr>
-                                        <td>
-                                            <select class="form-control" name="loai_nguyen_lieu_ids[]"
-                                                    onchange="changeLoaiNguyenLieu(this)">
-                                                <option
-                                                    {{ $dsNLSXChiTiet->type == 'nguyen_lieu_tinh' ? 'selected' : '' }} value="nguyen_lieu_tinh">
-                                                    Nguyên liệu Tinh
-                                                </option>
-                                                <option
-                                                    {{ $dsNLSXChiTiet->type == 'nguyen_lieu_phan_loai' ? 'selected' : '' }} value="nguyen_lieu_phan_loai">
-                                                    Nguyên liệu Phân loại
-                                                </option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control" name="nguyen_lieu_ids[]">
-                                               @if($dsNLSXChiTiet->type == 'nguyen_lieu_tinh')
-                                                    @foreach($nltinhs as $nltinh)
-                                                        <option
-                                                            {{ $nltinh->id == $dsNLSXChiTiet->nguyen_lieu_id ? 'selected' : '' }}
-                                                            value="{{ $nltinh->id }}">{{ $nltinh->ten_nguyen_lieu }}</option>
-                                                    @endforeach
-                                               @else
-                                                    @foreach($nlphanloais as $nlphanloai)
-                                                        <option
-                                                            {{ $nlphanloai->id == $dsNLSXChiTiet->nguyen_lieu_id ? 'selected' : '' }}
-                                                            value="{{ $nlphanloai->id }}">{{ $nlphanloai->ten_nguyen_lieu }}</option>
-                                                    @endforeach
-                                               @endif
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="ten_nguyen_lieus[]" class="form-control"
-                                                   value="{{ $dsNLSXChiTiet->ten_nguyen_lieu }}" required>
-                                        </td>
-                                        <td>
-                                            <input type="number" min="0" name="khoi_luongs[]"
-                                                   value="{{ $dsNLSXChiTiet->khoi_luong }}" class="form-control"
-                                                   required>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm disabled">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
                 </div>
 
             </div>
         </div>
-
-        <script>
-            const baseHtml = `<tr>
-                                    <td>
-                                        <select class="form-control" name="loai_nguyen_lieu_ids[]"
-                                                onchange="changeLoaiNguyenLieu(this)">
-                                            <option value="nguyen_lieu_tinh">Nguyên liệu Tinh</option>
-                                            <option value="nguyen_lieu_phan_loai">Nguyên liệu Phân loại</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" name="nguyen_lieu_ids[]">
-                                            @foreach($nltinhs as $nltinh)
-            <option value="{{ $nltinh->id }}">{{ $nltinh->ten_nguyen_lieu }}</option>
-                                            @endforeach
-            </select>
-        </td>
-        <td>
-            <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
-        </td>
-        <td>
-            <input type="number" min="0" name="khoi_luongs[]" class="form-control" required>
-        </td>
-        <td>
-            <button type="button" class="btn btn-danger btn-sm disabled">
-                <i class="bi bi-trash"></i>
-            </button>
-        </td>
-    </tr>`;
-
-            async function changeLoaiNguyenLieu(el) {
-                const value = $(el).val();
-                if (value === 'nguyen_lieu_tinh') {
-                    await listNguyenLieuTinh(el);
-                } else {
-                    await listNguyenLieuPhanLoai(el);
-                }
-            }
-
-            async function listNguyenLieuTinh(el) {
-                let url = `{{ route('api.nguyen.lieu.tinh.list') }}`;
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    async: false,
-                    success: function (data, textStatus) {
-                        renderData(el, data.data);
-                    },
-                    error: function (request, status, error) {
-                        let data = JSON.parse(request.responseText);
-                        alert(data.message);
-                    }
-                });
-            }
-
-            async function listNguyenLieuPhanLoai(el) {
-                let url = `{{ route('api.nguyen.lieu.phan.loai.list') }}`;
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    async: false,
-                    success: function (data, textStatus) {
-                        renderData(el, data.data);
-                    },
-                    error: function (request, status, error) {
-                        let data = JSON.parse(request.responseText);
-                        alert(data.message);
-                    }
-                });
-            }
-
-            function renderData(el, data) {
-                let html = '';
-                data.forEach((item) => {
-                    html += `<option value="${item.id}">${item.ten_nguyen_lieu}</option>`;
-                });
-                $(el).parent().next().find('select').html(html);
-            }
-
-            function plusItem() {
-                $('#tbodyListNL').append(baseHtml);
-            }
-
-            function removeItems(el) {
-                $(el).parent().closest('tr').remove();
-            }
-        </script>
     </section>
 @endsection

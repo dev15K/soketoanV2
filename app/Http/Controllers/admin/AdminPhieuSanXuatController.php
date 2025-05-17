@@ -32,10 +32,10 @@ class AdminPhieuSanXuatController extends Controller
         } while (PhieuSanXuat::where('code', $code)->exists());
 
         do {
-            $ma_lo_hang = generateRandomNumber(6);
-        } while (PhieuSanXuat::where('ma_lo_hang', $ma_lo_hang)->exists());
+            $so_lo_san_xuat = generateRandomNumber(6);
+        } while (PhieuSanXuat::where('so_lo_san_xuat', $so_lo_san_xuat)->exists());
 
-        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'ma_lo_hang', 'nltinhs'));
+        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'so_lo_san_xuat', 'nltinhs'));
     }
 
     public function detail($id)
@@ -55,11 +55,11 @@ class AdminPhieuSanXuatController extends Controller
             } while (PhieuSanXuat::where('code', $code)->exists());
         }
 
-        $ma_lo_hang = $phieu_san_xuat->ma_lo_hang;
+        $so_lo_san_xuat = $phieu_san_xuat->so_lo_san_xuat;
         if (empty($ma_lo_hang)) {
             do {
-                $ma_lo_hang = generateRandomNumber(6);
-            } while (PhieuSanXuat::where('ma_lo_hang', $ma_lo_hang)->exists());
+                $so_lo_san_xuat = generateRandomNumber(6);
+            } while (PhieuSanXuat::where('so_lo_san_xuat', $so_lo_san_xuat)->exists());
         }
 
         $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
@@ -69,7 +69,7 @@ class AdminPhieuSanXuatController extends Controller
         $dsNLSXChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiets', 'nltinhs', 'code', 'ma_lo_hang'));
+        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiets', 'nltinhs', 'code', 'so_lo_san_xuat'));
     }
 
     public function store(Request $request)
@@ -80,8 +80,6 @@ class AdminPhieuSanXuatController extends Controller
             $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
             $phieu_san_xuat->save();
 
-            $this->saveDataChiTiet($phieu_san_xuat, $request);
-
             return redirect()->back()->with('success', 'Thêm mới phiếu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -91,25 +89,21 @@ class AdminPhieuSanXuatController extends Controller
     private function saveData(PhieuSanXuat $phieuSanXuat, Request $request)
     {
         $ngay = $request->input('ngay');
-        $ten_phieu = $request->input('ten_phieu');
-
-        $tong_khoi_luong = 0;
-        $gia_tien = 0;
+        $code = $request->input('code');
+        $tong_khoi_luong = $request->input('tong_khoi_luong');
+        $so_lo_san_xuat = $request->input('so_lo_san_xuat');
+        $nguyen_lieu_id = $request->input('nguyen_lieu_id');
 
         if (!$phieuSanXuat->code) {
-            do {
-                $code = generateRandomString(8);
-            } while (PhieuSanXuat::where('code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
-
             $phieuSanXuat->code = $code;
         }
 
         $trang_thai = $request->input('trang_thai');
 
-        $phieuSanXuat->ten_phieu = $ten_phieu;
+        $phieuSanXuat->so_lo_san_xuat = $so_lo_san_xuat;
+        $phieuSanXuat->nguyen_lieu_id = $nguyen_lieu_id;
         $phieuSanXuat->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $phieuSanXuat->trang_thai = $trang_thai;
-
         $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
 
         return $phieuSanXuat;
@@ -188,8 +182,6 @@ class AdminPhieuSanXuatController extends Controller
 
             $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
             $phieu_san_xuat->save();
-
-            $this->saveDataChiTiet($phieu_san_xuat, $request);
 
             return redirect()->route('admin.phieu.san.xuat.index')->with('success', 'Chỉnh sửa phiếu sản xuất thành công');
         } catch (\Exception $e) {

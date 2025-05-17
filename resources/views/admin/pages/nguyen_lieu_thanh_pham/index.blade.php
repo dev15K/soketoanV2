@@ -69,80 +69,65 @@
                     </div>
                     <form method="post" action="{{ route('admin.nguyen.lieu.thanh.pham.store') }}" class="d-none">
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_san_pham">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="ten_san_pham" name="ten_san_pham"
-                                   required>
-                        </div>
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <label for="ngay">Ngày nhập kho</label>
+                                <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay" required>
                             </div>
+
                             <div class="form-group col-md-4">
-                                <label for="ngay_san_xuat">Ngày sản xuất</label>
-                                <input type="date" class="form-control" id="ngay_san_xuat" name="ngay_san_xuat"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="han_su_dung">Hạn sử dụng</label>
-                                <input type="date" class="form-control" id="han_su_dung" name="han_su_dung" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="type">Loại nguyên liệu</label>
-                                <select name="type" id="type" class="form-control">
-                                    <option value="san_xuat">Nguyên liệu Sản xuất</option>
-                                    <option value="tho">Nguyên liệu Thô</option>
-                                    <option value="phan_loai">Nguyên liệu Phân loại</option>
-                                    <option value="tinh">Nguyên liệu Tinh</option>
+                                <label for="nguyen_lieu_san_xuat_id">Lô SX</label>
+                                <select name="nguyen_lieu_san_xuat_id" id="nguyennguyen_lieu_san_xuat_id_lieu_id"
+                                        class="form-control">
+                                    @foreach($nlsanxuats as $nlsanxuat)
+                                        <option value="{{ $nlsanxuat->id }}">
+                                            {{ $nlsanxuat->PhieuSanXuat->so_lo_san_xuat }}
+                                            - {{ $nlsanxuat->ten_nguyen_lieu }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="nguyen_lieu_id">Tên nguyên liệu</label>
-                                <select name="nguyen_lieu_id" id="nguyen_lieu_id" class="form-control">
-                                    @foreach($nlsanxuats as $nlsanxuat)
-                                        <option value="{{ $nlsanxuat->id }}">{{ $nlsanxuat->ten_nguyen_lieu }}</option>
+                            <div class="form-group col-md-4">
+                                <label for="san_pham_id">Mã sản phẩm</label>
+                                <select name="san_pham_id" id="san_pham_id" class="form-control">
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id }}">
+                                            {{ $product->ma_san_pham}} - {{ $product->ten_san_pham }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <label for="khoi_luong">Khối lượng(kg)</label>
-                                <input type="number" min="0" class="form-control" id="khoi_luong" name="khoi_luong"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="don_vi_tinh">Đơn vị tính</label>
-                                <input type="text" class="form-control" id="don_vi_tinh" name="don_vi_tinh"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="so_luong">Số lượng</label>
+                                <label for="so_luong">Số lượng (cái/hộp)</label>
                                 <input type="text" class="form-control" id="so_luong" name="so_luong" required>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="price">Giá xuất kho thương mại</label>
                                 <input type="number" class="form-control" id="price" name="price"
                                        required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="total_price">Tổng giá</label>
+                                <label for="total_price">Tổng tiền</label>
                                 <input type="number" class="form-control" id="total_price"
                                        name="total_price" required>
                             </div>
-                            <div class="form-group col-md-4">
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}</option>
+                                            value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}</option>
                                     <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}</option>
+                                            value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}</option>
                                 </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="ngay_san_xuat">Ngày nhập kho</label>
+                                <input type="date" class="form-control" id="ngay_san_xuat" name="ngay_san_xuat"
+                                       required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -164,25 +149,33 @@
 
                     <table class="table table-hover vw-100">
                         <colgroup>
-                            <col width="5%">
+                            <col width="3%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
                             <col width="x">
-                            <col width="8%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
                             <col width="10%">
                             <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="8%">
-                            <col width="10%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="6%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col">Ngày</th>
+                            <th scope="col">Lô SX</th>
+                            <th scope="col">Mã SP</th>
                             <th scope="col">Tên sản phẩm</th>
-                            <th scope="col">Loại nguyên liệu</th>
-                            <th scope="col">Khối lượng</th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Giá bán</th>
+                            <th scope="col">Khối lượng riêng gr</th>
+                            <th scope="col">Đơn vị tính</th>
+                            <th scope="col">Số lượng (cái/hộp)</th>
+                            <th scope="col">Giá xuất kho thương mại</th>
                             <th scope="col">Tổng giá</th>
+                            <th scope="col">Ngày sản xuất</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
@@ -191,18 +184,16 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ $data->product_code }} - {{ $data->ten_san_pham }}</td>
-                                <td>
-                                    @if($data->type == 'san_xuat')
-                                        Nguyên liệu Sản xuất
-                                    @else
-                                        Nguyên liệu Khác
-                                    @endif
-                                </td>
-                                <td>{{ number_format($data->khoi_luong) }} kg</td>
-                                <td>{{ number_format($data->so_luong) }} {{ $data->don_vi_tinh }}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ $data->nguyenLieuSanXuat->PhieuSanXuat->so_lo_san_xuat }}</td>
+                                <td>{{ $data->sanPham->ma_san_pham }}</td>
+                                <td>{{ $data->sanPham->ten_san_pham }}</td>
+                                <td>{{ $data->sanPham->khoi_luong_rieng }}</td>
+                                <td>{{ $data->sanPham->don_vi_tinh }}</td>
+                                <td>{{ number_format($data->so_luong) }}</td>
                                 <td>{{ number_format($data->price) }} VND</td>
                                 <td>{{ number_format($data->total_price) }} VND</td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay_san_xuat)->format('d-m-Y') }}</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">

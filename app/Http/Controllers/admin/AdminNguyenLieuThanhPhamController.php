@@ -4,9 +4,11 @@ namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuSanXuat;
 use App\Enums\TrangThaiNguyenLieuThanhPham;
+use App\Enums\TrangThaiSanPham;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuSanXuat;
 use App\Models\NguyenLieuThanhPham;
+use App\Models\SanPham;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -22,7 +24,11 @@ class AdminNguyenLieuThanhPhamController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_thanh_pham.index', compact('datas', 'nlsanxuats'));
+        $products = SanPham::where('trang_thai', '!=', TrangThaiSanPham::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.pages.nguyen_lieu_thanh_pham.index', compact('datas', 'nlsanxuats', 'products'));
     }
 
     public function detail($id)
@@ -31,11 +37,16 @@ class AdminNguyenLieuThanhPhamController extends Controller
         if (!$nguyenLieuThanhPham || $nguyenLieuThanhPham->trang_thai == TrangThaiNguyenLieuThanhPham::DELETED()) {
             return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thành phẩm');
         }
+
         $nlsanxuats = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_thanh_pham.detail', compact('nguyenLieuThanhPham', 'nlsanxuats'));
+        $products = SanPham::where('trang_thai', '!=', TrangThaiSanPham::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.pages.nguyen_lieu_thanh_pham.detail', compact('nguyenLieuThanhPham', 'nlsanxuats', 'products'));
     }
 
     public function store(Request $request)
@@ -52,43 +63,29 @@ class AdminNguyenLieuThanhPhamController extends Controller
         }
     }
 
-    private function saveData(NguyenLieuThanhPham $phieuSanXuat, Request $request)
+    private function saveData(NguyenLieuThanhPham $nguyenLieuThanhPham, Request $request)
     {
-        $ten_san_pham = $request->input('ten_san_pham');
         $ngay = $request->input('ngay');
-        $type = $request->input('type');
-        $nguyen_lieu_id = $request->input('nguyen_lieu_id');
-        $khoi_luong = $request->input('khoi_luong');
-        $don_vi_tinh = $request->input('don_vi_tinh');
+        $nguyen_lieu_san_xuat_id = $request->input('nguyen_lieu_san_xuat_id');
+        $san_pham_id = $request->input('san_pham_id');
+        $ten_san_pham = $request->input('ten_san_pham');
         $so_luong = $request->input('so_luong');
         $price = $request->input('price');
         $total_price = $request->input('total_price');
         $ngay_san_xuat = $request->input('ngay_san_xuat');
-        $han_su_dung = $request->input('han_su_dung');
         $trang_thai = $request->input('trang_thai');
 
-        if (!$phieuSanXuat->product_code) {
-            do {
-                $code = generateRandomString(8);
-            } while (NguyenLieuThanhPham::where('product_code', $code)->where('id', '!=', $phieuSanXuat->id)->exists());
+        $nguyenLieuThanhPham->ten_san_pham = $ten_san_pham;
+        $nguyenLieuThanhPham->ngay = Carbon::parse($ngay)->format('Y-m-d');
+        $nguyenLieuThanhPham->so_luong = $so_luong;
+        $nguyenLieuThanhPham->price = $price;
+        $nguyenLieuThanhPham->total_price = $total_price;
+        $nguyenLieuThanhPham->nguyen_lieu_san_xuat_id = $nguyen_lieu_san_xuat_id;
+        $nguyenLieuThanhPham->san_pham_id = $san_pham_id;
+        $nguyenLieuThanhPham->ngay_san_xuat = Carbon::parse($ngay_san_xuat)->format('Y-m-d');
+        $nguyenLieuThanhPham->trang_thai = $trang_thai;
 
-            $phieuSanXuat->product_code = $code;
-        }
-
-        $phieuSanXuat->ten_san_pham = $ten_san_pham;
-        $phieuSanXuat->ngay = Carbon::parse($ngay)->format('Y-m-d');
-        $phieuSanXuat->type = $type;
-        $phieuSanXuat->nguyen_lieu_id = $nguyen_lieu_id;
-        $phieuSanXuat->khoi_luong = $khoi_luong;
-        $phieuSanXuat->don_vi_tinh = $don_vi_tinh;
-        $phieuSanXuat->so_luong = $so_luong;
-        $phieuSanXuat->price = $price;
-        $phieuSanXuat->total_price = $total_price;
-        $phieuSanXuat->ngay_san_xuat = Carbon::parse($ngay_san_xuat)->format('Y-m-d');
-        $phieuSanXuat->han_su_dung = Carbon::parse($han_su_dung)->format('Y-m-d');
-        $phieuSanXuat->trang_thai = $trang_thai;
-
-        return $phieuSanXuat;
+        return $nguyenLieuThanhPham;
     }
 
     public function delete($id)
