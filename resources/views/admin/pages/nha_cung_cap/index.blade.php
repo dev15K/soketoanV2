@@ -101,9 +101,10 @@
                     <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="5%">
-                            <col width="25%">
+                            <col width="20%">
                             <col width="10%">
                             <col width="x">
+                            <col width="20%">
                             <col width="10%">
                             <col width="10%">
                         </colgroup>
@@ -113,6 +114,7 @@
                             <th scope="col">Họ và tên</th>
                             <th scope="col">Số điện thoại</th>
                             <th scope="col">Địa chỉ</th>
+                            <th scope="col">Công nợ</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
@@ -124,6 +126,19 @@
                                 <td>{{ $data->ten }}</td>
                                 <td>{{ $data->so_dien_thoai }}</td>
                                 <td>{{ $data->dia_chi }}</td>
+                                <td>
+                                    @php
+                                        $nguyen_lieu_thos = \App\Models\NguyenLieuTho::where('trang_thai', '!=', \App\Enums\TrangThaiNguyenLieuTho::DELETED())
+                                            ->where('nha_cung_cap_id', $data->id)
+                                            ->get();
+
+                                        $total = 0;
+                                        foreach ($nguyen_lieu_thos as $nguyen_lieu_tho) {
+                                            $total += $nguyen_lieu_tho->cong_no;
+                                        }
+                                    @endphp
+                                    {{ number_format($total, 0) }} VND
+                                </td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
