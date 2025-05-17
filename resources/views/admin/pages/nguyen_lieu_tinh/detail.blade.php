@@ -184,7 +184,7 @@
                                         </select>
         </td>
         <td>
-            <input type="number" min="0" name="khoi_luongs[]" class="form-control" required>
+            <input type="text" min="0" name="khoi_luongs[]" class="form-control" required>
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm" onclick="removeItems(this)">

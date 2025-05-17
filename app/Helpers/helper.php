@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\LichSuTonKho;
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\Setting;
@@ -35,7 +36,7 @@ if (!function_exists('returnMessage')) {
 }
 
 if (!function_exists('setting')) {
-    function setting()
+    function setting(): ?Setting
     {
         if (Schema::hasTable('settings')) {
             return Setting::first();
@@ -63,7 +64,7 @@ if (!function_exists('getRoleUser')) {
 }
 
 if (!function_exists('generateRandomString')) {
-    function generateRandomString($length)
+    function generateRandomString($length): string
     {
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuyvwxyz';
         $charactersLength = strlen($characters);
@@ -74,7 +75,7 @@ if (!function_exists('generateRandomString')) {
         return $randomString;
     }
 
-    function generateRandomNumber($length)
+    function generateRandomNumber($length): string
     {
         $characters = '0123456789';
         $charactersLength = strlen($characters);
@@ -87,7 +88,7 @@ if (!function_exists('generateRandomString')) {
 }
 
 if (!function_exists('convertNumber')) {
-    function convertNumber($num)
+    function convertNumber($num): string
     {
         if ($num >= 1 && $num <= 10) {
             return '00' . $num;
@@ -98,8 +99,29 @@ if (!function_exists('convertNumber')) {
         }
     }
 
-    function generateCode($num)
+    function generateCode($num): string
     {
         return 'DH' . convertNumber($num);
+    }
+
+    function generateProductCode($num): string
+    {
+        return 'TTH' . convertNumber($num);
+    }
+
+    function generateLSXCode($num): string
+    {
+        return 'LSX' . convertNumber($num);
+    }
+}
+
+if (!function_exists('updateTonKho')) {
+    function updateTonKho(): ?string
+    {
+        if (Schema::hasTable('lich_su_ton_khos')) {
+            return 'ok';
+        }
+
+        return null;
     }
 }

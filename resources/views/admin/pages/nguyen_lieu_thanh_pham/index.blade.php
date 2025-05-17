@@ -105,12 +105,12 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="price">Giá xuất kho thương mại</label>
-                                <input type="number" class="form-control" id="price" name="price"
+                                <input type="text" class="form-control onlyNumber" id="price" name="price"
                                        required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="total_price">Tổng tiền</label>
-                                <input type="number" class="form-control" id="total_price"
+                                <input type="text" class="form-control onlyNumber" id="total_price"
                                        name="total_price" required>
                             </div>
                         </div>

@@ -15,9 +15,7 @@ class AdminSanPhamController extends Controller
             ->orderByDesc('id')
             ->paginate(20);
 
-        do {
-            $code = generateRandomString(8);
-        } while (SanPham::where('ma_san_pham', $code)->exists());
+        $code = $this->generateCode();
 
         return view('admin.pages.san_pham.index', compact('datas', 'code'));
     }
@@ -31,9 +29,7 @@ class AdminSanPhamController extends Controller
 
         $code = $item->ma_san_pham;
         if (!$item->ma_san_pham) {
-            do {
-                $code = generateRandomString(8);
-            } while (SanPham::where('ma_san_pham', $code)->exists());
+            $code = $this->generateCode();
         }
 
         return view('admin.pages.san_pham.detail', compact('item', 'code'));
@@ -112,5 +108,15 @@ class AdminSanPhamController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    private function generateCode()
+    {
+        $lastItem = SanPham::where('trang_thai', '!=', TrangThaiSanPham::DELETED())
+            ->orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return generateProductCode($lastId + 1);
     }
 }

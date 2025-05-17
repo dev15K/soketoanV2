@@ -34,13 +34,14 @@
                             <div class="col-md-4 form-group">
                                 <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="ngay">Ngày: </label>
-                                    <input type="date" class="form-control" id="ngay" name="ngay">
+                                    <input type="date" class="form-control" id="ngay_search"
+                                           value="{{ $ngay_search }}" name="ngay">
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên nguyên liệu sản xuất">
+                                    <input type="text" class="form-control" id="keyword" name="keyword"
+                                           placeholder="Tên nguyên liệu" value="{{ $keyword }}">
                                     <div class="input-group-prepend">
                                         <button type="button" class="input-group-text">
                                             <i class="bi bi-search"></i>
@@ -48,9 +49,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4 form-group">
+                                <div class="form-group">
+                                    <select name="phieu_san_xuat_id" id="phieu_san_xuat_id" class="form-control">
+                                        <option value="">Lựa chọn</option>
+                                        @foreach($phieu_san_xuats as $phieu_san_xuat)
+                                            <option {{ $phieu_san_xuat->id == $phieu_san_xuat_id ? 'selected' : '' }}
+                                                    value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
 
@@ -58,6 +70,15 @@
 
             </div>
         </div>
+
+        <script>
+            function searchTable() {
+                const ngay_search = $('#ngay_search').val();
+                const keyword = $('#keyword').val();
+                const so_lo_san_xuat = $('#phieu_san_xuat_id').val();
+                window.location.href = "{{ route('admin.nguyen.lieu.san.xuat.index') }}?ngay=" + ngay_search + "&keyword=" + keyword + "&phieu_san_xuat_id=" + so_lo_san_xuat;
+            }
+        </script>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
@@ -93,7 +114,7 @@
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong">Khối lượng(kg)</label>
-                                <input type="number" min="0" class="form-control" id="khoi_luong" name="khoi_luong"
+                                <input type="text" class="form-control onlyNumber" id="khoi_luong" name="khoi_luong"
                                        required>
                             </div>
                             <div class="form-group col-md-4">
@@ -102,14 +123,14 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="mau_sac">Màu sắc</label>
-                                <input type="text" class="form-control" id="mau_sac" name="mau_sac" required>
+                                <input type="text" class="form-control" id="mau_sac" name="mau_sac">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="mui_thom">Mùi thơm</label>
                                 <input type="text" class="form-control" id="mui_thom"
-                                       name="mui_thom" required>
+                                       name="mui_thom">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
@@ -121,14 +142,13 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group ">
+                            <label for="bao_quan">Bảo quản</label>
+                            <input type="text" class="form-control" id="bao_quan" name="bao_quan">
+                        </div>
                         <div class="form-group">
                             <label for="chi_tiet_khac">Chi tiết khác</label>
                             <textarea name="chi_tiet_khac" id="chi_tiet_khac" class="form-control" rows="5"></textarea>
-                        </div>
-                        <div class="form-group ">
-                            <label for="bao_quan">Bảo quản</label>
-                            <input type="text" class="form-control" id="bao_quan" name="bao_quan"
-                                   required>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
@@ -181,7 +201,7 @@
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
                                 <td>{{ $data->ten_nguyen_lieu }}</td>
-                                <td>{{ number_format($data->khoi_luong) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong, 0) }} kg</td>
                                 <td>{{ $data->don_vi_tinh }}</td>
                                 <td>{{ $data->mau_sac }}</td>
                                 <td>{{ $data->mui_thom }}</td>

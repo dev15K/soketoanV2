@@ -53,7 +53,7 @@
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong">Khối lượng(kg)</label>
-                                <input type="number" min="0" class="form-control" id="khoi_luong" name="khoi_luong"
+                                <input type="text" class="form-control onlyNumber" id="khoi_luong" name="khoi_luong"
                                        value="{{ $nguyen_lieu_san_xuat->khoi_luong }}" required>
                             </div>
                             <div class="form-group col-md-4">
@@ -64,14 +64,14 @@
                             <div class="form-group col-md-4">
                                 <label for="mau_sac">Màu sắc</label>
                                 <input type="text" class="form-control" id="mau_sac" name="mau_sac"
-                                       value="{{ $nguyen_lieu_san_xuat->mau_sac }}" required>
+                                       value="{{ $nguyen_lieu_san_xuat->mau_sac }}" >
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="mui_thom">Mùi thơm</label>
                                 <input type="text" class="form-control" id="mui_thom" name="mui_thom"
-                                       value="{{ $nguyen_lieu_san_xuat->mui_thom }}" required>
+                                       value="{{ $nguyen_lieu_san_xuat->mui_thom }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
@@ -85,16 +85,16 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group ">
+                            <label for="bao_quan">Bảo quản</label>
+                            <input type="text" class="form-control" id="bao_quan" name="bao_quan"
+                                   value="{{ $nguyen_lieu_san_xuat->bao_quan }}">
+                        </div>
                         <div class="form-group">
                             <label for="chi_tiet_khac">Chi tiết khác</label>
                             <textarea name="chi_tiet_khac" id="chi_tiet_khac" class="form-control" rows="5">
                                 {{ $nguyen_lieu_san_xuat->chi_tiet_khac }}
                             </textarea>
-                        </div>
-                        <div class="form-group ">
-                            <label for="bao_quan">Bảo quản</label>
-                            <input type="text" class="form-control" id="bao_quan" name="bao_quan"
-                                   value="{{ $nguyen_lieu_san_xuat->bao_quan }}" required>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
                     </form>

@@ -12,17 +12,32 @@ use Illuminate\Support\Carbon;
 
 class AdminNguyenLieuSanXuatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
-            ->orderByDesc('id')
-            ->paginate(20);
+        $ngay_search = $request->input('ngay');
+        $keyword = $request->input('keyword');
+        $phieu_san_xuat_id = $request->input('phieu_san_xuat_id');
 
+        $queries = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED());
+
+        if ($ngay_search) {
+            $queries->whereDate('ngay', Carbon::parse($ngay_search)->format('Y-m-d'));
+        }
+
+        if ($keyword) {
+            $queries->where('ten_nguyen_lieu', 'like', '%' . $keyword . '%');
+        }
+
+        if ($phieu_san_xuat_id) {
+            $queries->where('phieu_san_xuat_id', $phieu_san_xuat_id);
+        }
+
+        $datas = $queries->orderByDesc('id')->paginate(20);
         $phieu_san_xuats = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_san_xuat.index', compact('datas', 'phieu_san_xuats'));
+        return view('admin.pages.nguyen_lieu_san_xuat.index', compact('datas', 'phieu_san_xuats', 'ngay_search', 'keyword', 'phieu_san_xuat_id'));
     }
 
     public function detail($id)
@@ -79,10 +94,10 @@ class AdminNguyenLieuSanXuatController extends Controller
         $nguyenLieuSanXuat->phieu_san_xuat_id = $phieu_san_xuat_id;
         $nguyenLieuSanXuat->khoi_luong = $khoi_luong;
         $nguyenLieuSanXuat->don_vi_tinh = $don_vi_tinh;
-        $nguyenLieuSanXuat->mau_sac = $mau_sac;
-        $nguyenLieuSanXuat->mui_thom = $mui_thom;
-        $nguyenLieuSanXuat->chi_tiet_khac = $chi_tiet_khac;
-        $nguyenLieuSanXuat->bao_quan = $bao_quan;
+        $nguyenLieuSanXuat->mau_sac = $mau_sac ?? '';
+        $nguyenLieuSanXuat->mui_thom = $mui_thom ?? '';
+        $nguyenLieuSanXuat->chi_tiet_khac = $chi_tiet_khac ?? '';
+        $nguyenLieuSanXuat->bao_quan = $bao_quan ?? '';
         $nguyenLieuSanXuat->trang_thai = $trang_thai;
 
         return $nguyenLieuSanXuat;
