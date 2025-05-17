@@ -26,20 +26,21 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu thô</label>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm</label>
                     </h5>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">
                             <div class="col-md-4 form-group">
-                                <div class="d-flex justify-content-start align-items-end gap-2">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="ngay">Ngày: </label>
-                                    <input type="date" class="form-control" id="ngay" name="ngay">
+                                    <input type="date" class="form-control" id="ngay_search"
+                                           value="{{ \Carbon\Carbon::parse($ngay)->format('Y-m-d') }}" name="ngay">
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên nguyên liệu thô">
+                                    <input type="text" class="form-control" id="keyword" name="keyword"
+                                           placeholder="Tên nguyên liệu thô, mã đơn hàng" value="{{ $keyword }}">
                                     <div class="input-group-prepend">
                                         <button type="button" class="input-group-text">
                                             <i class="bi bi-search"></i>
@@ -47,15 +48,35 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4 form-group">
+                                <div class="form-group">
+                                    <select name="nha_cung_cap_id" id="nha_cung_cap_id_search" class="form-control">
+                                        <option value="">Lựa chọn</option>
+                                        @foreach($nccs as $ncc)
+                                            <option {{ $ncc->id == $nha_cung_cap_id ? 'selected' : '' }}
+                                                value="{{ $ncc->id }}">{{ $ncc->ten }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
+
+        <script>
+            function searchTable() {
+                const ngay_search = $('#ngay_search').val();
+                const keyword = $('#keyword').val();
+                const nha_cung_cap_id = $('#nha_cung_cap_id_search').val();
+                window.location.href = "{{ route('admin.nguyen.lieu.tho.index') }}?ngay=" + ngay_search + "&keyword=" + keyword + "&nha_cung_cap_id=" + nha_cung_cap_id;
+            }
+        </script>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
@@ -253,14 +274,14 @@
                                 <td>{{ $data->ten_nguyen_lieu }}</td>
                                 <td>{{ $data->loai }}</td>
                                 <td>{{ $data->nguon_goc }}</td>
-                                <td>{{ number_format($data->khoi_luong, 3) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong, 0) }} kg</td>
                                 <td>{{ $data->kich_thuoc }}</td>
                                 <td>{{ $data->do_kho }}</td>
                                 <td>{{ $data->dieu_kien_luu_tru }}</td>
-                                <td>{{ number_format($data->chi_phi_mua, 3) }} VND</td>
+                                <td>{{ number_format($data->chi_phi_mua, 0) }} VND</td>
                                 <td>{{ $data->phuong_thuc_thanh_toan }}</td>
-                                <td>{{ number_format(floatval($data->so_tien_thanh_toan) ?? 0, 3) }} VND</td>
-                                <td>{{ number_format($data->cong_no, 3) }} VND</td>
+                                <td>{{ number_format(floatval($data->so_tien_thanh_toan) ?? 0, 0) }} VND</td>
+                                <td>{{ number_format($data->cong_no, 0) }} VND</td>
                                 <td>{{ $data->nhan_su_xu_li }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->thoi_gian_phan_loai)->format('d-m-Y') }}</td>
                                 <td>{{ $data->ghi_chu }}</td>

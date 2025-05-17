@@ -11,8 +11,10 @@ class AdminNhaCungCapController extends Controller
 {
     public function index()
     {
-        $datas = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
-            ->orderByDesc('id')
+        $datas = NhaCungCaps::where('nha_cung_caps.trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
+            ->joins('nguyen_lieu_thos', 'nguyen_lieu_thos.nha_cung_cap_id', '=', 'nha_cung_caps.id')
+            ->select('nha_cung_caps.*', 'nguyen_lieu_thos.cong_no as cong_no')
+            ->orderByDesc('nha_cung_caps.id')
             ->paginate(20);
         return view('admin.pages.nha_cung_cap.index', compact('datas'));
     }

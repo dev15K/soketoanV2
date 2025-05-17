@@ -12,16 +12,27 @@ use Illuminate\Http\Request;
 
 class AdminNguyenLieuPhanLoaiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
-            ->orderByDesc('id')
-            ->paginate(20);
+        $ngay = $request->input('ngay');
+        $nguyen_lieu_tho_id = $request->input('nguyen_lieu_tho_id');
+
+        $queries = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED());
+
+        if ($ngay) {
+            $queries->whereDate('ngay', Carbon::parse($ngay)->format('Y-m-d'));
+        }
+
+        if ($nguyen_lieu_tho_id) {
+            $queries->where('nguyen_lieu_tho_id', $nguyen_lieu_tho_id);
+        }
+
+        $datas = $queries->orderByDesc('id')->paginate(20);
 
         $nlthos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_phan_loai.index', compact('datas', 'nlthos'));
+        return view('admin.pages.nguyen_lieu_phan_loai.index', compact('datas', 'nlthos', 'ngay', 'nguyen_lieu_tho_id'));
     }
 
     public function detail($id)
@@ -44,6 +55,8 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
             $nguyen_lieu_phan_loai = $this->saveData($nguyen_lieu_phan_loai, $request);
             $nguyen_lieu_phan_loai->save();
+
+            $this->updateNguyenLieuTho();
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu phân loại thành công');
         } catch (\Exception $e) {
@@ -96,6 +109,24 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         return $NguyenLieuPhanLoai;
     }
 
+    private function updateNguyenLieuTho()
+    {
+        $datas = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
+            ->orderByDesc('id')
+            ->get();
+        NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+            ->orderByDesc('id')
+            ->update(['allow_change' => true]);
+        foreach ($datas as $data) {
+            $nguyenLieuTho = NguyenLieuTho::where('id', $data->nguyen_lieu_tho_id)->first();
+            if ($nguyenLieuTho) {
+//                $nguyenLieuTho->khoi_luong = $nguyenLieuTho->khoi_luong - $data->tong_khoi_luong;
+                $nguyenLieuTho->allow_change = false;
+                $nguyenLieuTho->save();
+            }
+        }
+    }
+
     public function update($id, Request $request)
     {
         try {
@@ -106,6 +137,8 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
             $nguyen_lieu_phan_loai = $this->saveData($nguyen_lieu_phan_loai, $request);
             $nguyen_lieu_phan_loai->save();
+
+            $this->updateNguyenLieuTho();
 
             return redirect()->route('admin.nguyen.lieu.phan.loai.index')->with('success', 'Chỉnh sửa nguyên liệu phân loại thành công');
         } catch (\Exception $e) {

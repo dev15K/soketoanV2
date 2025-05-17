@@ -26,31 +26,30 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nguyên liệu phân
-                            loại</label>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm</label>
                     </h5>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">
                             <div class="col-md-4 form-group">
-                                <div class="d-flex justify-content-start align-items-end gap-2">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="ngay">Ngày: </label>
-                                    <input type="date" class="form-control" id="ngay" name="ngay">
+                                    <input type="date" class="form-control" id="ngay_search"
+                                           value="{{ $ngay }}" name="ngay">
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên nguyên liệu phân loại">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="input-group-text">
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id_search" class="form-control">
+                                    <option value="">Tìm kiếm theo Mã đơn hàng</option>
+                                    @foreach($nlthos as $nltho)
+                                        <option {{ $nltho->id == $nguyen_lieu_tho_id ? 'selected' : '' }}
+                                                value="{{ $nltho->id }}">{{ $nltho->code }}
+                                            - {{ $nltho->ten_nguyen_lieu }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
 
@@ -58,6 +57,14 @@
 
             </div>
         </div>
+
+        <script>
+            function searchTable() {
+                const ngay_search = $('#ngay_search').val();
+                const nguyen_lieu_tho_id_search = $('#nguyen_lieu_tho_id_search').val();
+                window.location.href = "{{ route('admin.nguyen.lieu.phan.loai.index') }}?ngay=" + ngay_search + "&nguyen_lieu_tho_id=" + nguyen_lieu_tho_id_search;
+            }
+        </script>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
@@ -74,7 +81,8 @@
                                 <label for="nguyen_lieu_tho_id">Mã đơn hàng</label>
                                 <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
                                     @foreach($nlthos as $nltho)
-                                        <option value="{{ $nltho->id }}">{{ $nltho->code }} - {{ $nltho->ten_nguyen_lieu }}</option>
+                                        <option value="{{ $nltho->id }}">{{ $nltho->code }}
+                                            - {{ $nltho->ten_nguyen_lieu }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -197,18 +205,18 @@
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td>{{ $data->nguyenLieuTho->code }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                <td>{{ number_format($data->nu_cao_cap, 3) }} kg</td>
-                                <td>{{ number_format($data->nu_vip, 3) }} kg</td>
-                                <td>{{ number_format($data->nhang, 3) }} kg</td>
-                                <td>{{ number_format($data->vong, 3) }} kg</td>
-                                <td>{{ number_format($data->tam_tre, 3) }} kg</td>
-                                <td>{{ number_format($data->keo, 3) }} kg</td>
-                                <td>{{ number_format($data->nau_dau, 3) }} kg</td>
-                                <td>{{ number_format($data->chi_phi_mua, 3) }} VND</td>
-                                <td>{{ number_format($data->tong_khoi_luong, 3) }} kg</td>
-                                <td>{{ number_format($data->khoi_luong_ban_dau, 3) }} kg</td>
-                                <td>{{ number_format($data->khoi_luong_hao_hut, 3) }} kg</td>
-                                <td>{{ number_format($data->gia_sau_phan_loai, 3) }} VND</td>
+                                <td>{{ number_format($data->nu_cao_cap, 0) }} kg</td>
+                                <td>{{ number_format($data->nu_vip, 0) }} kg</td>
+                                <td>{{ number_format($data->nhang, 0) }} kg</td>
+                                <td>{{ number_format($data->vong, 0) }} kg</td>
+                                <td>{{ number_format($data->tam_tre, 0) }} kg</td>
+                                <td>{{ number_format($data->keo, 0) }} kg</td>
+                                <td>{{ number_format($data->nau_dau, 0) }} kg</td>
+                                <td>{{ number_format($data->chi_phi_mua, 0) }} VND</td>
+                                <td>{{ number_format($data->tong_khoi_luong, 0) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong_ban_dau, 0) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong_hao_hut, 0) }} kg</td>
+                                <td>{{ number_format($data->gia_sau_phan_loai, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
@@ -234,17 +242,17 @@
                             <th scope="col">Tổng:</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
-                            <th scope="col">{{ number_format($datas->sum('nu_cao_cap'), 3) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nu_vip'), 3) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nhang'), 3) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('vong'), 3) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('tam_tre'), 3) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('keo'), 3) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nau_dau'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nu_cao_cap'), 0) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nu_vip'), 0) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nhang'), 0) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('vong'), 0) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('tam_tre'), 0) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('keo'), 0) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('nau_dau'), 0) }} kg</th>
                             <th scope="col"></th>
-                            <th scope="col">{{ number_format($datas->sum('tong_khoi_luong'), 3) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('khoi_luong_ban_dau'), 3) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('khoi_luong_hao_hut'), 3) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('tong_khoi_luong'), 0) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
+                            <th scope="col">{{ number_format($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>

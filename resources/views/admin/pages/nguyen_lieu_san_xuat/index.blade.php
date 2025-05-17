@@ -32,7 +32,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">
                             <div class="col-md-4 form-group">
-                                <div class="d-flex justify-content-start align-items-end gap-2">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="ngay">Ngày: </label>
                                     <input type="date" class="form-control" id="ngay" name="ngay">
                                 </div>

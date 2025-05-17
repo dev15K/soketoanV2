@@ -13,11 +13,22 @@ use Illuminate\Support\Carbon;
 
 class AdminNguyenLieuTinhController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
-            ->orderByDesc('id')
-            ->paginate(20);
+        $ngay = $request->input('ngay');
+        $code_search = $request->input('code');
+
+        $queries = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED());
+
+        if ($ngay) {
+            $queries->whereDate('ngay', Carbon::parse($ngay)->format('Y-m-d'));
+        }
+
+        if ($code_search) {
+            $queries->where('code', 'like', '%' . $code_search . '%');
+        }
+
+        $datas = $queries->orderByDesc('id')->paginate(20);;
 
         $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
             ->orderByDesc('id')
@@ -32,7 +43,7 @@ class AdminNguyenLieuTinhController extends Controller
         } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->exists());
 
 
-        return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu'));
+        return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu', 'ngay', 'code_search'));
     }
 
     public function detail($id)

@@ -14,24 +14,41 @@ use Illuminate\Http\Request;
 
 class AdminNguyenLieuThoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
-            ->orderByDesc('id')
-            ->paginate(20);
+        $ngay = $request->input('ngay');
+        $keyword = $request->input('keyword');
+        $nha_cung_cap_id = $request->input('nha_cung_cap_id');
+
+        $queries = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED());
+
+        if ($ngay) {
+            $queries->whereDate('ngay', Carbon::parse($ngay)->format('Y-m-d'));
+        }
+
+        if ($keyword) {
+            $queries->where(function ($q) use ($keyword) {
+                $q->where('ten_nguyen_lieu', 'like', '%' . $keyword . '%')
+                    ->orWhere('code', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        if ($nha_cung_cap_id) {
+            $queries->where('nha_cung_cap_id', $nha_cung_cap_id);
+        }
+
+        $datas = $queries->orderByDesc('id')->paginate(20);
 
         $nccs = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
             ->orderByDesc('id')
             ->get();
 
-        do {
-            $code = generateRandomString(8);
-        } while (NguyenLieuTho::where('code', $code)->exists());
+        $code = $this->generateCode();
 
         $nsus = User::where('status', '!=', UserStatus::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs', 'code', 'nsus'));
+        return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs', 'code', 'nsus', 'ngay', 'keyword', 'nha_cung_cap_id'));
     }
 
     public function detail($id)
@@ -47,9 +64,7 @@ class AdminNguyenLieuThoController extends Controller
 
         $code = $nguyen_lieu_tho->code;
         if (!$code) {
-            do {
-                $code = generateRandomString(8);
-            } while (NguyenLieuTho::where('code', $code)->exists());
+            $code = $this->generateCode();
         }
 
         $nsus = User::where('status', '!=', UserStatus::DELETED())
@@ -57,6 +72,16 @@ class AdminNguyenLieuThoController extends Controller
             ->get();
 
         return view('admin.pages.nguyen_lieu_tho.detail', compact('nguyen_lieu_tho', 'nccs', 'code', 'nsus'));
+    }
+
+    private function generateCode()
+    {
+        $lastItem = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+            ->orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return generateCode($lastId + 1);
     }
 
     public function store(Request $request)

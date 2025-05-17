@@ -85,3 +85,21 @@ if (!function_exists('generateRandomString')) {
         return $randomString;
     }
 }
+
+if (!function_exists('convertNumber')) {
+    function convertNumber($num)
+    {
+        if ($num >= 1 && $num <= 10) {
+            return '00' . $num;
+        } elseif ($num >= 11 && $num <= 99) {
+            return '0' . $num;
+        } else {
+            return (string)$num;
+        }
+    }
+
+    function generateCode($num)
+    {
+        return 'DH' . convertNumber($num);
+    }
+}
