@@ -17,25 +17,39 @@ use Illuminate\Support\Carbon;
 
 class AdminPhieuSanXuatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
-            ->orderByDesc('id')
-            ->paginate(20);
+        $ngay = $request->input('ngay');
+        $keyword = $request->input('keyword');
+        $nguyen_lieu_id = $request->input('nguyen_lieu_id');
+
+        $queries = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED());
+
+        if ($ngay) {
+            $queries->whereDate('ngay', \Carbon\Carbon::parse($ngay)->format('Y-m-d'));
+        }
+
+        if ($keyword) {
+            $queries->where(function ($q) use ($keyword) {
+                $q->where('so_lo_san_xuat', 'like', '%' . $keyword . '%')
+                    ->orWhere('code', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        if ($nguyen_lieu_id) {
+            $queries->where('nguyen_lieu_id', $nguyen_lieu_id);
+        }
+
+        $datas = $queries->orderByDesc('id')->paginate(20);
 
         $nltinhs = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
             ->orderByDesc('id')
             ->get();
 
-        do {
-            $code = generateRandomString(8);
-        } while (PhieuSanXuat::where('code', $code)->exists());
+        $code = $this->generateCode();
+        $so_lo_san_xuat = $this->generateLoSanXuat();
 
-        do {
-            $so_lo_san_xuat = generateRandomNumber(6);
-        } while (PhieuSanXuat::where('so_lo_san_xuat', $so_lo_san_xuat)->exists());
-
-        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'so_lo_san_xuat', 'nltinhs'));
+        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'so_lo_san_xuat', 'nltinhs', 'ngay', 'keyword', 'nguyen_lieu_id'));
     }
 
     public function detail($id)
@@ -50,16 +64,12 @@ class AdminPhieuSanXuatController extends Controller
             ->get();
         $code = $phieu_san_xuat->code;
         if (empty($code)) {
-            do {
-                $code = generateRandomString(8);
-            } while (PhieuSanXuat::where('code', $code)->exists());
+            $code = $this->generateCode();
         }
 
         $so_lo_san_xuat = $phieu_san_xuat->so_lo_san_xuat;
-        if (empty($ma_lo_hang)) {
-            do {
-                $so_lo_san_xuat = generateRandomNumber(6);
-            } while (PhieuSanXuat::where('so_lo_san_xuat', $so_lo_san_xuat)->exists());
+        if (empty($so_lo_san_xuat)) {
+            $so_lo_san_xuat = $this->generateLoSanXuat();
         }
 
         $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
@@ -187,5 +197,25 @@ class AdminPhieuSanXuatController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    private function generateCode()
+    {
+        $lastItem = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+            ->orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return convertNumber($lastId + 1);
+    }
+
+    private function generateLoSanXuat()
+    {
+        $lastItem = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+            ->orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return generateLSXCode($lastId + 1);
     }
 }

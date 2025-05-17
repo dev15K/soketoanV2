@@ -113,6 +113,11 @@ if (!function_exists('convertNumber')) {
     {
         return 'LSX' . convertNumber($num);
     }
+
+    function generateLHXCode($num): string
+    {
+        return 'LH' . convertNumber($num);
+    }
 }
 
 if (!function_exists('updateTonKho')) {

@@ -34,7 +34,7 @@
                                 <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="ngay">Ngày: </label>
                                     <input type="date" class="form-control" id="ngay_search"
-                                           value="{{ \Carbon\Carbon::parse($ngay)->format('Y-m-d') }}" name="ngay">
+                                           value="{{ $ngay  }}" name="ngay">
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">

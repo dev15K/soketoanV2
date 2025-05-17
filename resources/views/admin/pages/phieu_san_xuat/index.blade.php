@@ -34,13 +34,14 @@
                             <div class="col-md-4 form-group">
                                 <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="ngay">Ngày: </label>
-                                    <input type="date" class="form-control" id="ngay" name="ngay">
+                                    <input type="date" class="form-control" id="ngay_search"
+                                           value="{{ $ngay }}" name="ngay">
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Tìm kiếm theo tên phiếu sản xuất">
+                                    <input type="text" class="form-control" id="keyword" name="keyword"
+                                           placeholder="Số LÔ SX, Mã Phiếu" value="{{ $keyword }}">
                                     <div class="input-group-prepend">
                                         <button type="button" class="input-group-text">
                                             <i class="bi bi-search"></i>
@@ -48,9 +49,21 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4 form-group">
+                                <div class="form-group">
+                                    <select id="nguyen_lieu_id_search" name="nguyen_lieu_id_search"
+                                            class="form-control">
+                                        <option value="">Lựa chọn mã đơn hàng</option>
+                                        @foreach($nltinhs as $nltinh)
+                                            <option {{ $nltinh->id == $nguyen_lieu_id ? 'selected' : '' }}
+                                                    value="{{ $nltinh->id }}">{{ $nltinh->code }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
 
@@ -58,6 +71,15 @@
 
             </div>
         </div>
+
+        <script>
+            function searchTable() {
+                const ngay_search = $('#ngay_search').val();
+                const keyword = $('#keyword').val();
+                const nguyen_lieu_id = $('#nguyen_lieu_id_search').val();
+                window.location.href = "{{ route('admin.phieu.san.xuat.index') }}?ngay=" + ngay_search + "&keyword=" + keyword + "&nguyen_lieu_id=" + nguyen_lieu_id;
+            }
+        </script>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
@@ -106,9 +128,9 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
                                     <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
