@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Enums\LoaiSanPham;
 use App\Enums\TrangThaiBanHang;
+use App\Enums\TrangThaiNguyenLieuPhanLoai;
+use App\Enums\TrangThaiNguyenLieuThanhPham;
+use App\Enums\TrangThaiNguyenLieuTho;
+use App\Enums\TrangThaiNguyenLieuTinh;
 use App\Http\Controllers\Controller;
 use App\Models\BanHang;
 use App\Models\BanHangChiTiet;
 use App\Models\KhachHang;
+use App\Models\NguyenLieuPhanLoai;
+use App\Models\NguyenLieuThanhPham;
+use App\Models\NguyenLieuTho;
+use App\Models\NguyenLieuTinh;
 use App\Models\SoQuy;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,7 +40,41 @@ class AdminBanHangController extends Controller
         if (!$banhang || $banhang->trang_thai == TrangThaiBanHang::DELETED()) {
             return redirect()->back()->with('error', 'Không tìm thấy hóa đơn bán hàng');
         }
-        return view('admin.pages.ban_hang.detail', compact('banhang'));
+
+        $khachhangs = KhachHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        $chiTietBanHangs = BanHangChiTiet::where('ban_hang_id', $id)
+            ->orderByDesc('id')
+            ->get();
+
+        switch ($banhang->loai_san_pham) {
+            case LoaiSanPham::NGUYEN_LIEU_THO():
+                $nguyenlieus = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+                    ->orderByDesc('id')
+                    ->get();
+                break;
+            case LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
+                $nguyenlieus = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
+                    ->orderByDesc('id')
+                    ->get();
+                break;
+            case LoaiSanPham::NGUYEN_LIEU_TINH():
+                $nguyenlieus = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
+                    ->orderByDesc('id')
+                    ->get();
+                break;
+            case LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
+                $nguyenlieus = [];
+                break;
+            case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
+                $nguyenlieus = NguyenLieuThanhPham::where('trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED())
+                    ->orderByDesc('id')
+                    ->get();
+                break;
+        }
+        return view('admin.pages.ban_hang.detail', compact('banhang', 'chiTietBanHangs', 'khachhangs', 'nguyenlieus'));
     }
 
     public function store(Request $request)
@@ -100,7 +143,7 @@ class AdminBanHangController extends Controller
             $code = $this->generateCode();
             $soquy = new SoQuy();
             $soquy->loai = 1;
-            $soquy->so_tien = $banhang->tong_tien;
+            $soquy->so_tien = $banhang->da_thanht_toan;
             $soquy->gia_tri_id = $banhang->id;
             $soquy->ngay = Carbon::now();
             $soquy->noi_dung = 'Phiếu thu bán hàng hàng cho đơn hàng: #' . $banhang->id;
@@ -110,7 +153,7 @@ class AdminBanHangController extends Controller
             $soquy = SoQuy::find($idUpdate);
             if ($soquy) {
                 $soquy->loai = 1;
-                $soquy->so_tien = $banhang->tong_tien;
+                $soquy->so_tien = $banhang->da_thanht_toan;
                 $soquy->ngay = Carbon::now();
                 $soquy->gia_tri_id = $banhang->id;
                 $soquy->noi_dung = 'Phiếu thu bán hàng hàng cho đơn hàng: #' . $banhang->id;
@@ -189,6 +232,9 @@ class AdminBanHangController extends Controller
             $banhang->da_thanht_toan = $da_thanht_toan;
             $banhang->cong_no = $total - $da_thanht_toan;
             $banhang->save();
+
+            $idUpdate = SoQuy::where('gia_tri_id', $banhang->id)->first();
+            $this->insertBanHang($banhang, true, $idUpdate->id);
 
             return redirect()->route('admin.ban.hang.index')->with('success', 'Chỉnh sửa hóa đơn bán hàng thành công');
         } catch (\Exception $e) {

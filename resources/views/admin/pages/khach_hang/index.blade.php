@@ -124,7 +124,19 @@
                                 <td>{{ $data->ten }}</td>
                                 <td>{{ $data->so_dien_thoai }}</td>
                                 <td>{{ $data->dia_chi }}</td>
-                                <td>0 VND</td>
+                                <td>
+                                    @php
+                                        $ban_hangs = \App\Models\BanHang::where('trang_thai', '!=', \App\Enums\TrangThaiBanHang::DELETED())
+                                            ->where('khach_hang_id', $data->id)
+                                            ->get();
+
+                                        $total = 0;
+                                        foreach ($ban_hangs as $ban_hang) {
+                                            $total += $ban_hang->cong_no;
+                                        }
+                                    @endphp
+                                    {{ parseNumber($total, 0) }} VND
+                                </td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
