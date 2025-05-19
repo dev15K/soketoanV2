@@ -146,7 +146,7 @@ class AdminBanHangController extends Controller
             $soquy->so_tien = $banhang->da_thanht_toan;
             $soquy->gia_tri_id = $banhang->id;
             $soquy->ngay = Carbon::now();
-            $soquy->noi_dung = 'Phiếu thu bán hàng hàng cho đơn hàng: #' . $banhang->id;
+            $soquy->noi_dung = 'Phiếu thu bán hàng cho đơn hàng: #' . $banhang->id;
             $soquy->ma_phieu = $code;
             $soquy->save();
         } else {
@@ -156,7 +156,7 @@ class AdminBanHangController extends Controller
                 $soquy->so_tien = $banhang->da_thanht_toan;
                 $soquy->ngay = Carbon::now();
                 $soquy->gia_tri_id = $banhang->id;
-                $soquy->noi_dung = 'Phiếu thu bán hàng hàng cho đơn hàng: #' . $banhang->id;
+                $soquy->noi_dung = 'Phiếu thu bán hàng cho đơn hàng: #' . $banhang->id;
                 $soquy->save();
             }
         }

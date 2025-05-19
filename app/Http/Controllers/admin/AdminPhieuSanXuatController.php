@@ -201,7 +201,7 @@ class AdminPhieuSanXuatController extends Controller
 
     private function generateCode()
     {
-        $lastItem = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+        $lastItem = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
             ->orderByDesc('id')
             ->first();
 
@@ -211,7 +211,7 @@ class AdminPhieuSanXuatController extends Controller
 
     private function generateLoSanXuat()
     {
-        $lastItem = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+        $lastItem = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
             ->orderByDesc('id')
             ->first();
 
