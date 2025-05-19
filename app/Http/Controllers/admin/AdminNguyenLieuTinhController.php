@@ -34,16 +34,32 @@ class AdminNguyenLieuTinhController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        do {
-            $code = generateRandomString(8);
-        } while (NguyenLieuTinh::where('code', $code)->exists());
+        $code = $this->generateLHXCode();
 
-        do {
-            $ma_phieu = generateRandomString(8);
-        } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->exists());
+        $ma_phieu = $this->generateMaPhieu();
 
 
         return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu', 'ngay', 'code_search'));
+    }
+
+    private function generateMaPhieu()
+    {
+        $lastItem = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
+            ->orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return convertNumber($lastId + 1);
+    }
+
+    private function generateLHXCode()
+    {
+        $lastItem = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
+            ->orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return generateLHXCode($lastId + 1);
     }
 
     public function detail($id)
@@ -63,16 +79,12 @@ class AdminNguyenLieuTinhController extends Controller
 
         $code = $nguyen_lieu_tinh->code;
         if (!$nguyen_lieu_tinh->code) {
-            do {
-                $code = generateRandomString(8);
-            } while (NguyenLieuTinh::where('code', $code)->exists());
+            $code = $this->generateLHXCode();
         }
 
         $ma_phieu = $nguyen_lieu_tinh->ma_phieu;
         if (!$nguyen_lieu_tinh->ma_phieu) {
-            do {
-                $ma_phieu = generateRandomString(8);
-            } while (NguyenLieuTinh::where('ma_phieu', $ma_phieu)->exists());
+            $ma_phieu = $this->generateMaPhieu();
         }
 
         return view('admin.pages.nguyen_lieu_tinh.detail', compact('nguyen_lieu_tinh', 'nlphanloais', 'dsNLTChiTiet', 'code', 'ma_phieu'));

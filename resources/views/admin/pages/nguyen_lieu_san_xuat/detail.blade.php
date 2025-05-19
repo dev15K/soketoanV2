@@ -30,9 +30,10 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ Carbon\Carbon::parse($nguyen_lieu_san_xuat->ngay)->format('Y-m-d') }}"
-                                       required>
+                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay"
+                                        name="ngay" readonly
+                                        value="{{ Carbon\Carbon::parse($nguyen_lieu_san_xuat->ngay)->format('Y-m-d') }}"
+                                        required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="phieu_san_xuat_id">Lô Sản Xuất</label>
@@ -64,7 +65,7 @@
                             <div class="form-group col-md-4">
                                 <label for="mau_sac">Màu sắc</label>
                                 <input type="text" class="form-control" id="mau_sac" name="mau_sac"
-                                       value="{{ $nguyen_lieu_san_xuat->mau_sac }}" >
+                                       value="{{ $nguyen_lieu_san_xuat->mau_sac }}">
                             </div>
                         </div>
                         <div class="row">

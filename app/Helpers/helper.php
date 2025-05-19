@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\LichSuTonKho;
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\Setting;
@@ -91,8 +90,10 @@ if (!function_exists('convertNumber')) {
     function convertNumber($num): string
     {
         if ($num >= 1 && $num <= 10) {
-            return '00' . $num;
+            return '000' . $num;
         } elseif ($num >= 11 && $num <= 99) {
+            return '00' . $num;
+        } elseif ($num >= 100 && $num <= 999) {
             return '0' . $num;
         } else {
             return (string)$num;

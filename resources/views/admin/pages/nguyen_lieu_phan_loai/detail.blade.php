@@ -33,8 +33,8 @@
                                 <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
                                     @foreach($nlthos as $nltho)
                                         <option
-                                                {{ $nltho->id == $nguyen_lieu_phan_loai->nguyen_lieu_tho_id ? 'selected' : '' }}
-                                                value="{{ $nltho->id }}">{{ $nltho->code }}
+                                            {{ $nltho->id == $nguyen_lieu_phan_loai->nguyen_lieu_tho_id ? 'selected' : '' }}
+                                            value="{{ $nltho->id }}">{{ $nltho->code }}
                                             - {{ $nltho->ten_nguyen_lieu }}</option>
                                     @endforeach
                                 </select>
@@ -42,7 +42,8 @@
 
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay"
+                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay" name="ngay"
+                                       readonly
                                        value="{{ \Carbon\Carbon::parse($nguyen_lieu_phan_loai->ngay)->format('Y-m-d') }}"
                                        required>
                             </div>
@@ -89,11 +90,11 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                            {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() ? 'selected' : '' }}
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}</option>
+                                        {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() ? 'selected' : '' }}
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}</option>
                                     <option
-                                            {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() ? 'selected' : '' }}
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}</option>
+                                        {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() ? 'selected' : '' }}
+                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
@@ -112,12 +113,14 @@
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_ban_dau">Khối lượng ban đầu</label>
                                 <input type="text" class="form-control" id="khoi_luong_ban_dau" readonly
-                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_ban_dau,3) }}" required>
+                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_ban_dau,3) }}"
+                                       required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_hao_hut">Khối lượng hao hụt</label>
                                 <input type="text" class="form-control" id="khoi_luong_hao_hut" readonly
-                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_hao_hut, 3) }}" required>
+                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_hao_hut, 3) }}"
+                                       required>
                             </div>
                         </div>
 
@@ -130,7 +133,8 @@
                             <div class="form-group col-md-6">
                                 <label for="gia_sau_phan_loai">Giá sau phân loại</label>
                                 <input type="text" class="form-control" id="gia_sau_phan_loai" readonly
-                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->gia_sau_phan_loai, 3) }}" required>
+                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->gia_sau_phan_loai, 3) }}"
+                                       required>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>

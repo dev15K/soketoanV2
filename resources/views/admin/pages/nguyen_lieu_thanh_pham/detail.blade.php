@@ -30,7 +30,8 @@
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay"
+                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay"
+                                       name="ngay" readonly
                                        value="{{ \Carbon\Carbon::parse($nguyenLieuThanhPham->ngay)->format('Y-m-d') }}"
                                        required>
                             </div>
@@ -40,7 +41,8 @@
                                 <select name="nguyen_lieu_san_xuat_id" id="nguyennguyen_lieu_san_xuat_id_lieu_id"
                                         class="form-control">
                                     @foreach($nlsanxuats as $nlsanxuat)
-                                        <option {{ $nlsanxuat->id == $nguyenLieuThanhPham->nguyen_lieu_san_xuat_id ? 'selected' : '' }}
+                                        <option
+                                            {{ $nlsanxuat->id == $nguyenLieuThanhPham->nguyen_lieu_san_xuat_id ? 'selected' : '' }}
                                             value="{{ $nlsanxuat->id }}">
                                             {{ $nlsanxuat->PhieuSanXuat->so_lo_san_xuat }}
                                             - {{ $nlsanxuat->ten_nguyen_lieu }}
@@ -50,7 +52,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="san_pham_id">Mã sản phẩm</label>
-                                <select name="san_pham_id" id="san_pham_id" class="form-control" onchange="changeSanPham();">
+                                <select name="san_pham_id" id="san_pham_id" class="form-control"
+                                        onchange="changeSanPham();">
                                     @foreach($products as $product)
                                         <option
                                             {{ $product->id == $nguyenLieuThanhPham->san_pham_id ? 'selected' : '' }}

@@ -43,7 +43,8 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay"
+                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay"
+                                       name="ngay" readonly
                                        value="{{ Carbon::parse($nguyen_lieu_tinh->ngay)->format('Y-m-d') }}"
                                        required>
                             </div>
@@ -77,9 +78,9 @@
                                 </colgroup>
                                 <thead>
                                 <tr class="text-center">
-                                    <th scope="col">Nguyên liệu phân loại</th>
-                                    <th scope="col">Tên NVL sau phân loại</th>
-                                    <th scope="col">Khối lượng</th>
+                                    <th scope="col">THÀNH PHẦN TRỘN TỪ MÃ ĐƠN HÀNG</th>
+                                    <th scope="col">Tên NVL</th>
+                                    <th scope="col">TỔNG KL</th>
                                     <th scope="col"></th>
                                 </tr>
                                 </thead>

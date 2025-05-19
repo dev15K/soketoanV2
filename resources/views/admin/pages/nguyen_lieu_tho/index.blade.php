@@ -51,7 +51,7 @@
                             <div class="col-md-4 form-group">
                                 <div class="form-group">
                                     <select name="nha_cung_cap_id" id="nha_cung_cap_id_search" class="form-control">
-                                        <option value="">Lựa chọn</option>
+                                        <option value="">Lựa chọn NCC</option>
                                         @foreach($nccs as $ncc)
                                             <option {{ $ncc->id == $nha_cung_cap_id ? 'selected' : '' }}
                                                     value="{{ $ncc->id }}">{{ $ncc->ten }}</option>
@@ -96,7 +96,8 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay" required>
+                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay" name="ngay"
+                                       readonly value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
                             </div>
                         </div>
                         <div class="row">
@@ -291,14 +292,20 @@
                                            class="btn btn-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="{{ route('admin.nguyen.lieu.tho.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
+                                        @if($data->allow_change)
+                                            <form action="{{ route('admin.nguyen.lieu.tho.delete', $data->id) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        @else
+                                            <button type="button" class="btn btn-danger btn-sm" disabled>
                                                 <i class="bi bi-trash"></i>
                                             </button>
-                                        </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
