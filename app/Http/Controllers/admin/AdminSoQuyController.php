@@ -4,7 +4,6 @@ namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiKhachHang;
 use App\Http\Controllers\Controller;
-use App\Models\KhachHang;
 use App\Models\SoQuy;
 use Illuminate\Http\Request;
 
@@ -15,37 +14,51 @@ class AdminSoQuyController extends Controller
         $datas = SoQuy::where('deleted_at', null)
             ->orderByDesc('id')
             ->paginate(20);
-        return view('admin.pages.so_quy.index', compact('datas'));
+
+        $ma_phieu = $this->generateCode();
+        return view('admin.pages.so_quy.index', compact('datas', 'ma_phieu'));
+    }
+
+    private function generateCode()
+    {
+        $lastItem = SoQuy::where('deleted_at', null)
+            ->orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return generateCode($lastId + 1);
     }
 
     public function detail($id)
     {
-        $khachhang = KhachHang::find($id);
-        if (!$khachhang || $khachhang->trang_thai == TrangThaiKhachHang::DELETED()) {
-            return redirect()->back()->with('error', 'Không tìm thấy nhà cung cấp');
+        $soquy = SoQuy::find($id);
+        if (!$soquy || $soquy->trang_thai == TrangThaiKhachHang::DELETED()) {
+            return redirect()->back()->with('error', 'Không tìm thấy sổ quỹ');
         }
-        return view('admin.pages.so_quy.detail', compact('khachhang'));
+        return view('admin.pages.so_quy.detail', compact('soquy'));
     }
 
     public function store(Request $request)
     {
         try {
-            $ten = $request->input('ten');
-            $dia_chi = $request->input('dia_chi');
-            $so_dien_thoai = $request->input('so_dien_thoai');
-            $tinh_thanh = $request->input('tinh_thanh');
-            $trang_thai = $request->input('trang_thai');
+            $loai = $request->input('loai');
+            $so_tien = $request->input('so_tien');
+            $noi_dung = $request->input('noi_dung');
+            $ngay = $request->input('ngay');
 
-            $khachhang = new KhachHang();
+            $soquy = new SoQuy();
 
-            $khachhang->ten = $ten;
-            $khachhang->dia_chi = $dia_chi;
-            $khachhang->so_dien_thoai = $so_dien_thoai;
-            $khachhang->tinh_thanh = $tinh_thanh;
-            $khachhang->trang_thai = $trang_thai;
-            $khachhang->save();
+            $ma_phieu = $request->input('ma_phieu');
 
-            return redirect()->back()->with('success', 'Thêm mới nhà cung cấp thành công');
+            $soquy->ma_phieu = $ma_phieu;
+            $soquy->loai = $loai;
+            $soquy->so_tien = $so_tien;
+            $soquy->noi_dung = $noi_dung;
+            $soquy->ngay = $ngay;
+
+            $soquy->save();
+
+            return redirect()->back()->with('success', 'Thêm mới sổ quỹ thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -54,25 +67,23 @@ class AdminSoQuyController extends Controller
     public function update($id, Request $request)
     {
         try {
-            $ten = $request->input('ten');
-            $dia_chi = $request->input('dia_chi');
-            $so_dien_thoai = $request->input('so_dien_thoai');
-            $tinh_thanh = $request->input('tinh_thanh');
-            $trang_thai = $request->input('trang_thai');
+            $loai = $request->input('loai');
+            $so_tien = $request->input('so_tien');
+            $noi_dung = $request->input('noi_dung');
+            $ngay = $request->input('ngay');
 
-            $khachhang = KhachHang::find($id);
-            if (!$khachhang || $khachhang->trang_thai == TrangThaiKhachHang::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nhà cung cấp');
+            $soquy = SoQuy::find($id);
+            if (!$soquy || $soquy->trang_thai == TrangThaiKhachHang::DELETED()) {
+                return redirect()->back()->with('error', 'Không tìm thấy sổ quỹ');
             }
 
-            $khachhang->ten = $ten;
-            $khachhang->dia_chi = $dia_chi;
-            $khachhang->so_dien_thoai = $so_dien_thoai;
-            $khachhang->tinh_thanh = $tinh_thanh;
-            $khachhang->trang_thai = $trang_thai;
-            $khachhang->save();
+            $soquy->loai = $loai;
+            $soquy->so_tien = $so_tien;
+            $soquy->noi_dung = $noi_dung;
+            $soquy->ngay = $ngay;
+            $soquy->save();
 
-            return redirect()->route('admin.khach.hang.index')->with('success', 'Chỉnh sửa nhà cung cấp thành công');
+            return redirect()->route('admin.so.quy.index')->with('success', 'Chỉnh sửa sổ quỹ thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -81,15 +92,14 @@ class AdminSoQuyController extends Controller
     public function delete($id)
     {
         try {
-            $khachhang = KhachHang::find($id);
-            if (!$khachhang || $khachhang->trang_thai == TrangThaiKhachHang::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nhà cung cấp');
+            $soquy = SoQuy::find($id);
+            if (!$soquy || $soquy->trang_thai == TrangThaiKhachHang::DELETED()) {
+                return redirect()->back()->with('error', 'Không tìm thấy sổ quỹ');
             }
 
-            $khachhang->trang_thai = TrangThaiKhachHang::DELETED();
-            $khachhang->save();
+            $soquy->delete();
 
-            return redirect()->back()->with('success', 'Đã xoá nhà cung cấp thành công');
+            return redirect()->back()->with('success', 'Đã xoá sổ quỹ thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

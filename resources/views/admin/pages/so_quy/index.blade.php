@@ -29,8 +29,8 @@
                     <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm</label></h5>
                     <div class="col-md-4">
                         <div class="input-group mb-2">
-                            <input type="text" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm">
+                            <input type="date" class="form-control" id="inlineFormInputGroup"
+                                   placeholder="Tìm kiếm theo ngày">
                             <div class="input-group-prepend">
                                 <button type="button" class="input-group-text">
                                     <i class="bi bi-search"></i>
@@ -54,7 +54,36 @@
                     </div>
                     <form method="post" action="{{ route('admin.so.quy.store') }}" class="d-none">
                         @csrf
-
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="ngay">Ngày</label>
+                                <input type="date" class="form-control" id="ngay" name="ngay" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="ma_phieu">Mã phiếu</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
+                                       name="ma_phieu"
+                                       value="{{ $ma_phieu }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="loai">Loại</label>
+                                <select class="form-control" name="loai" id="loai">
+                                    <option value="0">Phiếu Chi</option>
+                                    <option value="1">Phiếu Thu</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="so_tien">Số tiền</label>
+                                <input type="text" class="form-control onlyNumber" id="so_tien" name="so_tien"
+                                       value="" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="noi_dung">Nội dung</label>
+                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5"></textarea>
+                        </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 
@@ -68,14 +97,14 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover vw-100">
+                    <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
-                            <col width="10%">
+                            <col width="12%">
                             <col width="10%">
                             <col width="30%">
                             <col width="x">
-                            <col width="10%">
+                            <col width="8%">
                         </colgroup>
                         <thead>
                         <tr>
@@ -91,9 +120,15 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
-                                <td>{{ $data->loai }}</td>
-                                <td>0 VND</td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>
+                                    @if($data->loai == 0)
+                                        Phiếu Chi
+                                    @else
+                                        Phiếu Thu
+                                    @endif
+                                </td>
+                                <td>{{ parseNumber($data->so_tien) }} VND</td>
                                 <td>{{ $data->noi_dung }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
@@ -101,14 +136,14 @@
                                            class="btn btn-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="{{ route('admin.so.quy.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
+                                        <a href="#"
+                                           class="btn btn-success btn-sm">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="#"
+                                           class="btn btn-warning btn-sm">
+                                            <i class="bi bi-printer"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

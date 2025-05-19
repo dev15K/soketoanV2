@@ -1,14 +1,14 @@
 @extends('admin.layouts.master')
 @section('title')
-    Chỉnh sửa khách hàng
+    Chỉnh sửa Sổ quỹ
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Chỉnh sửa khách hàng</h1>
+        <h1>Chỉnh sửa Sổ quỹ</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active">Chỉnh sửa khách hàng</li>
+                <li class="breadcrumb-item active">Chỉnh sửa Sổ quỹ</li>
             </ol>
         </nav>
     </div>
@@ -22,43 +22,39 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Chỉnh sửa khách hàng</h5>
-                    <form method="post" action="{{ route('admin.khach.hang.update', $khachhang->id) }}">
+                    <h5 class="card-title">Chỉnh sửa Sổ quỹ</h5>
+                    <form method="post" action="{{ route('admin.so.quy.update', $soquy->id) }}">
                         @method('PUT')
                         @csrf
-                        <div class="form-group">
-                            <label for="ten">Họ và tên</label>
-                            <input type="text" class="form-control" id="ten" name="ten" value="{{ $khachhang->ten }}"
-                                   required>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="ngay">Ngày</label>
+                                <input type="date" class="form-control" id="ngay" name="ngay"
+                                       value="{{ \Carbon\Carbon::parse($soquy->ngay)->format('Y-m-d') }}" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="ma_phieu">Mã phiếu</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
+                                       name="ma_phieu" value="{{ $soquy->ma_phieu }}" required>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="tinh_thanh">Tỉnh thành</label>
-                                <input type="text" class="form-control" id="tinh_thanh"
-                                       value="{{ $khachhang->tinh_thanh }}"
-                                       name="tinh_thanh" required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="so_dien_thoai">Số điện thoại</label>
-                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                       value="{{ $khachhang->so_dien_thoai }}" required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="trang_thai">Trạng thái</label>
-                                <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option
-                                        {{ $khachhang->trang_thai == \App\Enums\TrangThaiKhachHang::ACTIVE() ? 'selected' : '' }}
-                                        value="{{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}">{{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}</option>
-                                    <option
-                                        {{ $khachhang->trang_thai == \App\Enums\TrangThaiKhachHang::INACTIVE() ? 'selected' : '' }}
-                                        value="{{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}">{{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}</option>
+                            <div class="col-md-6 form-group">
+                                <label for="loai">Loại</label>
+                                <select class="form-control" name="loai" id="loai">
+                                    <option value="0">Phiếu Chi</option>
+                                    <option value="1">Phiếu Thu</option>
                                 </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="so_tien">Số tiền</label>
+                                <input type="text" class="form-control onlyNumber" id="so_tien" name="so_tien"
+                                       value="" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="dia_chi">Địa chỉ chi tiết</label>
-                            <input type="text" class="form-control" id="dia_chi"
-                                   name="dia_chi" value="{{ $khachhang->dia_chi }}" required>
+                            <label for="noi_dung">Nội dung</label>
+                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
                     </form>
