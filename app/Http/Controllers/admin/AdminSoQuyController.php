@@ -5,16 +5,17 @@ namespace App\Http\Controllers\admin;
 use App\Enums\TrangThaiKhachHang;
 use App\Http\Controllers\Controller;
 use App\Models\KhachHang;
+use App\Models\SoQuy;
 use Illuminate\Http\Request;
 
 class AdminSoQuyController extends Controller
 {
     public function index()
     {
-        $datas = KhachHang::where('trang_thai', '!=', TrangThaiKhachHang::DELETED())
+        $datas = SoQuy::where('deleted_at', null)
             ->orderByDesc('id')
             ->paginate(20);
-        return view('admin.pages.khach_hang.index', compact('datas'));
+        return view('admin.pages.so_quy.index', compact('datas'));
     }
 
     public function detail($id)
@@ -23,7 +24,7 @@ class AdminSoQuyController extends Controller
         if (!$khachhang || $khachhang->trang_thai == TrangThaiKhachHang::DELETED()) {
             return redirect()->back()->with('error', 'Không tìm thấy nhà cung cấp');
         }
-        return view('admin.pages.khach_hang.detail', compact('khachhang'));
+        return view('admin.pages.so_quy.detail', compact('khachhang'));
     }
 
     public function store(Request $request)
