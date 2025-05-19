@@ -27,15 +27,25 @@
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
                     <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm</label></h5>
-                    <div class="col-md-4">
-                        <div class="input-group mb-2">
-                            <input type="date" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm theo ngày">
-                            <div class="input-group-prepend">
-                                <button type="button" class="input-group-text">
-                                    <i class="bi bi-search"></i>
-                                </button>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-start align-items-center gap-4 w-100">
+                            <div class="col-md-4 form-group">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                    <label for="start_date">Từ ngày: </label>
+                                    <input type="date" class="form-control" id="start_date"
+                                           value="{{ $start_date }}" name="start_date">
+                                </div>
                             </div>
+                            <div class="col-md-4 form-group">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                    <label for="end_date">Đến ngày: </label>
+                                    <input type="date" class="form-control" id="end_date"
+                                           value="{{ $end_date }}" name="end_date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex justify-content-end align-items-center">
+                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
 
@@ -43,6 +53,14 @@
 
             </div>
         </div>
+
+        <script>
+            function searchTable() {
+                const start_date = $('#start_date').val();
+                const end_date = $('#end_date').val();
+                window.location.href = "{{ route('admin.so.quy.index') }}?start_date=" + start_date + "&end_date=" + end_date;
+            }
+        </script>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
@@ -57,7 +75,8 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay" required>
+                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay" name="ngay"
+                                       readonly value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="ma_phieu">Mã phiếu</label>
@@ -92,11 +111,33 @@
             </div>
         </div>
 
+        @php
+            $thu = 0;
+            $chi = 0;
+            foreach ($datas as $so_quy) {
+                 if ($so_quy->loai == 0)   {
+                     $chi += $so_quy->so_tien;
+                 } else {
+                     $thu += $so_quy->so_tien;
+                 }
+            }
+        @endphp
+
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
+                    <div class="mt-4 mb-3">
+                        <div class="d-flex gap-5">
+                            <h4> Quỹ đầu kỳ: <span class="text-danger">{{ parseNumber($ton_dau) }} VND</span></h4>
+                            <h4> Quỹ cuối kỳ: <span class="text-danger">{{ parseNumber($ton_cuoi) }} VND</span></h4>
+                        </div>
 
+                        <div class="d-flex gap-5 mt-2">
+                            <h5>Tổng thu: <span class="text-danger">{{ parseNumber($thu) }} VND</span></h5>
+                            <h5>Tổng chi: <span class="text-danger">{{ parseNumber($chi) }} VND</span></h5>
+                        </div>
+                    </div>
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
@@ -150,8 +191,6 @@
                         @endforeach
                         </tbody>
                     </table>
-
-                    {{ $datas->links('pagination::bootstrap-5') }}
                 </div>
 
             </div>

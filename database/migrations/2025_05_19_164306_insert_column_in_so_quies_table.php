@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('so_quies', function (Blueprint $table) {
-            $table->unsignedBigInteger('gia_tri_id');
+            $table->unsignedBigInteger('gia_tri_id')->nullable();
         });
     }
 

@@ -2,21 +2,87 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Enums\TrangThaiKhachHang;
 use App\Http\Controllers\Controller;
 use App\Models\SoQuy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class AdminSoQuyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
         $datas = SoQuy::where('deleted_at', null)
+            ->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('created_at', '>=', $start_date);
+            })
+            ->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('created_at', '<=', $end_date);
+            })
             ->orderByDesc('id')
-            ->paginate(20);
+            ->get();
+
+        $old_query = SoQuy::whereNull('deleted_at');
+
+        if ($start_date) {
+            $old_query->whereDate('created_at', '<', $start_date);
+        } elseif ($end_date) {
+            $old_query->whereDate('created_at', '<', $end_date);
+        } else {
+            $old_query->whereDate('created_at', '<', Carbon::today());
+        }
+
+        $old_datas = $old_query->orderByDesc('id')->get();
+
+        $ton_dau = 0;
+        foreach ($old_datas as $old_data) {
+            if ($old_data->loai == 1) {
+                $ton_dau += $old_data->so_tien;
+            } else {
+                $ton_dau -= $old_data->so_tien;
+            }
+        }
+
+
+        $query = SoQuy::whereNull('deleted_at');
+
+        if ($start_date && $end_date) {
+            $query->whereBetween('created_at', [
+                Carbon::parse($start_date)->startOfDay(),
+                Carbon::parse($end_date)->endOfDay()
+            ]);
+        } elseif ($start_date) {
+            $query->whereBetween('created_at', [
+                Carbon::parse($start_date)->startOfDay(),
+                Carbon::parse($start_date)->endOfDay()
+            ]);
+        } elseif ($end_date) {
+            $query->whereBetween('created_at', [
+                Carbon::today(),
+                Carbon::parse($end_date)->endOfDay()
+            ]);
+        } else {
+            $query->whereBetween('created_at', [
+                Carbon::today(),
+                Carbon::today()->endOfDay()
+            ]);
+        }
+
+        $new_datas = $query->orderByDesc('id')->get();
+
+        $ton_cuoi = 0;
+        foreach ($new_datas as $new_data) {
+            if ($new_data->loai == 1) {
+                $ton_cuoi += $new_data->so_tien;
+            } else {
+                $ton_cuoi -= $new_data->so_tien;
+            }
+        }
 
         $ma_phieu = $this->generateCode();
-        return view('admin.pages.so_quy.index', compact('datas', 'ma_phieu'));
+        return view('admin.pages.so_quy.index', compact('datas', 'ma_phieu', 'ton_dau', 'ton_cuoi', 'start_date', 'end_date'));
     }
 
     private function generateCode()
@@ -32,7 +98,7 @@ class AdminSoQuyController extends Controller
     public function detail($id)
     {
         $soquy = SoQuy::find($id);
-        if (!$soquy || $soquy->trang_thai == TrangThaiKhachHang::DELETED()) {
+        if (!$soquy || $soquy->deleted_at != null) {
             return redirect()->back()->with('error', 'Không tìm thấy sổ quỹ');
         }
         return view('admin.pages.so_quy.detail', compact('soquy'));
@@ -73,7 +139,7 @@ class AdminSoQuyController extends Controller
             $ngay = $request->input('ngay');
 
             $soquy = SoQuy::find($id);
-            if (!$soquy || $soquy->trang_thai == TrangThaiKhachHang::DELETED()) {
+            if (!$soquy || $soquy->deleted_at != null) {
                 return redirect()->back()->with('error', 'Không tìm thấy sổ quỹ');
             }
 
@@ -93,7 +159,7 @@ class AdminSoQuyController extends Controller
     {
         try {
             $soquy = SoQuy::find($id);
-            if (!$soquy || $soquy->trang_thai == TrangThaiKhachHang::DELETED()) {
+            if (!$soquy || $soquy->deleted_at != null) {
                 return redirect()->back()->with('error', 'Không tìm thấy sổ quỹ');
             }
 
