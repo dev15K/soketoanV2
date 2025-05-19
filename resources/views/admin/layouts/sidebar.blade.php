@@ -94,14 +94,16 @@
         </li><!-- End Properties Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('admin.categories.*') ? '' : 'collapsed' }}"
+            <a class="nav-link {{ Request::routeIs('admin.ban.hang*') ? '' : 'collapsed' }}"
                data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Bán hàng</span><i
                     class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="products-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="products-nav" class="nav-content collapse {{ Request::routeIs('admin.ban.hang.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a class="{{ Request::routeIs('admin.ban.hang.index') || Request::routeIs('admin.ban.hang.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.ban.hang.index') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
@@ -126,13 +128,15 @@
         </li><!-- End Orders Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('admin.categories.*') ? '' : 'collapsed' }}"
+            <a class="nav-link {{ Request::routeIs('admin.so.quy*') ? '' : 'collapsed' }}"
                data-bs-target="#news-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-newspaper"></i><span>Sổ quỹ</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="news-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="news-nav" class="nav-content collapse {{ Request::routeIs('admin.so.quy.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a class="{{ Request::routeIs('admin.so.quy.index') || Request::routeIs('admin.so.quy.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.so.quy.index') }}">
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>

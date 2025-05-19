@@ -22,11 +22,6 @@ return new class extends Migration
             $table->boolean('ban_le')->default(false)->nullable();
             $table->string('khach_le')->nullable();
 
-            $table->unsignedBigInteger('san_pham_id')->nullable();
-            $table->foreign('san_pham_id')->references('id')->on('san_phams')->onDelete('cascade');
-
-            $table->integer('so_luong');
-            $table->string('gia_ban');
             $table->string('tong_tien');
             $table->string('da_thanht_toan');
             $table->string('cong_no');

@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\admin\AdminBanHangController;
 use App\Http\Controllers\admin\AdminHomeController;
 use App\Http\Controllers\admin\AdminKhachHangController;
 use App\Http\Controllers\admin\AdminNguyenLieuPhanLoaiController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\admin\AdminNhaCungCapController;
 use App\Http\Controllers\admin\AdminPhieuSanXuatController;
 use App\Http\Controllers\admin\AdminSanPhamController;
 use App\Http\Controllers\admin\AdminSettingController;
+use App\Http\Controllers\admin\AdminSoQuyController;
 use App\Http\Controllers\admin\AdminThongTinController;
 use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\UserController;
@@ -127,6 +129,22 @@ Route::group(['prefix' => 'san-pham'], function () {
     Route::post('/store', [AdminSanPhamController::class, 'store'])->name('admin.san.pham.store');
     Route::put('/update/{id}', [AdminSanPhamController::class, 'update'])->name('admin.san.pham.update');
     Route::delete('/delete/{id}', [AdminSanPhamController::class, 'delete'])->name('admin.san.pham.delete');
+});
+
+Route::group(['prefix' => 'ban-hang'], function () {
+    Route::get('/index', [AdminBanHangController::class, 'index'])->name('admin.ban.hang.index');
+    Route::get('/detail/{id}', [AdminBanHangController::class, 'detail'])->name('admin.ban.hang.detail');
+    Route::post('/store', [AdminBanHangController::class, 'store'])->name('admin.ban.hang.store');
+    Route::put('/update/{id}', [AdminBanHangController::class, 'update'])->name('admin.ban.hang.update');
+    Route::delete('/delete/{id}', [AdminBanHangController::class, 'delete'])->name('admin.ban.hang.delete');
+});
+
+Route::group(['prefix' => 'so-quy'], function () {
+    Route::get('/index', [AdminSoQuyController::class, 'index'])->name('admin.so.quy.index');
+    Route::get('/detail/{id}', [AdminSoQuyController::class, 'detail'])->name('admin.so.quy.detail');
+    Route::post('/store', [AdminSoQuyController::class, 'store'])->name('admin.so.quy.store');
+    Route::put('/update/{id}', [AdminSoQuyController::class, 'update'])->name('admin.so.quy.update');
+    Route::delete('/delete/{id}', [AdminSoQuyController::class, 'delete'])->name('admin.so.quy.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {

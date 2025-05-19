@@ -1,0 +1,430 @@
+@extends('admin.layouts.master')
+@section('title')
+    Bán hàng
+@endsection
+@section('content')
+    <div class="pagetitle">
+        <h1>Bán hàng</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
+                <li class="breadcrumb-item active">Bán hàng</li>
+            </ol>
+        </nav>
+    </div>
+    <section class="section">
+        @if(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if(session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+        <div class="col-12">
+            <div class="card recent-sales overflow-auto">
+                <div class="card-body">
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm </label></h5>
+                    <div class="col-md-4">
+                        <div class="input-group mb-2">
+                            <input type="date" class="form-control" id="inlineFormInputGroup"
+                                   placeholder="Tìm kiếm">
+                            <div class="input-group-prepend">
+                                <button type="button" class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card recent-sales overflow-auto">
+
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Thêm mới bán hàng</h5>
+                        <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
+                    </div>
+                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="">
+                        @csrf
+                        <div class="form-group">
+                            <label for="khach_hang_id">Khách hàng</label>
+                            <select id="khach_hang_id" name="khach_hang_id" class="form-control"
+                                    onchange="changeKhachHang()">
+                                <option value="0">Khách lẻ</option>
+                                @foreach($khachhangs as $khachhang)
+                                    <option value="{{ $khachhang->id }}">{{ $khachhang->ten }}
+                                        - {{ $khachhang->so_dien_thoai }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="row" id="formKhachLe">
+                            <div class="form-group col-md-12">
+                                <label for="ten_khach_hang">Tên khách hàng</label>
+                                <input type="text" class="form-control" id="ten_khach_hang" name="ten_khach_hang"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="so_dien_thoai">Số điện thoại</label>
+                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="dia_chi">Địa chỉ chi tiết</label>
+                                <input type="text" class="form-control" id="dia_chi"
+                                       name="dia_chi" required>
+                            </div>
+                        </div>
+
+                        <div class="mt-3" id="formSanPham">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="form-group col-md-4 mb-2">
+                                    <label for="select_kho">Chọn kho</label>
+                                    <select id="select_kho" name="select_kho" class="form-control"
+                                            onchange="changeLoaiSanPham()">
+                                        <option value="">Lựa chọn kho</option>
+                                        <option
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
+                                            Nguyên liệu Thô
+                                        </option>
+                                        <option
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
+                                            Nguyên liệu Phân loại
+                                        </option>
+                                        <option
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
+                                            Nguyên liệu Tinh
+                                        </option>
+                                        <option
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT }}">
+                                            Nguyên liệu Sản xuất
+                                        </option>
+                                        <option
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
+                                            Nguyên liệu Thành phẩm
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <button class="btn btn-sm btn-primary d-none showForm" type="button"
+                                        onclick="addItems()">
+                                    <i class="bi bi-plus"></i> Thêm sản phẩm
+                                </button>
+                            </div>
+                            <table class="table table-bordered d-none showForm">
+                                <colgroup>
+                                    <col width="x">
+                                    <col width="25%">
+                                    <col width="15%">
+                                    <col width="25%">
+                                    <col width="5%">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Giá bán</th>
+                                    <th scope="col">Số lượng/Khối lượng</th>
+                                    <th scope="col">Tổng tiền</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbodySanPham">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <input type="hidden" name="loai_san_pham" id="loai_san_pham">
+                        <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+        <table class="d-none">
+            <tbody>
+            <tr id="listSanPham">
+                <td>
+                    <select name="san_pham_id[]" class="form-control" required>
+                        <option value="">Lựa chọn sản phẩm</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" min="0" name="gia_bans[]" class="form-control" required>
+                </td>
+                <td>
+                    <input type="number" min="0" name="so_luong[]" class="form-control" value="1"
+                           oninput="changeGiaSanPham(this)" required>
+                </td>
+                <td>
+                    <input type="text" name="tong_tien[]" class="form-control" disabled readonly>
+                </td>
+                <td>
+                    <button type="button" onclick="removeItems(this)" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <script>
+            const htmlKhachHang = ` <div class="form-group col-md-12">
+                                <label for="ten_khach_hang">Tên khách hàng</label>
+                                <input type="text" class="form-control" id="ten_khach_hang" name="ten_khach_hang"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="so_dien_thoai">Số điện thoại</label>
+                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="dia_chi">Địa chỉ chi tiết</label>
+                                <input type="text" class="form-control" id="dia_chi"
+                                       name="dia_chi" required>
+                            </div>`;
+
+            const formSanPham = $('#formSanPham');
+
+            function changeKhachHang() {
+                const formKhachLe = $('#formKhachLe');
+                const khachHangId = $('#khach_hang_id').val();
+                if (khachHangId == 0) {
+                    formKhachLe.append(htmlKhachHang);
+                } else {
+                    formKhachLe.empty();
+                }
+            }
+
+            async function changeLoaiSanPham() {
+                const select_kho = $('#select_kho');
+                select_kho.prop('disabled', true);
+                const loaiSanPham = select_kho.val();
+                $('#loai_san_pham').val(loaiSanPham);
+                const showForm = $('.showForm');
+                showForm.removeClass('d-none');
+                await getListSanPham(loaiSanPham);
+            }
+
+            async function getListSanPham(loaiSanPham) {
+                let url = '';
+                switch (loaiSanPham) {
+                    case 'NGUYEN_LIEU_THO':
+                        url = `{{ route('api.nguyen.lieu.tho.list') }}`;
+                        break;
+                    case 'NGUYEN_LIEU_PHAN_LOAI':
+                        url = `{{ route('api.nguyen.lieu.phan.loai.list') }}`;
+                        break;
+                    case 'NGUYEN_LIEU_TINH':
+                        url = `{{ route('api.nguyen.lieu.tinh.list') }}`;
+                        break;
+                    case 'NGUYEN_LIEU_SAN_XUAT':
+                        url = `{{ route('api.nguyen.lieu.san.xuat.list') }}`;
+                        break;
+                    case 'NGUYEN_LIEU_THANH_PHAM':
+                        url = `{{ route('api.nguyen.lieu.thanh.pham.list') }}`;
+                        break;
+                }
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        renderSanPham(data.data, loaiSanPham);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
+                    }
+                });
+            }
+
+            function renderSanPham(data, loaiSanPham) {
+                let html = '';
+                data.forEach((item) => {
+                    let ten_;
+                    let gia_;
+                    switch (loaiSanPham) {
+                        case 'NGUYEN_LIEU_THO':
+                            ten_ = item.ten_nguyen_lieu + ' - ' + item.ghi_chu ?? '';
+                            gia_
+                            break;
+                        case 'NGUYEN_LIEU_PHAN_LOAI':
+                            ten_ = item.ten_nguyen_lieu_tho + ' - ' + item.ma_don_hang + ' - ' + item.ghi_chu ?? '';
+                            break;
+                        case 'NGUYEN_LIEU_TINH':
+                            ten_ = item.code + ' - ' + item.ghi_chu ?? '';
+                            break;
+                        case 'NGUYEN_LIEU_SAN_XUAT':
+                            ten_ = item.ten_nguyen_lieu + ' - ' + item.ghi_chu ?? '';
+                            break;
+                        case 'NGUYEN_LIEU_THANH_PHAM':
+                            ten_ = item.ten_san_pham + ' - ' + item.so_lo_san_xuat + ' - ' + item.ghi_chu ?? '';
+                            break;
+                    }
+                    html += `<option value="${item.id}">${ten_}</option>`;
+                });
+                $('#listSanPham').find('select').empty().append(html);
+            }
+
+            function changeGiaSanPham(el) {
+
+            }
+
+            $(document).ready(function () {
+                addItems();
+            })
+
+            function addItems(el) {
+                const tbody = $('#tbodySanPham');
+                const tr = $('#listSanPham').clone();
+                tbody.append(tr);
+            }
+
+            function removeItems(el) {
+                $(el).parent().closest('tr').remove();
+            }
+        </script>
+
+        <div class="col-12">
+            <div class="card recent-sales overflow-auto">
+
+                <div class="card-body">
+
+                    <table class="table table-hover small" style="min-width: 3000px">
+                        <colgroup>
+                            <col width="50px">
+                            <col width="120px">
+                            <col width="300px">
+                            <col width="200px">
+                            <col width="300px">
+                            <col width="100px">
+                            <col width="250px">
+                            <col width="150px">
+                            <col width="250px">
+                            <col width="250px">
+                            <col width="250px">
+                            <col width="250px">
+                            <col width="250px">
+                            <col width="100px">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Khách hàng</th>
+                            <th scope="col">Số điện thoại</th>
+                            <th scope="col">Địa chỉ</th>
+                            <th scope="col">Loại sản phẩm</th>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Giá bán</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Đã thanh toán</th>
+                            <th scope="col">Phương thức thanh toán</th>
+                            <th scope="col">Công nợ</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($datas as $data)
+                            <tr>
+                                <th scope="row">{{ $loop->index + 1 }}</th>
+                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
+                                <td>
+                                    @if($data->ban_le)
+                                        {{ $data->khach_le }}
+                                    @else
+                                        {{ $data->khachHang->ten }}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($data->ban_le)
+                                        {{ $data->so_dien_thoai }}
+                                    @else
+                                        {{ $data->khachHang->so_dien_thoai }}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($data->ban_le)
+                                        {{ $data->dia_chi }}
+                                    @else
+                                        {{ $data->khachHang->dia_chi }}
+                                    @endif
+                                </td>
+                                <td>
+                                    @switch($data->loai_san_pham)
+                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_THO)
+                                            Nguyên liệu Thô
+                                            @break
+                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI)
+                                            Nguyên liệu Phân loại
+                                            @break
+                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH)
+                                            Nguyên liệu Tinh
+                                            @break
+                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT)
+                                            Nguyên liệu Sản xuất
+                                            @break
+                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM)
+                                            Nguyên liệu Thành phẩm
+                                            @break
+                                    @endswitch
+                                </td>
+                                <td>
+                                    {{--                                    @switch($data->loai_san_pham)--}}
+                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_THO)--}}
+                                    {{--                                            {{ $data->nguyenLieuTho->ten_nguyen_lieu }}--}}
+                                    {{--                                            @break--}}
+                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI)--}}
+                                    {{--                                            {{ $data->nguyenLieuPhanLoai-> }}--}}
+                                    {{--                                            @break--}}
+                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH)--}}
+                                    {{--                                            Nguyên liệu Tinh--}}
+                                    {{--                                            @break--}}
+                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT)--}}
+                                    {{--                                            Nguyên liệu Sản xuất--}}
+                                    {{--                                            @break--}}
+                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM)--}}
+                                    {{--                                            Nguyên liệu Thành phẩm--}}
+                                    {{--                                            @break--}}
+                                    {{--                                    @endswitch--}}
+                                    ---
+                                </td>
+                                <td>{{ parseNumber($data->so_luong) }}</td>
+                                <td>{{ parseNumber($data->gia_ban) }} VND</td>
+                                <td>{{ parseNumber($data->tong_tien) }} VND</td>
+                                <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
+                                <td>{{ $data->phuong_thuc_thanh_toan }}</td>
+                                <td>{{ parseNumber($data->cong_no) }} VND</td>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('admin.ban.hang.detail', $data->id) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
+                    {{ $datas->links('pagination::bootstrap-5') }}
+                </div>
+
+            </div>
+        </div>
+    </section>
+@endsection
