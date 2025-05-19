@@ -134,6 +134,14 @@ if (!function_exists('updateTonKho')) {
 if (!function_exists('parseNumber')) {
     function parseNumber($num): ?string
     {
+        if (!is_numeric($num)) {
+            return 0;
+        }
+
+        // Ép kiểu về float để xử lý phần thập phân
+        $num = (float)$num;
+
+        // Nếu là số nguyên
         if (fmod($num, 1) == 0) {
             return number_format($num, 0);
         }
@@ -144,11 +152,8 @@ if (!function_exists('parseNumber')) {
         // Loại bỏ số 0 ở cuối phần thập phân
         $decimalPart = rtrim($decimalPart, '0');
 
-        // Đếm số chữ số thập phân còn lại
-        $decimalLength = strlen($decimalPart);
-
-        // Giới hạn tối đa là 3 chữ số thập phân
-        $decimalLength = min($decimalLength, 3);
+        // Đếm số chữ số thập phân còn lại (tối đa 3)
+        $decimalLength = min(strlen($decimalPart), 3);
 
         return number_format($num, $decimalLength);
     }
