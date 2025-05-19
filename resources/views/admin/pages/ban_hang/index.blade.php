@@ -83,6 +83,20 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="da_thanht_toan">Đã thanh toán</label>
+                                <input type="text" class="form-control onlyNumber" id="da_thanht_toan" name="da_thanht_toan" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
+                                <select class="form-control" name="phuong_thuc_thanh_toan" id="phuong_thuc_thanh_toan">
+                                    <option value="Tiền mặt">Tiền mặt</option>
+                                    <option value="Chuyển khoản">Chuyển khoản</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="mt-3" id="formSanPham">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="form-group col-md-4 mb-2">
@@ -101,10 +115,6 @@
                                         <option
                                             value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
                                             Nguyên liệu Tinh
-                                        </option>
-                                        <option
-                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT }}">
-                                            Nguyên liệu Sản xuất
                                         </option>
                                         <option
                                             value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
@@ -154,19 +164,19 @@
             <tbody>
             <tr id="listSanPham">
                 <td>
-                    <select name="san_pham_id[]" class="form-control" required>
+                    <select name="san_pham_id[]" class="form-control" onchange="changeThongTinSanPham(this)" required>
                         <option value="">Lựa chọn sản phẩm</option>
                     </select>
                 </td>
                 <td>
-                    <input type="text" min="0" name="gia_bans[]" class="form-control" required>
+                    <input type="text" min="0" name="gia_bans[]" class="form-control gia_bans" required>
                 </td>
                 <td>
-                    <input type="number" min="0" name="so_luong[]" class="form-control" value="1"
+                    <input type="number" min="1" name="so_luong[]" class="form-control so_luong" value="1"
                            oninput="changeGiaSanPham(this)" required>
                 </td>
                 <td>
-                    <input type="text" name="tong_tien[]" class="form-control" disabled readonly>
+                    <input type="text" name="tong_tien[]" class="form-control tong_tien" disabled readonly>
                 </td>
                 <td>
                     <button type="button" onclick="removeItems(this)" class="btn btn-danger btn-sm">
@@ -178,32 +188,36 @@
         </table>
 
         <script>
-            const htmlKhachHang = ` <div class="form-group col-md-12">
-                                <label for="ten_khach_hang">Tên khách hàng</label>
-                                <input type="text" class="form-control" id="ten_khach_hang" name="ten_khach_hang"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="so_dien_thoai">Số điện thoại</label>
-                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="dia_chi">Địa chỉ chi tiết</label>
-                                <input type="text" class="form-control" id="dia_chi"
-                                       name="dia_chi" required>
-                            </div>`;
-
-            const formSanPham = $('#formSanPham');
-
-            function changeKhachHang() {
-                const formKhachLe = $('#formKhachLe');
+            async function changeKhachHang() {
                 const khachHangId = $('#khach_hang_id').val();
-                if (khachHangId == 0) {
-                    formKhachLe.append(htmlKhachHang);
-                } else {
-                    formKhachLe.empty();
+                if (khachHangId !== 0) {
+                    await selectKhachHang(khachHangId);
                 }
+            }
+
+            async function selectKhachHang(id) {
+                const url = `{{ route('api.khach.hang.detail') }}?id=${id}`;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        renderKhachHnag(data.data);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
+                    }
+                });
+            }
+
+            function renderKhachHnag(data) {
+                const tenKhachHang = data.ten;
+                const soDienThoai = data.so_dien_thoai;
+                const diaChi = data.dia_chi;
+                $('#ten_khach_hang').val(tenKhachHang);
+                $('#so_dien_thoai').val(soDienThoai);
+                $('#dia_chi').val(diaChi);
             }
 
             async function changeLoaiSanPham() {
@@ -252,34 +266,93 @@
 
             function renderSanPham(data, loaiSanPham) {
                 let html = '';
+                let gia_ = null;
                 data.forEach((item) => {
                     let ten_;
-                    let gia_;
                     switch (loaiSanPham) {
                         case 'NGUYEN_LIEU_THO':
                             ten_ = item.ten_nguyen_lieu + ' - ' + item.ghi_chu ?? '';
-                            gia_
+                            gia_ = null;
                             break;
                         case 'NGUYEN_LIEU_PHAN_LOAI':
                             ten_ = item.ten_nguyen_lieu_tho + ' - ' + item.ma_don_hang + ' - ' + item.ghi_chu ?? '';
+                            if (!gia_) {
+                                gia_ = item.gia_sau_phan_loai;
+                            }
                             break;
                         case 'NGUYEN_LIEU_TINH':
-                            ten_ = item.code + ' - ' + item.ghi_chu ?? '';
-                            break;
-                        case 'NGUYEN_LIEU_SAN_XUAT':
-                            ten_ = item.ten_nguyen_lieu + ' - ' + item.ghi_chu ?? '';
+                            ten_ = item.code;
+                            if (!gia_) {
+                                gia_ = item.gia_tien;
+                            }
                             break;
                         case 'NGUYEN_LIEU_THANH_PHAM':
                             ten_ = item.ten_san_pham + ' - ' + item.so_lo_san_xuat + ' - ' + item.ghi_chu ?? '';
+                            if (!gia_) {
+                                gia_ = item.price;
+                            }
                             break;
                     }
                     html += `<option value="${item.id}">${ten_}</option>`;
                 });
-                $('#listSanPham').find('select').empty().append(html);
+
+                const listSanPham = $('#listSanPham');
+                listSanPham.find('select').empty().append(html);
+                listSanPham.find('input.gia_bans').val(gia_);
+                listSanPham.find('input.tong_tien').val(gia_);
             }
 
             function changeGiaSanPham(el) {
+                const totalEl = $(el).closest('tr').find('input.tong_tien');
+                const gia_ = $(el).closest('tr').find('input.gia_bans').val();
+                const so_luong = $(el).closest('tr').find('input.so_luong').val();
 
+                totalEl.val(gia_ * so_luong);
+            }
+
+            function changeThongTinSanPham(el) {
+                const loaiSanPham = $('#loai_san_pham').val();
+                const id = $(el).val();
+                layThongTinNguyenLieu(id, el, loaiSanPham);
+            }
+
+            function renderChiTietSanPham(data, element, loaiSanPham) {
+                let gia_ = null;
+                switch (loaiSanPham) {
+                    case 'NGUYEN_LIEU_THO':
+                        gia_ = null;
+                        break;
+                    case 'NGUYEN_LIEU_PHAN_LOAI':
+                        gia_ = data.gia_sau_phan_loai;
+                        break;
+                    case 'NGUYEN_LIEU_TINH':
+                        gia_ = data.gia_tien;
+                        break;
+                    case 'NGUYEN_LIEU_THANH_PHAM':
+                        gia_ = data.price;
+                        break;
+                }
+
+                $(element).closest('tr').find('input.gia_bans').val(gia_);
+
+                changeGiaSanPham(element);
+            }
+
+            function layThongTinNguyenLieu(id, el, loaiSanPham) {
+                const url = `{{ route('api.chi.tiet.nguyen.lieu') }}?id=${id}&type=${loaiSanPham}`;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        renderChiTietSanPham(data.data, el, loaiSanPham);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
+                    }
+                });
             }
 
             $(document).ready(function () {
@@ -302,17 +375,13 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover small" style="min-width: 3000px">
+                    <table class="table table-hover small min-vw-100">
                         <colgroup>
                             <col width="50px">
                             <col width="120px">
                             <col width="300px">
                             <col width="200px">
                             <col width="300px">
-                            <col width="100px">
-                            <col width="250px">
-                            <col width="150px">
-                            <col width="250px">
                             <col width="250px">
                             <col width="250px">
                             <col width="250px">
@@ -326,10 +395,6 @@
                             <th scope="col">Khách hàng</th>
                             <th scope="col">Số điện thoại</th>
                             <th scope="col">Địa chỉ</th>
-                            <th scope="col">Loại sản phẩm</th>
-                            <th scope="col">Sản phẩm</th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Giá bán</th>
                             <th scope="col">Tổng tiền</th>
                             <th scope="col">Đã thanh toán</th>
                             <th scope="col">Phương thức thanh toán</th>
@@ -363,47 +428,6 @@
                                         {{ $data->khachHang->dia_chi }}
                                     @endif
                                 </td>
-                                <td>
-                                    @switch($data->loai_san_pham)
-                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_THO)
-                                            Nguyên liệu Thô
-                                            @break
-                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI)
-                                            Nguyên liệu Phân loại
-                                            @break
-                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH)
-                                            Nguyên liệu Tinh
-                                            @break
-                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT)
-                                            Nguyên liệu Sản xuất
-                                            @break
-                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM)
-                                            Nguyên liệu Thành phẩm
-                                            @break
-                                    @endswitch
-                                </td>
-                                <td>
-                                    {{--                                    @switch($data->loai_san_pham)--}}
-                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_THO)--}}
-                                    {{--                                            {{ $data->nguyenLieuTho->ten_nguyen_lieu }}--}}
-                                    {{--                                            @break--}}
-                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI)--}}
-                                    {{--                                            {{ $data->nguyenLieuPhanLoai-> }}--}}
-                                    {{--                                            @break--}}
-                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH)--}}
-                                    {{--                                            Nguyên liệu Tinh--}}
-                                    {{--                                            @break--}}
-                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT)--}}
-                                    {{--                                            Nguyên liệu Sản xuất--}}
-                                    {{--                                            @break--}}
-                                    {{--                                        @case(\App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM)--}}
-                                    {{--                                            Nguyên liệu Thành phẩm--}}
-                                    {{--                                            @break--}}
-                                    {{--                                    @endswitch--}}
-                                    ---
-                                </td>
-                                <td>{{ parseNumber($data->so_luong) }}</td>
-                                <td>{{ parseNumber($data->gia_ban) }} VND</td>
                                 <td>{{ parseNumber($data->tong_tien) }} VND</td>
                                 <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
                                 <td>{{ $data->phuong_thuc_thanh_toan }}</td>
@@ -412,8 +436,16 @@
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.ban.hang.detail', $data->id) }}"
                                            class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
+                                            <i class="bi bi-eye"></i>
                                         </a>
+                                        <form action="{{ route('admin.ban.hang.delete', $data->id) }}"
+                                              method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

@@ -26,7 +26,7 @@ class AdminSoQuyController extends Controller
             ->first();
 
         $lastId = $lastItem?->id;
-        return generateCode($lastId + 1);
+        return convertNumber($lastId + 1);
     }
 
     public function detail($id)

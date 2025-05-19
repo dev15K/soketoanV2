@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\LoaiSanPham;
+use App\Enums\TrangThaiKhachHang;
 use App\Enums\TrangThaiNguyenLieuPhanLoai;
 use App\Enums\TrangThaiNguyenLieuSanXuat;
 use App\Enums\TrangThaiNguyenLieuThanhPham;
 use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNguyenLieuTinh;
 use App\Enums\TrangThaiSanPham;
+use App\Models\KhachHang;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuSanXuat;
 use App\Models\NguyenLieuThanhPham;
@@ -92,5 +95,58 @@ class HomeController extends Controller
 
         $data = returnMessage(1, $sanpham, 'Success!');
         return response()->json($data);
+    }
+
+    public function thongTinKhachHang(Request $request)
+    {
+        $id = $request->get('id');
+        $khachhang = KhachHang::where('trang_thai', '!=', TrangThaiKhachHang::DELETED())
+            ->where('id', $id)
+            ->first();
+
+        $data = returnMessage(1, $khachhang, 'Success!');
+        return response()->json($data);
+    }
+
+    public function chiTietNguyenLieu(Request $request)
+    {
+        $id = $request->get('id');
+        $type = $request->get('type');
+        $data = null;
+        switch ($type) {
+            case LoaiSanPham::NGUYEN_LIEU_THO():
+                $data = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+                    ->where('id', $id)
+                    ->first();
+                break;
+            case LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
+                $data = NguyenLieuPhanLoai::where('nguyen_lieu_phan_loais.trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
+                    ->join('nguyen_lieu_thos', 'nguyen_lieu_thos.id', '=', 'nguyen_lieu_phan_loais.nguyen_lieu_tho_id')
+                    ->where('nguyen_lieu_phan_loais.id', $id)
+                    ->select('nguyen_lieu_phan_loais.*', 'nguyen_lieu_thos.ten_nguyen_lieu as ten_nguyen_lieu_tho', 'nguyen_lieu_thos.code as ma_don_hang')
+                    ->first();
+                break;
+            case LoaiSanPham::NGUYEN_LIEU_TINH():
+                $data = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
+                    ->where('id', $id)
+                    ->first();
+                break;
+            case LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
+                $data = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
+                    ->where('id', $id)
+                    ->first();
+                break;
+            case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
+                $data = NguyenLieuThanhPham::where('nguyen_lieu_thanh_phams.trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED())
+                    ->join('san_phams', 'san_phams.id', '=', 'nguyen_lieu_thanh_phams.san_pham_id')
+                    ->join('nguyen_lieu_san_xuats', 'nguyen_lieu_san_xuats.id', '=', 'nguyen_lieu_thanh_phams.nguyen_lieu_san_xuat_id')
+                    ->join('phieu_san_xuats', 'phieu_san_xuats.id', '=', 'nguyen_lieu_san_xuats.phieu_san_xuat_id')
+                    ->where('nguyen_lieu_thanh_phams.id', $id)
+                    ->select('nguyen_lieu_thanh_phams.*', 'san_phams.ten_san_pham as ten_san_pham', 'phieu_san_xuats.so_lo_san_xuat as so_lo_san_xuat')
+                    ->first();
+                break;
+        }
+        $res = returnMessage(1, $data, 'Success!');
+        return response()->json($res);
     }
 }

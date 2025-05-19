@@ -5,9 +5,11 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
- * @method static static OptionOne()
- * @method static static OptionTwo()
- * @method static static OptionThree()
+ * @method static static NGUYEN_LIEU_THO()
+ * @method static static NGUYEN_LIEU_PHAN_LOAI()
+ * @method static static NGUYEN_LIEU_TINH()
+ * @method static static NGUYEN_LIEU_SAN_XUAT()
+ * @method static static NGUYEN_LIEU_THANH_PHAM()
  */
 final class LoaiSanPham extends Enum
 {

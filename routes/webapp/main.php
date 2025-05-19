@@ -23,5 +23,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/nguyen-lieu-san-xuat/list', [HomeController::class, 'listNguyenLieuSanXuat'])->name('api.nguyen.lieu.san.xuat.list');
     Route::get('/nguyen-lieu-thanh-pham/list', [HomeController::class, 'listNguyenLieuThanhPham'])->name('api.nguyen.lieu.thanh.pham.list');
     Route::get('/thong-tin-san-pham/detail', [HomeController::class, 'thongTinSanPham'])->name('api.thong.tin.san.pham.detail');
+    Route::get('/thong-tin-khach-hang/detail', [HomeController::class, 'thongTinKhachHang'])->name('api.khach.hang.detail');
+    Route::get('/chi-tiet-nguyen-lieu', [HomeController::class, 'chiTietNguyenLieu'])->name('api.chi.tiet.nguyen.lieu');
 });
 
