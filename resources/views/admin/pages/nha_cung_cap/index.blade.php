@@ -137,7 +137,7 @@
                                             $total += $nguyen_lieu_tho->cong_no;
                                         }
                                     @endphp
-                                    {{ number_format($total, 0) }} VND
+                                    {{ parseNumber($total, 0) }} VND
                                 </td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>

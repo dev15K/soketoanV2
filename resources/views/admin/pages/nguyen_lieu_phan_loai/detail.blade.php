@@ -107,17 +107,17 @@
                             <div class="form-group col-md-4">
                                 <label for="tong_khoi_luong">Tổng khối lượng</label>
                                 <input type="text" class="form-control" id="tong_khoi_luong" readonly disabled
-                                       value="{{ number_format($nguyen_lieu_phan_loai->tong_khoi_luong,3) }}" required>
+                                       value="{{ parseNumber($nguyen_lieu_phan_loai->tong_khoi_luong,3) }}" required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_ban_dau">Khối lượng ban đầu</label>
                                 <input type="text" class="form-control" id="khoi_luong_ban_dau" readonly
-                                       disabled value="{{ number_format($nguyen_lieu_phan_loai->khoi_luong_ban_dau,3) }}" required>
+                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_ban_dau,3) }}" required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_hao_hut">Khối lượng hao hụt</label>
                                 <input type="text" class="form-control" id="khoi_luong_hao_hut" readonly
-                                       disabled value="{{ number_format($nguyen_lieu_phan_loai->khoi_luong_hao_hut, 3) }}" required>
+                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_hao_hut, 3) }}" required>
                             </div>
                         </div>
 
@@ -125,12 +125,12 @@
                             <div class="form-group col-md-6">
                                 <label for="chi_phi_mua">Chi phí mua</label>
                                 <input type="text" class="form-control" id="chi_phi_mua" readonly disabled
-                                       value="{{ number_format($nguyen_lieu_phan_loai->chi_phi_mua, 3) }}" required>
+                                       value="{{ parseNumber($nguyen_lieu_phan_loai->chi_phi_mua, 3) }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="gia_sau_phan_loai">Giá sau phân loại</label>
                                 <input type="text" class="form-control" id="gia_sau_phan_loai" readonly
-                                       disabled value="{{ number_format($nguyen_lieu_phan_loai->gia_sau_phan_loai, 3) }}" required>
+                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->gia_sau_phan_loai, 3) }}" required>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>

@@ -270,9 +270,9 @@
                                 <td>{{ $data->sanPham->ten_san_pham }}</td>
                                 <td>{{ $data->sanPham->khoi_luong_rieng }}</td>
                                 <td>{{ $data->sanPham->don_vi_tinh }}</td>
-                                <td>{{ number_format($data->so_luong) }}</td>
-                                <td>{{ number_format($data->price) }} VND</td>
-                                <td>{{ number_format($data->total_price) }} VND</td>
+                                <td>{{ parseNumber($data->so_luong) }}</td>
+                                <td>{{ parseNumber($data->price) }} VND</td>
+                                <td>{{ parseNumber($data->total_price) }} VND</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay_san_xuat)->format('d-m-Y') }}</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>

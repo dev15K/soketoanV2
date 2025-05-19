@@ -200,7 +200,7 @@
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
                                 <td>{{ $data->ten_nguyen_lieu }}</td>
-                                <td>{{ number_format($data->khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
                                 <td>{{ $data->don_vi_tinh }}</td>
                                 <td>{{ $data->mau_sac }}</td>
                                 <td>{{ $data->mui_thom }}</td>

@@ -144,9 +144,9 @@
                                 <td>{{ $data->ten_san_pham }}</td>
                                 <td>{{ $data->don_vi_tinh }}</td>
                                 <td>{{ $data->khoi_luong_rieng }}</td>
-                                <td>{{ number_format($data->gia_xuat_kho) }} VND</td>
-                                <td>{{ number_format($data->gia_ban) }} VND</td>
-                                <td>{{ number_format($data->ton_kho) }}</td>
+                                <td>{{ parseNumber($data->gia_xuat_kho) }} VND</td>
+                                <td>{{ parseNumber($data->gia_ban) }} VND</td>
+                                <td>{{ parseNumber($data->ton_kho) }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.san.pham.detail', $data->id) }}"

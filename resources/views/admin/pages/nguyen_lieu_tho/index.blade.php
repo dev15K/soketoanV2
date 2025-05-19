@@ -273,14 +273,14 @@
                                 <td>{{ $data->ten_nguyen_lieu }}</td>
                                 <td>{{ $data->loai }}</td>
                                 <td>{{ $data->nguon_goc }}</td>
-                                <td>{{ number_format($data->khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
                                 <td>{{ $data->kich_thuoc }}</td>
                                 <td>{{ $data->do_kho }}</td>
                                 <td>{{ $data->dieu_kien_luu_tru }}</td>
-                                <td>{{ number_format($data->chi_phi_mua, 0) }} VND</td>
+                                <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
                                 <td>{{ $data->phuong_thuc_thanh_toan }}</td>
-                                <td>{{ number_format(floatval($data->so_tien_thanh_toan) ?? 0, 0) }} VND</td>
-                                <td>{{ number_format($data->cong_no, 0) }} VND</td>
+                                <td>{{ parseNumber(floatval($data->so_tien_thanh_toan) ?? 0, 0) }} VND</td>
+                                <td>{{ parseNumber($data->cong_no, 0) }} VND</td>
                                 <td>{{ $data->nhan_su_xu_li }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->thoi_gian_phan_loai)->format('d-m-Y') }}</td>
                                 <td>{{ $data->ghi_chu }}</td>

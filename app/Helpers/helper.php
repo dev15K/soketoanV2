@@ -130,3 +130,26 @@ if (!function_exists('updateTonKho')) {
         return null;
     }
 }
+
+if (!function_exists('parseNumber')) {
+    function parseNumber($num): ?string
+    {
+        if (fmod($num, 1) == 0) {
+            return number_format($num, 0);
+        }
+
+        // Tách phần thập phân
+        $decimalPart = explode('.', (string)$num)[1] ?? '';
+
+        // Loại bỏ số 0 ở cuối phần thập phân
+        $decimalPart = rtrim($decimalPart, '0');
+
+        // Đếm số chữ số thập phân còn lại
+        $decimalLength = strlen($decimalPart);
+
+        // Giới hạn tối đa là 3 chữ số thập phân
+        $decimalLength = min($decimalLength, 3);
+
+        return number_format($num, $decimalLength);
+    }
+}

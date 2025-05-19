@@ -205,18 +205,18 @@
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td>{{ $data->nguyenLieuTho->code }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                <td>{{ number_format($data->nu_cao_cap, 0) }} kg</td>
-                                <td>{{ number_format($data->nu_vip, 0) }} kg</td>
-                                <td>{{ number_format($data->nhang, 0) }} kg</td>
-                                <td>{{ number_format($data->vong, 0) }} kg</td>
-                                <td>{{ number_format($data->tam_tre, 0) }} kg</td>
-                                <td>{{ number_format($data->keo, 0) }} kg</td>
-                                <td>{{ number_format($data->nau_dau, 0) }} kg</td>
-                                <td>{{ number_format($data->chi_phi_mua, 0) }} VND</td>
-                                <td>{{ number_format($data->tong_khoi_luong, 0) }} kg</td>
-                                <td>{{ number_format($data->khoi_luong_ban_dau, 0) }} kg</td>
-                                <td>{{ number_format($data->khoi_luong_hao_hut, 0) }} kg</td>
-                                <td>{{ number_format($data->gia_sau_phan_loai, 0) }} VND</td>
+                                <td>{{ parseNumber($data->nu_cao_cap, 0) }} kg</td>
+                                <td>{{ parseNumber($data->nu_vip, 0) }} kg</td>
+                                <td>{{ parseNumber($data->nhang, 0) }} kg</td>
+                                <td>{{ parseNumber($data->vong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->tam_tre, 0) }} kg</td>
+                                <td>{{ parseNumber($data->keo, 0) }} kg</td>
+                                <td>{{ parseNumber($data->nau_dau, 0) }} kg</td>
+                                <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong_ban_dau, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong_hao_hut, 0) }} kg</td>
+                                <td>{{ parseNumber($data->gia_sau_phan_loai, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
@@ -242,17 +242,17 @@
                             <th scope="col">Tổng:</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
-                            <th scope="col">{{ number_format($datas->sum('nu_cao_cap'), 0) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nu_vip'), 0) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nhang'), 0) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('vong'), 0) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('tam_tre'), 0) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('keo'), 0) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('nau_dau'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('nu_cao_cap'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('nu_vip'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('nhang'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('vong'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('tam_tre'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('keo'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('nau_dau'), 0) }} kg</th>
                             <th scope="col"></th>
-                            <th scope="col">{{ number_format($datas->sum('tong_khoi_luong'), 0) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
-                            <th scope="col">{{ number_format($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>

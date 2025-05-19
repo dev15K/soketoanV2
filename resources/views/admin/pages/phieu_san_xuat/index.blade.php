@@ -269,7 +269,7 @@
                                 <td>{{ $data->code }}</td>
                                 <td>{{ $data->so_lo_san_xuat }}</td>
                                 <td>{{ $data->nguyen_lieu_id ? $data->nguyenLieuTinh->code : ''}}</td>
-                                <td>{{ number_format($data->tong_khoi_luong) }} kg</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">

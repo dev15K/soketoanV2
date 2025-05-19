@@ -256,8 +256,8 @@
                                 <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->ma_phieu }}</td>
                                 <td>{{ $data->code }}</td>
-                                <td>{{ number_format($data->tong_khoi_luong, 0) }} kg</td>
-                                <td>{{ number_format($data->gia_tien, 0) }} VND</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->gia_tien, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
