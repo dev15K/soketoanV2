@@ -6,8 +6,8 @@
 </style>
 <header
     class="top-header w-100 d-flex position-fixed top-0 bg-primary text-white justify-content-between align-items-center px-2">
-    <div>Người dùng: {{ Auth::user()->full_name }} | Công ty: Công ty TNHH Thương Mại</div>
-    <a href="tel:0865756088" class="text-white"><span>Hỗ trợ: 086 575 6088</span></a>
+    <div>Người dùng: {{ Auth::user()->full_name }} | {{ $setting ? $setting->company_name : '' }}</div>
+    <a href="tel:{{ $setting ? $setting->phone : '' }}" class="text-white"><span>Hỗ trợ: {{ $setting ? $setting->phone : '' }}</span></a>
 </header>
 <header id="header" class="header fixed-top d-flex align-items-center">
 
