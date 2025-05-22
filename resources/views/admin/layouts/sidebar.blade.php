@@ -128,9 +128,25 @@
         </li><!-- End Orders Nav -->
 
         <li class="nav-item">
+            <a class="nav-link {{ Request::routeIs('admin.loai.quy*') ? '' : 'collapsed' }}"
+               data-bs-target="#loaiquy-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-wallet"></i><span>Loại sổ quỹ</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="loaiquy-nav" class="nav-content collapse {{ Request::routeIs('admin.loai.quy.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="{{ Request::routeIs('admin.loai.quy.index') || Request::routeIs('admin.loai.quy.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.loai.quy.index') }}">
+                        <i class="bi bi-circle"></i><span>Danh sách</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End News Nav -->
+
+        <li class="nav-item">
             <a class="nav-link {{ Request::routeIs('admin.so.quy*') ? '' : 'collapsed' }}"
                data-bs-target="#news-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-newspaper"></i><span>Sổ quỹ</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-piggy-bank"></i><span>Sổ quỹ</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="news-nav" class="nav-content collapse {{ Request::routeIs('admin.so.quy.*') ? 'show' : '' }}"
                 data-bs-parent="#sidebar-nav">

@@ -40,22 +40,32 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label for="loai">Loại</label>
+                            <div class="col-md-4 form-group">
+                                <label for="loai">Loại phiếu</label>
                                 <select class="form-control" name="loai" id="loai">
-                                    <option value="0">Phiếu Chi</option>
-                                    <option value="1">Phiếu Thu</option>
+                                    <option {{ $soquy->loai == 0 ? 'selected' : '' }} value="0">Phiếu Chi</option>
+                                    <option {{ $soquy->loai == 1 ? 'selected' : '' }} value="1">Phiếu Thu</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-4 form-group">
+                                <label for="loai_quy_id">Tên quỹ</label>
+                                <select class="form-control" name="loai_quy_id" id="loai_quy_id">
+                                    @foreach($loai_quies as $loai_quy)
+                                        <option {{ $loai_quy->id == $soquy->loai_quy_id ? 'selected' : '' }}
+                                                value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
                                 <label for="so_tien">Số tiền</label>
                                 <input type="text" class="form-control onlyNumber" id="so_tien" name="so_tien"
-                                       value="" required>
+                                       value="{{ $soquy->so_tien }}" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="noi_dung">Nội dung</label>
-                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5"></textarea>
+                            <textarea name="noi_dung" id="noi_dung" class="form-control"
+                                      rows="5">{{ $soquy->noi_dung }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
                     </form>

@@ -13,4 +13,9 @@ class NguyenLieuTho extends Model
     {
         return $this->belongsTo(NhaCungCaps::class, 'nha_cung_cap_id', 'id');
     }
+
+    public function loaiQuy()
+    {
+        return $this->belongsTo(LoaiQuy::class, 'phuong_thuc_thanh_toan', 'id');
+    }
 }

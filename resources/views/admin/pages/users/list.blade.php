@@ -62,7 +62,7 @@
                             <form action="{{ route('admin.nhan.vien.delete', $user) }}" method="post">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
+                                <button type="button" class="btn btn-danger btn-sm btnDelete">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>

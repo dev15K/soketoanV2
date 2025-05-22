@@ -108,9 +108,12 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
-                                    <input type="text" class="form-control" id="phuong_thuc_thanh_toan"
-                                           name="phuong_thuc_thanh_toan"
-                                           value="{{ $nguyen_lieu_tho->phuong_thuc_thanh_toan }}" required>
+                                    <select class="form-control" name="phuong_thuc_thanh_toan" id="phuong_thuc_thanh_toan">
+                                        @foreach($loai_quies as $loai_quy)
+                                            <option {{ $nguyen_lieu_tho->phuong_thuc_thanh_toan == $loai_quy->id ? 'selected' : '' }}
+                                                value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">

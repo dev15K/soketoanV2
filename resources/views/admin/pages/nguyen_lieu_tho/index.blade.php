@@ -158,9 +158,11 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
-                                <input type="text" class="form-control" id="phuong_thuc_thanh_toan"
-                                       name="phuong_thuc_thanh_toan"
-                                       required>
+                                <select class="form-control" name="phuong_thuc_thanh_toan" id="phuong_thuc_thanh_toan">
+                                    @foreach($loai_quies as $loai_quy)
+                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -279,7 +281,7 @@
                                 <td>{{ $data->do_kho }}</td>
                                 <td>{{ $data->dieu_kien_luu_tru }}</td>
                                 <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
-                                <td>{{ $data->phuong_thuc_thanh_toan }}</td>
+                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                 <td>{{ parseNumber(floatval($data->so_tien_thanh_toan) ?? 0, 0) }} VND</td>
                                 <td>{{ parseNumber($data->cong_no, 0) }} VND</td>
                                 <td>{{ $data->nhan_su_xu_li }}</td>
@@ -297,7 +299,7 @@
                                                   method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>

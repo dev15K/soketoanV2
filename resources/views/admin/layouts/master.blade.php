@@ -88,6 +88,12 @@
                 return val.replace(/[^0-9.]/g, ''); // Xoá ký tự không hợp lệ
             });
         });
+
+        $('.btnDelete').on('click', function () {
+            if (confirm('Bạn có chắc chắn muốn xóa không?')) {
+                $(this).closest('form').submit();
+            }
+        });
     })
 </script>
 

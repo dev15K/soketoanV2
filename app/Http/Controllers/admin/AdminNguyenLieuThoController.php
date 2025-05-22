@@ -6,6 +6,7 @@ use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNhaCungCap;
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
+use App\Models\LoaiQuy;
 use App\Models\NguyenLieuTho;
 use App\Models\NhaCungCaps;
 use App\Models\SoQuy;
@@ -49,7 +50,9 @@ class AdminNguyenLieuThoController extends Controller
         $nsus = User::where('status', '!=', UserStatus::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs', 'code', 'nsus', 'ngay', 'keyword', 'nha_cung_cap_id'));
+
+        $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
+        return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs', 'code', 'nsus', 'ngay', 'keyword', 'nha_cung_cap_id', 'loai_quies'));
     }
 
     private function generateCode()
@@ -82,7 +85,8 @@ class AdminNguyenLieuThoController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_tho.detail', compact('nguyen_lieu_tho', 'nccs', 'code', 'nsus'));
+        $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
+        return view('admin.pages.nguyen_lieu_tho.detail', compact('nguyen_lieu_tho', 'nccs', 'code', 'nsus', 'loai_quies'));
     }
 
     public function store(Request $request)
@@ -93,7 +97,9 @@ class AdminNguyenLieuThoController extends Controller
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
             $nguyen_lieu_tho->save();
 
-            $this->insertSoQuy($nguyen_lieu_tho, false, null);
+            $new_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
+
+            $this->insertSoQuy($nguyen_lieu_tho, false, null, $new_id);
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu thô thành công');
         } catch (\Exception $e) {
@@ -146,9 +152,9 @@ class AdminNguyenLieuThoController extends Controller
         return $nguyenLieuTho;
     }
 
-    private function insertSoQuy(NguyenLieuTho $nguyenLieuTho, $isUpdate = false, $idUpdate = null)
+    private function insertSoQuy(NguyenLieuTho $nguyenLieuTho, $so_quy_id = null, $old_quy_id = null, $new_quy_id = null)
     {
-        if (!$idUpdate) {
+        if (!$so_quy_id) {
             $code = $this->generateSoQuyCode();
             $soquy = new SoQuy();
             $soquy->loai = 0;
@@ -157,9 +163,21 @@ class AdminNguyenLieuThoController extends Controller
             $soquy->ngay = Carbon::now();
             $soquy->noi_dung = 'Phiếu chi mua hàng cho nguyên liệu thô: #' . $nguyenLieuTho->id . ' - MDH: ' . $nguyenLieuTho->code;
             $soquy->ma_phieu = $code;
+            $soquy->loai_quy_id = $new_quy_id;
             $soquy->save();
+
+            $loai_quy = LoaiQuy::find($new_quy_id);
+            if ($loai_quy) {
+                $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $soquy->so_tien;
+                $loai_quy->save();
+            }
         } else {
-            $soquy = SoQuy::find($idUpdate);
+            $soquy = SoQuy::where('gia_tri_id', $nguyenLieuTho->id)
+                ->where('loai', 0)
+                ->first();
+
+            $old_so_tien = $soquy->so_tien;
+
             if ($soquy) {
                 $soquy->loai = 0;
                 $soquy->so_tien = $nguyenLieuTho->chi_phi_mua;
@@ -167,6 +185,28 @@ class AdminNguyenLieuThoController extends Controller
                 $soquy->gia_tri_id = $nguyenLieuTho->id;
                 $soquy->noi_dung = 'Phiếu chi mua hàng cho nguyên liệu thô: #' . $nguyenLieuTho->id . ' - MDH: ' . $nguyenLieuTho->code;
                 $soquy->save();
+
+                if ($soquy->loai_quy_id != $new_quy_id) {
+                    $loai_quy = LoaiQuy::find($soquy->loai_quy_id);
+
+                    if ($loai_quy) {
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $soquy->so_tien;
+                        $loai_quy->save();
+                    }
+
+                    $loai_quy = LoaiQuy::find($new_quy_id);
+
+                    if ($loai_quy) {
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $soquy->so_tien;
+                        $loai_quy->save();
+                    }
+                } else {
+                    $loai_quy = LoaiQuy::find($new_quy_id);
+                    if ($loai_quy) {
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $soquy->so_tien + $old_so_tien;
+                        $loai_quy->save();
+                    }
+                }
             }
         }
     }
@@ -189,11 +229,14 @@ class AdminNguyenLieuThoController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thô');
             }
 
+            $old_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
+
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
             $nguyen_lieu_tho->save();
 
-            $idUpdate = SoQuy::where('gia_tri_id', $nguyen_lieu_tho->id)->first();
-            $this->insertSoQuy($nguyen_lieu_tho, true, $idUpdate?->id);
+            $new_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
+
+            $this->insertSoQuy($nguyen_lieu_tho, true, $old_id, $new_id);
 
             return redirect()->route('admin.nguyen.lieu.tho.index')->with('success', 'Chỉnh sửa nguyên liệu thô thành công');
         } catch (\Exception $e) {

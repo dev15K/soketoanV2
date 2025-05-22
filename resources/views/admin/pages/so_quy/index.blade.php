@@ -86,14 +86,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label for="loai">Loại</label>
+                            <div class="col-md-4 form-group">
+                                <label for="loai">Loại phiếu</label>
                                 <select class="form-control" name="loai" id="loai">
                                     <option value="0">Phiếu Chi</option>
                                     <option value="1">Phiếu Thu</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-4 form-group">
+                                <label for="loai_quy_id">Tên quỹ</label>
+                                <select class="form-control" name="loai_quy_id" id="loai_quy_id">
+                                    @foreach($loai_quies as $loai_quy)
+                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
                                 <label for="so_tien">Số tiền</label>
                                 <input type="text" class="form-control onlyNumber" id="so_tien" name="so_tien"
                                        value="" required>
@@ -141,17 +149,19 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
-                            <col width="12%">
                             <col width="10%">
+                            <col width="10%">
+                            <col width="15%">
                             <col width="30%">
                             <col width="x">
-                            <col width="8%">
+                            <col width="10%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Loại</th>
+                            <th scope="col">Tên quỹ</th>
                             <th scope="col">Số tiền</th>
                             <th scope="col">Nội dung</th>
                             <th scope="col">Hành động</th>
@@ -169,6 +179,7 @@
                                         Phiếu Thu
                                     @endif
                                 </td>
+                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                 <td>{{ parseNumber($data->so_tien) }} VND</td>
                                 <td>{{ $data->noi_dung }}</td>
                                 <td>

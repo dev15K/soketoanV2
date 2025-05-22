@@ -14,6 +14,7 @@
 use App\Http\Controllers\admin\AdminBanHangController;
 use App\Http\Controllers\admin\AdminHomeController;
 use App\Http\Controllers\admin\AdminKhachHangController;
+use App\Http\Controllers\admin\AdminLoaiQuyController;
 use App\Http\Controllers\admin\AdminNguyenLieuPhanLoaiController;
 use App\Http\Controllers\admin\AdminNguyenLieuSanXuatController;
 use App\Http\Controllers\admin\AdminNguyenLieuThanhPhamController;
@@ -139,6 +140,13 @@ Route::group(['prefix' => 'ban-hang'], function () {
     Route::delete('/delete/{id}', [AdminBanHangController::class, 'delete'])->name('admin.ban.hang.delete');
 });
 
+Route::group(['prefix' => 'loai-quy'], function () {
+    Route::get('/index', [AdminLoaiQuyController::class, 'index'])->name('admin.loai.quy.index');
+    Route::get('/detail/{id}', [AdminLoaiQuyController::class, 'detail'])->name('admin.loai.quy.detail');
+    Route::post('/store', [AdminLoaiQuyController::class, 'store'])->name('admin.loai.quy.store');
+    Route::put('/update/{id}', [AdminLoaiQuyController::class, 'update'])->name('admin.loai.quy.update');
+    Route::delete('/delete/{id}', [AdminLoaiQuyController::class, 'delete'])->name('admin.loai.quy.delete');
+});
 Route::group(['prefix' => 'so-quy'], function () {
     Route::get('/index', [AdminSoQuyController::class, 'index'])->name('admin.so.quy.index');
     Route::get('/detail/{id}', [AdminSoQuyController::class, 'detail'])->name('admin.so.quy.detail');
