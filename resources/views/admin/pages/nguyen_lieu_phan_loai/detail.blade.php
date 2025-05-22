@@ -42,8 +42,7 @@
 
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay" name="ngay"
-                                       readonly
+                                <input type="date" class="form-control" id="ngay" name="ngay"
                                        value="{{ \Carbon\Carbon::parse($nguyen_lieu_phan_loai->ngay)->format('Y-m-d') }}"
                                        required>
                             </div>

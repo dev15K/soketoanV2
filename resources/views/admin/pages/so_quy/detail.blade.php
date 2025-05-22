@@ -29,8 +29,7 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay"
-                                       name="ngay" readonly
+                                <input type="date" class="form-control" id="ngay" name="ngay"
                                        value="{{ \Illuminate\Support\Carbon::parse($soquy->ngay)->format('Y-m-d') }}"
                                        required>
                             </div>

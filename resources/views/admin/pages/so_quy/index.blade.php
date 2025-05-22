@@ -75,8 +75,8 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control bg-secondary bg-opacity-10" id="ngay" name="ngay"
-                                       readonly value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                <input type="date" class="form-control" id="ngay" name="ngay"
+                                       value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="ma_phieu">Mã phiếu</label>
