@@ -82,7 +82,7 @@
                                 <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
                                     @foreach($nlthos as $nltho)
                                         <option value="{{ $nltho->id }}">{{ $nltho->code }}
-                                            - {{ $nltho->ten_nguyen_lieu }}</option>
+                                            - {{ $nltho->ten_nguyen_lieu }} - {{ parseNumber($nltho->khoi_luong - $nltho->khoi_luong_da_phan_loai) }} kg</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -95,49 +95,39 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
+                                <label for="khoi_luong_ban_dau">Khối lượng ban đầu</label>
+                                <input type="text" class="onlyNumber form-control" id="khoi_luong_ban_dau"
+                                       name="khoi_luong_ban_dau" required>
+                            </div>
+                            <div class="form-group col-md-3">
                                 <label for="nu_cao_cap">Nguyên liệu nụ cao cấp (NCC)</label>
-                                <input type="text" class="onlyNumber form-control" id="nu_cao_cap" name="nu_cao_cap"
-                                       required>
+                                <input type="text" class="onlyNumber form-control" id="nu_cao_cap" name="nu_cao_cap">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="nu_vip">Nguyên liệu nụ VIP (NVIP)</label>
-                                <input type="text" class="onlyNumber form-control" id="nu_vip" name="nu_vip"
-                                       required>
+                                <input type="text" class="onlyNumber form-control" id="nu_vip" name="nu_vip">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="nhang">Nguyên liệu nhang (NLN)</label>
-                                <input type="text" class="onlyNumber form-control" id="nhang" name="nhang" required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="vong">Nguyên liệu vòng (NLV)</label>
-                                <input type="text" class="onlyNumber form-control" id="vong" name="vong"
-                                       required>
+                                <input type="text" class="onlyNumber form-control" id="nhang" name="nhang">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
+                                <label for="vong">Nguyên liệu vòng (NLV)</label>
+                                <input type="text" class="onlyNumber form-control" id="vong" name="vong">
+                            </div>
+                            <div class="form-group col-md-3">
                                 <label for="tam_tre">Tăm tre</label>
-                                <input type="text" class="onlyNumber form-control" id="tam_tre" name="tam_tre"
-                                       required>
+                                <input type="text" class="onlyNumber form-control" id="tam_tre" name="tam_tre">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="keo">Keo</label>
-                                <input type="text" class="onlyNumber form-control" id="keo" name="keo"
-                                       required>
+                                <input type="text" class="onlyNumber form-control" id="keo" name="keo">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="nau_dau">Nấu dầu</label>
-                                <input type="text" class="onlyNumber form-control" id="nau_dau" name="nau_dau"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="trang_thai">Trạng thái</label>
-                                <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}</option>
-                                    <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}</option>
-                                </select>
+                                <input type="text" class="onlyNumber form-control" id="nau_dau" name="nau_dau">
                             </div>
                         </div>
                         <div class="form-group">
@@ -175,6 +165,8 @@
                             <col width="200px">
                             <col width="200px">
                             <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
                             <col width="250px">
                             <col width="100px">
                             <col width="100px">
@@ -195,6 +187,9 @@
                             <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Khối lượng ban đầu</th>
                             <th scope="col">Khối lượng hao hụt</th>
+                            <th scope="col">Khối lượng đã dùng</th>
+                            <th scope="col">Khối lượng tồn</th>
+                            <th scope="col">Giá trước phân loại</th>
                             <th scope="col">Giá sau phân loại</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
@@ -217,6 +212,9 @@
                                 <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
                                 <td>{{ parseNumber($data->khoi_luong_ban_dau, 0) }} kg</td>
                                 <td>{{ parseNumber($data->khoi_luong_hao_hut, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_phan_loai, 0) }} kg</td>
+                                <td>{{ parseNumber($data->gia_truoc_phan_loai, 0) }} VND</td>
                                 <td>{{ parseNumber($data->gia_sau_phan_loai, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
@@ -254,6 +252,9 @@
                             <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>

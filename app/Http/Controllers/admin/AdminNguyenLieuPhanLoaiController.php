@@ -54,6 +54,9 @@ class AdminNguyenLieuPhanLoaiController extends Controller
             $nguyen_lieu_phan_loai = new NguyenLieuPhanLoai();
 
             $nguyen_lieu_phan_loai = $this->saveData($nguyen_lieu_phan_loai, $request);
+            if (!$nguyen_lieu_phan_loai) {
+                return redirect()->back()->with('error', 'Khối lượng ban đầu không đủ');
+            }
             $nguyen_lieu_phan_loai->save();
 
             $this->updateNguyenLieuTho();
@@ -66,6 +69,12 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
     private function saveData(NguyenLieuPhanLoai $NguyenLieuPhanLoai, Request $request)
     {
+        $is_update = false;
+        if ($NguyenLieuPhanLoai->nguyen_lieu_tho_id) {
+            $is_update = true;
+            $old_nguyen_lieu_tho_id = $NguyenLieuPhanLoai->nguyen_lieu_tho_id;
+            $old_khoi_luong_ban_dau = $NguyenLieuPhanLoai->khoi_luong_ban_dau;
+        }
         $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
         $ngay = $request->input('ngay');
         $nguyen_lieu_tho_id = $request->input('nguyen_lieu_tho_id');
@@ -77,19 +86,20 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         $keo = $request->input('keo');
         $nau_dau = $request->input('nau_dau');
         $ghi_chu = $request->input('ghi_chu');
-        $trang_thai = $request->input('trang_thai');
+        $khoi_luong_ban_dau = $request->input('khoi_luong_ban_dau');
+        $trang_thai = $request->input('trang_thai') ?? TrangThaiNguyenLieuPhanLoai::ACTIVE();
 
         $NguyenLieuPhanLoai->ten_nguyen_lieu = $ten_nguyen_lieu;
         $NguyenLieuPhanLoai->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $NguyenLieuPhanLoai->nguyen_lieu_tho_id = $nguyen_lieu_tho_id;
-        $NguyenLieuPhanLoai->nu_cao_cap = $nu_cao_cap;
-        $NguyenLieuPhanLoai->nu_vip = $nu_vip;
-        $NguyenLieuPhanLoai->nhang = $nhang;
-        $NguyenLieuPhanLoai->vong = $vong;
-        $NguyenLieuPhanLoai->tam_tre = $tam_tre;
-        $NguyenLieuPhanLoai->keo = $keo;
-        $NguyenLieuPhanLoai->nau_dau = $nau_dau;
-
+        $NguyenLieuPhanLoai->nu_cao_cap = $nu_cao_cap ?? 0;
+        $NguyenLieuPhanLoai->nu_vip = $nu_vip ?? 0;
+        $NguyenLieuPhanLoai->nhang = $nhang ?? 0;
+        $NguyenLieuPhanLoai->vong = $vong ?? 0;
+        $NguyenLieuPhanLoai->tam_tre = $tam_tre ?? 0;
+        $NguyenLieuPhanLoai->keo = $keo ?? 0;
+        $NguyenLieuPhanLoai->nau_dau = $nau_dau ?? 0;
+        $NguyenLieuPhanLoai->khoi_luong_ban_dau = $khoi_luong_ban_dau;
         $NguyenLieuPhanLoai->ghi_chu = $ghi_chu;
         $NguyenLieuPhanLoai->trang_thai = $trang_thai;
 
@@ -97,13 +107,54 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
         $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_tho_id)->first();
         if ($nguyenLieuTho) {
-            $NguyenLieuPhanLoai->khoi_luong_ban_dau = $nguyenLieuTho->khoi_luong;
-            $NguyenLieuPhanLoai->chi_phi_mua = $nguyenLieuTho->chi_phi_mua;
+            if ($nguyenLieuTho->khoi_luong < $khoi_luong_ban_dau) {
+                return null;
+            }
+        }
+        if ($is_update) {
+            if (isset($old_nguyen_lieu_tho_id) && isset($old_khoi_luong_ban_dau) && $old_nguyen_lieu_tho_id != $nguyen_lieu_tho_id) {
+                $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_tho_id)->first();
+                if ($nguyenLieuTho) {
+                    $NguyenLieuPhanLoai->chi_phi_mua = $nguyenLieuTho->chi_phi_mua / $nguyenLieuTho->khoi_luong * $khoi_luong_ban_dau;
 
+                    $NguyenLieuPhanLoai->khoi_luong_hao_hut = $khoi_luong_ban_dau - $NguyenLieuPhanLoai->tong_khoi_luong;
+                    $NguyenLieuPhanLoai->gia_truoc_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->khoi_luong_ban_dau, 2);
+                    $NguyenLieuPhanLoai->gia_sau_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->tong_khoi_luong, 2);
 
-            $NguyenLieuPhanLoai->khoi_luong_hao_hut = $nguyenLieuTho->khoi_luong - $NguyenLieuPhanLoai->tong_khoi_luong;
+                    $nguyenLieuTho->khoi_luong_da_phan_loai = $khoi_luong_ban_dau;
+                    $nguyenLieuTho->save();
+                }
 
-            $NguyenLieuPhanLoai->gia_sau_phan_loai = round($nguyenLieuTho->chi_phi_mua / $NguyenLieuPhanLoai->tong_khoi_luong, 2);
+                $nguyenLieuTho = NguyenLieuTho::where('id', $old_nguyen_lieu_tho_id)->first();
+                if ($nguyenLieuTho) {
+                    $nguyenLieuTho->khoi_luong_da_phan_loai = $nguyenLieuTho->khoi_luong_da_phan_loai - $old_khoi_luong_ban_dau;
+                    $nguyenLieuTho->save();
+                }
+            } else {
+                $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_tho_id)->first();
+
+                if ($nguyenLieuTho) {
+                    $NguyenLieuPhanLoai->chi_phi_mua = $nguyenLieuTho->chi_phi_mua / $nguyenLieuTho->khoi_luong * $khoi_luong_ban_dau;
+
+                    $NguyenLieuPhanLoai->khoi_luong_hao_hut = $khoi_luong_ban_dau - $NguyenLieuPhanLoai->tong_khoi_luong;
+                    $NguyenLieuPhanLoai->gia_truoc_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->khoi_luong_ban_dau, 2);
+                    $NguyenLieuPhanLoai->gia_sau_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->tong_khoi_luong, 2);
+
+                    $nguyenLieuTho->khoi_luong_da_phan_loai = $khoi_luong_ban_dau - $old_khoi_luong_ban_dau ?? 0;
+                    $nguyenLieuTho->save();
+                }
+            }
+        } else {
+            $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_tho_id)->first();
+            if ($nguyenLieuTho) {
+                $NguyenLieuPhanLoai->chi_phi_mua = $nguyenLieuTho->chi_phi_mua / $nguyenLieuTho->khoi_luong * $khoi_luong_ban_dau;
+
+                $NguyenLieuPhanLoai->khoi_luong_hao_hut = $khoi_luong_ban_dau - $NguyenLieuPhanLoai->tong_khoi_luong;
+                $NguyenLieuPhanLoai->gia_sau_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->tong_khoi_luong, 2);
+
+                $nguyenLieuTho->khoi_luong_da_phan_loai = $khoi_luong_ban_dau;
+                $nguyenLieuTho->save();
+            }
         }
 
         return $NguyenLieuPhanLoai;
@@ -136,6 +187,9 @@ class AdminNguyenLieuPhanLoaiController extends Controller
             }
 
             $nguyen_lieu_phan_loai = $this->saveData($nguyen_lieu_phan_loai, $request);
+            if (!$nguyen_lieu_phan_loai) {
+                return redirect()->back()->with('error', 'Khối lượng ban đầu không đủ');
+            }
             $nguyen_lieu_phan_loai->save();
 
             $this->updateNguyenLieuTho();
@@ -156,6 +210,21 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
             $nguyen_lieu_phan_loai->trang_thai = TrangThaiNguyenLieuPhanLoai::DELETED();
             $nguyen_lieu_phan_loai->save();
+
+            $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_phan_loai->nguyen_lieu_tho_id)->first();
+            if ($nguyenLieuTho) {
+                $nguyenLieuTho->khoi_luong_da_phan_loai = $nguyenLieuTho->khoi_luong_da_phan_loai - $nguyen_lieu_phan_loai->khoi_luong_ban_dau;
+                $nguyenLieuTho->save();
+
+                $otherNguyenLieuTho = NguyenLieuPhanLoai::where('nguyen_lieu_tho_id', $nguyenLieuTho->id)
+                    ->where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
+                    ->first();
+
+                if (!$otherNguyenLieuTho) {
+                    $nguyenLieuTho->allow_change = true;
+                    $nguyenLieuTho->save();
+                }
+            }
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu phân loại thành công');
         } catch (\Exception $e) {

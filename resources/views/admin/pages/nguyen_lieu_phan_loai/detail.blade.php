@@ -49,53 +49,49 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
+                                <label for="khoi_luong_ban_dau">Khối lượng ban đầu</label>
+                                <input type="text" class="form-control" id="khoi_luong_ban_dau"
+                                       name="khoi_luong_ban_dau"
+                                       value="{{ $nguyen_lieu_phan_loai->khoi_luong_ban_dau }}">
+                            </div>
+                            <div class="form-group col-md-3">
                                 <label for="nu_cao_cap">Nguyên liệu nụ cao cấp (NCC)</label>
                                 <input type="text" class="form-control onlyNumber" id="nu_cao_cap" name="nu_cao_cap"
-                                       value="{{ $nguyen_lieu_phan_loai->nu_cao_cap }}" required>
+                                       value="{{ $nguyen_lieu_phan_loai->nu_cao_cap }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="nu_vip">Nguyên liệu nụ VIP (NVIP)</label>
                                 <input type="text" class="form-control onlyNumber" id="nu_vip" name="nu_vip"
-                                       value="{{ $nguyen_lieu_phan_loai->nu_vip }}" required>
+                                       value="{{ $nguyen_lieu_phan_loai->nu_vip }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="nhang">Nguyên liệu nhang (NLN)</label>
                                 <input type="text" class="form-control onlyNumber" id="nhang" name="nhang"
-                                       value="{{ $nguyen_lieu_phan_loai->nhang }}" required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="vong">Nguyên liệu vòng (NLV)</label>
-                                <input type="text" class="form-control onlyNumber" id="vong" name="vong"
-                                       value="{{ $nguyen_lieu_phan_loai->vong }}" required>
+                                       value="{{ $nguyen_lieu_phan_loai->nhang }}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
+                                <label for="vong">Nguyên liệu vòng (NLV)</label>
+                                <input type="text" class="form-control onlyNumber" id="vong" name="vong"
+                                       value="{{ $nguyen_lieu_phan_loai->vong }}">
+                            </div>
+                            <div class="form-group col-md-3">
                                 <label for="tam_tre">Tăm tre</label>
                                 <input type="text" class="form-control onlyNumber" id="tam_tre" name="tam_tre"
-                                       value="{{ $nguyen_lieu_phan_loai->tam_tre }}" required>
+                                       value="{{ $nguyen_lieu_phan_loai->tam_tre }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="keo">Keo</label>
                                 <input type="text" class="form-control onlyNumber" id="keo" name="keo"
-                                       value="{{ $nguyen_lieu_phan_loai->keo }}" required>
+                                       value="{{ $nguyen_lieu_phan_loai->keo }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="nau_dau">Nấu dầu</label>
                                 <input type="text" class="form-control onlyNumber" id="nau_dau" name="nau_dau"
-                                       value="{{ $nguyen_lieu_phan_loai->nau_dau }}" required>
+                                       value="{{ $nguyen_lieu_phan_loai->nau_dau }}">
                             </div>
-                            <div class="form-group col-md-3">
-                                <label for="trang_thai">Trạng thái</label>
-                                <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option
-                                        {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() ? 'selected' : '' }}
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::ACTIVE() }}</option>
-                                    <option
-                                        {{ $nguyen_lieu_phan_loai->trang_thai == \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() ? 'selected' : '' }}
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuPhanLoai::INACTIVE() }}</option>
-                                </select>
-                            </div>
+
                         </div>
                         <div class="form-group">
                             <label for="ghi_chu">Ghi chú</label>
@@ -104,22 +100,16 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 <label for="tong_khoi_luong">Tổng khối lượng</label>
                                 <input type="text" class="form-control" id="tong_khoi_luong" readonly disabled
-                                       value="{{ parseNumber($nguyen_lieu_phan_loai->tong_khoi_luong,3) }}" required>
+                                       value="{{ parseNumber($nguyen_lieu_phan_loai->tong_khoi_luong,3) }}">
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="khoi_luong_ban_dau">Khối lượng ban đầu</label>
-                                <input type="text" class="form-control" id="khoi_luong_ban_dau" readonly
-                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_ban_dau,3) }}"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 <label for="khoi_luong_hao_hut">Khối lượng hao hụt</label>
                                 <input type="text" class="form-control" id="khoi_luong_hao_hut" readonly
-                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_hao_hut, 3) }}"
-                                       required>
+                                       disabled
+                                       value="{{ parseNumber($nguyen_lieu_phan_loai->khoi_luong_hao_hut, 3) }}">
                             </div>
                         </div>
 
@@ -127,13 +117,12 @@
                             <div class="form-group col-md-6">
                                 <label for="chi_phi_mua">Chi phí mua</label>
                                 <input type="text" class="form-control" id="chi_phi_mua" readonly disabled
-                                       value="{{ parseNumber($nguyen_lieu_phan_loai->chi_phi_mua, 3) }}" required>
+                                       value="{{ parseNumber($nguyen_lieu_phan_loai->chi_phi_mua, 3) }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="gia_sau_phan_loai">Giá sau phân loại</label>
                                 <input type="text" class="form-control" id="gia_sau_phan_loai" readonly
-                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->gia_sau_phan_loai, 3) }}"
-                                       required>
+                                       disabled value="{{ parseNumber($nguyen_lieu_phan_loai->gia_sau_phan_loai, 3) }}">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
