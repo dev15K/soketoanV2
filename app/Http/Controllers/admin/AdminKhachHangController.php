@@ -38,9 +38,9 @@ class AdminKhachHangController extends Controller
             $khachhang = new KhachHang();
 
             $khachhang->ten = $ten;
-            $khachhang->dia_chi = $dia_chi;
-            $khachhang->so_dien_thoai = $so_dien_thoai;
-            $khachhang->tinh_thanh = $tinh_thanh;
+            $khachhang->dia_chi = $dia_chi ?? '';
+            $khachhang->so_dien_thoai = $so_dien_thoai ?? '';
+            $khachhang->tinh_thanh = $tinh_thanh ?? '';
             $khachhang->trang_thai = $trang_thai;
             $khachhang->save();
 
@@ -65,9 +65,9 @@ class AdminKhachHangController extends Controller
             }
 
             $khachhang->ten = $ten;
-            $khachhang->dia_chi = $dia_chi;
-            $khachhang->so_dien_thoai = $so_dien_thoai;
-            $khachhang->tinh_thanh = $tinh_thanh;
+            $khachhang->dia_chi = $dia_chi ?? '';
+            $khachhang->so_dien_thoai = $so_dien_thoai ?? '';
+            $khachhang->tinh_thanh = $tinh_thanh ?? '';
             $khachhang->trang_thai = $trang_thai;
             $khachhang->save();
 

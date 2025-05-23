@@ -39,9 +39,9 @@ class AdminNhaCungCapController extends Controller
             $ncc = new NhaCungCaps();
 
             $ncc->ten = $ten;
-            $ncc->dia_chi = $dia_chi;
-            $ncc->so_dien_thoai = $so_dien_thoai;
-            $ncc->tinh_thanh = $tinh_thanh;
+            $ncc->dia_chi = $dia_chi ?? '';
+            $ncc->so_dien_thoai = $so_dien_thoai ?? '';
+            $ncc->tinh_thanh = $tinh_thanh ?? '';
             $ncc->trang_thai = $trang_thai;
             $ncc->save();
 
@@ -66,9 +66,9 @@ class AdminNhaCungCapController extends Controller
             }
 
             $ncc->ten = $ten;
-            $ncc->dia_chi = $dia_chi;
-            $ncc->so_dien_thoai = $so_dien_thoai;
-            $ncc->tinh_thanh = $tinh_thanh;
+            $ncc->dia_chi = $dia_chi ?? '';
+            $ncc->so_dien_thoai = $so_dien_thoai ?? '';
+            $ncc->tinh_thanh = $tinh_thanh ?? '';
             $ncc->trang_thai = $trang_thai;
             $ncc->save();
 

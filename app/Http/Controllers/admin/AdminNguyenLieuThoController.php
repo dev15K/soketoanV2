@@ -128,22 +128,22 @@ class AdminNguyenLieuThoController extends Controller
         $code = $request->input('code');
 
         $nguyenLieuTho->ngay = Carbon::parse($ngay)->format('Y-m-d');
-        $nguyenLieuTho->nha_cung_cap_id = $nha_cung_cap_id;
-        $nguyenLieuTho->ten_nguyen_lieu = $ten_nguyen_lieu;
-        $nguyenLieuTho->loai = $loai;
-        $nguyenLieuTho->nguon_goc = $nguon_goc;
-        $nguyenLieuTho->khoi_luong = $khoi_luong;
-        $nguyenLieuTho->kich_thuoc = $kich_thuoc;
-        $nguyenLieuTho->do_kho = $do_kho;
-        $nguyenLieuTho->dieu_kien_luu_tru = $dieu_kien_luu_tru;
-        $nguyenLieuTho->chi_phi_mua = $chi_phi_mua;
-        $nguyenLieuTho->phuong_thuc_thanh_toan = $phuong_thuc_thanh_toan;
-        $nguyenLieuTho->so_tien_thanh_toan = $so_tien_thanh_toan;
+        $nguyenLieuTho->nha_cung_cap_id = $nha_cung_cap_id ?? '';
+        $nguyenLieuTho->ten_nguyen_lieu = $ten_nguyen_lieu ?? '';
+        $nguyenLieuTho->loai = $loai ?? '';
+        $nguyenLieuTho->nguon_goc = $nguon_goc ?? '';
+        $nguyenLieuTho->khoi_luong = $khoi_luong ?? '';
+        $nguyenLieuTho->kich_thuoc = $kich_thuoc ?? '';
+        $nguyenLieuTho->do_kho = $do_kho ?? '';
+        $nguyenLieuTho->dieu_kien_luu_tru = $dieu_kien_luu_tru ?? '';
+        $nguyenLieuTho->chi_phi_mua = $chi_phi_mua ?? '';
+        $nguyenLieuTho->phuong_thuc_thanh_toan = $phuong_thuc_thanh_toan ?? '';
+        $nguyenLieuTho->so_tien_thanh_toan = $so_tien_thanh_toan ?? '';
 
         $nguyenLieuTho->cong_no = $chi_phi_mua - $so_tien_thanh_toan;
         $nguyenLieuTho->nhan_su_xu_li = $nhan_su_xu_li;
         $nguyenLieuTho->thoi_gian_phan_loai = Carbon::parse($thoi_gian_phan_loai)->format('Y-m-d');
-        $nguyenLieuTho->ghi_chu = $ghi_chu;
+        $nguyenLieuTho->ghi_chu = $ghi_chu ?? '';
         $nguyenLieuTho->trang_thai = $trang_thai;
         if ($code) {
             $nguyenLieuTho->code = $code;

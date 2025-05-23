@@ -61,12 +61,11 @@
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="tinh_thanh">Tỉnh thành</label>
-                                <input type="text" class="form-control" id="tinh_thanh" name="tinh_thanh" required>
+                                <input type="text" class="form-control" id="tinh_thanh" name="tinh_thanh">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="so_dien_thoai">Số điện thoại</label>
-                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                       required>
+                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="trang_thai">Trạng thái</label>
@@ -81,7 +80,7 @@
                         <div class="form-group">
                             <label for="dia_chi">Địa chỉ chi tiết</label>
                             <input type="text" class="form-control" id="dia_chi"
-                                   name="dia_chi" required>
+                                   name="dia_chi">
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
@@ -96,7 +95,7 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover vw-100">
+                    <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
                             <col width="20%">

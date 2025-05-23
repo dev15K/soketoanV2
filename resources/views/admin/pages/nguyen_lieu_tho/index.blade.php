@@ -118,36 +118,32 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="loai">Loại</label>
-                                <input type="text" class="form-control" id="loai" name="loai" required>
+                                <input type="text" class="form-control" id="loai" name="loai">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="nguon_goc">Nguồn gốc</label>
-                                <input type="text" class="form-control" id="nguon_goc" name="nguon_goc" required>
+                                <input type="text" class="form-control" id="nguon_goc" name="nguon_goc">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="khoi_luong">Khối lượng(kg)</label>
                                 <input type="text" min="0" class="form-control onlyNumber" id="khoi_luong"
-                                       name="khoi_luong"
-                                       required>
+                                       name="khoi_luong" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="kich_thuoc">Kích thước</label>
-                                <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc"
-                                       required>
+                                <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="do_kho">Độ khô</label>
-                                <input type="text" class="form-control" id="do_kho" name="do_kho"
-                                       required>
+                                <input type="text" class="form-control" id="do_kho" name="do_kho">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="dieu_kien_luu_tru">Điều kiện lưu trữ</label>
-                                <input type="text" class="form-control" id="dieu_kien_luu_tru" name="dieu_kien_luu_tru"
-                                       required>
+                                <input type="text" class="form-control" id="dieu_kien_luu_tru" name="dieu_kien_luu_tru">
                             </div>
                         </div>
                         <div class="row">
@@ -190,7 +186,7 @@
                             <div class="form-group col-md-4">
                                 <label for="thoi_gian_phan_loai">Thời gian phân loại</label>
                                 <input type="date" class="form-control" id="thoi_gian_phan_loai"
-                                       name="thoi_gian_phan_loai" required>
+                                       name="thoi_gian_phan_loai">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="trang_thai">Trạng thái</label>
@@ -232,6 +228,8 @@
                             <col width="150px">
                             <col width="150px">
                             <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
                             <col width="250px">
                             <col width="150px">
                             <col width="250px">
@@ -252,6 +250,8 @@
                             <th scope="col">Loại (đã làm sạch và phơi khô)</th>
                             <th scope="col">Nguồn gốc</th>
                             <th scope="col">Khối lượng(kg)</th>
+                            <th scope="col">Khối lượng đã phân loại(kg)</th>
+                            <th scope="col">Khối lượng tồn(kg)</th>
                             <th scope="col">Kích thước</th>
                             <th scope="col">Độ khô</th>
                             <th scope="col">Điều kiện lưu trữ</th>
@@ -277,6 +277,8 @@
                                 <td>{{ $data->loai }}</td>
                                 <td>{{ $data->nguon_goc }}</td>
                                 <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_phan_loai, 0) }} kg</td>
                                 <td>{{ $data->kich_thuoc }}</td>
                                 <td>{{ $data->do_kho }}</td>
                                 <td>{{ $data->dieu_kien_luu_tru }}</td>

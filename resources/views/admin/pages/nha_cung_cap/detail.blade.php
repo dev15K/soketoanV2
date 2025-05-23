@@ -28,19 +28,18 @@
                         @csrf
                         <div class="form-group">
                             <label for="ten">Họ và tên</label>
-                            <input type="text" class="form-control" id="ten" name="ten" value="{{ $ncc->ten }}"
-                                   required>
+                            <input type="text" class="form-control" id="ten" name="ten" value="{{ $ncc->ten }}">
                         </div>
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="tinh_thanh">Tỉnh thành</label>
                                 <input type="text" class="form-control" id="tinh_thanh" value="{{ $ncc->tinh_thanh }}"
-                                       name="tinh_thanh" required>
+                                       name="tinh_thanh">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="so_dien_thoai">Số điện thoại</label>
                                 <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                       value="{{ $ncc->so_dien_thoai }}" required>
+                                       value="{{ $ncc->so_dien_thoai }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="trang_thai">Trạng thái</label>
@@ -60,7 +59,7 @@
                         <div class="form-group">
                             <label for="dia_chi">Địa chỉ chi tiết</label>
                             <input type="text" class="form-control" id="dia_chi"
-                                   name="dia_chi" value="{{ $ncc->dia_chi }}" required>
+                                   name="dia_chi" value="{{ $ncc->dia_chi }}">
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
                     </form>

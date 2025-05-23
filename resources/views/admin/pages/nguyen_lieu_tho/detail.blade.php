@@ -65,12 +65,12 @@
                                 <div class="form-group col-md-6">
                                     <label for="loai">Loại</label>
                                     <input type="text" class="form-control" id="loai" name="loai"
-                                           value="{{ $nguyen_lieu_tho->loai }}" required>
+                                           value="{{ $nguyen_lieu_tho->loai }}">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="nguon_goc">Nguồn gốc</label>
                                     <input type="text" class="form-control" id="nguon_goc" name="nguon_goc"
-                                           value="{{ $nguyen_lieu_tho->nguon_goc }}" required>
+                                           value="{{ $nguyen_lieu_tho->nguon_goc }}">
                                 </div>
                             </div>
                             <div class="row">
@@ -82,20 +82,20 @@
                                 <div class="form-group col-md-6">
                                     <label for="kich_thuoc">Kích thước</label>
                                     <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc"
-                                           value="{{ $nguyen_lieu_tho->kich_thuoc }}" required>
+                                           value="{{ $nguyen_lieu_tho->kich_thuoc }}">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="do_kho">Độ khô</label>
                                     <input type="text" class="form-control" id="do_kho" name="do_kho"
-                                           value="{{ $nguyen_lieu_tho->do_kho }}" required>
+                                           value="{{ $nguyen_lieu_tho->do_kho }}">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="dieu_kien_luu_tru">Điều kiện lưu trữ</label>
                                     <input type="text" class="form-control" id="dieu_kien_luu_tru"
                                            name="dieu_kien_luu_tru"
-                                           value="{{ $nguyen_lieu_tho->dieu_kien_luu_tru }}" required>
+                                           value="{{ $nguyen_lieu_tho->dieu_kien_luu_tru }}">
                                 </div>
                             </div>
 
@@ -108,9 +108,11 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
-                                    <select class="form-control" name="phuong_thuc_thanh_toan" id="phuong_thuc_thanh_toan">
+                                    <select class="form-control" name="phuong_thuc_thanh_toan"
+                                            id="phuong_thuc_thanh_toan">
                                         @foreach($loai_quies as $loai_quy)
-                                            <option {{ $nguyen_lieu_tho->phuong_thuc_thanh_toan == $loai_quy->id ? 'selected' : '' }}
+                                            <option
+                                                {{ $nguyen_lieu_tho->phuong_thuc_thanh_toan == $loai_quy->id ? 'selected' : '' }}
                                                 value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
                                         @endforeach
                                     </select>
@@ -146,8 +148,7 @@
                                     <label for="thoi_gian_phan_loai">Thời gian phân loại </label>
                                     <input type="date" class="form-control" id="thoi_gian_phan_loai"
                                            name="thoi_gian_phan_loai"
-                                           value="{{ \Carbon\Carbon::parse($nguyen_lieu_tho->thoi_gian_phan_loai)->format('yY-m-d') }}"
-                                           required>
+                                           value="{{ \Carbon\Carbon::parse($nguyen_lieu_tho->thoi_gian_phan_loai)->format('yY-m-d') }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="trang_thai">Trạng thái</label>
