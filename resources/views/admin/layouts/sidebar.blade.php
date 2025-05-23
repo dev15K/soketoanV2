@@ -45,13 +45,13 @@
                 <li>
                     <a class="{{ Request::routeIs('admin.nguyen.lieu.san.xuat.index') || Request::routeIs('admin.nguyen.lieu.san.xuat.detail') ? 'active' : '' }}"
                        href="{{ route('admin.nguyen.lieu.san.xuat.index') }}">
-                        <i class="bi bi-circle"></i><span>Kho NL Sản xuất</span>
+                        <i class="bi bi-circle"></i><span>Kho Thành phẩm Sản xuất</span>
                     </a>
                 </li>
                 <li>
                     <a class="{{ Request::routeIs('admin.nguyen.lieu.thanh.pham.index') || Request::routeIs('admin.nguyen.lieu.thanh.pham.detail') ? 'active' : '' }}"
                        href="{{ route('admin.nguyen.lieu.thanh.pham.index') }}">
-                        <i class="bi bi-circle"></i><span>Kho NL Thành phẩm</span>
+                        <i class="bi bi-circle"></i><span>Kho đã đóng gói</span>
                     </a>
                 </li>
             </ul>

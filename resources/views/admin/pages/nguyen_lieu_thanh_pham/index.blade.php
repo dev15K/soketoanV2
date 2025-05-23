@@ -1,14 +1,14 @@
 @extends('admin.layouts.master')
 @section('title')
-    Kho nguyên liệu Thành phẩm
+    Kho đã đóng gói
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Kho nguyên liệu Thành phẩm</h1>
+        <h1>Kho đã đóng gói</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active"> Kho nguyên liệu Thành phẩm</li>
+                <li class="breadcrumb-item active"> Kho đã đóng gói</li>
             </ol>
         </nav>
     </div>
@@ -90,7 +90,7 @@
 
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">Thêm mới Kho nguyên liệu Thành phẩm</h5>
+                        <h5 class="card-title">Thêm mới Kho đã đóng gói</h5>
                         <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
                     </div>
                     <form method="post" action="{{ route('admin.nguyen.lieu.thanh.pham.store') }}" class="d-none">

@@ -1,14 +1,14 @@
 @extends('admin.layouts.master')
 @section('title')
-    Kho nguyên liệu sản xuất
+    Kho Thành phẩm sản xuất
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Kho nguyên liệu sản xuất</h1>
+        <h1>Kho Thành phẩm sản xuất</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active"> Kho nguyên liệu sản xuất</li>
+                <li class="breadcrumb-item active"> Kho Thành phẩm sản xuất</li>
             </ol>
         </nav>
     </div>
@@ -84,7 +84,7 @@
 
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">Thêm mới Kho nguyên liệu sản xuất</h5>
+                        <h5 class="card-title">Thêm mới Kho Thành phẩm sản xuất</h5>
                         <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
                     </div>
                     <form method="post" action="{{ route('admin.nguyen.lieu.san.xuat.store') }}" class="d-none">

@@ -1,14 +1,14 @@
 @extends('admin.layouts.master')
 @section('title')
-    Chỉnh sửa Kho nguyên liệu sản xuất
+    Chỉnh sửa Kho Thành phẩm sản xuất
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Chỉnh sửa Kho nguyên liệu Thô</h1>
+        <h1>Chỉnh sửa Kho Thành phẩm Thô</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active">Chỉnh sửa Kho nguyên liệu sản xuất</li>
+                <li class="breadcrumb-item active">Chỉnh sửa Kho Thành phẩm sản xuất</li>
             </ol>
         </nav>
     </div>
@@ -22,7 +22,7 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Chỉnh sửa Kho nguyên liệu sản xuất</h5>
+                    <h5 class="card-title">Chỉnh sửa Kho Thành phẩm sản xuất</h5>
                     <form method="post"
                           action="{{ route('admin.nguyen.lieu.san.xuat.update', $nguyen_lieu_san_xuat->id) }}">
                         @method('PUT')
