@@ -93,8 +93,9 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="total_price">Tổng tiền</label>
-                                <input type="text" class="form-control onlyNumber" id="total_price"
-                                       value="{{ $nguyenLieuThanhPham->total_price }}" name="total_price" required>
+                                <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
+                                       value="{{ $nguyenLieuThanhPham->total_price }}" id="total_price"
+                                       name="total_price" required>
                             </div>
                         </div>
                         <div class="row">
@@ -163,5 +164,19 @@
             $('#khoi_luong_rieng').val(khoi_luong_rieng);
             $('#don_vi_tinh').val(don_vi_tinh);
         }
+
+        $('#so_luong').on('input', function () {
+            const price = $('#price').val();
+            const so_luong = $(this).val();
+            const total = price * so_luong;
+            $('#total_price').val(total);
+        })
+
+        $('#price').on('input', function () {
+            const price = $(this).val();
+            const so_luong = $('#so_luong').val();
+            const total = price * so_luong;
+            $('#total_price').val(total);
+        })
     </script>
 @endsection

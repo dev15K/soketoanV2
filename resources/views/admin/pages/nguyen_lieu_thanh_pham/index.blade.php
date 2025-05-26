@@ -155,8 +155,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="total_price">Tổng tiền</label>
-                                <input type="text" class="form-control onlyNumber" id="total_price"
-                                       name="total_price" required>
+                                <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
+                                       id="total_price" name="total_price" readonly required>
                             </div>
                         </div>
                         <div class="row">
@@ -221,6 +221,20 @@
                 $('#khoi_luong_rieng').val(khoi_luong_rieng);
                 $('#don_vi_tinh').val(don_vi_tinh);
             }
+
+            $('#so_luong').on('input', function () {
+                const price = $('#price').val();
+                const so_luong = $(this).val();
+                const total = price * so_luong;
+                $('#total_price').val(total);
+            })
+
+            $('#price').on('input', function () {
+                const price = $(this).val();
+                const so_luong = $('#so_luong').val();
+                const total = price * so_luong;
+                $('#total_price').val(total);
+            })
         </script>
 
         <div class="col-12">
@@ -234,8 +248,10 @@
                             <col width="7%">
                             <col width="7%">
                             <col width="7%">
-                            <col width="x">
                             <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="x">
                             <col width="7%">
                             <col width="7%">
                             <col width="10%">
@@ -249,11 +265,13 @@
                             <th scope="col">#</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Lô SX</th>
+                            <th scope="col">Số lượng (cái/hộp)</th>
+                            <th scope="col">Số lượng đã dùng</th>
+                            <th scope="col">Số lượng tồn kho</th>
                             <th scope="col">Mã SP</th>
                             <th scope="col">Tên sản phẩm</th>
                             <th scope="col">Khối lượng riêng gr</th>
                             <th scope="col">Đơn vị tính</th>
-                            <th scope="col">Số lượng (cái/hộp)</th>
                             <th scope="col">Giá xuất kho thương mại</th>
                             <th scope="col">Tổng giá</th>
                             <th scope="col">Ngày sản xuất</th>
@@ -267,11 +285,13 @@
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->nguyenLieuSanXuat->PhieuSanXuat->so_lo_san_xuat }}</td>
+                                <td>{{ parseNumber($data->so_luong) }}</td>
+                                <td>{{ parseNumber($data->so_luong_da_ban) }}</td>
+                                <td>{{ parseNumber($data->so_luong - $data->so_luong_da_ban) }}</td>
                                 <td>{{ $data->sanPham->ma_san_pham }}</td>
                                 <td>{{ $data->sanPham->ten_san_pham }}</td>
                                 <td>{{ $data->sanPham->khoi_luong_rieng }}</td>
                                 <td>{{ $data->sanPham->don_vi_tinh }}</td>
-                                <td>{{ parseNumber($data->so_luong) }}</td>
                                 <td>{{ parseNumber($data->price) }} VND</td>
                                 <td>{{ parseNumber($data->total_price) }} VND</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay_san_xuat)->format('d-m-Y') }}</td>

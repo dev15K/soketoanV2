@@ -227,24 +227,29 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover">
+                    <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="5%">
-                            <col width="25%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="15%">
+                            <col width="8%">
                             <col width="x">
-                            <col width="10%">
+                            <col width="8%">
+                            <col width="8%">
+                            <col width="8%">
+                            <col width="8%">
+                            <col width="8%">
+                            <col width="8%">
                             <col width="10%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Ngày</th>
+                            <th scope="col">Tổng khối lượng</th>
+                            <th scope="col">Khối lượng đã bán</th>
+                            <th scope="col">Khối lượng tồn</th>
+                            <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Mã lô hàng</th>
-                            <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Đơn giá</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
@@ -255,9 +260,11 @@
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->so_luong_da_dung, 0) }} kg</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong - $data->so_luong_da_dung, 0) }} kg</td>
                                 <td>{{ $data->ma_phieu }}</td>
                                 <td>{{ $data->code }}</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
                                 <td>{{ parseNumber($data->gia_tien, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>

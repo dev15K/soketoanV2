@@ -52,12 +52,13 @@
                         <h5 class="card-title">Thêm mới Thông tin Sản phẩm</h5>
                         <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
                     </div>
-                    <form method="post" action="{{ route('admin.san.pham.store') }}" enctype="multipart/form-data" class="d-none">
+                    <form method="post" action="{{ route('admin.san.pham.store') }}" enctype="multipart/form-data"
+                          class="d-none">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ma_san_pham">Mã sản phẩm</label>
-                                <input type="text" class="form-control  bg-secondary bg-opacity-10" id="ma_san_pham"
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_san_pham"
                                        name="ma_san_pham" value="{{ $code }}" required>
                             </div>
                             <div class="form-group col-md-6">
