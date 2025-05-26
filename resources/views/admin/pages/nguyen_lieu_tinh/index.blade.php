@@ -135,7 +135,9 @@
                                 <tbody id="tbodyListNL" class="text-center">
                                 <tr>
                                     <td>
-                                        <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
+                                        <select class="form-control nguyen_lieu_phan_loai_ids"
+                                                name="nguyen_lieu_phan_loai_ids[]"
+                                                onchange="selectNLPhanLoai(this)">
                                             @foreach($nlphanloais as $nlphanloai)
                                                 <option value="{{ $nlphanloai->id }}">
                                                     {{ $nlphanloai->nguyenLieuTho->code }}
@@ -146,14 +148,7 @@
                                     </td>
                                     <td>
                                         <select class="form-control" name="ten_nguyen_lieus[]">
-                                            <option value="Nguyên liệu nụ cao cấp (NCC)">Nguyên liệu nụ cao cấp (NCC)
-                                            </option>
-                                            <option value="Nguyên liệu nụ VIP (NVIP)">Nguyên liệu nụ VIP (NVIP)</option>
-                                            <option value="Nguyên liệu nhang (NLN)">Nguyên liệu nhang (NLN)</option>
-                                            <option value="Nguyên liệu vòng (NLV)">Nguyên liệu vòng (NLV)</option>
-                                            <option value="Tăm tre">Tăm tre</option>
-                                            <option value="Keo">Keo</option>
-                                            <option value="Nấu dầu">Nấu dầu</option>
+
                                         </select>
                                     </td>
                                     <td>
@@ -180,7 +175,7 @@
         <script>
             const baseHtml = `<tr>
                                     <td>
-                                        <select class="form-control" name="nguyen_lieu_phan_loai_ids[]">
+                                        <select class="form-control" name="nguyen_lieu_phan_loai_ids[]" onchange="selectNLPhanLoai(this)">
                                             @foreach($nlphanloais as $nlphanloai)
             <option  value="{{ $nlphanloai->id }}">
             {{ $nlphanloai->nguyenLieuTho->code }} - {{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
@@ -189,14 +184,8 @@
             </select>
         </td>
         <td>
-            <select class="form-control" name="ten_nguyen_lieus[]">
-                                            <option value="Nguyên liệu nụ cao cấp (NCC)">Nguyên liệu nụ cao cấp (NCC)</option>
-                                            <option value="Nguyên liệu nụ VIP (NVIP)">Nguyên liệu nụ VIP (NVIP)</option>
-                                            <option value="Nguyên liệu nhang (NLN)">Nguyên liệu nhang (NLN)</option>
-                                            <option value="Nguyên liệu vòng (NLV)">Nguyên liệu vòng (NLV)</option>
-                                            <option value="Tăm tre">Tăm tre</option>
-                                            <option value="Keo">Keo</option>
-                                            <option value="Nấu dầu">Nấu dầu</option>
+            <select class="form-control" name="ten_nguyen_lieus[]" >
+
                                         </select>
         </td>
         <td>
@@ -220,6 +209,41 @@
             function removeItems(el) {
                 $(el).parent().closest('tr').remove();
             }
+
+            function selectNLPhanLoai(elm) {
+                const id = $(elm).val();
+                const url = `{{ route('api.chi.tiet.nguyen.lieu') }}?id=${id}&type={{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI() }}`;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        renderChiTietSanPham(data.data, elm);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
+                    }
+                });
+            }
+
+            const nlPhanLoai = $('.nguyen_lieu_phan_loai_ids');
+            selectNLPhanLoai(nlPhanLoai);
+
+            function renderChiTietSanPham(data, elm) {
+                const html = `
+                <option value="Nguyên liệu nụ cao cấp (NCC)">Nguyên liệu nụ cao cấp (NCC) - ${data.nu_cao_cap} kg</option>
+                                            <option value="Nguyên liệu nụ VIP (NVIP)">Nguyên liệu nụ VIP (NVIP) - ${data.nu_vip} kg</option>
+                                            <option value="Nguyên liệu nhang (NLN)">Nguyên liệu nhang (NLN) - ${data.nhang} kg</option>
+                                            <option value="Nguyên liệu vòng (NLV)">Nguyên liệu vòng (NLV) - ${data.vong} kg</option>
+                                            <option value="Tăm tre">Tăm tre - ${data.tam_tre} kg</option>
+                                            <option value="Keo">Keo - ${data.keo} kg</option>
+                                            <option value="Nấu dầu">Nấu dầu - ${data.nau_dau} kg</option>
+                `;
+
+                $(elm).parent().next().find('select').html(html);
+            }
         </script>
 
         <div class="col-12">
@@ -230,14 +254,14 @@
                     <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="5%">
-                            <col width="8%">
+                            <col width="10%">
                             <col width="x">
-                            <col width="8%">
-                            <col width="8%">
-                            <col width="8%">
-                            <col width="8%">
-                            <col width="8%">
-                            <col width="8%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
                             <col width="10%">
                         </colgroup>
                         <thead>
@@ -245,9 +269,8 @@
                             <th scope="col">#</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Tổng khối lượng</th>
-                            <th scope="col">Khối lượng đã bán</th>
+                            <th scope="col">Khối lượng đã dùng</th>
                             <th scope="col">Khối lượng tồn</th>
-                            <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Mã lô hàng</th>
                             <th scope="col">Đơn giá</th>

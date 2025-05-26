@@ -98,7 +98,12 @@ class AdminNguyenLieuTinhController extends Controller
             $nguyen_lieu_tinh = $this->saveData($nguyen_lieu_tinh, $request);
             $nguyen_lieu_tinh->save();
 
-            $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
+            $success = $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
+
+            if (!$success) {
+                NguyenLieuTinh::where('id', $nguyen_lieu_tinh->id)->delete();
+                return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.');
+            }
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu tinh thành công');
         } catch (\Exception $e) {
@@ -173,7 +178,6 @@ class AdminNguyenLieuTinhController extends Controller
                 ->where('ten_nguyen_lieu', $ten_nguyen_lieu)
                 ->first();
 
-
             if ($oldData) {
                 $NguyenLieuTinhChiTiet = $oldData;
             } else {
@@ -186,6 +190,56 @@ class AdminNguyenLieuTinhController extends Controller
             $NguyenLieuTinhChiTiet->khoi_luong = $khoi_luong;
             $NguyenLieuTinhChiTiet->so_tien = $so_tien;
 
+            $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($nguyen_lieu_phan_loai_id);
+            if ($nguyenLieuPhanLoai) {
+                switch ($NguyenLieuTinhChiTiet->ten_nguyen_lieu) {
+                    case 'Nguyên liệu nụ cao cấp (NCC)':
+                        if ($nguyenLieuPhanLoai->nu_cao_cap < $khoi_luong) {
+                            return false;
+                        }
+                        $nguyenLieuPhanLoai->nu_cao_cap -= $khoi_luong;
+                        break;
+                    case 'Nguyên liệu nụ VIP (NVIP)':
+                        if ($nguyenLieuPhanLoai->nu_vip < $khoi_luong) {
+                            return false;
+                        }
+                        $nguyenLieuPhanLoai->nu_vip -= $khoi_luong;
+                        break;
+                    case 'Nguyên liệu nhang (NLN)':
+                        if ($nguyenLieuPhanLoai->nhang < $khoi_luong) {
+                            return false;
+                        }
+                        $nguyenLieuPhanLoai->nhang -= $khoi_luong;
+                        break;
+                    case 'Nguyên liệu vòng (NLV)':
+                        if ($nguyenLieuPhanLoai->vong < $khoi_luong) {
+                            return false;
+                        }
+                        $nguyenLieuPhanLoai->vong -= $khoi_luong;
+                        break;
+                    case 'Tăm tre':
+                        if ($nguyenLieuPhanLoai->tam_tre < $khoi_luong) {
+                            return false;
+                        }
+                        $nguyenLieuPhanLoai->tam_tre -= $khoi_luong;
+                        break;
+                    case 'Keo':
+                        if ($nguyenLieuPhanLoai->keo < $khoi_luong) {
+                            return false;
+                        }
+                        $nguyenLieuPhanLoai->keo -= $khoi_luong;
+                        break;
+                    case 'Nấu dầu':
+                        if ($nguyenLieuPhanLoai->nau_dau < $khoi_luong) {
+                            return false;
+                        }
+                        $nguyenLieuPhanLoai->nau_dau -= $khoi_luong;
+                        break;
+                }
+
+                $nguyenLieuPhanLoai->save();
+            }
+
             $NguyenLieuTinhChiTiet->save();
 
             $tong_khoi_luong += $khoi_luong;
@@ -196,6 +250,7 @@ class AdminNguyenLieuTinhController extends Controller
         $NguyenLieuTinh->gia_tien = $gia_tien;
 
         $NguyenLieuTinh->save();
+        return $NguyenLieuTinh;
     }
 
     public function delete($id)
@@ -226,7 +281,11 @@ class AdminNguyenLieuTinhController extends Controller
             $nguyen_lieu_tinh = $this->saveData($nguyen_lieu_tinh, $request);
             $nguyen_lieu_tinh->save();
 
-            $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
+            $success = $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
+
+            if (!$success) {
+                return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.');
+            }
 
             return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
         } catch (\Exception $e) {
