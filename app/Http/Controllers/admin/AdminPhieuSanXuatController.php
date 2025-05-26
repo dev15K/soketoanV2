@@ -90,6 +90,13 @@ class AdminPhieuSanXuatController extends Controller
             $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
             $phieu_san_xuat->save();
 
+            $success = $this->saveDataChiTiet($phieu_san_xuat, $request);
+
+            if (!$success) {
+                PhieuSanXuat::where('id', $phieu_san_xuat->id)->delete();
+                return redirect()->route('admin.phieu.san.xuat.index')->with('error', 'Không có đủ nguyên liệu.');
+            }
+
             return redirect()->back()->with('success', 'Thêm mới phiếu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -100,9 +107,9 @@ class AdminPhieuSanXuatController extends Controller
     {
         $ngay = $request->input('ngay');
         $code = $request->input('code');
-        $tong_khoi_luong = $request->input('tong_khoi_luong');
+        $tong_khoi_luong = $request->input('tong_khoi_luong') ?? 0;
         $so_lo_san_xuat = $request->input('so_lo_san_xuat');
-        $nguyen_lieu_id = $request->input('nguyen_lieu_id');
+        $nguyen_lieu_id = 0;
 
         if (!$phieuSanXuat->code) {
             $phieuSanXuat->code = $code;
@@ -121,25 +128,25 @@ class AdminPhieuSanXuatController extends Controller
 
     private function saveDataChiTiet(PhieuSanXuat $phieuSanXuat, Request $request)
     {
-        $loai_nguyen_lieu_ids = $request->input('loai_nguyen_lieu_ids');
         $nguyen_lieu_ids = $request->input('nguyen_lieu_ids');
         $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
         $khoi_luongs = $request->input('khoi_luongs');
 
         $tong_khoi_luong = 0;
 
+        $nguyen_lieu_ids = $nguyen_lieu_ids ?? [];
+
         PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
             ->whereNotIn('nguyen_lieu_id', $nguyen_lieu_ids)
             ->delete();
 
-        for ($i = 0; $i < count($loai_nguyen_lieu_ids); $i++) {
-            $loai_nguyen_lieu_id = $loai_nguyen_lieu_ids[$i];
-            $nguyen_lieu_phan_loai_id = $nguyen_lieu_ids[$i];
+        for ($i = 0; $i < count($nguyen_lieu_ids); $i++) {
+            $nguyen_lieu_id = $nguyen_lieu_ids[$i];
             $ten_nguyen_lieu = $ten_nguyen_lieus[$i];
             $khoi_luong = $khoi_luongs[$i];
 
             $oldData = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
-                ->where('nguyen_lieu_id', $nguyen_lieu_phan_loai_id)
+                ->where('nguyen_lieu_id', $nguyen_lieu_id)
                 ->first();
 
             if ($oldData) {
@@ -148,21 +155,34 @@ class AdminPhieuSanXuatController extends Controller
                 $phieuSanXuatChiTiet = new PhieuSanXuatChiTiet();
             }
 
-            $phieuSanXuatChiTiet->type = $loai_nguyen_lieu_id;
+            $nguyenLieuTinh = NguyenLieuTinh::find($nguyen_lieu_id);
+
+            if (!$nguyenLieuTinh) {
+                return false;
+            }
+
+            $tonkho = $nguyenLieuTinh->tong_khoi_luong - $nguyenLieuTinh->so_luong_da_dung;
+            if ($tonkho < $khoi_luong) {
+                return false;
+            }
+            $phieuSanXuatChiTiet->type = '';
             $phieuSanXuatChiTiet->phieu_san_xuat_id = $phieuSanXuat->id;
-            $phieuSanXuatChiTiet->nguyen_lieu_id = $nguyen_lieu_phan_loai_id;
+            $phieuSanXuatChiTiet->nguyen_lieu_id = $nguyen_lieu_id;
             $phieuSanXuatChiTiet->ten_nguyen_lieu = $ten_nguyen_lieu;
             $phieuSanXuatChiTiet->khoi_luong = $khoi_luong;
-            $phieuSanXuatChiTiet->so_tien = 0;
+            $phieuSanXuatChiTiet->so_tien = $khoi_luong * $nguyenLieuTinh->gia_tien;
 
             $phieuSanXuatChiTiet->save();
 
             $tong_khoi_luong += $khoi_luong;
+
+            $nguyenLieuTinh->so_luong_da_dung += $khoi_luong;
+            $nguyenLieuTinh->save();
         }
 
         $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
 
-        $phieuSanXuat->save();
+        return $phieuSanXuat->save();
     }
 
     public function delete($id)

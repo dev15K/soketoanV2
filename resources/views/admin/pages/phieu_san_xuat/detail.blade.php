@@ -1,3 +1,5 @@
+@php use App\Enums\TrangThaiPhieuSanXuat;use Carbon\Carbon; @endphp
+@php @endphp
 @extends('admin.layouts.master')
 @section('title')
     Chỉnh sửa Phiếu sản xuất
@@ -26,6 +28,7 @@
                     <form method="post" action="{{ route('admin.phieu.san.xuat.update', $phieu_san_xuat) }}">
                         @method('PUT')
                         @csrf
+                        @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="code">Mã Phiếu</label>
@@ -40,18 +43,10 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="nguyen_lieu_id">Mã lô hàng</label>
-                                <select id="nguyen_lieu_id" name="nguyen_lieu_id" class="form-control">
-                                    @foreach($nltinhs as $nltinh)
-                                        <option {{ $nltinh->id == $phieu_san_xuat->nguyen_lieu_id ? 'selected' : '' }}
-                                                value="{{ $nltinh->id }}">{{ $nltinh->code }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
                                 <label for="tong_khoi_luong">Khối lượng</label>
-                                <input type="text" class="form-control onlyNumber" id="tong_khoi_luong"
-                                       name="tong_khoi_luong" value="{{ $phieu_san_xuat->tong_khoi_luong }}" required>
+                                <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
+                                       id="tong_khoi_luong"
+                                       name="tong_khoi_luong" value="{{ $phieu_san_xuat->tong_khoi_luong }}" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -65,20 +60,111 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        {{ $phieu_san_xuat->trang_thai == \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                        {{ $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::ACTIVE() ? 'selected' : '' }}
+                                        value="{{ TrangThaiPhieuSanXuat::ACTIVE() }}">{{ TrangThaiPhieuSanXuat::ACTIVE() }}</option>
                                     <option
-                                        {{ $phieu_san_xuat->trang_thai == \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                        {{ $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::INACTIVE() ? 'selected' : '' }}
+                                        value="{{ TrangThaiPhieuSanXuat::INACTIVE() }}">{{ TrangThaiPhieuSanXuat::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
+                        <div class="mt-2">
+                            <div class="w-100 d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Danh sách nguyên liệu</h4>
+
+                                <button type="button" class="btn btn-success btn-sm" onclick="plusItem()">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
+                            <table class="table table-bordered">
+                                <colgroup>
+                                    <col width="40%">
+                                    <col width="40%">
+                                    <col width="15%">
+                                    <col width="x">
+                                </colgroup>
+                                <thead>
+                                <tr class="text-center">
+                                    <th scope="col">THÀNH PHẦN TRỘN TỪ MÃ ĐƠN HÀNG</th>
+                                    <th scope="col">Tên NVL</th>
+                                    <th scope="col">TỔNG KL</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbodyListNL" class="text-center">
+                                @foreach($dsNLSXChiTiets as $dsNLSXChiTiet)
+                                    <tr>
+                                        <td>
+                                            <select class="form-control"
+                                                    name="nguyen_lieu_ids[]">
+                                                @foreach($nltinhs as $nltinh)
+                                                    <option
+                                                        {{ $dsNLSXChiTiet->nguyen_lieu_id == $nltinh->id ? 'selected' : '' }}
+                                                        value="{{ $nltinh->id }}">
+                                                        {{ $nltinh->code }}
+                                                        - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="ten_nguyen_lieus[]" class="form-control"
+                                                   value="{{ $dsNLSXChiTiet->ten_nguyen_lieu }}" required>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="khoi_luongs[]" class="form-control onlyNumber"
+                                                   value="{{ $dsNLSXChiTiet->khoi_luong }}" required>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                    onclick="removeItems(this)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
                     </form>
                 </div>
 
             </div>
         </div>
+
+        <script>
+            const baseHtml = `<tr><td>
+                                        <select class="form-control"
+                                                name="nguyen_lieu_ids[]">
+                                            @foreach($nltinhs as $nltinh)
+            <option value="{{ $nltinh->id }}">{{ $nltinh->code }}
+            - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
+            </option>
+@endforeach
+            </select>
+        </td>
+        <td>
+            <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
+        </td>
+        <td>
+            <input type="text" min="0" name="khoi_luongs[]" class="form-control" required>
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeItems(this)">
+                <i class="bi bi-trash"></i>
+            </button>
+        </td>
+    </tr>`;
+
+            function plusItem() {
+                $('#tbodyListNL').append(baseHtml);
+            }
+
+            function removeItems(el) {
+                $(el).parent().closest('tr').remove();
+            }
+        </script>
     </section>
 @endsection

@@ -1,3 +1,5 @@
+@php use App\Enums\TrangThaiPhieuSanXuat;use Carbon\Carbon; @endphp
+@php @endphp
 @extends('admin.layouts.master')
 @section('title')
     Phiếu sản xuất
@@ -26,8 +28,7 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên phiếu sản
-                            xuất</label>
+                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm</label>
                     </h5>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">
@@ -49,18 +50,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 form-group">
-                                <div class="form-group">
-                                    <select id="nguyen_lieu_id_search" name="nguyen_lieu_id_search"
-                                            class="form-control">
-                                        <option value="">Lựa chọn mã đơn hàng</option>
-                                        @foreach($nltinhs as $nltinh)
-                                            <option {{ $nltinh->id == $nguyen_lieu_id ? 'selected' : '' }}
-                                                    value="{{ $nltinh->id }}">{{ $nltinh->code }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center">
                             <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
@@ -76,8 +65,7 @@
             function searchTable() {
                 const ngay_search = $('#ngay_search').val();
                 const keyword = $('#keyword').val();
-                const nguyen_lieu_id = $('#nguyen_lieu_id_search').val();
-                window.location.href = "{{ route('admin.phieu.san.xuat.index') }}?ngay=" + ngay_search + "&keyword=" + keyword + "&nguyen_lieu_id=" + nguyen_lieu_id;
+                window.location.href = "{{ route('admin.phieu.san.xuat.index') }}?ngay=" + ngay_search + "&keyword=" + keyword;
             }
         </script>
 
@@ -106,37 +94,73 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="nguyen_lieu_id">Mã lô hàng</label>
-                                <select id="nguyen_lieu_id" name="nguyen_lieu_id" class="form-control">
-                                    @foreach($nltinhs as $nltinh)
-                                        <option value="{{ $nltinh->id }}">{{ $nltinh->code }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="tong_khoi_luong">Khối lượng</label>
-                                <input type="text" class="form-control onlyNumber" id="tong_khoi_luong"
-                                       name="tong_khoi_luong" value="" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                       value="{{ Carbon::now()->format('Y-m-d') }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                        value="{{ TrangThaiPhieuSanXuat::ACTIVE() }}">{{ TrangThaiPhieuSanXuat::ACTIVE() }}</option>
                                     <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                        value="{{ TrangThaiPhieuSanXuat::INACTIVE() }}">{{ TrangThaiPhieuSanXuat::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>
 
+                        <div class="mt-2">
+                            <div class="w-100 d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Danh sách nguyên liệu</h4>
 
+                                <button type="button" class="btn btn-success btn-sm" onclick="plusItem()">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
+                            <table class="table table-bordered">
+                                <colgroup>
+                                    <col width="40%">
+                                    <col width="40%">
+                                    <col width="15%">
+                                    <col width="x">
+                                </colgroup>
+                                <thead>
+                                <tr class="text-center">
+                                    <th scope="col">THÀNH PHẦN TRỘN TỪ MÃ ĐƠN HÀNG</th>
+                                    <th scope="col">Tên NVL</th>
+                                    <th scope="col">TỔNG KL</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbodyListNL" class="text-center">
+                                <tr>
+                                    <td>
+                                        <select class="form-control"
+                                                name="nguyen_lieu_ids[]">
+                                            @foreach($nltinhs as $nltinh)
+                                                <option value="{{ $nltinh->id }}">
+                                                    {{ $nltinh->code }}
+                                                    - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="khoi_luongs[]" class="form-control onlyNumber"
+                                               required>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm disabled">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 
@@ -146,19 +170,14 @@
         </div>
 
         <script>
-            const baseHtml = `<tr>
-                                    <td>
-                                        <select class="form-control" name="loai_nguyen_lieu_ids[]"
-                                                onchange="changeLoaiNguyenLieu(this)">
-                                            <option value="nguyen_lieu_tinh">Nguyên liệu Tinh</option>
-                                            <option value="nguyen_lieu_phan_loai">Nguyên liệu Phân loại</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" name="nguyen_lieu_ids[]">
+            const baseHtml = `<tr><td>
+                                        <select class="form-control"
+                                                name="nguyen_lieu_ids[]">
                                             @foreach($nltinhs as $nltinh)
-            <option value="{{ $nltinh->id }}">{{ $nltinh->ten_nguyen_lieu }}</option>
-                                            @endforeach
+            <option value="{{ $nltinh->id }}">{{ $nltinh->code }}
+            - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
+            </option>
+@endforeach
             </select>
         </td>
         <td>
@@ -168,62 +187,11 @@
             <input type="text" min="0" name="khoi_luongs[]" class="form-control" required>
         </td>
         <td>
-            <button type="button" class="btn btn-danger btn-sm disabled">
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeItems(this)">
                 <i class="bi bi-trash"></i>
             </button>
         </td>
     </tr>`;
-
-            async function changeLoaiNguyenLieu(el) {
-                const value = $(el).val();
-                if (value === 'nguyen_lieu_tinh') {
-                    await listNguyenLieuTinh(el);
-                } else {
-                    await listNguyenLieuPhanLoai(el);
-                }
-            }
-
-            async function listNguyenLieuTinh(el) {
-                let url = `{{ route('api.nguyen.lieu.tinh.list') }}`;
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    async: false,
-                    success: function (data, textStatus) {
-                        renderData(el, data.data);
-                    },
-                    error: function (request, status, error) {
-                        let data = JSON.parse(request.responseText);
-                        alert(data.message);
-                    }
-                });
-            }
-
-            async function listNguyenLieuPhanLoai(el) {
-                let url = `{{ route('api.nguyen.lieu.phan.loai.list') }}`;
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    async: false,
-                    success: function (data, textStatus) {
-                        renderData(el, data.data);
-                    },
-                    error: function (request, status, error) {
-                        let data = JSON.parse(request.responseText);
-                        alert(data.message);
-                    }
-                });
-            }
-
-            function renderData(el, data) {
-                let html = '';
-                data.forEach((item) => {
-                    html += `<option value="${item.id}">${item.ten_nguyen_lieu}</option>`;
-                });
-                $(el).parent().next().find('select').html(html);
-            }
 
             function plusItem() {
                 $('#tbodyListNL').append(baseHtml);
@@ -239,10 +207,9 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover">
+                    <table class="table table-hover table-sm">
                         <colgroup>
                             <col width="5%">
-                            <col width="12%">
                             <col width="12%">
                             <col width="12%">
                             <col width="12%">
@@ -256,7 +223,6 @@
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Số LÔ SX</th>
-                            <th scope="col">Mã lô hàng</th>
                             <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
@@ -266,10 +232,9 @@
                         @foreach($datas as $data)
                             <tr>
                                 <th scope="row">{{ $loop->index + 1 }}</th>
-                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
+                                <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
                                 <td>{{ $data->so_lo_san_xuat }}</td>
-                                <td>{{ $data->nguyen_lieu_id ? $data->nguyenLieuTinh->code : ''}}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
