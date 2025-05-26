@@ -201,8 +201,7 @@ class AdminPhieuSanXuatController extends Controller
 
     private function generateCode()
     {
-        $lastItem = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
-            ->orderByDesc('id')
+        $lastItem = PhieuSanXuat::orderByDesc('id')
             ->first();
 
         $lastId = $lastItem?->id;
@@ -211,8 +210,7 @@ class AdminPhieuSanXuatController extends Controller
 
     private function generateLoSanXuat()
     {
-        $lastItem = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
-            ->orderByDesc('id')
+        $lastItem = PhieuSanXuat::orderByDesc('id')
             ->first();
 
         $lastId = $lastItem?->id;

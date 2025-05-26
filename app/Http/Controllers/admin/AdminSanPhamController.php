@@ -112,8 +112,7 @@ class AdminSanPhamController extends Controller
 
     private function generateCode()
     {
-        $lastItem = SanPham::where('trang_thai', '!=', TrangThaiSanPham::DELETED())
-            ->orderByDesc('id')
+        $lastItem = SanPham::orderByDesc('id')
             ->first();
 
         $lastId = $lastItem?->id;

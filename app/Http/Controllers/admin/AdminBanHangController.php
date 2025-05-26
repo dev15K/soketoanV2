@@ -164,9 +164,7 @@ class AdminBanHangController extends Controller
 
     private function generateCode()
     {
-        $lastItem = SoQuy::where('deleted_at', null)
-            ->orderByDesc('id')
-            ->first();
+        $lastItem = SoQuy::orderByDesc('id')->first();
 
         $lastId = $lastItem?->id;
         return convertNumber($lastId + 1);

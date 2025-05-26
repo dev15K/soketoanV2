@@ -89,8 +89,7 @@ class AdminSoQuyController extends Controller
 
     private function generateCode()
     {
-        $lastItem = SoQuy::where('deleted_at', null)
-            ->orderByDesc('id')
+        $lastItem = SoQuy::orderByDesc('id')
             ->first();
 
         $lastId = $lastItem?->id;

@@ -57,9 +57,7 @@ class AdminNguyenLieuThoController extends Controller
 
     private function generateCode()
     {
-        $lastItem = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
-            ->orderByDesc('id')
-            ->first();
+        $lastItem = NguyenLieuTho::orderByDesc('id')->first();
 
         $lastId = $lastItem?->id;
         return generateCode($lastId + 1);
@@ -213,9 +211,7 @@ class AdminNguyenLieuThoController extends Controller
 
     private function generateSoQuyCode()
     {
-        $lastItem = SoQuy::where('deleted_at', null)
-            ->orderByDesc('id')
-            ->first();
+        $lastItem = SoQuy::orderByDesc('id')->first();
 
         $lastId = $lastItem?->id;
         return convertNumber($lastId + 1);

@@ -44,8 +44,7 @@ class AdminNguyenLieuTinhController extends Controller
 
     private function generateMaPhieu()
     {
-        $lastItem = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
-            ->orderByDesc('id')
+        $lastItem = NguyenLieuTinh::orderByDesc('id')
             ->first();
 
         $lastId = $lastItem?->id;
@@ -54,9 +53,7 @@ class AdminNguyenLieuTinhController extends Controller
 
     private function generateLHXCode()
     {
-        $lastItem = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED())
-            ->orderByDesc('id')
-            ->first();
+        $lastItem = NguyenLieuTinh::orderByDesc('id')->first();
 
         $lastId = $lastItem?->id;
         return generateLHXCode($lastId + 1);
@@ -192,51 +189,27 @@ class AdminNguyenLieuTinhController extends Controller
 
             $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($nguyen_lieu_phan_loai_id);
             if ($nguyenLieuPhanLoai) {
-                switch ($NguyenLieuTinhChiTiet->ten_nguyen_lieu) {
-                    case 'Nguyên liệu nụ cao cấp (NCC)':
-                        if ($nguyenLieuPhanLoai->nu_cao_cap < $khoi_luong) {
-                            return false;
-                        }
-                        $nguyenLieuPhanLoai->nu_cao_cap -= $khoi_luong;
-                        break;
-                    case 'Nguyên liệu nụ VIP (NVIP)':
-                        if ($nguyenLieuPhanLoai->nu_vip < $khoi_luong) {
-                            return false;
-                        }
-                        $nguyenLieuPhanLoai->nu_vip -= $khoi_luong;
-                        break;
-                    case 'Nguyên liệu nhang (NLN)':
-                        if ($nguyenLieuPhanLoai->nhang < $khoi_luong) {
-                            return false;
-                        }
-                        $nguyenLieuPhanLoai->nhang -= $khoi_luong;
-                        break;
-                    case 'Nguyên liệu vòng (NLV)':
-                        if ($nguyenLieuPhanLoai->vong < $khoi_luong) {
-                            return false;
-                        }
-                        $nguyenLieuPhanLoai->vong -= $khoi_luong;
-                        break;
-                    case 'Tăm tre':
-                        if ($nguyenLieuPhanLoai->tam_tre < $khoi_luong) {
-                            return false;
-                        }
-                        $nguyenLieuPhanLoai->tam_tre -= $khoi_luong;
-                        break;
-                    case 'Keo':
-                        if ($nguyenLieuPhanLoai->keo < $khoi_luong) {
-                            return false;
-                        }
-                        $nguyenLieuPhanLoai->keo -= $khoi_luong;
-                        break;
-                    case 'Nấu dầu':
-                        if ($nguyenLieuPhanLoai->nau_dau < $khoi_luong) {
-                            return false;
-                        }
-                        $nguyenLieuPhanLoai->nau_dau -= $khoi_luong;
-                        break;
+                $mapping = [
+                    'Nguyên liệu nụ cao cấp (NCC)' => 'nu_cao_cap',
+                    'Nguyên liệu nụ VIP (NVIP)' => 'nu_vip',
+                    'Nguyên liệu nhang (NLN)' => 'nhang',
+                    'Nguyên liệu vòng (NLV)' => 'vong',
+                    'Tăm tre' => 'tam_tre',
+                    'Keo' => 'keo',
+                    'Nấu dầu' => 'nau_dau',
+                ];
+
+                $ten = $NguyenLieuTinhChiTiet->ten_nguyen_lieu;
+
+                if (isset($mapping[$ten])) {
+                    $field = $mapping[$ten];
+                    if ($nguyenLieuPhanLoai->$field < $khoi_luong) {
+                        return false;
+                    }
+                    $nguyenLieuPhanLoai->$field -= $khoi_luong;
                 }
 
+                $nguyenLieuPhanLoai->khoi_luong_da_phan_loai += $khoi_luong;
                 $nguyenLieuPhanLoai->save();
             }
 
