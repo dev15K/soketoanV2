@@ -57,9 +57,9 @@
                                        value="{{ $nguyen_lieu_san_xuat->khoi_luong }}" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="don_vi_tinh">Đơn vị tính</label>
-                                <input type="text" class="form-control" id="don_vi_tinh" name="don_vi_tinh"
-                                       value="{{ $nguyen_lieu_san_xuat->don_vi_tinh }}" required>
+                                <label for="don_gia">Đơn giá</label>
+                                <input type="text" class="form-control" id="don_gia" name="don_gia"
+                                       value="{{ $nguyen_lieu_san_xuat->don_gia }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="mau_sac">Màu sắc</label>

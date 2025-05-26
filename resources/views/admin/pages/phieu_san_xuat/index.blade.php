@@ -256,7 +256,7 @@
                                 <td>{{ $data->code }}</td>
                                 <td>{{ $data->so_lo_san_xuat }}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
+                                <td>{{ $data->tong_khoi_luong - $data->khoi_luong_da_dung }} kg</td>
                                 <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>

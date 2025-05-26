@@ -54,7 +54,8 @@
                                         <option value="">Lựa chọn</option>
                                         @foreach($phieu_san_xuats as $phieu_san_xuat)
                                             <option {{ $phieu_san_xuat->id == $phieu_san_xuat_id ? 'selected' : '' }}
-                                                    value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}</option>
+                                                    value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}
+                                                - {{ parseNumber($phieu_san_xuat->tong_khoi_luong - $phieu_san_xuat->khoi_luong_da_dung) }} kg</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -101,7 +102,8 @@
                                 <select id="phieu_san_xuat_id" name="phieu_san_xuat_id" class="form-control">
                                     @foreach($phieu_san_xuats as $phieu_san_xuat)
                                         <option
-                                            value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}</option>
+                                                value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}
+                                            - {{ parseNumber($phieu_san_xuat->tong_khoi_luong - $phieu_san_xuat->khoi_luong_da_dung) }} kg</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -118,8 +120,8 @@
                                        required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="don_vi_tinh">Đơn vị tính</label>
-                                <input type="text" class="form-control" id="don_vi_tinh" name="don_vi_tinh" required>
+                                <label for="don_gia">Đơn giá(Bỏ trống nếu tự tính)</label>
+                                <input type="text" class="form-control onlyNumber" id="don_gia" name="don_gia">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="mau_sac">Màu sắc</label>
@@ -150,6 +152,7 @@
                             <label for="chi_tiet_khac">Chi tiết khác</label>
                             <textarea name="chi_tiet_khac" id="chi_tiet_khac" class="form-control" rows="5"></textarea>
                         </div>
+                        <input type="hidden" name="gia_lo_san_xuat" id="gia_lo_san_xuat">
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 
@@ -170,9 +173,9 @@
                             <col width="10%">
                             <col width="x">
                             <col width="8%">
-                            <col width="8%">
-                            <col width="8%">
-                            <col width="8%">
+                            <col width="10%">
+                            <col width="7%">
+                            <col width="7%">
                             <col width="8%">
                             <col width="8%">
                             <col width="8%">
@@ -184,8 +187,8 @@
                             <th scope="col">Ngày</th>
                             <th scope="col">Lô Sản Xuất</th>
                             <th scope="col">Tên nguyên liệu</th>
-                            <th scope="col">Khối lượng</th>
-                            <th scope="col">Đơn vị tính</th>
+                            <th scope="col">Khối lượng(kg)</th>
+                            <th scope="col">Đơn giá</th>
                             <th scope="col">Màu sắc</th>
                             <th scope="col">Mùi thơm</th>
                             <th scope="col">Chi tiết khác</th>
@@ -202,7 +205,7 @@
                                 <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
                                 <td>{{ $data->ten_nguyen_lieu }}</td>
                                 <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
-                                <td>{{ $data->don_vi_tinh }}</td>
+                                <td>{{ parseNumber($data->don_gia, 0) }} VND</td>
                                 <td>{{ $data->mau_sac }}</td>
                                 <td>{{ $data->mui_thom }}</td>
                                 <td>{{ $data->chi_tiet_khac }}</td>
