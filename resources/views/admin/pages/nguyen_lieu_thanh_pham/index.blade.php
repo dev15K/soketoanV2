@@ -110,6 +110,8 @@
                                         <option value="{{ $nlsanxuat->id }}">
                                             {{ $nlsanxuat->PhieuSanXuat->so_lo_san_xuat }}
                                             - {{ $nlsanxuat->ten_nguyen_lieu }}
+                                            - {{ parseNumber($nlsanxuat->khoi_luong - $nlsanxuat->khoi_luong_da_dung) }}
+                                            kg
                                         </option>
                                     @endforeach
                                 </select>

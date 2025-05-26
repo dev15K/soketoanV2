@@ -166,20 +166,22 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover vw-100">
+                    <table class="table table-hover " style="min-width: 2000px">
                         <colgroup>
                             <col width="5%">
-                            <col width="10%">
-                            <col width="10%">
+                            <col width="6%">
+                            <col width="8%">
                             <col width="x">
                             <col width="8%">
-                            <col width="10%">
-                            <col width="7%">
-                            <col width="7%">
                             <col width="8%">
                             <col width="8%">
                             <col width="8%">
-                            <col width="8%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
                         </colgroup>
                         <thead>
                         <tr>
@@ -188,6 +190,8 @@
                             <th scope="col">Lô Sản Xuất</th>
                             <th scope="col">Tên nguyên liệu</th>
                             <th scope="col">Khối lượng(kg)</th>
+                            <th scope="col">Khối lượng đã dùng</th>
+                            <th scope="col">Khối lượng tồn</th>
                             <th scope="col">Đơn giá</th>
                             <th scope="col">Màu sắc</th>
                             <th scope="col">Mùi thơm</th>
@@ -205,6 +209,8 @@
                                 <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
                                 <td>{{ $data->ten_nguyen_lieu }}</td>
                                 <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong_da_dung, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_dung, 0) }} kg</td>
                                 <td>{{ parseNumber($data->don_gia, 0) }} VND</td>
                                 <td>{{ $data->mau_sac }}</td>
                                 <td>{{ $data->mui_thom }}</td>
