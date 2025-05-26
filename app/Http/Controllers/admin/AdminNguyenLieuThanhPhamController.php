@@ -71,6 +71,9 @@ class AdminNguyenLieuThanhPhamController extends Controller
             $nguyenLieuThanhPham = new NguyenLieuThanhPham();
 
             $nguyenLieuThanhPham = $this->saveData($nguyenLieuThanhPham, $request);
+            if (!$nguyenLieuThanhPham) {
+                return redirect()->back()->with('error', 'Số lượng không đủ!');
+            }
             $nguyenLieuThanhPham->save();
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu thành phẩm thành công');
@@ -90,6 +93,18 @@ class AdminNguyenLieuThanhPhamController extends Controller
         $total_price = $request->input('total_price');
         $ngay_san_xuat = $request->input('ngay_san_xuat');
         $trang_thai = $request->input('trang_thai');
+        $khoi_luong_da_dung = $request->input('khoi_luong_da_dung');
+
+        $oldNguyenLieuSanXuatId = $nguyenLieuThanhPham->nguyen_lieu_san_xuat_id;
+        $oldKhoiLuongDaDung = $nguyenLieuThanhPham->khoi_luong_da_dung;
+
+        $nguyenLieuSanXuat = NguyenLieuSanXuat::find($nguyen_lieu_san_xuat_id);
+        if ($nguyenLieuSanXuat) {
+            $khoi_luong = $nguyenLieuSanXuat->khoi_luong - $nguyenLieuSanXuat->khoi_luong_da_dung;
+            if ($khoi_luong < $khoi_luong_da_dung) {
+                return false;
+            }
+        }
 
         $nguyenLieuThanhPham->ten_san_pham = $ten_san_pham;
         $nguyenLieuThanhPham->ngay = Carbon::parse($ngay)->format('Y-m-d');
@@ -100,6 +115,27 @@ class AdminNguyenLieuThanhPhamController extends Controller
         $nguyenLieuThanhPham->san_pham_id = $san_pham_id;
         $nguyenLieuThanhPham->ngay_san_xuat = Carbon::parse($ngay_san_xuat)->format('Y-m-d');
         $nguyenLieuThanhPham->trang_thai = $trang_thai;
+        $nguyenLieuThanhPham->khoi_luong_da_dung = $khoi_luong_da_dung;
+
+        if ($oldNguyenLieuSanXuatId != $nguyen_lieu_san_xuat_id) {
+            $nguyenLieuSanXuat = NguyenLieuSanXuat::find($nguyen_lieu_san_xuat_id);
+            if ($nguyenLieuSanXuat) {
+                $nguyenLieuSanXuat->khoi_luong_da_dung += $khoi_luong_da_dung;
+                $nguyenLieuSanXuat->save();
+            }
+
+            $oldNguyenLieuSanXuat = NguyenLieuSanXuat::find($oldNguyenLieuSanXuatId);
+            if ($oldNguyenLieuSanXuat) {
+                $oldNguyenLieuSanXuat->khoi_luong_da_dung -= $oldKhoiLuongDaDung;
+                $oldNguyenLieuSanXuat->save();
+            }
+        } else {
+            $nguyenLieuSanXuat = NguyenLieuSanXuat::find($nguyen_lieu_san_xuat_id);
+            if ($nguyenLieuSanXuat) {
+                $nguyenLieuSanXuat->khoi_luong_da_dung += $khoi_luong_da_dung - $oldKhoiLuongDaDung;
+                $nguyenLieuSanXuat->save();
+            }
+        }
 
         return $nguyenLieuThanhPham;
     }
@@ -130,6 +166,9 @@ class AdminNguyenLieuThanhPhamController extends Controller
             }
 
             $nguyenLieuThanhPham = $this->saveData($nguyenLieuThanhPham, $request);
+            if (!$nguyenLieuThanhPham) {
+                return redirect()->back()->with('error', 'Số lượng không đủ!');
+            }
             $nguyenLieuThanhPham->save();
 
             return redirect()->route('admin.nguyen.lieu.thanh.pham.index')->with('success', 'Chỉnh sửa nguyên liệu thành phẩm thành công');

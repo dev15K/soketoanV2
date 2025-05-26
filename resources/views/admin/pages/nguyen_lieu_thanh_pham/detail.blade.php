@@ -79,6 +79,13 @@
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="don_vi_tinh"
                                        name="don_vi_tinh" required>
                             </div>
+                            <div class="form-group col-md-4">
+                                <label for="khoi_luong_da_dung">Khối lượng đã dùng</label>
+                                <input type="text" class="form-control onlyNumber" id="don_vi_tinh"
+                                       name="khoi_luong_da_dung"
+                                       value="{{ $nguyenLieuThanhPham->khoi_luong_da_dung }}"
+                                       required>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-4">

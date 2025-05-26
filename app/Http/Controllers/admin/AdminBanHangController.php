@@ -121,6 +121,40 @@ class AdminBanHangController extends Controller
                 $ban_hang_chi_tiet->tong_tien = $ban_hang_chi_tiet->gia_ban * $ban_hang_chi_tiet->so_luong;
                 $ban_hang_chi_tiet->save();
 
+                switch ($banhang->loai_san_pham) {
+                    case LoaiSanPham::NGUYEN_LIEU_THO():
+                        $nguyenLieuTho = NguyenLieuTho::find($san_pham_id);
+                        if ($nguyenLieuTho) {
+                            $nguyenLieuTho->khoi_luong_da_ban = $ban_hang_chi_tiet->so_luong;
+                            $nguyenLieuTho->save();
+                        }
+                        break;
+                    case LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
+                        $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($san_pham_id);
+                        if ($nguyenLieuPhanLoai) {
+                            $nguyenLieuPhanLoai->khoi_luong_da_phan_loai = $ban_hang_chi_tiet->so_luong;
+                            $nguyenLieuPhanLoai->save();
+                        }
+                        break;
+                    case LoaiSanPham::NGUYEN_LIEU_TINH():
+                        $nguyenLieuTinh = NguyenLieuTinh::find($san_pham_id);
+                        if ($nguyenLieuTinh) {
+                            $nguyenLieuTinh->so_luong_da_dung = $ban_hang_chi_tiet->so_luong;
+                            $nguyenLieuTinh->save();
+                        }
+                        break;
+                    case LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
+                        $nguyenlieus = [];
+                        break;
+                    case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
+                        $nguyenLieuThanhPham = NguyenLieuThanhPham::find($san_pham_id);
+                        if ($nguyenLieuThanhPham) {
+                            $nguyenLieuThanhPham->so_luong_da_ban = $ban_hang_chi_tiet->so_luong;
+                            $nguyenLieuThanhPham->save();
+                        }
+                        break;
+                }
+
                 $total += $ban_hang_chi_tiet->gia_ban * $ban_hang_chi_tiet->so_luong;
             }
 
