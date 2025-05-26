@@ -142,9 +142,9 @@
                                 </colgroup>
                                 <thead>
                                 <tr class="text-center">
-                                    <th scope="col">THÀNH PHẦN TRỘN TỪ MÃ ĐƠN HÀNG</th>
+                                    <th scope="col">THÀNH PHẦN TRỘN TỪ MÃ LÔ HÀNG</th>
                                     <th scope="col">Tên NVL</th>
-                                    <th scope="col">TỔNG KL</th>
+                                    <th scope="col">TỔNG KL(kg)</th>
                                     <th scope="col"></th>
                                 </tr>
                                 </thead>
@@ -226,10 +226,11 @@
                     <table class="table table-hover table-sm">
                         <colgroup>
                             <col width="5%">
-                            <col width="12%">
-                            <col width="12%">
-                            <col width="12%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
                             <col width="x">
+                            <col width="10%">
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
@@ -240,7 +241,8 @@
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Số LÔ SX</th>
-                            <th scope="col">Tổng khối lượng</th>
+                            <th scope="col">Tổng khối lượng(kg)</th>
+                            <th scope="col">Khối lượng tồn(kg)</th>
                             <th scope="col">Nhân sự xử lý</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
@@ -254,6 +256,7 @@
                                 <td>{{ $data->code }}</td>
                                 <td>{{ $data->so_lo_san_xuat }}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
                                 <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
