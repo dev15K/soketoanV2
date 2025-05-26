@@ -94,6 +94,22 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
+                                <label for="tong_khoi_luong">Khối lượng</label>
+                                <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
+                                       id="tong_khoi_luong" name="tong_khoi_luong" value="0" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="nhan_su_xu_li">Nhân sự xử lý</label>
+                                <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
+                                    @foreach($nsus as $nsu)
+                                        <option value="{{ $nsu->id }}">{{ $nsu->full_name }}
+                                            /{{ $nsu->email }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
                                        value="{{ Carbon::now()->format('Y-m-d') }}" required>
@@ -216,6 +232,7 @@
                             <col width="x">
                             <col width="10%">
                             <col width="10%">
+                            <col width="10%">
                         </colgroup>
                         <thead>
                         <tr>
@@ -224,6 +241,7 @@
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Số LÔ SX</th>
                             <th scope="col">Tổng khối lượng</th>
+                            <th scope="col">Nhân sự xử lý</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
                         </tr>
@@ -236,6 +254,7 @@
                                 <td>{{ $data->code }}</td>
                                 <td>{{ $data->so_lo_san_xuat }}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
+                                <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">

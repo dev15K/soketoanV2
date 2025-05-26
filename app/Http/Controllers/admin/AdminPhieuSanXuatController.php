@@ -6,12 +6,14 @@ use App\Enums\TrangThaiNguyenLieuPhanLoai;
 use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNguyenLieuTinh;
 use App\Enums\TrangThaiPhieuSanXuat;
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuTho;
 use App\Models\NguyenLieuTinh;
 use App\Models\PhieuSanXuat;
 use App\Models\PhieuSanXuatChiTiet;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -49,7 +51,11 @@ class AdminPhieuSanXuatController extends Controller
         $code = $this->generateCode();
         $so_lo_san_xuat = $this->generateLoSanXuat();
 
-        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'so_lo_san_xuat', 'nltinhs', 'ngay', 'keyword', 'nguyen_lieu_id'));
+        $nsus = User::where('status', '!=', UserStatus::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'so_lo_san_xuat', 'nltinhs', 'ngay', 'keyword', 'nguyen_lieu_id', 'nsus'));
     }
 
     public function detail($id)
@@ -79,7 +85,11 @@ class AdminPhieuSanXuatController extends Controller
         $dsNLSXChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiets', 'nltinhs', 'code', 'so_lo_san_xuat'));
+
+        $nsus = User::where('status', '!=', UserStatus::DELETED())
+            ->orderByDesc('id')
+            ->get();
+        return view('admin.pages.phieu_san_xuat.detail', compact('phieu_san_xuat', 'nlphanloais', 'dsNLSXChiTiets', 'nltinhs', 'code', 'so_lo_san_xuat', 'nsus'));
     }
 
     public function store(Request $request)
@@ -110,6 +120,7 @@ class AdminPhieuSanXuatController extends Controller
         $tong_khoi_luong = $request->input('tong_khoi_luong') ?? 0;
         $so_lo_san_xuat = $request->input('so_lo_san_xuat');
         $nguyen_lieu_id = 0;
+        $nhan_su_xu_li = $request->input('nhan_su_xu_li');
 
         if (!$phieuSanXuat->code) {
             $phieuSanXuat->code = $code;
@@ -122,6 +133,7 @@ class AdminPhieuSanXuatController extends Controller
         $phieuSanXuat->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $phieuSanXuat->trang_thai = $trang_thai;
         $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
+        $phieuSanXuat->nhan_su_xu_li_id = $nhan_su_xu_li;
 
         return $phieuSanXuat;
     }

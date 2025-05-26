@@ -48,6 +48,17 @@
                                        id="tong_khoi_luong"
                                        name="tong_khoi_luong" value="{{ $phieu_san_xuat->tong_khoi_luong }}" readonly>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="nhan_su_xu_li">Nhân sự xử lý</label>
+                                <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
+                                    @foreach($nsus as $nsu)
+                                        <option
+                                            {{ $nsu->id == $phieu_san_xuat->nhan_su_xu_li_id ? 'selected' : '' }}
+                                            value="{{ $nsu->id }}">{{ $nsu->full_name }}
+                                            /{{ $nsu->email }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
