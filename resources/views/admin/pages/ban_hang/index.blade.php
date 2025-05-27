@@ -83,16 +83,17 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row pt-3 mt-4 border-top">
                             <div class="form-group col-md-6">
-                                <label for="da_thanht_toan">Đã thanh toán</label>
+                                <label for="da_thanht_toan">Khách hàng đã thanh toán</label>
                                 <input type="text" class="form-control onlyNumber" id="da_thanht_toan" name="da_thanht_toan" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
-                                <select class="form-control" name="phuong_thuc_thanh_toan" id="phuong_thuc_thanh_toan">
-                                    <option value="Tiền mặt">Tiền mặt</option>
-                                    <option value="Chuyển khoản">Chuyển khoản</option>
+                                <label for="loai_quy_id">Loại quỹ</label>
+                                <select class="form-control" name="loai_quy_id" id="loai_quy_id">
+                                   @foreach($loai_quies as $loai_quy)
+                                       <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                   @endforeach
                                 </select>
                             </div>
                         </div>
@@ -106,19 +107,19 @@
                                         <option value="">Lựa chọn kho</option>
                                         <option
                                             value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
-                                            Nguyên liệu Thô
+                                            Kho Nguyên liệu Thô
                                         </option>
                                         <option
                                             value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
-                                            Nguyên liệu Phân loại
+                                            Kho Nguyên liệu Phân loại
                                         </option>
                                         <option
                                             value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
-                                            Nguyên liệu Tinh
+                                            Kho Nguyên liệu Tinh
                                         </option>
                                         <option
                                             value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
-                                            Nguyên liệu Thành phẩm
+                                           Kho đã Đóng gói
                                         </option>
                                     </select>
                                 </div>
@@ -430,7 +431,7 @@
                                 </td>
                                 <td>{{ parseNumber($data->tong_tien) }} VND</td>
                                 <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
-                                <td>{{ $data->phuong_thuc_thanh_toan }}</td>
+                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                 <td>{{ parseNumber($data->cong_no) }} VND</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">

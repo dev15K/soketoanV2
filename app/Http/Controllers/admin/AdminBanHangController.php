@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BanHang;
 use App\Models\BanHangChiTiet;
 use App\Models\KhachHang;
+use App\Models\LoaiQuy;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuThanhPham;
 use App\Models\NguyenLieuTho;
@@ -31,7 +32,9 @@ class AdminBanHangController extends Controller
         $khachhangs = KhachHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.ban_hang.index', compact('datas', 'khachhangs'));
+
+        $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
+        return view('admin.pages.ban_hang.index', compact('datas', 'khachhangs', 'loai_quies'));
     }
 
     public function detail($id)
@@ -74,7 +77,9 @@ class AdminBanHangController extends Controller
                     ->get();
                 break;
         }
-        return view('admin.pages.ban_hang.detail', compact('banhang', 'chiTietBanHangs', 'khachhangs', 'nguyenlieus'));
+
+        $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
+        return view('admin.pages.ban_hang.detail', compact('banhang', 'chiTietBanHangs', 'khachhangs', 'nguyenlieus', 'loai_quies'));
     }
 
     public function store(Request $request)
@@ -85,8 +90,13 @@ class AdminBanHangController extends Controller
             $so_dien_thoai = $request->input('so_dien_thoai');
             $dia_chi = $request->input('dia_chi');
             $loai_san_pham = $request->input('loai_san_pham');
-            $phuong_thuc_thanh_toan = $request->input('phuong_thuc_thanh_toan');
             $da_thanht_toan = $request->input('da_thanht_toan');
+            $loai_quy_id = $request->input('loai_quy_id');
+
+            $loaiQuy = LoaiQuy::find($loai_quy_id);
+            if (!$loaiQuy) {
+                return redirect()->back()->with('error', 'Không tìm thấy loại quý');
+            }
 
             $banhang = new BanHang();
 
@@ -96,7 +106,7 @@ class AdminBanHangController extends Controller
             $banhang->so_dien_thoai = $so_dien_thoai;
             $banhang->dia_chi = $dia_chi;
             $banhang->loai_san_pham = $loai_san_pham;
-            $banhang->phuong_thuc_thanh_toan = $phuong_thuc_thanh_toan;
+            $banhang->phuong_thuc_thanh_toan = $loai_quy_id;
             $banhang->tong_tien = 0;
             $banhang->da_thanht_toan = $da_thanht_toan ?? 0;
             $banhang->cong_no = 0;
@@ -125,6 +135,9 @@ class AdminBanHangController extends Controller
                     case LoaiSanPham::NGUYEN_LIEU_THO():
                         $nguyenLieuTho = NguyenLieuTho::find($san_pham_id);
                         if ($nguyenLieuTho) {
+                            if ($nguyenLieuTho->khoi_luong < $ban_hang_chi_tiet->so_luong) {
+                                return redirect()->back()->with('error', 'Số lượng không đủ!');
+                            }
                             $nguyenLieuTho->khoi_luong_da_ban = $ban_hang_chi_tiet->so_luong;
                             $nguyenLieuTho->save();
                         }
@@ -132,6 +145,9 @@ class AdminBanHangController extends Controller
                     case LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
                         $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($san_pham_id);
                         if ($nguyenLieuPhanLoai) {
+                            if ($nguyenLieuPhanLoai->tong_khoi_luong < $ban_hang_chi_tiet->so_luong) {
+                                return redirect()->back()->with('error', 'Số lượng không đủ!');
+                            }
                             $nguyenLieuPhanLoai->khoi_luong_da_phan_loai = $ban_hang_chi_tiet->so_luong;
                             $nguyenLieuPhanLoai->save();
                         }
@@ -139,6 +155,9 @@ class AdminBanHangController extends Controller
                     case LoaiSanPham::NGUYEN_LIEU_TINH():
                         $nguyenLieuTinh = NguyenLieuTinh::find($san_pham_id);
                         if ($nguyenLieuTinh) {
+                            if ($nguyenLieuTinh->tong_khoi_luong < $ban_hang_chi_tiet->so_luong) {
+                                return redirect()->back()->with('error', 'Số lượng không đủ!');
+                            }
                             $nguyenLieuTinh->so_luong_da_dung = $ban_hang_chi_tiet->so_luong;
                             $nguyenLieuTinh->save();
                         }
@@ -149,6 +168,9 @@ class AdminBanHangController extends Controller
                     case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
                         $nguyenLieuThanhPham = NguyenLieuThanhPham::find($san_pham_id);
                         if ($nguyenLieuThanhPham) {
+                            if ($nguyenLieuThanhPham->so_luong < $ban_hang_chi_tiet->so_luong) {
+                                return redirect()->back()->with('error', 'Số lượng không đủ!');
+                            }
                             $nguyenLieuThanhPham->so_luong_da_ban = $ban_hang_chi_tiet->so_luong;
                             $nguyenLieuThanhPham->save();
                         }
@@ -163,7 +185,7 @@ class AdminBanHangController extends Controller
             $banhang->cong_no = $total - $da_thanht_toan;
             $banhang->save();
 
-            $this->insertBanHang($banhang, false, null);
+            $this->insertBanHang($banhang, false, null, $loai_quy_id);
 
             return redirect()->back()->with('success', 'Thêm mới hóa đơn bán hàng thành công');
         } catch (\Exception $e) {
@@ -171,7 +193,7 @@ class AdminBanHangController extends Controller
         }
     }
 
-    private function insertBanHang(BanHang $banhang, $isUpdate = false, $idUpdate = null)
+    private function insertBanHang(BanHang $banhang, $isUpdate = false, $idUpdate = null, $loai_quy_id)
     {
         if (!$isUpdate) {
             $code = $this->generateCode();
@@ -182,16 +204,56 @@ class AdminBanHangController extends Controller
             $soquy->ngay = Carbon::now();
             $soquy->noi_dung = 'Phiếu thu bán hàng cho đơn hàng: #' . $banhang->id;
             $soquy->ma_phieu = $code;
+            $soquy->loai_quy_id = $loai_quy_id;
             $soquy->save();
+
+            $loaiQuy = LoaiQuy::find($loai_quy_id);
+            if ($loaiQuy) {
+                $loaiQuy->tong_tien_quy = $loaiQuy->tong_tien_quy + $banhang->da_thanht_toan;
+                $loaiQuy->save();
+            }
         } else {
             $soquy = SoQuy::find($idUpdate);
-            if ($soquy) {
+            if ($loai_quy_id != $soquy->loai_quy_id) {
+                $loaiQuy = LoaiQuy::find($soquy->loai_quy_id);
+                if ($loaiQuy) {
+                    $loaiQuy->tong_tien_quy = $loaiQuy->tong_tien_quy - $soquy->so_tien;
+                    $loaiQuy->save();
+                }
+
+                $soquy->delete();
+
+                $code = $this->generateCode();
+                $soquy = new SoQuy();
+                $soquy->loai = 1;
+                $soquy->so_tien = $banhang->da_thanht_toan;
+                $soquy->gia_tri_id = $banhang->id;
+                $soquy->ngay = Carbon::now();
+                $soquy->noi_dung = 'Phiếu thu bán hàng cho đơn hàng: #' . $banhang->id;
+                $soquy->ma_phieu = $code;
+                $soquy->loai_quy_id = $loai_quy_id;
+                $soquy->save();
+
+                $loaiQuy = LoaiQuy::find($loai_quy_id);
+                if ($loaiQuy) {
+                    $loaiQuy->tong_tien_quy = $loaiQuy->tong_tien_quy + $banhang->da_thanht_toan;
+                    $loaiQuy->save();
+                }
+            } else {
+                $oldTien = $soquy->so_tien;
                 $soquy->loai = 1;
                 $soquy->so_tien = $banhang->da_thanht_toan;
                 $soquy->ngay = Carbon::now();
                 $soquy->gia_tri_id = $banhang->id;
                 $soquy->noi_dung = 'Phiếu thu bán hàng cho đơn hàng: #' . $banhang->id;
+                $soquy->loai_quy_id = $loai_quy_id;
                 $soquy->save();
+
+                $loaiQuy = LoaiQuy::find($loai_quy_id);
+                if ($loaiQuy) {
+                    $loaiQuy->tong_tien_quy = $loaiQuy->tong_tien_quy + $banhang->da_thanht_toan - $oldTien;
+                    $loaiQuy->save();
+                }
             }
         }
     }
@@ -212,8 +274,8 @@ class AdminBanHangController extends Controller
             $so_dien_thoai = $request->input('so_dien_thoai');
             $dia_chi = $request->input('dia_chi');
             $loai_san_pham = $request->input('loai_san_pham');
-            $phuong_thuc_thanh_toan = $request->input('phuong_thuc_thanh_toan');
             $da_thanht_toan = $request->input('da_thanht_toan');
+            $loai_quy_id = $request->input('loai_quy_id');
 
             $banhang = BanHang::find($id);
             if (!$banhang || $banhang->trang_thai == TrangThaiBanHang::DELETED()) {
@@ -226,7 +288,7 @@ class AdminBanHangController extends Controller
             $banhang->so_dien_thoai = $so_dien_thoai;
             $banhang->dia_chi = $dia_chi;
             $banhang->loai_san_pham = $loai_san_pham;
-            $banhang->phuong_thuc_thanh_toan = $phuong_thuc_thanh_toan;
+            $banhang->phuong_thuc_thanh_toan = $loai_quy_id;
 
             $san_pham_ids = $request->input('san_pham_id');
             $gia_bans = $request->input('gia_bans');
@@ -266,7 +328,7 @@ class AdminBanHangController extends Controller
             $banhang->save();
 
             $idUpdate = SoQuy::where('gia_tri_id', $banhang->id)->first();
-            $this->insertBanHang($banhang, true, $idUpdate->id);
+            $this->insertBanHang($banhang, true, $idUpdate->id, $loai_quy_id);
 
             return redirect()->route('admin.ban.hang.index')->with('success', 'Chỉnh sửa hóa đơn bán hàng thành công');
         } catch (\Exception $e) {

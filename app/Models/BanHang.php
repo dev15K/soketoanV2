@@ -13,4 +13,9 @@ class BanHang extends Model
     {
         return $this->belongsTo(KhachHang::class, 'khach_hang_id', 'id');
     }
+
+    public function loaiQuy()
+    {
+        return $this->belongsTo(LoaiQuy::class, 'phuong_thuc_thanh_toan', 'id');
+    }
 }
