@@ -86,8 +86,14 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         $keo = $request->input('keo');
         $nau_dau = $request->input('nau_dau');
         $ghi_chu = $request->input('ghi_chu');
-        $khoi_luong_ban_dau = $request->input('khoi_luong_ban_dau');
         $trang_thai = $request->input('trang_thai') ?? TrangThaiNguyenLieuPhanLoai::ACTIVE();
+
+        $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_tho_id)->first();
+        $khoi_luong_ban_dau = $nguyenLieuTho->khoi_luong;
+
+        if ($khoi_luong_ban_dau <= 0) {
+            return false;
+        }
 
         $NguyenLieuPhanLoai->ten_nguyen_lieu = $ten_nguyen_lieu;
         $NguyenLieuPhanLoai->ngay = Carbon::parse($ngay)->format('Y-m-d');
@@ -105,12 +111,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
         $NguyenLieuPhanLoai->tong_khoi_luong = $nu_cao_cap + $nu_vip + $nhang + $vong + $tam_tre + $keo + $nau_dau;
 
-        $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_tho_id)->first();
-        if ($nguyenLieuTho) {
-            if ($nguyenLieuTho->khoi_luong < $khoi_luong_ban_dau) {
-                return null;
-            }
-        }
+
         if ($is_update) {
             if (isset($old_nguyen_lieu_tho_id) && isset($old_khoi_luong_ban_dau) && $old_nguyen_lieu_tho_id != $nguyen_lieu_tho_id) {
                 $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_tho_id)->first();

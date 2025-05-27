@@ -48,31 +48,25 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-3">
-                                <label for="khoi_luong_ban_dau">Khối lượng ban đầu</label>
-                                <input type="text" class="form-control" id="khoi_luong_ban_dau"
-                                       name="khoi_luong_ban_dau"
-                                       value="{{ $nguyen_lieu_phan_loai->khoi_luong_ban_dau }}">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="nu_cao_cap">Nguyên liệu nụ cao cấp (NCC)</label>
+                            <div class="form-group col-md-4">
+                                <label for="nu_cao_cap">NL nụ cao cấp (NCC)</label>
                                 <input type="text" class="form-control onlyNumber" id="nu_cao_cap" name="nu_cao_cap"
                                        value="{{ $nguyen_lieu_phan_loai->nu_cao_cap }}">
                             </div>
-                            <div class="form-group col-md-3">
-                                <label for="nu_vip">Nguyên liệu nụ VIP (NVIP)</label>
+                            <div class="form-group col-md-4">
+                                <label for="nu_vip">NL nụ VIP (NVIP)</label>
                                 <input type="text" class="form-control onlyNumber" id="nu_vip" name="nu_vip"
                                        value="{{ $nguyen_lieu_phan_loai->nu_vip }}">
                             </div>
-                            <div class="form-group col-md-3">
-                                <label for="nhang">Nguyên liệu nhang (NLN)</label>
+                            <div class="form-group col-md-4">
+                                <label for="nhang">NL nhang (NLN)</label>
                                 <input type="text" class="form-control onlyNumber" id="nhang" name="nhang"
                                        value="{{ $nguyen_lieu_phan_loai->nhang }}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label for="vong">Nguyên liệu vòng (NLV)</label>
+                                <label for="vong">NL vòng (NLV)</label>
                                 <input type="text" class="form-control onlyNumber" id="vong" name="vong"
                                        value="{{ $nguyen_lieu_phan_loai->vong }}">
                             </div>

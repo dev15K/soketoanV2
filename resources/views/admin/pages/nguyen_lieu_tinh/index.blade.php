@@ -255,24 +255,24 @@
                         <colgroup>
                             <col width="5%">
                             <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
                             <col width="x">
                             <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
+                            <col width="8%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Ngày</th>
+                            <th scope="col">Mã phiếu</th>
+                            <th scope="col">Mã lô hàng</th>
                             <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Khối lượng đã dùng</th>
                             <th scope="col">Khối lượng tồn</th>
-                            <th scope="col">Mã phiếu</th>
-                            <th scope="col">Mã lô hàng</th>
                             <th scope="col">Đơn giá</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>

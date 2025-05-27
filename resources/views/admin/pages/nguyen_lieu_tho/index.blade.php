@@ -127,7 +127,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="khoi_luong">Khối lượng(kg)</label>
+                                <label for="khoi_luong">KL(kg)</label>
                                 <input type="text" min="0" class="form-control onlyNumber" id="khoi_luong"
                                        name="khoi_luong" required>
                             </div>
@@ -218,10 +218,10 @@
                     <table class="table table-hover small" style="min-width: 3000px">
                         <colgroup>
                             <col width="50px">
-                            <col width="100px">
+                            <col width="150px">
                             <col width="150px">
                             <col width="200px">
-                            <col width="300px">
+                            <col width="250px">
                             <col width="200px">
                             <col width="150px">
                             <col width="150px">
@@ -249,9 +249,9 @@
                             <th scope="col">Tên nguyên liệu</th>
                             <th scope="col">Loại (đã làm sạch và phơi khô)</th>
                             <th scope="col">Nguồn gốc</th>
-                            <th scope="col">Khối lượng(kg)</th>
-                            <th scope="col">Khối lượng đã phân loại(kg)</th>
-                            <th scope="col">Khối lượng tồn(kg)</th>
+                            <th scope="col">KL(kg)</th>
+                            <th scope="col">KL đã phân loại(kg)</th>
+                            <th scope="col">KL tồn(kg)</th>
                             <th scope="col">Kích thước</th>
                             <th scope="col">Độ khô</th>
                             <th scope="col">Điều kiện lưu trữ</th>

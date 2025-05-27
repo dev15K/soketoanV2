@@ -82,7 +82,7 @@
                                 <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
                                     @foreach($nlthos as $nltho)
                                         <option value="{{ $nltho->id }}">{{ $nltho->code }}
-                                            - {{ $nltho->ten_nguyen_lieu }} - {{ parseNumber($nltho->khoi_luong - $nltho->khoi_luong_da_phan_loai) }} kg</option>
+                                            : {{ $nltho->ten_nguyen_lieu }} : {{ parseNumber($nltho->khoi_luong - $nltho->khoi_luong_da_phan_loai) }} kg</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -94,27 +94,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-3">
-                                <label for="khoi_luong_ban_dau">Khối lượng ban đầu</label>
-                                <input type="text" class="onlyNumber form-control" id="khoi_luong_ban_dau"
-                                       name="khoi_luong_ban_dau" required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="nu_cao_cap">Nguyên liệu nụ cao cấp (NCC)</label>
+                            <div class="form-group col-md-4">
+                                <label for="nu_cao_cap">NL nụ cao cấp (NCC)</label>
                                 <input type="text" class="onlyNumber form-control" id="nu_cao_cap" name="nu_cao_cap">
                             </div>
-                            <div class="form-group col-md-3">
-                                <label for="nu_vip">Nguyên liệu nụ VIP (NVIP)</label>
+                            <div class="form-group col-md-4">
+                                <label for="nu_vip">NL nụ VIP (NVIP)</label>
                                 <input type="text" class="onlyNumber form-control" id="nu_vip" name="nu_vip">
                             </div>
-                            <div class="form-group col-md-3">
-                                <label for="nhang">Nguyên liệu nhang (NLN)</label>
+                            <div class="form-group col-md-4">
+                                <label for="nhang">NL nhang (NLN)</label>
                                 <input type="text" class="onlyNumber form-control" id="nhang" name="nhang">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label for="vong">Nguyên liệu vòng (NLV)</label>
+                                <label for="vong">NL vòng (NLV)</label>
                                 <input type="text" class="onlyNumber form-control" id="vong" name="vong">
                             </div>
                             <div class="form-group col-md-3">
@@ -153,10 +148,10 @@
                         <colgroup>
                             <col width="50px">
                             <col width="150px">
-                            <col width="100px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="180px">
+                            <col width="150px">
+                            <col width="120px">
+                            <col width="120px">
+                            <col width="120px">
                             <col width="180px">
                             <col width="180px">
                             <col width="180px">
@@ -176,10 +171,10 @@
                             <th scope="col">#</th>
                             <th scope="col">MÃ ĐH</th>
                             <th scope="col">Ngày phân loại</th>
-                            <th scope="col">Nguyên liệu nụ cao cấp (NCC)</th>
-                            <th scope="col">Nguyên liệu nụ VIP (NVIP)</th>
-                            <th scope="col">Nguyên liệu nhang (NLN)</th>
-                            <th scope="col">Nguyên liệu vòng (NLV)</th>
+                            <th scope="col">NL nụ cao cấp (NCC)</th>
+                            <th scope="col">NL nụ VIP (NVIP)</th>
+                            <th scope="col">NL nhang (NLN)</th>
+                            <th scope="col">NL vòng (NLV)</th>
                             <th scope="col">Tăm tre</th>
                             <th scope="col">Keo</th>
                             <th scope="col">Nấu dầu</th>

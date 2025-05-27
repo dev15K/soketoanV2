@@ -94,7 +94,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="tong_khoi_luong">Khối lượng</label>
+                                <label for="tong_khoi_luong">KL</label>
                                 <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
                                        id="tong_khoi_luong" name="tong_khoi_luong" value="0" readonly>
                             </div>
@@ -241,8 +241,9 @@
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Số LÔ SX</th>
-                            <th scope="col">Tổng khối lượng(kg)</th>
-                            <th scope="col">Khối lượng tồn(kg)</th>
+                            <th scope="col">Tổng KL(kg)</th>
+                            <th scope="col">KL đã dùng(kg)</th>
+                            <th scope="col">KL tồn(kg)</th>
                             <th scope="col">Nhân sự xử lý</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
@@ -256,7 +257,8 @@
                                 <td>{{ $data->code }}</td>
                                 <td>{{ $data->so_lo_san_xuat }}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
-                                <td>{{ $data->tong_khoi_luong - $data->khoi_luong_da_dung }} kg</td>
+                                <td>{{ number_format($data->khoi_luong_da_dung) }} kg</td>
+                                <td>{{ number_format($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
                                 <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
