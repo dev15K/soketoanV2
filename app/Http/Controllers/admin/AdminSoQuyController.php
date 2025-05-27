@@ -14,6 +14,7 @@ class AdminSoQuyController extends Controller
     {
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
+        $loai_quy_search = $request->input('loai_quy_search');
 
         $datas = SoQuy::where('deleted_at', null)
             ->when($start_date, function ($query) use ($start_date) {
@@ -21,6 +22,9 @@ class AdminSoQuyController extends Controller
             })
             ->when($end_date, function ($query) use ($end_date) {
                 return $query->whereDate('created_at', '<=', $end_date);
+            })
+            ->when($loai_quy_search, function ($query) use ($loai_quy_search) {
+                return $query->where('loai_quy_id', $loai_quy_search);
             })
             ->orderByDesc('id')
             ->get();
@@ -84,7 +88,7 @@ class AdminSoQuyController extends Controller
         $ma_phieu = $this->generateCode();
 
         $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
-        return view('admin.pages.so_quy.index', compact('datas', 'ma_phieu', 'ton_dau', 'ton_cuoi', 'start_date', 'end_date', 'loai_quies'));
+        return view('admin.pages.so_quy.index', compact('datas', 'ma_phieu', 'ton_dau', 'ton_cuoi', 'start_date', 'end_date', 'loai_quies', 'loai_quy_search'));
     }
 
     private function generateCode()

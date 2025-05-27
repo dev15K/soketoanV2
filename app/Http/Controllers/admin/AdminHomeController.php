@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\LoaiQuy;
 use App\Models\SoQuy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -13,6 +14,7 @@ class AdminHomeController extends Controller
     {
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
+        $loai_quy_search = $request->input('loai_quy_search');
 
         $datas = SoQuy::where('deleted_at', null)
             ->when($start_date, function ($query) use ($start_date) {
@@ -20,6 +22,9 @@ class AdminHomeController extends Controller
             })
             ->when($end_date, function ($query) use ($end_date) {
                 return $query->whereDate('created_at', '<=', $end_date);
+            })
+            ->when($loai_quy_search, function ($query) use ($loai_quy_search) {
+                return $query->where('loai_quy_id', $loai_quy_search);
             })
             ->orderByDesc('id')
             ->get();
@@ -81,7 +86,9 @@ class AdminHomeController extends Controller
         }
 
         $ma_phieu = $this->generateCode();
-        return view('admin.index', compact('datas', 'ton_dau', 'ton_cuoi', 'ma_phieu', 'start_date', 'end_date'));
+
+        $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
+        return view('admin.index', compact('datas', 'ton_dau', 'ton_cuoi', 'ma_phieu', 'start_date', 'end_date', 'loai_quies', 'loai_quy_search'));
     }
 
     private function generateCode()

@@ -43,6 +43,18 @@
                                            value="{{ $end_date }}" name="end_date">
                                 </div>
                             </div>
+                            <div class="col-md-4 form-group">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                    <label for="loai_quy_search">Loại quỹ: </label>
+                                    <select name="loai_quy_search" id="loai_quy_search" class="form-control">
+                                        <option value="">Tất cả</option>
+                                        @foreach($loai_quies as $loai_quy)
+                                            <option {{ $loai_quy->id == $loai_quy_search ? 'selected' : '' }}
+                                                    value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center">
                             <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
@@ -58,7 +70,8 @@
             function searchTable() {
                 const start_date = $('#start_date').val();
                 const end_date = $('#end_date').val();
-                window.location.href = "{{ route('admin.so.quy.index') }}?start_date=" + start_date + "&end_date=" + end_date;
+                const loai_quy_search = $('#loai_quy_search').val();
+                window.location.href = "{{ route('admin.so.quy.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&loai_quy_search=" + loai_quy_search;
             }
         </script>
 
@@ -86,14 +99,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label for="loai">Loại</label>
+                            <div class="col-md-4 form-group">
+                                <label for="loai">Loại phiếu</label>
                                 <select class="form-control" name="loai" id="loai">
                                     <option value="0">Phiếu Chi</option>
                                     <option value="1">Phiếu Thu</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-4 form-group">
+                                <label for="loai_quy_id">Tên quỹ</label>
+                                <select class="form-control" name="loai_quy_id" id="loai_quy_id">
+                                    @foreach($loai_quies as $loai_quy)
+                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
                                 <label for="so_tien">Số tiền</label>
                                 <input type="text" class="form-control onlyNumber" id="so_tien" name="so_tien"
                                        value="" required>
@@ -101,7 +122,7 @@
                         </div>
                         <div class="form-group">
                             <label for="noi_dung">Nội dung</label>
-                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5"></textarea>
+                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
@@ -141,20 +162,20 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
-                            <col width="12%">
                             <col width="10%">
+                            <col width="10%">
+                            <col width="15%">
                             <col width="30%">
                             <col width="x">
-                            <col width="8%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Loại</th>
+                            <th scope="col">Tên quỹ</th>
                             <th scope="col">Số tiền</th>
                             <th scope="col">Nội dung</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -169,27 +190,18 @@
                                         Phiếu Thu
                                     @endif
                                 </td>
+                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                 <td>{{ parseNumber($data->so_tien) }} VND</td>
                                 <td>{{ $data->noi_dung }}</td>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.so.quy.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a href="#"
-                                           class="btn btn-success btn-sm">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="#"
-                                           class="btn btn-warning btn-sm">
-                                            <i class="bi bi-printer"></i>
-                                        </a>
-                                    </div>
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <th scope="col" colspan="4">Tổng:</th>
+                            <th scope="col" colspan="2">{{ parseNumber($datas->sum('so_tien')) }} VND</th>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
 
