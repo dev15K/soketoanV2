@@ -70,7 +70,7 @@
                             <div class="form-group col-md-6">
                                 <label for="ton_kho">Tồn kho</label>
                                 <input type="text" class="form-control onlyNumber" id="ton_kho" name="ton_kho"
-                                       value="{{ $item->ton_kho }}" required>
+                                       value="{{ $item->ton_kho }}" readonly disabled>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>

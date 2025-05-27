@@ -44,7 +44,9 @@
                                             {{ $nlsanxuat->id == $nguyenLieuThanhPham->nguyen_lieu_san_xuat_id ? 'selected' : '' }}
                                             value="{{ $nlsanxuat->id }}">
                                             {{ $nlsanxuat->PhieuSanXuat->so_lo_san_xuat }}
-                                            - {{ $nlsanxuat->ten_nguyen_lieu }}
+                                            : {{ $nlsanxuat->ten_nguyen_lieu }}
+                                            : {{ parseNumber($nlsanxuat->khoi_luong - $nlsanxuat->khoi_luong_da_dung) }}
+                                            kg
                                         </option>
                                     @endforeach
                                 </select>
@@ -57,7 +59,7 @@
                                         <option
                                             {{ $product->id == $nguyenLieuThanhPham->san_pham_id ? 'selected' : '' }}
                                             value="{{ $product->id }}">
-                                            {{ $product->ma_san_pham}} - {{ $product->ten_san_pham }}
+                                            {{ $product->ma_san_pham}} : {{ $product->ten_san_pham }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -80,11 +82,9 @@
                                        name="don_vi_tinh" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="khoi_luong_da_dung">Khối lượng đã dùng</label>
-                                <input type="text" class="form-control onlyNumber" id="don_vi_tinh"
-                                       name="khoi_luong_da_dung"
-                                       value="{{ $nguyenLieuThanhPham->khoi_luong_da_dung }}"
-                                       required>
+                                <label for="price">Giá xuất kho thương mại</label>
+                                <input type="text" class="form-control onlyNumber" id="price" name="price"
+                                       value="{{ $nguyenLieuThanhPham->price }}" required>
                             </div>
                         </div>
                         <div class="row">
@@ -94,9 +94,11 @@
                                        value="{{ $nguyenLieuThanhPham->so_luong }}" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="price">Giá xuất kho thương mại</label>
-                                <input type="text" class="form-control onlyNumber" id="price" name="price"
-                                       value="{{ $nguyenLieuThanhPham->price }}" required>
+                                <label for="khoi_luong_da_dung">Khối lượng đã dùng</label>
+                                <input type="text" class="form-control onlyNumber" id="don_vi_tinh"
+                                       name="khoi_luong_da_dung"
+                                       value="{{ $nguyenLieuThanhPham->khoi_luong_da_dung }}"
+                                       required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="total_price">Tổng tiền</label>

@@ -54,13 +54,15 @@ class AdminSanPhamController extends Controller
         $old_trang_thai = $item->trang_thai ?? TrangThaiSanPham::ACTIVE();
 
         $ma_san_pham = $request->input('ma_san_pham');
-        $ma_vach = $request->input('ma_vach');
+        $ma_vach = $request->input('ma_vach') ?? '';
         $ten_san_pham = $request->input('ten_san_pham');
         $don_vi_tinh = $request->input('don_vi_tinh');
         $khoi_luong_rieng = $request->input('khoi_luong_rieng');
         $gia_xuat_kho = $request->input('gia_xuat_kho');
         $gia_ban = $request->input('gia_ban');
-        $ton_kho = $request->input('ton_kho');
+        $ton_kho = !empty($request->input('ton_kho'))
+            ? $request->input('ton_kho')
+            : (!empty($item->ton_kho) ? $item->ton_kho : 0);
         $mo_ta = $request->input('mo_ta');
         $trang_thai = $request->input('trang_thai') ?? $old_trang_thai;
 

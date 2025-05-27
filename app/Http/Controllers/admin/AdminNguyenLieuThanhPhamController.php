@@ -95,14 +95,17 @@ class AdminNguyenLieuThanhPhamController extends Controller
         $trang_thai = $request->input('trang_thai');
         $khoi_luong_da_dung = $request->input('khoi_luong_da_dung');
 
+        $oldTonKho = $nguyenLieuThanhPham->so_luong;
         $oldNguyenLieuSanXuatId = $nguyenLieuThanhPham->nguyen_lieu_san_xuat_id;
         $oldKhoiLuongDaDung = $nguyenLieuThanhPham->khoi_luong_da_dung;
 
-        $nguyenLieuSanXuat = NguyenLieuSanXuat::find($nguyen_lieu_san_xuat_id);
-        if ($nguyenLieuSanXuat) {
-            $khoi_luong = $nguyenLieuSanXuat->khoi_luong - $nguyenLieuSanXuat->khoi_luong_da_dung;
-            if ($khoi_luong < $khoi_luong_da_dung) {
-                return false;
+        if ($oldNguyenLieuSanXuatId != $nguyen_lieu_san_xuat_id) {
+            $nguyenLieuSanXuat = NguyenLieuSanXuat::find($nguyen_lieu_san_xuat_id);
+            if ($nguyenLieuSanXuat) {
+                $khoi_luong = $nguyenLieuSanXuat->khoi_luong - $nguyenLieuSanXuat->khoi_luong_da_dung;
+                if ($khoi_luong < $khoi_luong_da_dung) {
+                    return false;
+                }
             }
         }
 
@@ -135,6 +138,12 @@ class AdminNguyenLieuThanhPhamController extends Controller
                 $nguyenLieuSanXuat->khoi_luong_da_dung += $khoi_luong_da_dung - $oldKhoiLuongDaDung;
                 $nguyenLieuSanXuat->save();
             }
+        }
+
+        $sanPham = SanPham::find($san_pham_id);
+        if ($sanPham) {
+            $sanPham->ton_kho = $sanPham->ton_kho - $oldTonKho + $so_luong;
+            $sanPham->save();
         }
 
         return $nguyenLieuThanhPham;

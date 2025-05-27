@@ -109,8 +109,8 @@
                                     @foreach($nlsanxuats as $nlsanxuat)
                                         <option value="{{ $nlsanxuat->id }}">
                                             {{ $nlsanxuat->PhieuSanXuat->so_lo_san_xuat }}
-                                            - {{ $nlsanxuat->ten_nguyen_lieu }}
-                                            - {{ parseNumber($nlsanxuat->khoi_luong - $nlsanxuat->khoi_luong_da_dung) }}
+                                            : {{ $nlsanxuat->ten_nguyen_lieu }}
+                                            : {{ parseNumber($nlsanxuat->khoi_luong - $nlsanxuat->khoi_luong_da_dung) }}
                                             kg
                                         </option>
                                     @endforeach
@@ -122,7 +122,7 @@
                                         onchange="changeSanPham()">
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">
-                                            {{ $product->ma_san_pham}} - {{ $product->ten_san_pham }}
+                                            {{ $product->ma_san_pham}} : {{ $product->ten_san_pham }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -132,33 +132,33 @@
                             <div class="form-group col-md-12">
                                 <label for="ten_san_pham">Tên sản phẩm</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ten_san_pham"
-                                       name="ten_san_pham" required>
+                                       name="ten_san_pham" readonly required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_rieng">KL rieng gr</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="khoi_luong_rieng"
-                                       name="khoi_luong_rieng" required>
+                                       name="khoi_luong_rieng" readonly required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="don_vi_tinh">Đơn vị tính</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="don_vi_tinh"
-                                       name="don_vi_tinh" required>
+                                       name="don_vi_tinh" readonly required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="khoi_luong_da_dung">Khối lượng đã dùng</label>
-                                <input type="text" class="form-control onlyNumber" id="don_vi_tinh"
-                                       name="khoi_luong_da_dung" required>
+                                <label for="price">Giá xuất kho thương mại</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="price"
+                                       name="price" readonly required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <label for="so_luong">Số lượng (cái/hộp)</label>
+                                <label for="so_luong">SL (cái/hộp)</label>
                                 <input type="text" class="form-control" id="so_luong" name="so_luong" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="price">Giá xuất kho thương mại</label>
-                                <input type="text" class="form-control onlyNumber" id="price" name="price"
-                                       required>
+                                <label for="khoi_luong_da_dung">KL đã dùng</label>
+                                <input type="text" class="form-control onlyNumber" id="don_vi_tinh"
+                                       name="khoi_luong_da_dung" required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="total_price">Tổng tiền</label>
@@ -223,10 +223,12 @@
                 const ten_san_pham = data.ten_san_pham;
                 const khoi_luong_rieng = data.khoi_luong_rieng;
                 const don_vi_tinh = data.don_vi_tinh;
+                const price = data.gia_xuat_kho;
 
                 $('#ten_san_pham').val(ten_san_pham);
                 $('#khoi_luong_rieng').val(khoi_luong_rieng);
                 $('#don_vi_tinh').val(don_vi_tinh);
+                $('#price').val(price);
             }
 
             $('#so_luong').on('input', function () {
@@ -252,19 +254,19 @@
                     <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="3%">
-                            <col width="7%">
-                            <col width="7%">
-                            <col width="7%">
-                            <col width="7%">
-                            <col width="7%">
-                            <col width="7%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
+                            <col width="6%">
                             <col width="x">
-                            <col width="7%">
-                            <col width="7%">
+                            <col width="6%">
+                            <col width="6%">
                             <col width="10%">
                             <col width="10%">
-                            <col width="7%">
-                            <col width="7%">
+                            <col width="6%">
+                            <col width="6%">
                             <col width="6%">
                         </colgroup>
                         <thead>
@@ -272,12 +274,12 @@
                             <th scope="col">#</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Lô SX</th>
-                            <th scope="col">Số lượng (cái/hộp)</th>
-                            <th scope="col">Số lượng đã dùng</th>
-                            <th scope="col">Số lượng tồn kho</th>
+                            <th scope="col">SL (cái/hộp)</th>
+                            <th scope="col">SL đã bán</th>
+                            <th scope="col">SL tồn kho</th>
                             <th scope="col">Mã SP</th>
                             <th scope="col">Tên sản phẩm</th>
-                            <th scope="col">Khối lượng riêng gr</th>
+                            <th scope="col">KL riêng gr</th>
                             <th scope="col">Đơn vị tính</th>
                             <th scope="col">Giá xuất kho thương mại</th>
                             <th scope="col">Tổng giá</th>

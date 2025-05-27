@@ -63,7 +63,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="ma_vach">Mã vạch</label>
-                                <input type="text" class="form-control" id="ma_vach" name="ma_vach" required>
+                                <input type="text" class="form-control" id="ma_vach" name="ma_vach">
                             </div>
                         </div>
                         <div class="form-group">
@@ -90,10 +90,6 @@
                             <div class="form-group col-md-6">
                                 <label for="gia_ban">Giá bán (giá bán ra cho Khách hàng)</label>
                                 <input type="text" class="form-control onlyNumber" id="gia_ban" name="gia_ban" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="ton_kho">Tồn kho</label>
-                                <input type="text" class="form-control onlyNumber" id="ton_kho" name="ton_kho" required>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>

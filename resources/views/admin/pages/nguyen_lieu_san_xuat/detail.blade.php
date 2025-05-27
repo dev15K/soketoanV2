@@ -40,7 +40,11 @@
                                     @foreach($phieu_san_xuats as $phieu_san_xuat)
                                         <option
                                             {{ $phieu_san_xuat->id == $nguyen_lieu_san_xuat->phieu_san_xuat_id ? 'selected' : '' }}
-                                            value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}</option>
+                                            value="{{ $phieu_san_xuat->id }}">
+                                            {{ $phieu_san_xuat->so_lo_san_xuat }}
+                                            : {{ parseNumber($phieu_san_xuat->tong_khoi_luong - $phieu_san_xuat->khoi_luong_da_dung) }}
+                                            kg
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
