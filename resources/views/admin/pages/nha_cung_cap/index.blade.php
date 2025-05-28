@@ -109,7 +109,9 @@
                         </colgroup>
                         <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input type="checkbox" name="check_all" id="check_all">
+                            </th>
                             <th scope="col">Họ và tên</th>
                             <th scope="col">Số điện thoại</th>
                             <th scope="col">Địa chỉ</th>
@@ -121,7 +123,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row">{{ $loop->index + 1 }}</th>
+                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                                       value="{{ $data->id }}"></th>
                                 <td>{{ $data->ten }}</td>
                                 <td>{{ $data->so_dien_thoai }}</td>
                                 <td>{{ $data->dia_chi }}</td>

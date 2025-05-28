@@ -189,7 +189,9 @@
                         </colgroup>
                         <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input type="checkbox" name="check_all" id="check_all">
+                            </th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Lô Sản Xuất</th>
                             <th scope="col">Tên nguyên liệu</th>
@@ -208,7 +210,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row">{{ $loop->index + 1 }}</th>
+                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                                       value="{{ $data->id }}"></th>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
                                 <td>{{ $data->ten_nguyen_lieu }}</td>

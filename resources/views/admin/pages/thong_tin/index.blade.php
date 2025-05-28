@@ -74,7 +74,7 @@
 
                 <div class="card-body">
 
-                    <table class="table table-hover vw-100">
+                    <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
                             <col width="x">
@@ -83,7 +83,9 @@
                         </colgroup>
                         <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input type="checkbox" name="check_all" id="check_all">
+                            </th>
                             <th scope="col">Tên hiển thị</th>
                             <th scope="col">File</th>
                             <th scope="col">Hành động</th>
@@ -92,7 +94,9 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row">{{ $loop->index + 1 }}</th>
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
+                                                       value="{{ $data->id }}"></th>
                                 <td>{{ $data->display_name }}</td>
                                 <td>
                                     <a href="{{ $data->file_path }}"

@@ -94,6 +94,60 @@
                 $(this).closest('form').submit();
             }
         });
+
+        $('#check_all').on('change', function () {
+            if (this.checked) {
+                $('input[name="check_item[]"]').each(function () {
+                    this.checked = true;
+                });
+            } else {
+                $('input[name="check_item[]"]').each(function () {
+                    this.checked = false;
+                });
+            }
+        })
+
+        async function confirmDelete(type) {
+            let countChecked = $('input[name="check_item[]"]:checked').length;
+
+            if (countChecked === 0) {
+                alert('Vui lòng chọn lựa chọn muuốn xóa!');
+                return false;
+            }
+
+            if (!confirm('Bạn có chắc chắn muốn xóa các lựa chọn không?')) {
+                return false;
+            }
+
+            await deleteAllItemSelected(type);
+        }
+
+        async function deleteAllItemSelected(type) {
+            const list_id = [];
+            $('input[name="check_item[]"]:checked').each(async function () {
+                list_id.push($(this).val());
+            })
+
+            const url = ``;
+
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                async: false,
+                data: {
+                    list_id: list_id,
+                    type: type
+                },
+                traditional: true,
+                success: function (response) {
+                    alert('Xóa thành công!');
+                    window.location.reload();
+                },
+                error: function (exception) {
+                    console.log(exception)
+                }
+            });
+        }
     })
 </script>
 

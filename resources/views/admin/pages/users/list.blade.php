@@ -30,7 +30,9 @@
             </colgroup>
             <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col">
+                    <input type="checkbox" name="check_all" id="check_all">
+                </th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">Họ và tên</th>
                 <th scope="col">Email</th>
@@ -44,9 +46,11 @@
             <tbody>
             @foreach($users as $user)
                 <tr>
-                    <th scope="row">{{ $loop->index + 1 }}</th>
+                    <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $user->id }}"
+                                           value="{{ $user->id }}"></th>
                     <td>
-                        <img class="rounded-circle" src="{{ $user->avatar }}" alt="{{ $user->full_name }}" width="100px" height="100px">
+                        <img class="rounded-circle" src="{{ $user->avatar }}" alt="{{ $user->full_name }}" width="100px"
+                             height="100px">
                     </td>
                     <td>{{ $user->full_name }}</td>
                     <td>{{ $user->email }}</td>

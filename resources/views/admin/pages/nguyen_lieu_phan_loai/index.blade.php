@@ -168,7 +168,9 @@
                         </colgroup>
                         <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">
+                                <input type="checkbox" name="check_all" id="check_all">
+                            </th>
                             <th scope="col">MÃ ĐH</th>
                             <th scope="col">Ngày phân loại</th>
                             <th scope="col">NL nụ cao cấp (NCC)</th>
@@ -193,7 +195,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row">{{ $loop->index + 1 }}</th>
+                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                                       value="{{ $data->id }}"></th>
                                 <td>{{ $data->nguyenLieuTho->code }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ parseNumber($data->nu_cao_cap, 0) }} kg</td>
