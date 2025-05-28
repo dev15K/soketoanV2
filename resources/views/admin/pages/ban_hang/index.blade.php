@@ -52,7 +52,7 @@
                         <h5 class="card-title">Thêm mới bán hàng</h5>
                         <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
                     </div>
-                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="">
+                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="d-none">
                         @csrf
                         <div class="form-group">
                             <label for="khach_hang_id">Khách hàng</label>
