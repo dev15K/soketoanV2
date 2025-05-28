@@ -398,7 +398,7 @@
                     <table class="table table-hover small min-vw-100">
                         <colgroup>
                             <col width="50px">
-                            <col width="120px">
+                            <col width="150px">
                             <col width="300px">
                             <col width="200px">
                             <col width="300px">
