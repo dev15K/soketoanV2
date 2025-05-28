@@ -33,8 +33,8 @@
                                 <option value="0">Khách lẻ</option>
                                 @foreach($khachhangs as $khachhang)
                                     <option
-                                            {{ $khachhang->id == $banhang->khach_hang_id ? 'selected' : '' }}
-                                            value="{{ $khachhang->id }}">{{ $khachhang->ten }}
+                                        {{ $khachhang->id == $banhang->khach_hang_id ? 'selected' : '' }}
+                                        value="{{ $khachhang->id }}">{{ $khachhang->ten }}
                                         - {{ $khachhang->so_dien_thoai }}</option>
                                 @endforeach
                             </select>
@@ -57,28 +57,24 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row pt-3 mt-4 border-top">
                             <div class="form-group col-md-4">
                                 <label for="ok">Tổng tiền</label>
                                 <input type="text" class="form-control onlyNumber" disabled readonly id="ok"
                                        name="ok" value="{{ $banhang->tong_tien }}" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="da_thanht_toan">Đã thanh toán</label>
+                                <label for="da_thanht_toan">Khách hàng đã thanh toán</label>
                                 <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
                                        name="da_thanht_toan" value="{{ $banhang->da_thanht_toan }}" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
-                                <select class="form-control" name="phuong_thuc_thanh_toan" id="phuong_thuc_thanh_toan">
-                                    <option
-                                            {{ $banhang->phuong_thuc_thanh_toan == 'Tiền mặt' ? 'selected' : '' }} value="Tiền mặt">
-                                        Tiền mặt
-                                    </option>
-                                    <option
-                                            {{ $banhang->phuong_thuc_thanh_toan == 'Chuyển khoản' ? 'selected' : '' }} value="Chuyển khoản">
-                                        Chuyển khoản
-                                    </option>
+                                <label for="loai_quy_id">Loại quỹ</label>
+                                <select class="form-control" name="loai_quy_id" id="loai_quy_id">
+                                    @foreach($loai_quies as $loai_quy)
+                                        <option {{ $loai_quy->id == $banhang->phuong_thuc_thanh_toan ? 'selected' : '' }}
+                                                value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -91,23 +87,23 @@
                                             onchange="changeLoaiSanPham()" disabled readonly="">
                                         <option value="">Lựa chọn kho</option>
                                         <option
-                                                {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO ? 'selected' : '' }}
-                                                value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
+                                            {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO ? 'selected' : '' }}
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
                                             Nguyên liệu Thô
                                         </option>
                                         <option
-                                                {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI ? 'selected' : '' }}
-                                                value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
+                                            {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI ? 'selected' : '' }}
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
                                             Nguyên liệu Phân loại
                                         </option>
                                         <option
-                                                {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH ? 'selected' : '' }}
-                                                value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
+                                            {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH ? 'selected' : '' }}
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
                                             Nguyên liệu Tinh
                                         </option>
                                         <option
-                                                {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM ? 'selected' : '' }}
-                                                value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
+                                            {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM ? 'selected' : '' }}
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
                                             Nguyên liệu Thành phẩm
                                         </option>
                                     </select>
@@ -163,8 +159,8 @@
                                                     @endphp
 
                                                     <option
-                                                            {{ $chiTietBanHang->san_pham_id == $nguyenlieu->id ? 'selected' : '' }}
-                                                            value="{{ $nguyenlieu->id }}">{{ $label }}</option>
+                                                        {{ $chiTietBanHang->san_pham_id == $nguyenlieu->id ? 'selected' : '' }}
+                                                        value="{{ $nguyenlieu->id }}">{{ $label }}</option>
                                                 @endforeach
 
                                             </select>

@@ -111,6 +111,9 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
         $NguyenLieuPhanLoai->tong_khoi_luong = $nu_cao_cap + $nu_vip + $nhang + $vong + $tam_tre + $keo + $nau_dau;
 
+        if ($khoi_luong_ban_dau <= $NguyenLieuPhanLoai->tong_khoi_luong) {
+            return false;
+        }
 
         if ($is_update) {
             if (isset($old_nguyen_lieu_tho_id) && isset($old_khoi_luong_ban_dau) && $old_nguyen_lieu_tho_id != $nguyen_lieu_tho_id) {

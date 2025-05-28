@@ -223,7 +223,7 @@
 
             async function changeLoaiSanPham() {
                 const select_kho = $('#select_kho');
-                select_kho.prop('disabled', true);
+                $('#tbodySanPham').empty();
                 const loaiSanPham = select_kho.val();
                 $('#loai_san_pham').val(loaiSanPham);
                 const showForm = $('.showForm');

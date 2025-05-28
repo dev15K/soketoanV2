@@ -156,7 +156,9 @@
                                 <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
                                 <select class="form-control" name="phuong_thuc_thanh_toan" id="phuong_thuc_thanh_toan">
                                     @foreach($loai_quies as $loai_quy)
-                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}
+                                            - {{ parseNumber($loai_quy->tong_tien_quy) }} VND
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>

@@ -93,6 +93,11 @@ class AdminNguyenLieuThoController extends Controller
             $nguyen_lieu_tho = new NguyenLieuTho();
 
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
+
+            if (!$nguyen_lieu_tho) {
+                return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ hoặc tiền quỹ không đủ!');
+            }
+
             $nguyen_lieu_tho->save();
 
             $new_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
@@ -137,6 +142,25 @@ class AdminNguyenLieuThoController extends Controller
         $nguyenLieuTho->chi_phi_mua = $chi_phi_mua ?? '';
         $nguyenLieuTho->phuong_thuc_thanh_toan = $phuong_thuc_thanh_toan ?? '';
         $nguyenLieuTho->so_tien_thanh_toan = $so_tien_thanh_toan ?? '';
+
+        $loaiQuy = LoaiQuy::find($phuong_thuc_thanh_toan);
+        if (!$loaiQuy) {
+            return false;
+        }
+
+        $tong_tien = $loaiQuy->tong_tien_quy;
+
+        if ($so_tien_thanh_toan < 0) {
+            return false;
+        }
+
+        if ($so_tien_thanh_toan > $chi_phi_mua) {
+            return false;
+        }
+
+        if ($so_tien_thanh_toan > $tong_tien) {
+            return false;
+        }
 
         $nguyenLieuTho->cong_no = $chi_phi_mua - $so_tien_thanh_toan;
         $nguyenLieuTho->nhan_su_xu_li = $nhan_su_xu_li;
@@ -228,6 +252,11 @@ class AdminNguyenLieuThoController extends Controller
             $old_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
 
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
+
+            if (!$nguyen_lieu_tho) {
+                return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ hoặc tiền quỹ không đủ!');
+            }
+
             $nguyen_lieu_tho->save();
 
             $new_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
