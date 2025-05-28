@@ -158,4 +158,18 @@ if (!function_exists('parseNumber')) {
 
         return number_format($num, $decimalLength);
     }
+
+    function compareNumbers(string $a, string $b): int {
+        if (function_exists('bccomp')) {
+            return bccomp($a, $b, 10);
+        }
+
+        $aFloat = (float) $a;
+        $bFloat = (float) $b;
+
+        if ($aFloat > $bFloat) return 1;
+        if ($aFloat < $bFloat) return -1;
+        return 0;
+    }
+
 }
