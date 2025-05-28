@@ -61,7 +61,7 @@
                                 <option value="0">Khách lẻ</option>
                                 @foreach($khachhangs as $khachhang)
                                     <option value="{{ $khachhang->id }}">{{ $khachhang->ten }}
-                                        - {{ $khachhang->so_dien_thoai }}</option>
+                                        : {{ $khachhang->so_dien_thoai }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -86,14 +86,15 @@
                         <div class="row pt-3 mt-4 border-top">
                             <div class="form-group col-md-6">
                                 <label for="da_thanht_toan">Khách hàng đã thanh toán</label>
-                                <input type="text" class="form-control onlyNumber" id="da_thanht_toan" name="da_thanht_toan" required>
+                                <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
+                                       name="da_thanht_toan" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="loai_quy_id">Loại quỹ</label>
                                 <select class="form-control" name="loai_quy_id" id="loai_quy_id">
-                                   @foreach($loai_quies as $loai_quy)
-                                       <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
-                                   @endforeach
+                                    @foreach($loai_quies as $loai_quy)
+                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -118,8 +119,12 @@
                                             Kho Nguyên liệu Tinh
                                         </option>
                                         <option
+                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT }}">
+                                            Kho Thành phẩm sản xuất
+                                        </option>
+                                        <option
                                             value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
-                                           Kho đã Đóng gói
+                                            Kho đã Đóng gói
                                         </option>
                                     </select>
                                 </div>
@@ -272,23 +277,31 @@
                     let ten_;
                     switch (loaiSanPham) {
                         case 'NGUYEN_LIEU_THO':
-                            ten_ = item.ten_nguyen_lieu + ' - ' + item.ghi_chu ?? '';
-                            gia_ = null;
+                            ten_ = item.ten_nguyen_lieu + ' : ' +
+                                (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_phan_loai)) + 'kg';
+                            gia_ = item.chi_phi_mua / item.khoi_luong;
                             break;
                         case 'NGUYEN_LIEU_PHAN_LOAI':
-                            ten_ = item.ten_nguyen_lieu_tho + ' - ' + item.ma_don_hang + ' - ' + item.ghi_chu ?? '';
+                            ten_ = item.ma_don_hang + ' : ' +
+                                (parseFloat(item.tong_khoi_luong) - parseFloat(item.khoi_luong_da_phan_loai ?? 0)) + 'kg';
                             if (!gia_) {
                                 gia_ = item.gia_sau_phan_loai;
                             }
                             break;
                         case 'NGUYEN_LIEU_TINH':
-                            ten_ = item.code;
+                            ten_ = item.code + ' : ' + (parseFloat(item.tong_khoi_luong) - parseFloat(item.so_luong_da_dung ?? 0)) + 'kg';
+                            if (!gia_) {
+                                gia_ = item.gia_tien;
+                            }
+                            break;
+                        case 'NGUYEN_LIEU_SAN_XUAT':
+                            ten_ = item.code + ' : ' + (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_dung ?? 0)) + 'kg';
                             if (!gia_) {
                                 gia_ = item.gia_tien;
                             }
                             break;
                         case 'NGUYEN_LIEU_THANH_PHAM':
-                            ten_ = item.ten_san_pham + ' - ' + item.so_lo_san_xuat + ' - ' + item.ghi_chu ?? '';
+                            ten_ = item.ten_san_pham + ' : ' + (parseFloat(item.so_luong) - parseFloat(item.so_luong_da_ban ?? 0)) + 'kg';
                             if (!gia_) {
                                 gia_ = item.price;
                             }
@@ -321,12 +334,15 @@
                 let gia_ = null;
                 switch (loaiSanPham) {
                     case 'NGUYEN_LIEU_THO':
-                        gia_ = null;
+                        gia_ = data.chi_phi_mua / data.khoi_luong;
                         break;
                     case 'NGUYEN_LIEU_PHAN_LOAI':
                         gia_ = data.gia_sau_phan_loai;
                         break;
                     case 'NGUYEN_LIEU_TINH':
+                        gia_ = data.gia_tien;
+                        break;
+                    case 'NGUYEN_LIEU_SAN_XUAT':
                         gia_ = data.gia_tien;
                         break;
                     case 'NGUYEN_LIEU_THANH_PHAM':
@@ -376,7 +392,8 @@
 
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tho')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tho')">Xoá tất cả
+                        </button>
                     </div>
                     <table class="table table-hover small min-vw-100">
                         <colgroup>
@@ -410,7 +427,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
                                 <td>

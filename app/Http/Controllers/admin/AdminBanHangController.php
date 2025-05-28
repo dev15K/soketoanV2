@@ -14,6 +14,7 @@ use App\Models\BanHangChiTiet;
 use App\Models\KhachHang;
 use App\Models\LoaiQuy;
 use App\Models\NguyenLieuPhanLoai;
+use App\Models\NguyenLieuSanXuat;
 use App\Models\NguyenLieuThanhPham;
 use App\Models\NguyenLieuTho;
 use App\Models\NguyenLieuTinh;
@@ -135,7 +136,9 @@ class AdminBanHangController extends Controller
                     case LoaiSanPham::NGUYEN_LIEU_THO():
                         $nguyenLieuTho = NguyenLieuTho::find($san_pham_id);
                         if ($nguyenLieuTho) {
-                            if ($nguyenLieuTho->khoi_luong < $ban_hang_chi_tiet->so_luong) {
+                            $kl = $nguyenLieuTho->khoi_luong - $nguyenLieuTho->khoi_luong_da_ban;
+                            if ($kl > $ban_hang_chi_tiet->so_luong) {
+                                $banhang->delete();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuTho->khoi_luong_da_ban = $ban_hang_chi_tiet->so_luong;
@@ -145,7 +148,9 @@ class AdminBanHangController extends Controller
                     case LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
                         $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($san_pham_id);
                         if ($nguyenLieuPhanLoai) {
-                            if ($nguyenLieuPhanLoai->tong_khoi_luong < $ban_hang_chi_tiet->so_luong) {
+                            $kl = $nguyenLieuPhanLoai->tong_khoi_luong - $nguyenLieuPhanLoai->khoi_luong_da_phan_loai;
+                            if ($kl > $ban_hang_chi_tiet->so_luong) {
+                                $banhang->delete();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuPhanLoai->khoi_luong_da_phan_loai = $ban_hang_chi_tiet->so_luong;
@@ -155,7 +160,9 @@ class AdminBanHangController extends Controller
                     case LoaiSanPham::NGUYEN_LIEU_TINH():
                         $nguyenLieuTinh = NguyenLieuTinh::find($san_pham_id);
                         if ($nguyenLieuTinh) {
-                            if ($nguyenLieuTinh->tong_khoi_luong < $ban_hang_chi_tiet->so_luong) {
+                            $kl = $nguyenLieuTinh->tong_khoi_luong - $nguyenLieuTinh->so_luong_da_dung;
+                            if ($kl > $ban_hang_chi_tiet->so_luong) {
+                                $banhang->delete();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuTinh->so_luong_da_dung = $ban_hang_chi_tiet->so_luong;
@@ -163,12 +170,23 @@ class AdminBanHangController extends Controller
                         }
                         break;
                     case LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
-                        $nguyenlieus = [];
+                        $nguyenLieuSanXuat = NguyenLieuSanXuat::find($san_pham_id);
+                        if ($nguyenLieuSanXuat) {
+                            $kl = $nguyenLieuSanXuat->khoi_luong - $nguyenLieuSanXuat->khoi_luong_da_dung;
+                            if ($kl > $ban_hang_chi_tiet->so_luong) {
+                                $banhang->delete();
+                                return redirect()->back()->with('error', 'Số lượng không đủ!');
+                            }
+                            $nguyenLieuSanXuat->khoi_luong_da_dung = $ban_hang_chi_tiet->so_luong;
+                            $nguyenLieuSanXuat->save();
+                        }
                         break;
                     case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
                         $nguyenLieuThanhPham = NguyenLieuThanhPham::find($san_pham_id);
                         if ($nguyenLieuThanhPham) {
-                            if ($nguyenLieuThanhPham->so_luong < $ban_hang_chi_tiet->so_luong) {
+                            $kl = $nguyenLieuThanhPham->so_luong - $nguyenLieuThanhPham->so_luong_da_ban;
+                            if ($kl > $ban_hang_chi_tiet->so_luong) {
+                                $banhang->delete();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuThanhPham->so_luong_da_ban = $ban_hang_chi_tiet->so_luong;
