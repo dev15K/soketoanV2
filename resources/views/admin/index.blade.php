@@ -162,7 +162,7 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
-                            <col width="10%">
+                            <col width="120px">
                             <col width="10%">
                             <col width="15%">
                             <col width="30%">
@@ -170,9 +170,7 @@
                         </colgroup>
                         <thead>
                         <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
+                            <th scope="col">#</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Loại</th>
                             <th scope="col">Tên quỹ</th>
@@ -183,8 +181,7 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
+                                <th scope="row">{{ $loop->index + 1 }}</th>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>
                                     @if($data->loai == 0)

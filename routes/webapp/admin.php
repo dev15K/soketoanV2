@@ -156,5 +156,5 @@ Route::group(['prefix' => 'so-quy'], function () {
 });
 
 Route::group(['prefix' => 'api'], function () {
-
+    Route::delete('/delete/items', [AdminHomeController::class, 'deleteItem'])->name('api.admin.delete.items');
 });
