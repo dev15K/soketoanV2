@@ -205,8 +205,10 @@ class AdminPhieuSanXuatController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
-            $phieu_san_xuat->trang_thai = TrangThaiphieuSanXuat::DELETED();
-            $phieu_san_xuat->save();
+            PhieuSanXuat::where('id', $id)
+                ->where('khoi_luong_da_dung', null)
+                ->orWhere('khoi_luong_da_dung', 0)
+                ->update(['trang_thai' => TrangThaiPhieuSanXuat::DELETED()]);
 
             return redirect()->back()->with('success', 'Đã xoá phiếu sản xuất thành công');
         } catch (\Exception $e) {

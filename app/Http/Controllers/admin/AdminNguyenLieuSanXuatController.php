@@ -162,8 +162,10 @@ class AdminNguyenLieuSanXuatController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
             }
 
-            $nguyen_lieu_san_xuat->trang_thai = TrangThaiNguyenLieuSanXuat::DELETED();
-            $nguyen_lieu_san_xuat->save();
+            NguyenLieuSanXuat::where('id', $id)
+                ->where('khoi_luong_da_dung', null)
+                ->orWhere('khoi_luong_da_dung', 0)
+                ->update(['trang_thai' => TrangThaiNguyenLieuSanXuat::DELETED()]);
 
             $phieuSanXuat = PhieuSanXuat::find($nguyen_lieu_san_xuat->phieu_san_xuat_id);
             if ($phieuSanXuat) {

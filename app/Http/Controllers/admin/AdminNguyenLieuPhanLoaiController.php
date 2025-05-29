@@ -155,6 +155,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
                 $NguyenLieuPhanLoai->chi_phi_mua = $nguyenLieuTho->chi_phi_mua / $nguyenLieuTho->khoi_luong * $khoi_luong_ban_dau;
 
                 $NguyenLieuPhanLoai->khoi_luong_hao_hut = $khoi_luong_ban_dau - $NguyenLieuPhanLoai->tong_khoi_luong;
+                $NguyenLieuPhanLoai->gia_truoc_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->khoi_luong_ban_dau, 2);
                 $NguyenLieuPhanLoai->gia_sau_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->tong_khoi_luong, 2);
 
                 $nguyenLieuTho->khoi_luong_da_phan_loai = $khoi_luong_ban_dau;
@@ -213,8 +214,10 @@ class AdminNguyenLieuPhanLoaiController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu phân loại');
             }
 
-            $nguyen_lieu_phan_loai->trang_thai = TrangThaiNguyenLieuPhanLoai::DELETED();
-            $nguyen_lieu_phan_loai->save();
+            NguyenLieuPhanLoai::where('id', $id)
+                ->where('khoi_luong_da_phan_loai', null)
+                ->orWhere('khoi_luong_da_phan_loai', 0)
+                ->update(['trang_thai' => TrangThaiNguyenLieuPhanLoai::DELETED()]);
 
             $nguyenLieuTho = NguyenLieuTho::where('id', $nguyen_lieu_phan_loai->nguyen_lieu_tho_id)->first();
             if ($nguyenLieuTho) {

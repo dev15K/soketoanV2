@@ -277,8 +277,10 @@ class AdminNguyenLieuThoController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thô');
             }
 
-            $nguyen_lieu_tho->trang_thai = TrangThaiNguyenLieuTho::DELETED();
-            $nguyen_lieu_tho->save();
+            NguyenLieuTho::where('id', $id)
+                ->where('khoi_luong_da_phan_loai', null)
+                ->orderByDesc('khoi_luong_da_phan_loai', 0)
+                ->update(['trang_thai' => TrangThaiNguyenLieuTho::DELETED()]);
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu thô thành công');
         } catch (\Exception $e) {

@@ -234,8 +234,10 @@ class AdminNguyenLieuTinhController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
             }
 
-            $nguyen_lieu_tinh->trang_thai = TrangThaiNguyenLieuTinh::DELETED();
-            $nguyen_lieu_tinh->save();
+            NguyenLieuTinh::where('id', $id)
+                ->where('so_luong_da_dung', null)
+                ->orWhere('so_luong_da_dung', 0)
+                ->update(['trang_thai' => TrangThaiNguyenLieuTinh::DELETED()]);
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu tinh thành công');
         } catch (\Exception $e) {

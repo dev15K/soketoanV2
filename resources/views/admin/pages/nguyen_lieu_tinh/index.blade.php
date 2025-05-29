@@ -251,7 +251,7 @@
 
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tho')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tinh')">Xoá tất cả</button>
                     </div>
                     <table class="table table-hover vw-100">
                         <colgroup>
