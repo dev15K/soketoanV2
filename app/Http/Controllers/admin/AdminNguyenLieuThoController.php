@@ -95,7 +95,7 @@ class AdminNguyenLieuThoController extends Controller
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
 
             if (!$nguyen_lieu_tho) {
-                return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ hoặc tiền quỹ không đủ!');
+                return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ hoặc tiền quỹ không đủ!')->withInput();
             }
 
             $nguyen_lieu_tho->save();

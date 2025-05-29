@@ -104,7 +104,7 @@ class AdminPhieuSanXuatController extends Controller
 
             if (!$success) {
                 PhieuSanXuat::where('id', $phieu_san_xuat->id)->delete();
-                return redirect()->route('admin.phieu.san.xuat.index')->with('error', 'Không có đủ nguyên liệu.');
+                return redirect()->route('admin.phieu.san.xuat.index')->with('error', 'Không có đủ nguyên liệu.')->withInput();
             }
 
             return redirect()->back()->with('success', 'Thêm mới phiếu sản xuất thành công');

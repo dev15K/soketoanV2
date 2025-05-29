@@ -62,7 +62,7 @@ class AdminNguyenLieuSanXuatController extends Controller
 
             $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
             if (!$nguyen_lieu_san_xuat) {
-                return redirect()->back()->with('error', 'Số lượng không đủ');
+                return redirect()->back()->with('error', 'Số lượng không đủ')->withInput();
             }
             $nguyen_lieu_san_xuat->save();
 

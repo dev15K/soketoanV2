@@ -72,7 +72,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
 
             $nguyenLieuThanhPham = $this->saveData($nguyenLieuThanhPham, $request);
             if (!$nguyenLieuThanhPham) {
-                return redirect()->back()->with('error', 'Số lượng không đủ!');
+                return redirect()->back()->with('error', 'Số lượng không đủ!')->withInput();
             }
             $nguyenLieuThanhPham->save();
 

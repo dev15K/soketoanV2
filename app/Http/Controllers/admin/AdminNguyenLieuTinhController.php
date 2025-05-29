@@ -99,7 +99,7 @@ class AdminNguyenLieuTinhController extends Controller
 
             if (!$success) {
                 NguyenLieuTinh::where('id', $nguyen_lieu_tinh->id)->delete();
-                return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.');
+                return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.')->withInput();
             }
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu tinh thành công');

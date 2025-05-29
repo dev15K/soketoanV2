@@ -55,7 +55,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
             $nguyen_lieu_phan_loai = $this->saveData($nguyen_lieu_phan_loai, $request);
             if (!$nguyen_lieu_phan_loai) {
-                return redirect()->back()->with('error', 'Khối lượng ban đầu không đủ');
+                return redirect()->back()->with('error', 'Khối lượng ban đầu không đủ')->withInput();
             }
             $nguyen_lieu_phan_loai->save();
 

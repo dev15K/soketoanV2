@@ -288,11 +288,11 @@
                                 <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ $data->ma_phieu }}</td>
+                                <td>{{ $data->code }}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
                                 <td>{{ parseNumber($data->so_luong_da_dung, 0) }} kg</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong - $data->so_luong_da_dung, 0) }} kg</td>
-                                <td>{{ $data->ma_phieu }}</td>
-                                <td>{{ $data->code }}</td>
                                 <td>{{ parseNumber($data->gia_tien, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                                 <td>
