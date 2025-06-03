@@ -13,4 +13,9 @@ class NguyenLieuSanXuat extends Model
     {
         return $this->belongsTo(PhieuSanXuat::class, 'phieu_san_xuat_id', 'id');
     }
+
+    public function NhanVien()
+    {
+        return $this->belongsTo(User::class, 'nhan_vien_san_xuat', 'id');
+    }
 }

@@ -1,4 +1,4 @@
-@php use App\Enums\TrangThaiPhieuSanXuat;use Carbon\Carbon; @endphp
+@php use App\Enums\TrangThaiPhieuSanXuat; @endphp
 @php @endphp
 @extends('admin.layouts.master')
 @section('title')
@@ -78,6 +78,14 @@
                                         value="{{ TrangThaiPhieuSanXuat::INACTIVE() }}">{{ TrangThaiPhieuSanXuat::INACTIVE() }}</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
+                            <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
+                                   name="thoi_gian_hoan_thanh_san_xuat"
+                                   value="{{ \Illuminate\Support\Carbon::parse($phieu_san_xuat->thoi_gian_hoan_thanh_san_xuat)->format('Y-m-d') }}"
+                                   required>
                         </div>
 
                         <div class="mt-2">

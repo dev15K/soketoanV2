@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuPhanLoai;
-use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNguyenLieuTinh;
 use App\Enums\TrangThaiPhieuSanXuat;
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuPhanLoai;
-use App\Models\NguyenLieuTho;
 use App\Models\NguyenLieuTinh;
 use App\Models\PhieuSanXuat;
 use App\Models\PhieuSanXuatChiTiet;
@@ -56,6 +54,24 @@ class AdminPhieuSanXuatController extends Controller
             ->get();
 
         return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'so_lo_san_xuat', 'nltinhs', 'ngay', 'keyword', 'nguyen_lieu_id', 'nsus'));
+    }
+
+    private function generateCode()
+    {
+        $lastItem = PhieuSanXuat::orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return convertNumber($lastId + 1);
+    }
+
+    private function generateLoSanXuat()
+    {
+        $lastItem = PhieuSanXuat::orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return generateLSXCode($lastId + 1);
     }
 
     public function detail($id)
@@ -119,6 +135,7 @@ class AdminPhieuSanXuatController extends Controller
         $code = $request->input('code');
         $tong_khoi_luong = $request->input('tong_khoi_luong') ?? 0;
         $so_lo_san_xuat = $request->input('so_lo_san_xuat');
+        $thoi_gian_hoan_thanh_san_xuat = $request->input('thoi_gian_hoan_thanh_san_xuat');
         $nguyen_lieu_id = 0;
         $nhan_su_xu_li = $request->input('nhan_su_xu_li');
 
@@ -134,6 +151,7 @@ class AdminPhieuSanXuatController extends Controller
         $phieuSanXuat->trang_thai = $trang_thai;
         $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
         $phieuSanXuat->nhan_su_xu_li_id = $nhan_su_xu_li;
+        $phieuSanXuat->thoi_gian_hoan_thanh_san_xuat = $thoi_gian_hoan_thanh_san_xuat;
 
         return $phieuSanXuat;
     }
@@ -231,23 +249,5 @@ class AdminPhieuSanXuatController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-    }
-
-    private function generateCode()
-    {
-        $lastItem = PhieuSanXuat::orderByDesc('id')
-            ->first();
-
-        $lastId = $lastItem?->id;
-        return convertNumber($lastId + 1);
-    }
-
-    private function generateLoSanXuat()
-    {
-        $lastItem = PhieuSanXuat::orderByDesc('id')
-            ->first();
-
-        $lastId = $lastItem?->id;
-        return generateLSXCode($lastId + 1);
     }
 }

@@ -125,6 +125,13 @@
                             </div>
                         </div>
 
+                        <div class="form-group col-md-12">
+                            <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
+                            <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
+                                   name="thoi_gian_hoan_thanh_san_xuat"
+                                   value="{{ Carbon::now()->format('Y-m-d') }}" required>
+                        </div>
+
                         <div class="mt-2">
                             <div class="w-100 d-flex justify-content-between align-items-center">
                                 <h4 class="card-title">Danh sách nguyên liệu</h4>
@@ -223,7 +230,9 @@
 
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('phieu_san_xuat')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('phieu_san_xuat')">
+                            Xoá tất cả
+                        </button>
                     </div>
                     <table class="table table-hover table-sm">
                         <colgroup>
@@ -236,6 +245,7 @@
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
+                            <col width="60px">
                         </colgroup>
                         <thead>
                         <tr>
@@ -249,14 +259,15 @@
                             <th scope="col">KL đã dùng(kg)</th>
                             <th scope="col">KL tồn(kg)</th>
                             <th scope="col">Nhân sự xử lý</th>
-                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Thời gian dự kiến hoàn thành SX</th>
                             <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
@@ -265,7 +276,7 @@
                                 <td>{{ number_format($data->khoi_luong_da_dung) }} kg</td>
                                 <td>{{ number_format($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
                                 <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
-                                <td>{{ $data->trang_thai }}</td>
+                                <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.phieu.san.xuat.detail', $data->id) }}"

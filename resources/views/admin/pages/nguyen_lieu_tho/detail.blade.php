@@ -140,7 +140,7 @@
                                     <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
                                         @foreach($nsus as $nsu)
                                             <option
-                                                {{ $nsu->full_name == $nguyen_lieu_tho->nhan_su_xu_li_id ? 'selected' : '' }}
+                                                {{ $nsu->full_name == $nguyen_lieu_tho->nhan_su_xu_li ? 'selected' : '' }}
                                                 value="{{ $nsu->full_name }}">{{ $nsu->full_name }}
                                                 /{{ $nsu->email }}</option>
                                         @endforeach

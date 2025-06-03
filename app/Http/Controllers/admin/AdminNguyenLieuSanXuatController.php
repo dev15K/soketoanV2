@@ -4,10 +4,12 @@ namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuSanXuat;
 use App\Enums\TrangThaiPhieuSanXuat;
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuSanXuat;
 use App\Models\PhieuSanXuat;
 use App\Models\PhieuSanXuatChiTiet;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -38,7 +40,12 @@ class AdminNguyenLieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_san_xuat.index', compact('datas', 'phieu_san_xuats', 'ngay_search', 'keyword', 'phieu_san_xuat_id'));
+        $nsus = User::where('status', '!=', UserStatus::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.pages.nguyen_lieu_san_xuat.index', compact('datas', 'phieu_san_xuats',
+            'ngay_search', 'keyword', 'phieu_san_xuat_id', 'nsus'));
     }
 
     public function detail($id)
@@ -52,7 +59,11 @@ class AdminNguyenLieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat', 'phieu_san_xuats'));
+        $nsus = User::where('status', '!=', UserStatus::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat', 'phieu_san_xuats', 'nsus'));
     }
 
     public function store(Request $request)
@@ -85,6 +96,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         $chi_tiet_khac = $request->input('chi_tiet_khac');
         $bao_quan = $request->input('bao_quan');
         $trang_thai = $request->input('trang_thai');
+        $nhan_vien_san_xuat = $request->input('nhan_vien_san_xuat');
 
         $oldPhieuSanXuatId = $nguyenLieuSanXuat->phieu_san_xuat_id;
         $oldKhoiLuong = $nguyenLieuSanXuat->khoi_luong;
@@ -94,14 +106,17 @@ class AdminNguyenLieuSanXuatController extends Controller
             return false;
         }
 
-        if (!$khoi_luong || $khoi_luong <= 0 || !is_numeric($khoi_luong)) {
-            return false;
+        if ($oldKhoiLuong != $khoi_luong){
+            if (!$khoi_luong || $khoi_luong <= 0 || !is_numeric($khoi_luong)) {
+                return false;
+            }
+
+            $ton = $phieuSanXuat->tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung;
+            if ($khoi_luong > $ton) {
+                return false;
+            }
         }
 
-        $ton = $phieuSanXuat->tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung;
-        if ($khoi_luong > $ton) {
-            return false;
-        }
         if (!$nguyenLieuSanXuat->code) {
             do {
                 $code = generateRandomString(8);
@@ -131,6 +146,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         $nguyenLieuSanXuat->chi_tiet_khac = $chi_tiet_khac ?? '';
         $nguyenLieuSanXuat->bao_quan = $bao_quan ?? '';
         $nguyenLieuSanXuat->trang_thai = $trang_thai;
+        $nguyenLieuSanXuat->nhan_vien_san_xuat = $nhan_vien_san_xuat;
 
         if ($oldPhieuSanXuatId != $phieu_san_xuat_id) {
             $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);

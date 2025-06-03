@@ -104,7 +104,7 @@
                                 <select id="phieu_san_xuat_id" name="phieu_san_xuat_id" class="form-control">
                                     @foreach($phieu_san_xuats as $phieu_san_xuat)
                                         <option
-                                            value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}
+                                                value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}
                                             : {{ parseNumber($phieu_san_xuat->tong_khoi_luong - $phieu_san_xuat->khoi_luong_da_dung) }}
                                             kg
                                         </option>
@@ -138,13 +138,23 @@
                                 <input type="text" class="form-control" id="mui_thom"
                                        name="mui_thom">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group d-none">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() }}</option>
+                                            value="{{ \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() }}</option>
                                     <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() }}</option>
+                                            value="{{ \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="nhan_vien_san_xuat">Nhân viên SX</label>
+                                <select id="nhan_vien_san_xuat" name="nhan_vien_san_xuat" class="form-control">
+                                    @foreach($nsus as $nsu)
+                                        <option value="{{ $nsu->id }}" {{ old('nhan_vien_san_xuat') == $nsu->id ? 'selected' : '' }}>
+                                            {{ $nsu->full_name }}/{{ $nsu->email }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -170,7 +180,9 @@
 
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('thanh_pham')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('thanh_pham')">Xoá
+                            tất cả
+                        </button>
                     </div>
                     <table class="table table-hover " style="min-width: 2000px">
                         <colgroup>
@@ -205,14 +217,15 @@
                             <th scope="col">Mùi thơm</th>
                             <th scope="col">Chi tiết khác</th>
                             <th scope="col">Bảo quản</th>
-                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Nhân viên SX</th>
                             <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
@@ -225,7 +238,7 @@
                                 <td>{{ $data->mui_thom }}</td>
                                 <td>{{ $data->chi_tiet_khac }}</td>
                                 <td>{{ $data->bao_quan }}</td>
-                                <td>{{ $data->trang_thai }}</td>
+                                <td>{{ $data->NhanVien->full_name }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.nguyen.lieu.san.xuat.detail', $data->id) }}"
