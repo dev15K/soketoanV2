@@ -59,37 +59,41 @@
                             <div class="form-group col-md-6">
                                 <label for="ma_san_pham">Mã sản phẩm</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_san_pham"
-                                       name="ma_san_pham" value="{{ $code }}" required>
+                                       name="ma_san_pham" value="{{ old('ma_san_pham', $code) }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="ma_vach">Mã vạch</label>
-                                <input type="text" class="form-control" id="ma_vach" name="ma_vach">
+                                <input type="text" class="form-control" id="ma_vach" name="ma_vach"
+                                       value="{{ old('ma_vach') }}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="ten_san_pham">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="ten_san_pham" name="ten_san_pham" required>
+                            <input type="text" class="form-control" id="ten_san_pham" name="ten_san_pham"
+                                   value="{{ old('ten_san_pham') }}" required>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="don_vi_tinh">Đơn vị tính</label>
-                                <input type="text" class="form-control" id="don_vi_tinh" name="don_vi_tinh" required>
+                                <input type="text" class="form-control" id="don_vi_tinh" name="don_vi_tinh"
+                                       value="{{ old('don_vi_tinh') }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="khoi_luong_rieng">Khối lượng riêng</label>
                                 <input type="text" class="form-control" id="khoi_luong_rieng" name="khoi_luong_rieng"
-                                       required>
+                                       value="{{ old('khoi_luong_rieng') }}" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="gia_xuat_kho">Giá xuất kho ( Giá nhập)</label>
+                                <label for="gia_xuat_kho">Giá xuất kho (Giá nhập)</label>
                                 <input type="text" class="form-control onlyNumber" id="gia_xuat_kho" name="gia_xuat_kho"
-                                       required>
+                                       value="{{ old('gia_xuat_kho') }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="gia_ban">Giá bán (giá bán ra cho Khách hàng)</label>
-                                <input type="text" class="form-control onlyNumber" id="gia_ban" name="gia_ban" required>
+                                <input type="text" class="form-control onlyNumber" id="gia_ban" name="gia_ban"
+                                       value="{{ old('gia_ban') }}" required>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
@@ -105,7 +109,9 @@
 
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('san_pham')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('san_pham')">Xoá tất
+                            cả
+                        </button>
                     </div>
                     <table class="table table-hover vw-100">
                         <colgroup>
@@ -139,7 +145,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ $data->ma_san_pham }}</td>
                                 <td>{{ $data->ma_vach }}</td>

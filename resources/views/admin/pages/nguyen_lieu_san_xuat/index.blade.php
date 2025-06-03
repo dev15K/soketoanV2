@@ -96,77 +96,96 @@
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                       value="{{ old('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="phieu_san_xuat_id">Lô Sản Xuất</label>
                                 <select id="phieu_san_xuat_id" name="phieu_san_xuat_id" class="form-control">
                                     @foreach($phieu_san_xuats as $phieu_san_xuat)
-                                        <option
-                                                value="{{ $phieu_san_xuat->id }}">{{ $phieu_san_xuat->so_lo_san_xuat }}
-                                            : {{ parseNumber($phieu_san_xuat->tong_khoi_luong - $phieu_san_xuat->khoi_luong_da_dung) }}
+                                        <option value="{{ $phieu_san_xuat->id }}"
+                                            {{ old('phieu_san_xuat_id') == $phieu_san_xuat->id ? 'selected' : '' }}>
+                                            {{ $phieu_san_xuat->so_lo_san_xuat }} :
+                                            {{ parseNumber($phieu_san_xuat->tong_khoi_luong - $phieu_san_xuat->khoi_luong_da_dung) }}
                                             kg
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
                             <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
-                                   required>
+                                   value="{{ old('ten_nguyen_lieu') }}" required>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong">Khối lượng(kg)</label>
                                 <input type="text" class="form-control onlyNumber" id="khoi_luong" name="khoi_luong"
-                                       required>
+                                       value="{{ old('khoi_luong') }}" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="don_gia">Đơn giá(Bỏ trống nếu tự tính)</label>
-                                <input type="text" class="form-control onlyNumber" id="don_gia" name="don_gia">
+                                <label for="don_gia">Đơn giá (Bỏ trống nếu tự tính)</label>
+                                <input type="text" class="form-control onlyNumber" id="don_gia" name="don_gia"
+                                       value="{{ old('don_gia') }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="mau_sac">Màu sắc</label>
-                                <input type="text" class="form-control" id="mau_sac" name="mau_sac">
+                                <input type="text" class="form-control" id="mau_sac" name="mau_sac"
+                                       value="{{ old('mau_sac') }}">
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="mui_thom">Mùi thơm</label>
-                                <input type="text" class="form-control" id="mui_thom"
-                                       name="mui_thom">
+                                <input type="text" class="form-control" id="mui_thom" name="mui_thom"
+                                       value="{{ old('mui_thom') }}">
                             </div>
+
                             <div class="form-group d-none">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() }}</option>
-                                    <option
-                                            value="{{ \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() }}</option>
+                                    <option value="{{ \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() }}"
+                                        {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() ? 'selected' : '' }}>
+                                        {{ \App\Enums\TrangThaiNguyenLieuSanXuat::ACTIVE() }}
+                                    </option>
+                                    <option value="{{ \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() }}"
+                                        {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() ? 'selected' : '' }}>
+                                        {{ \App\Enums\TrangThaiNguyenLieuSanXuat::INACTIVE() }}
+                                    </option>
                                 </select>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label for="nhan_vien_san_xuat">Nhân viên SX</label>
                                 <select id="nhan_vien_san_xuat" name="nhan_vien_san_xuat" class="form-control">
                                     @foreach($nsus as $nsu)
-                                        <option value="{{ $nsu->id }}" {{ old('nhan_vien_san_xuat') == $nsu->id ? 'selected' : '' }}>
+                                        <option value="{{ $nsu->id }}"
+                                            {{ old('nhan_vien_san_xuat') == $nsu->id ? 'selected' : '' }}>
                                             {{ $nsu->full_name }}/{{ $nsu->email }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group ">
+
+                        <div class="form-group">
                             <label for="bao_quan">Bảo quản</label>
-                            <input type="text" class="form-control" id="bao_quan" name="bao_quan">
+                            <input type="text" class="form-control" id="bao_quan" name="bao_quan"
+                                   value="{{ old('bao_quan') }}">
                         </div>
+
                         <div class="form-group">
                             <label for="chi_tiet_khac">Chi tiết khác</label>
-                            <textarea name="chi_tiet_khac" id="chi_tiet_khac" class="form-control" rows="5"></textarea>
+                            <textarea name="chi_tiet_khac" id="chi_tiet_khac" class="form-control"
+                                      rows="5">{{ old('chi_tiet_khac') }}</textarea>
                         </div>
-                        <input type="hidden" name="gia_lo_san_xuat" id="gia_lo_san_xuat">
+
+                        <input type="hidden" name="gia_lo_san_xuat" id="gia_lo_san_xuat"
+                               value="{{ old('gia_lo_san_xuat') }}">
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 

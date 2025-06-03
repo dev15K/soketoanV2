@@ -106,7 +106,7 @@ class AdminNguyenLieuThoController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu thô thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -265,7 +265,7 @@ class AdminNguyenLieuThoController extends Controller
 
             return redirect()->route('admin.nguyen.lieu.tho.index')->with('success', 'Chỉnh sửa nguyên liệu thô thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -284,7 +284,7 @@ class AdminNguyenLieuThoController extends Controller
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu thô thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

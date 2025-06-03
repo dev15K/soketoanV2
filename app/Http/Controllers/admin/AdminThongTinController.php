@@ -47,7 +47,7 @@ class AdminThongTinController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới dữ liệu thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -77,7 +77,7 @@ class AdminThongTinController extends Controller
 
             return redirect()->route('admin.thong.tin.index')->with('success', 'Chỉnh sửa dữ liệu thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -92,7 +92,7 @@ class AdminThongTinController extends Controller
             $item->delete();
             return redirect()->back()->with('success', 'Đã xoá dữ liệu thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

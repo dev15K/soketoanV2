@@ -36,7 +36,7 @@ class AdminLoaiQuyController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới loại quỹ thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -55,7 +55,7 @@ class AdminLoaiQuyController extends Controller
 
             return redirect()->route('admin.loai.quy.index')->with('success', 'Chỉnh sửa loại quỹ thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -74,7 +74,7 @@ class AdminLoaiQuyController extends Controller
             $item->delete();
             return redirect()->back()->with('success', 'Đã xoá loại quỹ thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

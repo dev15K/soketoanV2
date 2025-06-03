@@ -50,7 +50,7 @@
                                         <option value="">Tất cả</option>
                                         @foreach($loai_quies as $loai_quy)
                                             <option {{ $loai_quy->id == $loai_quy_search ? 'selected' : '' }}
-                                                value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                                    value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -89,40 +89,44 @@
                             <div class="col-md-6 form-group">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                       value="{{ old('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="ma_phieu">Mã phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
                                        name="ma_phieu"
-                                       value="{{ $ma_phieu }}" required>
+                                       value="{{ old('ma_phieu', $ma_phieu) }}" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label for="loai">Loại phiếu</label>
-                                <select class="form-control" name="loai" id="loai">
-                                    <option value="0">Phiếu Chi</option>
-                                    <option value="1">Phiếu Thu</option>
+                                <select class="form-control" name="loai" id="loai" required>
+                                    <option value="0" {{ old('loai') === '0' ? 'selected' : '' }}>Phiếu Chi</option>
+                                    <option value="1" {{ old('loai') === '1' ? 'selected' : '' }}>Phiếu Thu</option>
                                 </select>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label for="loai_quy_id">Tên quỹ</label>
-                                <select class="form-control" name="loai_quy_id" id="loai_quy_id">
+                                <select class="form-control" name="loai_quy_id" id="loai_quy_id" required>
                                     @foreach($loai_quies as $loai_quy)
-                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                        <option
+                                            value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                            {{ $loai_quy->ten_loai_quy }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label for="so_tien">Số tiền</label>
                                 <input type="text" class="form-control onlyNumber" id="so_tien" name="so_tien"
-                                       value="" required>
+                                       value="{{ old('so_tien') }}" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="noi_dung">Nội dung</label>
-                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5" required></textarea>
+                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5"
+                                      required>{{ old('noi_dung') }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>

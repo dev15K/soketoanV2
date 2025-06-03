@@ -84,26 +84,30 @@
                             <div class="form-group col-md-6">
                                 <label for="code">Mã Phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
-                                       value="{{ $code }}" required>
+                                       value="{{ old('code', $code) }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="so_lo_san_xuat">Số LÔ SX</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="so_lo_san_xuat"
-                                       name="so_lo_san_xuat" value="{{ $so_lo_san_xuat }}" required>
+                                       name="so_lo_san_xuat" value="{{ old('so_lo_san_xuat', $so_lo_san_xuat) }}"
+                                       required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="tong_khoi_luong">KL</label>
                                 <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
-                                       id="tong_khoi_luong" name="tong_khoi_luong" value="0" readonly>
+                                       id="tong_khoi_luong" name="tong_khoi_luong"
+                                       value="{{ old('tong_khoi_luong', 0) }}" readonly>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="nhan_su_xu_li">Nhân sự xử lý</label>
                                 <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
                                     @foreach($nsus as $nsu)
-                                        <option value="{{ $nsu->id }}">{{ $nsu->full_name }}
-                                            /{{ $nsu->email }}</option>
+                                        <option value="{{ $nsu->id }}"
+                                            {{ old('nhan_su_xu_li') == $nsu->id ? 'selected' : '' }}>
+                                            {{ $nsu->full_name }}/{{ $nsu->email }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -112,15 +116,19 @@
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ Carbon::now()->format('Y-m-d') }}" required>
+                                       value="{{ old('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option
-                                        value="{{ TrangThaiPhieuSanXuat::ACTIVE() }}">{{ TrangThaiPhieuSanXuat::ACTIVE() }}</option>
-                                    <option
-                                        value="{{ TrangThaiPhieuSanXuat::INACTIVE() }}">{{ TrangThaiPhieuSanXuat::INACTIVE() }}</option>
+                                    <option value="{{ \TrangThaiPhieuSanXuat::ACTIVE() }}"
+                                        {{ old('trang_thai') == \TrangThaiPhieuSanXuat::ACTIVE() ? 'selected' : '' }}>
+                                        {{ \TrangThaiPhieuSanXuat::ACTIVE() }}
+                                    </option>
+                                    <option value="{{ \TrangThaiPhieuSanXuat::INACTIVE() }}"
+                                        {{ old('trang_thai') == \TrangThaiPhieuSanXuat::INACTIVE() ? 'selected' : '' }}>
+                                        {{ \TrangThaiPhieuSanXuat::INACTIVE() }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -129,7 +137,8 @@
                             <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
                             <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
                                    name="thoi_gian_hoan_thanh_san_xuat"
-                                   value="{{ Carbon::now()->format('Y-m-d') }}" required>
+                                   value="{{ old('thoi_gian_hoan_thanh_san_xuat', \Carbon\Carbon::now()->format('Y-m-d')) }}"
+                                   required>
                         </div>
 
                         <div class="mt-2">

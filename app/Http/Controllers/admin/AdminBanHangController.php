@@ -207,7 +207,7 @@ class AdminBanHangController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới hóa đơn bán hàng thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -350,7 +350,7 @@ class AdminBanHangController extends Controller
 
             return redirect()->route('admin.ban.hang.index')->with('success', 'Chỉnh sửa hóa đơn bán hàng thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -371,7 +371,7 @@ class AdminBanHangController extends Controller
 
             return redirect()->back()->with('success', 'Đã xoá hóa đơn bán hàng thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

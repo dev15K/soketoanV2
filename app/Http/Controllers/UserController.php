@@ -67,7 +67,7 @@ class UserController extends Controller
 
             return redirect()->route('admin.profile.index')->with('success', 'Thay đổi thông tin cá nhân thành công!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -98,7 +98,7 @@ class UserController extends Controller
             $user->save();
             return redirect()->route('admin.profile.index')->with('success', 'Đổi mật khẩu thành công!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

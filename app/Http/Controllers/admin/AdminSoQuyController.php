@@ -145,7 +145,7 @@ class AdminSoQuyController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới sổ quỹ thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -214,7 +214,7 @@ class AdminSoQuyController extends Controller
 
             return redirect()->route('admin.so.quy.index')->with('success', 'Chỉnh sửa sổ quỹ thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -230,7 +230,7 @@ class AdminSoQuyController extends Controller
 
             return redirect()->back()->with('success', 'Đã xoá sổ quỹ thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

@@ -46,7 +46,7 @@ class AdminKhachHangController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới nhà cung cấp thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -73,7 +73,7 @@ class AdminKhachHangController extends Controller
 
             return redirect()->route('admin.khach.hang.index')->with('success', 'Chỉnh sửa nhà cung cấp thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -90,7 +90,7 @@ class AdminKhachHangController extends Controller
 
             return redirect()->back()->with('success', 'Đã xoá nhà cung cấp thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

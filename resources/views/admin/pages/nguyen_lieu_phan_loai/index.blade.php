@@ -81,8 +81,11 @@
                                 <label for="nguyen_lieu_tho_id">Mã đơn hàng</label>
                                 <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
                                     @foreach($nlthos as $nltho)
-                                        <option value="{{ $nltho->id }}">{{ $nltho->code }}
-                                            : {{ $nltho->ten_nguyen_lieu }} : {{ parseNumber($nltho->khoi_luong - $nltho->khoi_luong_da_phan_loai) }} kg</option>
+                                        <option
+                                            value="{{ $nltho->id }}" {{ old('nguyen_lieu_tho_id') == $nltho->id ? 'selected' : '' }}>
+                                            {{ $nltho->code }} : {{ $nltho->ten_nguyen_lieu }} :
+                                            {{ parseNumber($nltho->khoi_luong - $nltho->khoi_luong_da_phan_loai) }} kg
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -90,45 +93,57 @@
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                       value="{{ old('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="nu_cao_cap">NL nụ cao cấp (NCC)</label>
-                                <input type="text" class="onlyNumber form-control" id="nu_cao_cap" name="nu_cao_cap">
+                                <input type="text" class="onlyNumber form-control" id="nu_cao_cap" name="nu_cao_cap"
+                                       value="{{ old('nu_cao_cap') }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="nu_vip">NL nụ VIP (NVIP)</label>
-                                <input type="text" class="onlyNumber form-control" id="nu_vip" name="nu_vip">
+                                <input type="text" class="onlyNumber form-control" id="nu_vip" name="nu_vip"
+                                       value="{{ old('nu_vip') }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="nhang">NL nhang (NLN)</label>
-                                <input type="text" class="onlyNumber form-control" id="nhang" name="nhang">
+                                <input type="text" class="onlyNumber form-control" id="nhang" name="nhang"
+                                       value="{{ old('nhang') }}">
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="vong">NL vòng (NLV)</label>
-                                <input type="text" class="onlyNumber form-control" id="vong" name="vong">
+                                <input type="text" class="onlyNumber form-control" id="vong" name="vong"
+                                       value="{{ old('vong') }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="tam_tre">Tăm tre</label>
-                                <input type="text" class="onlyNumber form-control" id="tam_tre" name="tam_tre">
+                                <input type="text" class="onlyNumber form-control" id="tam_tre" name="tam_tre"
+                                       value="{{ old('tam_tre') }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="keo">Keo</label>
-                                <input type="text" class="onlyNumber form-control" id="keo" name="keo">
+                                <input type="text" class="onlyNumber form-control" id="keo" name="keo"
+                                       value="{{ old('keo') }}">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="nau_dau">Nấu dầu</label>
-                                <input type="text" class="onlyNumber form-control" id="nau_dau" name="nau_dau">
+                                <input type="text" class="onlyNumber form-control" id="nau_dau" name="nau_dau"
+                                       value="{{ old('nau_dau') }}">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="ghi_chu">Ghi chú</label>
-                            <textarea name="ghi_chu" id="ghi_chu" class="form-control" rows="5"></textarea>
+                            <textarea name="ghi_chu" id="ghi_chu" class="form-control"
+                                      rows="5">{{ old('ghi_chu') }}</textarea>
                         </div>
+
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 
@@ -144,7 +159,9 @@
                 @endphp
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('phan_loai')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('phan_loai')">Xoá tất
+                            cả
+                        </button>
                     </div>
                     <table class="table table-hover small" style="min-width: 2500px">
                         <colgroup>
@@ -197,7 +214,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ $data->nguyenLieuTho->code }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
@@ -213,7 +231,8 @@
                                 <td>{{ parseNumber($data->khoi_luong_ban_dau, 0) }} kg</td>
                                 <td>{{ parseNumber($data->khoi_luong_hao_hut, 0) }} kg</td>
                                 <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_phan_loai, 0) }} kg</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_phan_loai, 0) }}kg
+                                </td>
                                 <td>{{ parseNumber($data->gia_truoc_phan_loai, 0) }} VND</td>
                                 <td>{{ parseNumber($data->gia_sau_phan_loai, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>

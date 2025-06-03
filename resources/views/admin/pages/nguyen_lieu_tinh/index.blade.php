@@ -84,27 +84,32 @@
                             <div class="form-group col-md-6">
                                 <label for="ma_phieu">Mã phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
-                                       name="ma_phieu" value="{{ $ma_phieu }}" required>
+                                       name="ma_phieu" value="{{ old('ma_phieu', $ma_phieu) }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="code">Mã lô hàng</label>
-                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
-                                       value="{{ $code }}" required>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code"
+                                       name="code" value="{{ old('code', $code) }}" required>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                       value="{{ old('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option
-                                        value="{{ TrangThaiNguyenLieuTho::ACTIVE() }}">{{ TrangThaiNguyenLieuTho::ACTIVE() }}</option>
-                                    <option
-                                        value="{{ TrangThaiNguyenLieuTho::INACTIVE() }}">{{ TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                    <option value="{{ \TrangThaiNguyenLieuTho::ACTIVE() }}"
+                                        {{ old('trang_thai') == \TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}>
+                                        {{ \TrangThaiNguyenLieuTho::ACTIVE() }}
+                                    </option>
+                                    <option value="{{ \TrangThaiNguyenLieuTho::INACTIVE() }}"
+                                        {{ old('trang_thai') == \TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}>
+                                        {{ \TrangThaiNguyenLieuTho::INACTIVE() }}
+                                    </option>
                                 </select>
                             </div>
                         </div>

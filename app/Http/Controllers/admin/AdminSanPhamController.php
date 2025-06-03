@@ -45,7 +45,7 @@ class AdminSanPhamController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới dữ liệu thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -93,7 +93,7 @@ class AdminSanPhamController extends Controller
 
             return redirect()->route('admin.san.pham.index')->with('success', 'Chỉnh sửa dữ liệu thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -108,7 +108,7 @@ class AdminSanPhamController extends Controller
             $item->delete();
             return redirect()->back()->with('success', 'Đã xoá dữ liệu thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 

@@ -17,16 +17,19 @@
             @csrf
             <div class="form-group">
                 <label for="full_name">Họ và tên</label>
-                <input type="text" class="form-control" id="full_name" name="full_name" required>
+                <input type="text" class="form-control" id="full_name" name="full_name"
+                       value="{{ old('full_name') }}" required>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control" id="email" name="email"
+                           value="{{ old('email') }}" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="phone">Số điện thoại</label>
-                    <input type="text" class="form-control" id="phone" name="phone" required>
+                    <input type="text" class="form-control" id="phone" name="phone"
+                           value="{{ old('phone') }}" required>
                 </div>
             </div>
             <div class="row">
@@ -41,11 +44,13 @@
             </div>
             <div class="form-group">
                 <label for="address">Địa chỉ</label>
-                <input type="text" class="form-control" id="address" name="address">
+                <input type="text" class="form-control" id="address" name="address"
+                       value="{{ old('address') }}">
             </div>
             <div class="form-group">
                 <label for="about">Giới thiệu</label>
-                <input type="text" class="form-control" id="about" name="about">
+                <input type="text" class="form-control" id="about" name="about"
+                       value="{{ old('about') }}">
             </div>
             <div class="row">
                 <div class="form-group col-md-4">
@@ -54,21 +59,28 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="room">Phòng ban</label>
-                    <input type="text" class="form-control" id="room" name="room" required>
+                    <input type="text" class="form-control" id="room" name="room"
+                           value="{{ old('room') }}" required>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="status">Trạng thái</label>
                     <select id="status" name="status" class="form-control">
-                        <option
-                            value="{{ \App\Enums\UserStatus::ACTIVE() }}">{{ \App\Enums\UserStatus::ACTIVE() }}</option>
-                        <option
-                            value="{{ \App\Enums\UserStatus::INACTIVE() }}">{{ \App\Enums\UserStatus::INACTIVE() }}</option>
-                        <option
-                            value="{{ \App\Enums\UserStatus::BLOCKED() }}">{{ \App\Enums\UserStatus::BLOCKED() }}</option>
+                        <option value="{{ \App\Enums\UserStatus::ACTIVE() }}"
+                            {{ old('status') == \App\Enums\UserStatus::ACTIVE() ? 'selected' : '' }}>
+                            {{ \App\Enums\UserStatus::ACTIVE() }}
+                        </option>
+                        <option value="{{ \App\Enums\UserStatus::INACTIVE() }}"
+                            {{ old('status') == \App\Enums\UserStatus::INACTIVE() ? 'selected' : '' }}>
+                            {{ \App\Enums\UserStatus::INACTIVE() }}
+                        </option>
+                        <option value="{{ \App\Enums\UserStatus::BLOCKED() }}"
+                            {{ old('status') == \App\Enums\UserStatus::BLOCKED() ? 'selected' : '' }}>
+                            {{ \App\Enums\UserStatus::BLOCKED() }}
+                        </option>
                     </select>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
+            <button type="submit" class="btn btn-primary mt-3">Tạo người dùng</button>
         </form>
     </section>
 @endsection

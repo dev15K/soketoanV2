@@ -56,32 +56,44 @@
                         @csrf
                         <div class="form-group">
                             <label for="ten">Họ và tên</label>
-                            <input type="text" class="form-control" id="ten" name="ten" required>
+                            <input type="text" class="form-control" id="ten" name="ten" value="{{ old('ten') }}"
+                                   required>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="tinh_thanh">Tỉnh thành</label>
-                                <input type="text" class="form-control" id="tinh_thanh" name="tinh_thanh">
+                                <input type="text" class="form-control" id="tinh_thanh" name="tinh_thanh"
+                                       value="{{ old('tinh_thanh') }}">
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="so_dien_thoai">Số điện thoại</label>
-                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai">
+                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
+                                       value="{{ old('so_dien_thoai') }}">
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        value="{{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}">{{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}" {{ old('trang_thai') == \App\Enums\TrangThaiKhachHang::ACTIVE() ? 'selected' : '' }}>
+                                        {{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}
+                                    </option>
                                     <option
-                                        value="{{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}">{{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}</option>
+                                        value="{{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}" {{ old('trang_thai') == \App\Enums\TrangThaiKhachHang::INACTIVE() ? 'selected' : '' }}>
+                                        {{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="dia_chi">Địa chỉ chi tiết</label>
-                            <input type="text" class="form-control" id="dia_chi"
-                                   name="dia_chi">
+                            <input type="text" class="form-control" id="dia_chi" name="dia_chi"
+                                   value="{{ old('dia_chi') }}">
                         </div>
+
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 
@@ -95,7 +107,9 @@
 
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('khach_hang')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('khach_hang')">Xoá
+                            tất cả
+                        </button>
                     </div>
                     <table class="table table-hover">
                         <colgroup>
@@ -123,7 +137,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ $data->ten }}</td>
                                 <td>{{ $data->so_dien_thoai }}</td>

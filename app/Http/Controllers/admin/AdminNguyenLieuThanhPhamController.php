@@ -78,7 +78,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu thành phẩm thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -164,7 +164,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu thành phẩm thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -184,7 +184,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
 
             return redirect()->route('admin.nguyen.lieu.thanh.pham.index')->with('success', 'Chỉnh sửa nguyên liệu thành phẩm thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

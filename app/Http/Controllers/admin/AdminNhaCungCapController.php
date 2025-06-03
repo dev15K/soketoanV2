@@ -47,7 +47,7 @@ class AdminNhaCungCapController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới nhà cung cấp thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -74,7 +74,7 @@ class AdminNhaCungCapController extends Controller
 
             return redirect()->route('admin.nha.cung.cap.index')->with('success', 'Chỉnh sửa nhà cung cấp thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -91,7 +91,7 @@ class AdminNhaCungCapController extends Controller
 
             return redirect()->back()->with('success', 'Đã xoá nhà cung cấp thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

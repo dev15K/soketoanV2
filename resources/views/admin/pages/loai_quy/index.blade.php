@@ -35,7 +35,8 @@
                         @csrf
                         <div class="form-group">
                             <label for="ten_loai_quy">Tên quỹ</label>
-                            <input type="text" id="ten_loai_quy" name="ten_loai_quy" class="form-control" required>
+                            <input type="text" id="ten_loai_quy" name="ten_loai_quy" class="form-control"
+                                   value="{{ old('ten_loai_quy') }}" required>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>

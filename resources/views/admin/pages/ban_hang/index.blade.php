@@ -56,30 +56,33 @@
                         @csrf
                         <div class="form-group">
                             <label for="khach_hang_id">Khách hàng</label>
-                            <select id="khach_hang_id" name="khach_hang_id" class="form-control"
-                                    onchange="changeKhachHang()">
-                                <option value="0">Khách lẻ</option>
+                            <select id="khach_hang_id" name="khach_hang_id" class="form-control" onchange="changeKhachHang()">
+                                <option value="0" {{ old('khach_hang_id') == 0 ? 'selected' : '' }}>Khách lẻ</option>
                                 @foreach($khachhangs as $khachhang)
-                                    <option value="{{ $khachhang->id }}">{{ $khachhang->ten }}
-                                        : {{ $khachhang->so_dien_thoai }}</option>
+                                    <option value="{{ $khachhang->id }}" {{ old('khach_hang_id') == $khachhang->id ? 'selected' : '' }}>
+                                        {{ $khachhang->ten }} : {{ $khachhang->so_dien_thoai }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="row" id="formKhachLe">
                             <div class="form-group col-md-12">
                                 <label for="ten_khach_hang">Tên khách hàng</label>
                                 <input type="text" class="form-control" id="ten_khach_hang" name="ten_khach_hang"
-                                       required>
+                                       value="{{ old('ten_khach_hang') }}" required>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label for="so_dien_thoai">Số điện thoại</label>
                                 <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                       required>
+                                       value="{{ old('so_dien_thoai') }}" required>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label for="dia_chi">Địa chỉ chi tiết</label>
-                                <input type="text" class="form-control" id="dia_chi"
-                                       name="dia_chi" required>
+                                <input type="text" class="form-control" id="dia_chi" name="dia_chi"
+                                       value="{{ old('dia_chi') }}" required>
                             </div>
                         </div>
 
@@ -87,13 +90,16 @@
                             <div class="form-group col-md-6">
                                 <label for="da_thanht_toan">Khách hàng đã thanh toán</label>
                                 <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
-                                       name="da_thanht_toan" required>
+                                       name="da_thanht_toan" value="{{ old('da_thanht_toan') }}" required>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label for="loai_quy_id">Loại quỹ</label>
                                 <select class="form-control" name="loai_quy_id" id="loai_quy_id">
                                     @foreach($loai_quies as $loai_quy)
-                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                        <option value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                            {{ $loai_quy->ten_loai_quy }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>

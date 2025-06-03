@@ -79,7 +79,7 @@ class AdminNguyenLieuSanXuatController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu sản xuất thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -191,7 +191,7 @@ class AdminNguyenLieuSanXuatController extends Controller
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu sản xuất thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -211,7 +211,7 @@ class AdminNguyenLieuSanXuatController extends Controller
 
             return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa nguyên liệu sản xuất thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

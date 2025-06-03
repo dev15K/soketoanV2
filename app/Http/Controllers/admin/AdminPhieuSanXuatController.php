@@ -125,7 +125,7 @@ class AdminPhieuSanXuatController extends Controller
 
             return redirect()->back()->with('success', 'Thêm mới phiếu sản xuất thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -230,7 +230,7 @@ class AdminPhieuSanXuatController extends Controller
 
             return redirect()->back()->with('success', 'Đã xoá phiếu sản xuất thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -247,7 +247,7 @@ class AdminPhieuSanXuatController extends Controller
 
             return redirect()->route('admin.phieu.san.xuat.index')->with('success', 'Chỉnh sửa phiếu sản xuất thành công');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

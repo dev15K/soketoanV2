@@ -99,7 +99,7 @@
                             <div class="form-group col-md-4">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                       value="{{ old('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
                             </div>
 
                             <div class="form-group col-md-4">
@@ -107,7 +107,8 @@
                                 <select name="nguyen_lieu_san_xuat_id" id="nguyen_lieu_san_xuat_id"
                                         class="form-control">
                                     @foreach($nlsanxuats as $nlsanxuat)
-                                        <option value="{{ $nlsanxuat->id }}">
+                                        <option value="{{ $nlsanxuat->id }}"
+                                            {{ old('nguyen_lieu_san_xuat_id') == $nlsanxuat->id ? 'selected' : '' }}>
                                             {{ $nlsanxuat->PhieuSanXuat->so_lo_san_xuat }}
                                             : {{ $nlsanxuat->ten_nguyen_lieu }}
                                             : {{ parseNumber($nlsanxuat->khoi_luong - $nlsanxuat->khoi_luong_da_dung) }}
@@ -116,76 +117,96 @@
                                     @endforeach
                                 </select>
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="san_pham_id">Mã sản phẩm</label>
                                 <select name="san_pham_id" id="san_pham_id" class="form-control"
                                         onchange="changeSanPham()">
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}">
-                                            {{ $product->ma_san_pham}} : {{ $product->ten_san_pham }}
+                                        <option value="{{ $product->id }}"
+                                            {{ old('san_pham_id') == $product->id ? 'selected' : '' }}>
+                                            {{ $product->ma_san_pham }} : {{ $product->ten_san_pham }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="ten_san_pham">Tên sản phẩm</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ten_san_pham"
-                                       name="ten_san_pham" readonly required>
+                                       name="ten_san_pham" value="{{ old('ten_san_pham') }}" readonly required>
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_rieng">KL rieng gr</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="khoi_luong_rieng"
-                                       name="khoi_luong_rieng" readonly required>
+                                       name="khoi_luong_rieng" value="{{ old('khoi_luong_rieng') }}" readonly required>
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="don_vi_tinh">Đơn vị tính</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="don_vi_tinh"
-                                       name="don_vi_tinh" readonly required>
+                                       name="don_vi_tinh" value="{{ old('don_vi_tinh') }}" readonly required>
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="price">Giá xuất kho thương mại</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="price"
-                                       name="price" readonly required>
+                                       name="price" value="{{ old('price') }}" readonly required>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="so_luong">SL (cái/hộp)</label>
-                                <input type="text" class="form-control" id="so_luong" name="so_luong" required>
+                                <input type="text" class="form-control" id="so_luong" name="so_luong"
+                                       value="{{ old('so_luong') }}" required>
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_da_dung">KL đã dùng</label>
-                                <input type="text" class="form-control onlyNumber" id="don_vi_tinh"
-                                       name="khoi_luong_da_dung" required>
+                                <input type="text" class="form-control onlyNumber" id="khoi_luong_da_dung"
+                                       name="khoi_luong_da_dung" value="{{ old('khoi_luong_da_dung') }}" required>
                             </div>
+
                             <div class="form-group col-md-4">
                                 <label for="total_price">Tổng tiền</label>
                                 <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
-                                       id="total_price" name="total_price" readonly required>
+                                       id="total_price"
+                                       name="total_price" value="{{ old('total_price') }}" readonly required>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}</option>
-                                    <option
-                                        value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}">{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}</option>
+                                    <option value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}"
+                                        {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() ? 'selected' : '' }}>
+                                        {{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}
+                                    </option>
+                                    <option value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}"
+                                        {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() ? 'selected' : '' }}>
+                                        {{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}
+                                    </option>
                                 </select>
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label for="ngay_san_xuat">Hạn sử dụng</label>
                                 <input type="date" class="form-control" id="ngay_san_xuat" name="ngay_san_xuat"
-                                       required>
+                                       value="{{ old('ngay_san_xuat') }}" required>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="ghi_chu">Ghi chú</label>
-                            <textarea name="ghi_chu" id="ghi_chu" class="form-control" rows="5"></textarea>
+                            <textarea name="ghi_chu" id="ghi_chu" class="form-control"
+                                      rows="5">{{ old('ghi_chu') }}</textarea>
                         </div>
+
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 
@@ -251,7 +272,9 @@
 
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('dong_goi')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('dong_goi')">Xoá tất
+                            cả
+                        </button>
                     </div>
                     <table class="table table-hover vw-100">
                         <colgroup>
@@ -295,7 +318,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->nguyenLieuSanXuat->PhieuSanXuat->so_lo_san_xuat }}</td>
