@@ -1,4 +1,4 @@
-@php use App\Enums\TrangThaiNguyenLieuTho;use Carbon\Carbon; @endphp
+@php use App\Enums\TrangThaiNguyenLieuTinh;use Carbon\Carbon; @endphp
 @php @endphp
 @extends('admin.layouts.master')
 @section('title')
@@ -51,11 +51,11 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        {{ $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}
-                                        value="{{ TrangThaiNguyenLieuTho::ACTIVE() }}">{{ TrangThaiNguyenLieuTho::ACTIVE() }}</option>
+                                        {{ $nguyen_lieu_tinh->trang_thai == \App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() ? 'selected' : '' }}
+                                        value="{{ TrangThaiNguyenLieuTinh::ACTIVE() }}">{{ TrangThaiNguyenLieuTinh::ACTIVE() }}</option>
                                     <option
-                                        {{ $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}
-                                        value="{{ TrangThaiNguyenLieuTho::INACTIVE() }}">{{ TrangThaiNguyenLieuTho::INACTIVE() }}</option>
+                                        {{ $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::INACTIVE() ? 'selected' : '' }}
+                                        value="{{ TrangThaiNguyenLieuTinh::INACTIVE() }}">{{ TrangThaiNguyenLieuTinh::INACTIVE() }}</option>
                                 </select>
                             </div>
                         </div>

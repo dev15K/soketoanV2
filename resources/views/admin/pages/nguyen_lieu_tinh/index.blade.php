@@ -103,12 +103,12 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option value="{{ \App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() }}"
-                                        {{ old('trang_thai') ==App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() ? 'selected' : '' }}>
-                                        {{App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() }}
+                                        {{ old('trang_thai') ==\App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() ? 'selected' : '' }}>
+                                        {{\App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() }}
                                     </option>
-                                    <option value="{{App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() }}"
-                                        {{ old('trang_thai') ==App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() ? 'selected' : '' }}>
-                                        {{ App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() }}
+                                    <option value="{{\App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() }}"
+                                        {{ old('trang_thai') ==\App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() ? 'selected' : '' }}>
+                                        {{ \App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() }}
                                     </option>
                                 </select>
                             </div>
@@ -256,7 +256,8 @@
 
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tinh')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tinh')">Xoá tất cả
+                        </button>
                     </div>
                     <table class="table table-hover vw-100">
                         <colgroup>
@@ -290,7 +291,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->ma_phieu }}</td>
