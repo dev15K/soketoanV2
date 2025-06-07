@@ -180,7 +180,7 @@ class AdminNguyenLieuThoController extends Controller
             $code = $this->generateSoQuyCode();
             $soquy = new SoQuy();
             $soquy->loai = 0;
-            $soquy->so_tien = $nguyenLieuTho->chi_phi_mua;
+            $soquy->so_tien = $nguyenLieuTho->so_tien_thanh_toan;
             $soquy->gia_tri_id = $nguyenLieuTho->id;
             $soquy->ngay = Carbon::now();
             $soquy->noi_dung = 'Phiếu chi mua hàng cho nguyên liệu thô: #' . $nguyenLieuTho->id . ' - MDH: ' . $nguyenLieuTho->code;
@@ -202,7 +202,7 @@ class AdminNguyenLieuThoController extends Controller
 
             if ($soquy) {
                 $soquy->loai = 0;
-                $soquy->so_tien = $nguyenLieuTho->chi_phi_mua;
+                $soquy->so_tien = $nguyenLieuTho->so_tien_thanh_toan;
                 $soquy->ngay = Carbon::now();
                 $soquy->gia_tri_id = $nguyenLieuTho->id;
                 $soquy->noi_dung = 'Phiếu chi mua hàng cho nguyên liệu thô: #' . $nguyenLieuTho->id . ' - MDH: ' . $nguyenLieuTho->code;
