@@ -102,13 +102,13 @@
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option value="{{ \TrangThaiNguyenLieuTho::ACTIVE() }}"
-                                        {{ old('trang_thai') == \TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}>
-                                        {{ \TrangThaiNguyenLieuTho::ACTIVE() }}
+                                    <option value="{{ \App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() }}"
+                                        {{ old('trang_thai') ==App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() ? 'selected' : '' }}>
+                                        {{App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() }}
                                     </option>
-                                    <option value="{{ \TrangThaiNguyenLieuTho::INACTIVE() }}"
-                                        {{ old('trang_thai') == \TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}>
-                                        {{ \TrangThaiNguyenLieuTho::INACTIVE() }}
+                                    <option value="{{App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() }}"
+                                        {{ old('trang_thai') ==App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() ? 'selected' : '' }}>
+                                        {{ App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() }}
                                     </option>
                                 </select>
                             </div>
