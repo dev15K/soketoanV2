@@ -65,28 +65,41 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label for="vong">NL vòng (NLV)</label>
                                 <input type="text" class="form-control onlyNumber" id="vong" name="vong"
                                        value="{{ $nguyen_lieu_phan_loai->vong }}">
                             </div>
-                            <div class="form-group col-md-3">
-                                <label for="tam_tre">Tăm tre</label>
-                                <input type="text" class="form-control onlyNumber" id="tam_tre" name="tam_tre"
-                                       value="{{ $nguyen_lieu_phan_loai->tam_tre }}">
-                            </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label for="keo">Keo</label>
                                 <input type="text" class="form-control onlyNumber" id="keo" name="keo"
                                        value="{{ $nguyen_lieu_phan_loai->keo }}">
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label for="nau_dau">Nấu dầu</label>
                                 <input type="text" class="form-control onlyNumber" id="nau_dau" name="nau_dau"
                                        value="{{ $nguyen_lieu_phan_loai->nau_dau }}">
                             </div>
-
                         </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="tam_dai">NL Tăm dài</label>
+                                <input type="text" class="onlyNumber form-control" id="tam_dai" name="tam_dai"
+                                       value="{{ old('tam_dai') ?? $nguyen_lieu_phan_loai->tam_dai }}">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="tam_ngan">NL Tăm ngắn</label>
+                                <input type="text" class="onlyNumber form-control" id="tam_ngan" name="tam_ngan"
+                                       value="{{ old('tam_ngan') ?? $nguyen_lieu_phan_loai->tam_ngan }}">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="nuoc_cat">Nước cất</label>
+                                <input type="text" class="onlyNumber form-control" id="nuoc_cat" name="nuoc_cat"
+                                       value="{{ old('nuoc_cat') ?? $nguyen_lieu_phan_loai->nuoc_cat }}">
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="ghi_chu">Ghi chú</label>
                             <textarea name="ghi_chu" id="ghi_chu" class="form-control"

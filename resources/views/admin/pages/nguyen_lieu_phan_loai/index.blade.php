@@ -116,25 +116,38 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label for="vong">NL vòng (NLV)</label>
                                 <input type="text" class="onlyNumber form-control" id="vong" name="vong"
                                        value="{{ old('vong') }}">
                             </div>
-                            <div class="form-group col-md-3">
-                                <label for="tam_tre">Tăm tre</label>
-                                <input type="text" class="onlyNumber form-control" id="tam_tre" name="tam_tre"
-                                       value="{{ old('tam_tre') }}">
-                            </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label for="keo">Keo</label>
                                 <input type="text" class="onlyNumber form-control" id="keo" name="keo"
                                        value="{{ old('keo') }}">
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label for="nau_dau">Nấu dầu</label>
                                 <input type="text" class="onlyNumber form-control" id="nau_dau" name="nau_dau"
                                        value="{{ old('nau_dau') }}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="tam_dai">NL Tăm dài</label>
+                                <input type="text" class="onlyNumber form-control" id="tam_dai" name="tam_dai"
+                                       value="{{ old('tam_dai') }}">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="tam_ngan">NL Tăm ngắn</label>
+                                <input type="text" class="onlyNumber form-control" id="tam_ngan" name="tam_ngan"
+                                       value="{{ old('tam_ngan') }}">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="nuoc_cat">Nước cất</label>
+                                <input type="text" class="onlyNumber form-control" id="nuoc_cat" name="nuoc_cat"
+                                       value="{{ old('nuoc_cat') }}">
                             </div>
                         </div>
 
@@ -176,6 +189,8 @@
                             <col width="180px">
                             <col width="180px">
                             <col width="180px">
+                            <col width="180px">
+                            <col width="180px">
                             <col width="250px">
                             <col width="200px">
                             <col width="200px">
@@ -197,7 +212,9 @@
                             <th scope="col">NL nụ VIP (NVIP)</th>
                             <th scope="col">NL nhang (NLN)</th>
                             <th scope="col">NL vòng (NLV)</th>
-                            <th scope="col">Tăm tre</th>
+                            <th scope="col">NL Tăm dài</th>
+                            <th scope="col">NL Tăm ngắn</th>
+                            <th scope="col">Nước cất</th>
                             <th scope="col">Keo</th>
                             <th scope="col">Nấu dầu</th>
                             <th scope="col">Chi phí mua</th>
@@ -239,7 +256,9 @@
                                 <td>{{ parseNumber($data->nu_vip, 0) }} kg</td>
                                 <td>{{ parseNumber($data->nhang, 0) }} kg</td>
                                 <td>{{ parseNumber($data->vong, 0) }} kg</td>
-                                <td>{{ parseNumber($data->tam_tre, 0) }} kg</td>
+                                <td>{{ parseNumber($data->tam_dai, 0) }} kg</td>
+                                <td>{{ parseNumber($data->tam_ngan, 0) }} kg</td>
+                                <td>{{ parseNumber($data->nuoc_cat, 0) }} kg</td>
                                 <td>{{ parseNumber($data->keo, 0) }} kg</td>
                                 <td>{{ parseNumber($data->nau_dau, 0) }} kg</td>
                                 <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
@@ -260,18 +279,20 @@
                             <th scope="col">Tổng:</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
+                            <th scope="col"></th>
                             <th scope="col">{{ parseNumber($datas->sum('nu_cao_cap'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('nu_vip'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('nhang'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('vong'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('tam_tre'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('tam_dai'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('tam_ngan'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('nuoc_cat'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('keo'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('nau_dau'), 0) }} kg</th>
                             <th scope="col"></th>
                             <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
-                            <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>

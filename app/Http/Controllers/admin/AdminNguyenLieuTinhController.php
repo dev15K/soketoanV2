@@ -194,7 +194,9 @@ class AdminNguyenLieuTinhController extends Controller
                     'Nguyên liệu nụ VIP (NVIP)' => 'nu_vip',
                     'Nguyên liệu nhang (NLN)' => 'nhang',
                     'Nguyên liệu vòng (NLV)' => 'vong',
-                    'Tăm tre' => 'tam_tre',
+                    'Tăm dài' => 'tam_dai',
+                    'Tăm ngắn' => 'tam_ngan',
+                    'Nước cất' => 'nuoc_cat',
                     'Keo' => 'keo',
                     'Nấu dầu' => 'nau_dau',
                 ];
