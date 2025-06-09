@@ -13,7 +13,7 @@ class AdminNhaCungCapController extends Controller
     {
         $datas = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
             ->orderByDesc('id')
-            ->paginate(20);
+            ->paginate(10);
 
         return view('admin.pages.nha_cung_cap.index', compact('datas'));
     }

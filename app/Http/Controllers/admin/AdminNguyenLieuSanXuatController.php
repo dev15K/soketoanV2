@@ -35,7 +35,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             $queries->where('phieu_san_xuat_id', $phieu_san_xuat_id);
         }
 
-        $datas = $queries->orderByDesc('id')->paginate(20);
+        $datas = $queries->orderByDesc('id')->paginate(10);
         $phieu_san_xuats = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
             ->orderByDesc('id')
             ->get();

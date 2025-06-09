@@ -12,7 +12,7 @@ class AdminLoaiQuyController extends Controller
     {
         $datas = LoaiQuy::where('deleted_at', null)
             ->orderByDesc('id')
-            ->paginate(20);
+            ->paginate(10);
         return view('admin.pages.loai_quy.index', compact('datas'));
     }
 

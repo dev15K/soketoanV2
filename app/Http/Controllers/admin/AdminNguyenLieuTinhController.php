@@ -28,7 +28,7 @@ class AdminNguyenLieuTinhController extends Controller
             $queries->where('code', 'like', '%' . $code_search . '%');
         }
 
-        $datas = $queries->orderByDesc('id')->paginate(20);;
+        $datas = $queries->orderByDesc('id')->paginate(10);;
 
         $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
             ->orderByDesc('id')

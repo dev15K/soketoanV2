@@ -34,7 +34,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
             $queries->where('san_pham_id', $san_pham_id_search);
         }
 
-        $datas = $queries->orderByDesc('id')->paginate(20);
+        $datas = $queries->orderByDesc('id')->paginate(10);
 
         $nlsanxuats = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
             ->orderByDesc('id')

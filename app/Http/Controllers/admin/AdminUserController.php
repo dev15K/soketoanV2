@@ -20,7 +20,7 @@ class AdminUserController extends Controller
             ->where('roles.name', '!=', RoleName::ADMIN())
             ->orderByDesc('users.id')
             ->select('users.*', 'roles.name as role_name')
-            ->paginate(20);
+            ->paginate(10);
         return view('admin.pages.users.list', compact('users'));
     }
 

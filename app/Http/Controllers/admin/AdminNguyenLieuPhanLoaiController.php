@@ -27,7 +27,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
             $queries->where('nguyen_lieu_tho_id', $nguyen_lieu_tho_id);
         }
 
-        $datas = $queries->orderByDesc('id')->paginate(20);
+        $datas = $queries->orderByDesc('id')->paginate(10);
 
         $nlthos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
             ->orderByDesc('id')

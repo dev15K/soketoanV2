@@ -28,7 +28,7 @@ class AdminBanHangController extends Controller
     {
         $datas = BanHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED())
             ->orderByDesc('id')
-            ->paginate(20);
+            ->paginate(10);
 
         $khachhangs = KhachHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED())
             ->orderByDesc('id')

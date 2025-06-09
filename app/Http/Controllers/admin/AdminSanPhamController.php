@@ -13,7 +13,7 @@ class AdminSanPhamController extends Controller
     {
         $datas = SanPham::where('trang_thai', '!=', TrangThaiSanPham::DELETED())
             ->orderByDesc('id')
-            ->paginate(20);
+            ->paginate(10);
 
         $code = $this->generateCode();
 
