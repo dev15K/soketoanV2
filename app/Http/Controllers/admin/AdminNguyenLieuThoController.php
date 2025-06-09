@@ -39,7 +39,7 @@ class AdminNguyenLieuThoController extends Controller
             $queries->where('nha_cung_cap_id', $nha_cung_cap_id);
         }
 
-        $datas = $queries->orderByDesc('id')->paginate(10);
+        $datas = $queries->orderBy('khoi_luong_da_phan_loai', 'asc')->orderByDesc('id')->paginate(10);
 
         $nccs = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
             ->orderByDesc('id')

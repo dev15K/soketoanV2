@@ -153,36 +153,36 @@
         </div>
 
         <div class="col-12">
+            <div class="d-flex mb-4 mt-3 justify-content-end">
+                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('phan_loai')">Xoá tất
+                    cả
+                </button>
+            </div>
             <div class="card recent-sales overflow-auto">
                 @php
                     $total_nu_cao_cap = $total_nu_vip = $total_nhang = $total_vong = $total_tam_tre = $total_keo = $total_nau_dau = $total_ghi_chu = 0;
                 @endphp
                 <div class="card-body">
-                    <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('phan_loai')">Xoá tất
-                            cả
-                        </button>
-                    </div>
                     <table class="table table-hover small" style="min-width: 2500px">
                         <colgroup>
                             <col width="50px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="120px">
-                            <col width="120px">
-                            <col width="120px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="250px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="250px">
                             <col width="100px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="120px">
+                            <col width="120px">
+                            <col width="120px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="180px">
+                            <col width="250px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="200px">
+                            <col width="250px">
                             <col width="100px">
                         </colgroup>
                         <thead>
@@ -191,6 +191,7 @@
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
                             <th scope="col">MÃ ĐH</th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Ngày phân loại</th>
                             <th scope="col">NL nụ cao cấp (NCC)</th>
                             <th scope="col">NL nụ VIP (NVIP)</th>
@@ -208,7 +209,6 @@
                             <th scope="col">Giá trước phân loại</th>
                             <th scope="col">Giá sau phân loại</th>
                             <th scope="col">Trạng thái</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -217,6 +217,22 @@
                                 <th scope="row"><input type="checkbox" name="check_item[]"
                                                        id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('admin.nguyen.lieu.phan.loai.detail', $data->id) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <form action="{{ route('admin.nguyen.lieu.phan.loai.delete', $data->id) }}"
+                                              method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                                 <td>{{ $data->nguyenLieuTho->code }}</td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ parseNumber($data->nu_cao_cap, 0) }} kg</td>
@@ -236,22 +252,6 @@
                                 <td>{{ parseNumber($data->gia_truoc_phan_loai, 0) }} VND</td>
                                 <td>{{ parseNumber($data->gia_sau_phan_loai, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.nguyen.lieu.phan.loai.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <form action="{{ route('admin.nguyen.lieu.phan.loai.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>

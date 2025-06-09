@@ -252,16 +252,16 @@
         </script>
 
         <div class="col-12">
+            <div class="d-flex mb-4 mt-3 justify-content-end">
+                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tinh')">Xoá tất cả
+                </button>
+            </div>
             <div class="card recent-sales overflow-auto">
-
                 <div class="card-body">
-                    <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tinh')">Xoá tất cả
-                        </button>
-                    </div>
                     <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="5%">
+                            <col width="8%">
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
@@ -270,13 +270,13 @@
                             <col width="10%">
                             <col width="x">
                             <col width="10%">
-                            <col width="8%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Mã lô hàng</th>
@@ -285,7 +285,6 @@
                             <th scope="col">Khối lượng tồn</th>
                             <th scope="col">Đơn giá</th>
                             <th scope="col">Trạng thái</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -294,14 +293,6 @@
                                 <th scope="row"><input type="checkbox" name="check_item[]"
                                                        id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
-                                <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                <td>{{ $data->ma_phieu }}</td>
-                                <td>{{ $data->code }}</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
-                                <td>{{ parseNumber($data->so_luong_da_dung, 0) }} kg</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong - $data->so_luong_da_dung, 0) }} kg</td>
-                                <td>{{ parseNumber($data->gia_tien, 0) }} VND</td>
-                                <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.nguyen.lieu.tinh.detail', $data->id) }}"
@@ -318,6 +309,14 @@
                                         </form>
                                     </div>
                                 </td>
+                                <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ $data->ma_phieu }}</td>
+                                <td>{{ $data->code }}</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->so_luong_da_dung, 0) }} kg</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong - $data->so_luong_da_dung, 0) }} kg</td>
+                                <td>{{ parseNumber($data->gia_tien, 0) }} VND</td>
+                                <td>{{ $data->trang_thai }}</td>
                             </tr>
                         @endforeach
                         </tbody>

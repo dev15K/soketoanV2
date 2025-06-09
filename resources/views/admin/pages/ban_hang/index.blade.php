@@ -394,16 +394,17 @@
         </script>
 
         <div class="col-12">
+            <div class="d-flex mb-4 mt-3 justify-content-end">
+                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('ban_hang')">Xoá tất cả
+                </button>
+            </div>
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('ban_hang')">Xoá tất cả
-                        </button>
-                    </div>
                     <table class="table table-hover small min-vw-100">
                         <colgroup>
                             <col width="50px">
+                            <col width="100px">
                             <col width="150px">
                             <col width="300px">
                             <col width="200px">
@@ -412,13 +413,13 @@
                             <col width="250px">
                             <col width="250px">
                             <col width="250px">
-                            <col width="100px">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Ngày tạo</th>
                             <th scope="col">Khách hàng</th>
                             <th scope="col">Số điện thoại</th>
@@ -427,7 +428,6 @@
                             <th scope="col">Đã thanh toán</th>
                             <th scope="col">Phương thức thanh toán</th>
                             <th scope="col">Công nợ</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -436,6 +436,22 @@
                                 <th scope="row"><input type="checkbox" name="check_item[]"
                                                        id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('admin.ban.hang.detail', $data->id) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <form action="{{ route('admin.ban.hang.delete', $data->id) }}"
+                                              method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                                 <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
                                 <td>
                                     @if($data->ban_le)
@@ -462,22 +478,6 @@
                                 <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
                                 <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                 <td>{{ parseNumber($data->cong_no) }} VND</td>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.ban.hang.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <form action="{{ route('admin.ban.hang.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>

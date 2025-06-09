@@ -105,7 +105,8 @@
                                 <label for="nha_cung_cap_id">Nhà cung cấp</label>
                                 <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control">
                                     @foreach($nccs as $ncc)
-                                        <option value="{{ $ncc->id }}" {{ old('nha_cung_cap_id') == $ncc->id ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $ncc->id }}" {{ old('nha_cung_cap_id') == $ncc->id ? 'selected' : '' }}>
                                             {{ $ncc->ten }}
                                         </option>
                                     @endforeach
@@ -124,7 +125,8 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="nguon_goc">Nguồn gốc</label>
-                                <input type="text" class="form-control" id="nguon_goc" name="nguon_goc" value="{{ old('nguon_goc') }}">
+                                <input type="text" class="form-control" id="nguon_goc" name="nguon_goc"
+                                       value="{{ old('nguon_goc') }}">
                             </div>
                         </div>
                         <div class="row">
@@ -135,17 +137,20 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="kich_thuoc">Kích thước</label>
-                                <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc" value="{{ old('kich_thuoc') }}">
+                                <input type="text" class="form-control" id="kich_thuoc" name="kich_thuoc"
+                                       value="{{ old('kich_thuoc') }}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="do_kho">Độ khô</label>
-                                <input type="text" class="form-control" id="do_kho" name="do_kho" value="{{ old('do_kho') }}">
+                                <input type="text" class="form-control" id="do_kho" name="do_kho"
+                                       value="{{ old('do_kho') }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="dieu_kien_luu_tru">Điều kiện lưu trữ</label>
-                                <input type="text" class="form-control" id="dieu_kien_luu_tru" name="dieu_kien_luu_tru" value="{{ old('dieu_kien_luu_tru') }}">
+                                <input type="text" class="form-control" id="dieu_kien_luu_tru" name="dieu_kien_luu_tru"
+                                       value="{{ old('dieu_kien_luu_tru') }}">
                             </div>
                         </div>
                         <div class="row">
@@ -158,8 +163,10 @@
                                 <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
                                 <select class="form-control" name="phuong_thuc_thanh_toan" id="phuong_thuc_thanh_toan">
                                     @foreach($loai_quies as $loai_quy)
-                                        <option value="{{ $loai_quy->id }}" {{ old('phuong_thuc_thanh_toan') == $loai_quy->id ? 'selected' : '' }}>
-                                            {{ $loai_quy->ten_loai_quy }} - {{ parseNumber($loai_quy->tong_tien_quy) }} VND
+                                        <option
+                                            value="{{ $loai_quy->id }}" {{ old('phuong_thuc_thanh_toan') == $loai_quy->id ? 'selected' : '' }}>
+                                            {{ $loai_quy->ten_loai_quy }} - {{ parseNumber($loai_quy->tong_tien_quy) }}
+                                            VND
                                         </option>
                                     @endforeach
                                 </select>
@@ -182,7 +189,8 @@
                                 <label for="nhan_su_xu_li">Nhân sự xử lý</label>
                                 <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
                                     @foreach($nsus as $nsu)
-                                        <option value="{{ $nsu->full_name }}" {{ old('nhan_su_xu_li') == $nsu->full_name ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $nsu->full_name }}" {{ old('nhan_su_xu_li') == $nsu->full_name ? 'selected' : '' }}>
                                             {{ $nsu->full_name }}/{{ $nsu->email }}
                                         </option>
                                     @endforeach
@@ -209,7 +217,8 @@
                         </div>
                         <div class="form-group">
                             <label for="ghi_chu">Ghi chú</label>
-                            <textarea name="ghi_chu" id="ghi_chu" class="form-control" rows="5">{{ old('ghi_chu') }}</textarea>
+                            <textarea name="ghi_chu" id="ghi_chu" class="form-control"
+                                      rows="5">{{ old('ghi_chu') }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
@@ -220,42 +229,43 @@
         </div>
 
         <div class="col-12">
+            <div class="d-flex mb-4 mt-3 justify-content-end">
+                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tho')">Xoá tất cả</button>
+            </div>
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('tho')">Xoá tất cả</button>
-                    </div>
-                    <table class="table table-hover small" style="min-width: 3000px">
+                    <table class="table table-hover small position-relative" style="min-width: 3000px">
                         <colgroup>
                             <col width="50px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="200px">
-                            <col width="250px">
-                            <col width="200px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="250px">
-                            <col width="150px">
-                            <col width="250px">
-                            <col width="250px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="250px">
                             <col width="100px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="200px">
+                            <col width="250px">
+                            <col width="200px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="250px">
+                            <col width="150px">
+                            <col width="250px">
+                            <col width="250px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="250px">
                             <col width="100px">
                         </colgroup>
                         <thead>
-                        <tr>
+                        <tr class="sticky-top top-0 position-sticky" style="z-index: 100">
                             <th scope="col">
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã đơn hàng</th>
                             <th scope="col">Nhà cung cấp</th>
@@ -276,34 +286,14 @@
                             <th scope="col">Thời gian phân loại</th>
                             <th scope="col">GHI CHÚ</th>
                             <th scope="col">Trạng thái</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
-                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                <td>{{ $data->code }}</td>
-                                <td>{{ $data->NhaCungCap->ten }}</td>
-                                <td>{{ $data->ten_nguyen_lieu }}</td>
-                                <td>{{ $data->loai }}</td>
-                                <td>{{ $data->nguon_goc }}</td>
-                                <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
-                                <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
-                                <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_phan_loai, 0) }} kg</td>
-                                <td>{{ $data->kich_thuoc }}</td>
-                                <td>{{ $data->do_kho }}</td>
-                                <td>{{ $data->dieu_kien_luu_tru }}</td>
-                                <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
-                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
-                                <td>{{ parseNumber(floatval($data->so_tien_thanh_toan) ?? 0, 0) }} VND</td>
-                                <td>{{ parseNumber($data->cong_no, 0) }} VND</td>
-                                <td>{{ $data->nhan_su_xu_li }}</td>
-                                <td>{{ \Carbon\Carbon::parse($data->thoi_gian_phan_loai)->format('d-m-Y') }}</td>
-                                <td>{{ $data->ghi_chu }}</td>
-                                <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.nguyen.lieu.tho.detail', $data->id) }}"
@@ -326,6 +316,26 @@
                                         @endif
                                     </div>
                                 </td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ $data->code }}</td>
+                                <td>{{ $data->NhaCungCap->ten }}</td>
+                                <td>{{ $data->ten_nguyen_lieu }}</td>
+                                <td>{{ $data->loai }}</td>
+                                <td>{{ $data->nguon_goc }}</td>
+                                <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_phan_loai, 0) }} kg</td>
+                                <td>{{ $data->kich_thuoc }}</td>
+                                <td>{{ $data->do_kho }}</td>
+                                <td>{{ $data->dieu_kien_luu_tru }}</td>
+                                <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
+                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
+                                <td>{{ parseNumber(floatval($data->so_tien_thanh_toan) ?? 0, 0) }} VND</td>
+                                <td>{{ parseNumber($data->cong_no, 0) }} VND</td>
+                                <td>{{ $data->nhan_su_xu_li }}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->thoi_gian_phan_loai)->format('d-m-Y') }}</td>
+                                <td>{{ $data->ghi_chu }}</td>
+                                <td>{{ $data->trang_thai }}</td>
                             </tr>
                         @endforeach
                         </tbody>

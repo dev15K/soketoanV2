@@ -105,17 +105,18 @@
         </div>
 
         <div class="col-12">
+            <div class="d-flex mb-4 mt-3 justify-content-end">
+                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('san_pham')">Xoá tất
+                    cả
+                </button>
+            </div>
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('san_pham')">Xoá tất
-                            cả
-                        </button>
-                    </div>
                     <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="3%">
+                            <col width="8%">
                             <col width="10%">
                             <col width="10%">
                             <col width="x">
@@ -124,13 +125,13 @@
                             <col width="15%">
                             <col width="15%">
                             <col width="15%">
-                            <col width="8%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Mã sản phẩm</th>
                             <th scope="col">Mã vạch</th>
                             <th scope="col">Tên sản phẩm</th>
@@ -139,7 +140,6 @@
                             <th scope="col">Giá xuất kho ( Giá nhập)</th>
                             <th scope="col">Giá bán (giá bán ra cho KHách hàng)</th>
                             <th scope="col">Tồn kho</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -148,14 +148,6 @@
                                 <th scope="row"><input type="checkbox" name="check_item[]"
                                                        id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
-                                <td>{{ $data->ma_san_pham }}</td>
-                                <td>{{ $data->ma_vach }}</td>
-                                <td>{{ $data->ten_san_pham }}</td>
-                                <td>{{ $data->don_vi_tinh }}</td>
-                                <td>{{ $data->khoi_luong_rieng }}</td>
-                                <td>{{ parseNumber($data->gia_xuat_kho) }} VND</td>
-                                <td>{{ parseNumber($data->gia_ban) }} VND</td>
-                                <td>{{ parseNumber($data->ton_kho) }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.san.pham.detail', $data->id) }}"
@@ -172,6 +164,14 @@
                                         </form>
                                     </div>
                                 </td>
+                                <td>{{ $data->ma_san_pham }}</td>
+                                <td>{{ $data->ma_vach }}</td>
+                                <td>{{ $data->ten_san_pham }}</td>
+                                <td>{{ $data->don_vi_tinh }}</td>
+                                <td>{{ $data->khoi_luong_rieng }}</td>
+                                <td>{{ parseNumber($data->gia_xuat_kho) }} VND</td>
+                                <td>{{ parseNumber($data->gia_ban) }} VND</td>
+                                <td>{{ parseNumber($data->ton_kho) }}</td>
                             </tr>
                         @endforeach
                         </tbody>

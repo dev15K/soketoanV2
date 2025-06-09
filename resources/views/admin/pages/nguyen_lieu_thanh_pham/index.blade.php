@@ -268,17 +268,18 @@
         </script>
 
         <div class="col-12">
+            <div class="d-flex mb-4 mt-3 justify-content-end">
+                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('dong_goi')">Xoá tất
+                    cả
+                </button>
+            </div>
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('dong_goi')">Xoá tất
-                            cả
-                        </button>
-                    </div>
                     <table class="table table-hover vw-100">
                         <colgroup>
                             <col width="3%">
+                            <col width="6%">
                             <col width="6%">
                             <col width="6%">
                             <col width="6%">
@@ -292,13 +293,13 @@
                             <col width="10%">
                             <col width="6%">
                             <col width="6%">
-                            <col width="6%">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Lô SX</th>
                             <th scope="col">SL (cái/hộp)</th>
@@ -312,7 +313,6 @@
                             <th scope="col">Tổng giá</th>
                             <th scope="col">Ngày sản xuất</th>
                             <th scope="col">Trạng thái</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -321,19 +321,6 @@
                                 <th scope="row"><input type="checkbox" name="check_item[]"
                                                        id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
-                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                <td>{{ $data->nguyenLieuSanXuat->PhieuSanXuat->so_lo_san_xuat }}</td>
-                                <td>{{ parseNumber($data->so_luong) }}</td>
-                                <td>{{ parseNumber($data->so_luong_da_ban) }}</td>
-                                <td>{{ parseNumber($data->so_luong - $data->so_luong_da_ban) }}</td>
-                                <td>{{ $data->sanPham->ma_san_pham }}</td>
-                                <td>{{ $data->sanPham->ten_san_pham }}</td>
-                                <td>{{ $data->sanPham->khoi_luong_rieng }}</td>
-                                <td>{{ $data->sanPham->don_vi_tinh }}</td>
-                                <td>{{ parseNumber($data->price) }} VND</td>
-                                <td>{{ parseNumber($data->total_price) }} VND</td>
-                                <td>{{ \Carbon\Carbon::parse($data->ngay_san_xuat)->format('d-m-Y') }}</td>
-                                <td>{{ $data->trang_thai }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.nguyen.lieu.thanh.pham.detail', $data->id) }}"
@@ -350,6 +337,19 @@
                                         </form>
                                     </div>
                                 </td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ $data->nguyenLieuSanXuat->PhieuSanXuat->so_lo_san_xuat }}</td>
+                                <td>{{ parseNumber($data->so_luong) }}</td>
+                                <td>{{ parseNumber($data->so_luong_da_ban) }}</td>
+                                <td>{{ parseNumber($data->so_luong - $data->so_luong_da_ban) }}</td>
+                                <td>{{ $data->sanPham->ma_san_pham }}</td>
+                                <td>{{ $data->sanPham->ten_san_pham }}</td>
+                                <td>{{ $data->sanPham->khoi_luong_rieng }}</td>
+                                <td>{{ $data->sanPham->don_vi_tinh }}</td>
+                                <td>{{ parseNumber($data->price) }} VND</td>
+                                <td>{{ parseNumber($data->total_price) }} VND</td>
+                                <td>{{ \Carbon\Carbon::parse($data->ngay_san_xuat)->format('d-m-Y') }}</td>
+                                <td>{{ $data->trang_thai }}</td>
                             </tr>
                         @endforeach
                         </tbody>

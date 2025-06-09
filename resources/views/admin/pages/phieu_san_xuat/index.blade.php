@@ -235,17 +235,17 @@
         </script>
 
         <div class="col-12">
+            <div class="d-flex mb-4 mt-3 justify-content-end">
+                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('phieu_san_xuat')">
+                    Xoá tất cả
+                </button>
+            </div>
             <div class="card recent-sales overflow-auto">
-
                 <div class="card-body">
-                    <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('phieu_san_xuat')">
-                            Xoá tất cả
-                        </button>
-                    </div>
                     <table class="table table-hover table-sm">
                         <colgroup>
                             <col width="5%">
+                            <col width="60px">
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
@@ -254,13 +254,13 @@
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
-                            <col width="60px">
                         </colgroup>
                         <thead>
                         <tr>
                             <th scope="col">
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
                             <th scope="col">Số LÔ SX</th>
@@ -269,7 +269,6 @@
                             <th scope="col">KL tồn(kg)</th>
                             <th scope="col">Nhân sự xử lý</th>
                             <th scope="col">Thời gian dự kiến hoàn thành SX</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -278,14 +277,6 @@
                                 <th scope="row"><input type="checkbox" name="check_item[]"
                                                        id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
-                                <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
-                                <td>{{ $data->code }}</td>
-                                <td>{{ $data->so_lo_san_xuat }}</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
-                                <td>{{ number_format($data->khoi_luong_da_dung) }} kg</td>
-                                <td>{{ number_format($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
-                                <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
-                                <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.phieu.san.xuat.detail', $data->id) }}"
@@ -302,6 +293,14 @@
                                         </form>
                                     </div>
                                 </td>
+                                <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
+                                <td>{{ $data->code }}</td>
+                                <td>{{ $data->so_lo_san_xuat }}</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
+                                <td>{{ number_format($data->khoi_luong_da_dung) }} kg</td>
+                                <td>{{ number_format($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
+                                <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
+                                <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
                             </tr>
                         @endforeach
                         </tbody>

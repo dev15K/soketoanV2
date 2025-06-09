@@ -19,66 +19,78 @@
         <div class="d-flex mb-4 mt-3 justify-content-end">
             <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('user')">Xoá tất cả</button>
         </div>
-        <table class="table table-hover vw-100">
-            <colgroup>
-                <col width="5%">
-                <col width="10%">
-                <col width="x">
-                <col width="10%">
-                <col width="10%">
-                <col width="20%">
-                <col width="10%">
-                <col width="10%">
-                <col width="10%">
-            </colgroup>
-            <thead>
-            <tr>
-                <th scope="col">
-                    <input type="checkbox" name="check_all" id="check_all">
-                </th>
-                <th scope="col">Ảnh</th>
-                <th scope="col">Họ và tên</th>
-                <th scope="col">Email</th>
-                <th scope="col">Số điện thoại</th>
-                <th scope="col">Địa chỉ</th>
-                <th scope="col">Phòng</th>
-                <th scope="col">Quyền hạn</th>
-                <th scope="col">Hành động</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($users as $user)
-                <tr>
-                    <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $user->id }}"
-                                           value="{{ $user->id }}"></th>
-                    <td>
-                        <img class="rounded-circle" src="{{ $user->avatar }}" alt="{{ $user->full_name }}" width="100px"
-                             height="100px">
-                    </td>
-                    <td>{{ $user->full_name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->phone }}</td>
-                    <td>{{ $user->address }}</td>
-                    <td>{{ $user->room }}</td>
-                    <td>{{ $user->role_name == \App\Enums\RoleName::ADMIN ? 'Quản trị viên' : 'Nhân viên' }}</td>
-                    <td>
-                        <div class="d-flex gap-2 justify-content-center">
-                            <a href="{{ route('admin.nhan.vien.detail', $user) }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            <form action="{{ route('admin.nhan.vien.delete', $user) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-        {{ $users->links('pagination::bootstrap-5') }}
+        <div class="col-12">
+            <div class="card recent-sales overflow-auto">
+
+                <div class="card-body">
+
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col width="5%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="x">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="20%">
+                            <col width="10%">
+                            <col width="10%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">
+                                <input type="checkbox" name="check_all" id="check_all">
+                            </th>
+                            <th scope="col">Hành động</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Họ và tên</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Số điện thoại</th>
+                            <th scope="col">Địa chỉ</th>
+                            <th scope="col">Phòng</th>
+                            <th scope="col">Quyền hạn</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($users as $user)
+                            <tr>
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $user->id }}"
+                                                       value="{{ $user->id }}"></th>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('admin.nhan.vien.detail', $user) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <form action="{{ route('admin.nhan.vien.delete', $user) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>
+                                    <img class="rounded-circle" src="{{ $user->avatar }}" alt="{{ $user->full_name }}"
+                                         width="100px"
+                                         height="100px">
+                                </td>
+                                <td>{{ $user->full_name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->phone }}</td>
+                                <td>{{ $user->address }}</td>
+                                <td>{{ $user->room }}</td>
+                                <td>{{ $user->role_name == \App\Enums\RoleName::ADMIN ? 'Quản trị viên' : 'Nhân viên' }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    {{ $users->links('pagination::bootstrap-5') }}
+                </div>
+
+            </div>
+        </div>
     </section>
 @endsection
