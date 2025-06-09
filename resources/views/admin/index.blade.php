@@ -203,6 +203,8 @@
                         </tr>
                         </tfoot>
                     </table>
+
+                    {{ $datas->links('pagination::bootstrap-5') }}
                 </div>
 
             </div>

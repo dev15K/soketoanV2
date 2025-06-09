@@ -113,11 +113,11 @@
                     <table class="table table-hover">
                         <colgroup>
                             <col width="5%">
+                            <col width="10%">
                             <col width="20%">
                             <col width="10%">
                             <col width="x">
                             <col width="20%">
-                            <col width="10%">
                             <col width="10%">
                         </colgroup>
                         <thead>
@@ -125,12 +125,12 @@
                             <th scope="col">
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Họ và tên</th>
                             <th scope="col">Số điện thoại</th>
                             <th scope="col">Địa chỉ</th>
                             <th scope="col">Công nợ</th>
                             <th scope="col">Trạng thái</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -139,6 +139,22 @@
                                 <th scope="row"><input type="checkbox" name="check_item[]"
                                                        id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('admin.nha.cung.cap.detail', $data->id) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <form action="{{ route('admin.nha.cung.cap.delete', $data->id) }}"
+                                              method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                                 <td>{{ $data->ten }}</td>
                                 <td>{{ $data->so_dien_thoai }}</td>
                                 <td>{{ $data->dia_chi }}</td>
@@ -156,22 +172,6 @@
                                     {{ parseNumber($total, 0) }} VND
                                 </td>
                                 <td>{{ $data->trang_thai }}</td>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.nha.cung.cap.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <form action="{{ route('admin.nha.cung.cap.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>

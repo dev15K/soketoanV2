@@ -50,7 +50,7 @@ class AdminHomeController extends Controller
                 return $query->where('loai_quy_id', $loai_quy_search);
             })
             ->orderByDesc('id')
-            ->get();
+            ->paginate(10);
 
         $old_query = SoQuy::whereNull('deleted_at');
 
