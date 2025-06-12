@@ -123,9 +123,19 @@
                                                     Nguyên liệu vòng (NLV)
                                                 </option>
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Tăm tre' ? 'selected' : '' }}
-                                                    value="Tăm tre">
-                                                    Tăm tre
+                                                    {{ $nltct->ten_nguyen_lieu == 'Tăm dài' ? 'selected' : '' }}
+                                                    value="Tăm dài">
+                                                    Tăm dài
+                                                </option>
+                                                <option
+                                                    {{ $nltct->ten_nguyen_lieu == 'Tăm ngắn' ? 'selected' : '' }}
+                                                    value="Tăm ngắn">
+                                                    Tăm ngắn
+                                                </option>
+                                                <option
+                                                    {{ $nltct->ten_nguyen_lieu == 'Nước cất' ? 'selected' : '' }}
+                                                    value="Nước cất">
+                                                    Nước cất
                                                 </option>
                                                 <option
                                                     {{ $nltct->ten_nguyen_lieu == 'Keo' ? 'selected' : '' }}
@@ -227,7 +237,9 @@
                                             <option value="Nguyên liệu nụ VIP (NVIP)">Nguyên liệu nụ VIP (NVIP) - ${data.nu_vip} kg</option>
                                             <option value="Nguyên liệu nhang (NLN)">Nguyên liệu nhang (NLN) - ${data.nhang} kg</option>
                                             <option value="Nguyên liệu vòng (NLV)">Nguyên liệu vòng (NLV) - ${data.vong} kg</option>
-                                            <option value="Tăm tre">Tăm tre - ${data.tam_tre} kg</option>
+                                            <option value="Tăm dài">Tăm dài - ${data.tam_dai} kg</option>
+                                            <option value="Tăm ngắn">Tăm ngắn - ${data.tam_ngan} kg</option>
+                                            <option value="Nước cất">Nước cất - ${data.nuoc_cat} kg</option>
                                             <option value="Keo">Keo - ${data.keo} kg</option>
                                             <option value="Nấu dầu">Nấu dầu - ${data.nau_dau} kg</option>
                 `;
