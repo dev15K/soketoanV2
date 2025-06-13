@@ -43,11 +43,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="keyword" name="keyword"
                                            placeholder="Số LÔ SX, Mã Phiếu" value="{{ $keyword }}">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="input-group-text">
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>

@@ -41,11 +41,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="keyword" name="keyword"
                                            placeholder="Tên nguyên liệu" value="{{ $keyword }}">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="input-group-text">
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
+
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
