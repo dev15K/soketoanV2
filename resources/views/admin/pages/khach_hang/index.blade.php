@@ -31,11 +31,7 @@
                         <div class="input-group mb-2">
                             <input type="text" class="form-control" id="inlineFormInputGroup"
                                    placeholder="Tìm kiếm theo tên khách hàng">
-                            <div class="input-group-prepend">
-                                <button type="button" class="input-group-text">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
+
                         </div>
                     </div>
 

@@ -41,11 +41,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="keyword" name="keyword"
                                            placeholder="Tên nguyên liệu" value="{{ $keyword }}">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="input-group-text">
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
+
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
@@ -205,8 +201,8 @@
                 <div class="card-body">
                     <table class="table table-hover " style="min-width: 2000px">
                         <colgroup>
-                            <col width="5%">
-                            <col width="6%">
+                            <col width="50px">
+                            <col width="100px">
                             <col width="6%">
                             <col width="8%">
                             <col width="x">

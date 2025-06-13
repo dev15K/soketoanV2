@@ -43,11 +43,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="code_search" name="code"
                                            placeholder="Tìm kiếm theo mã lô hàng" value="{{ $code_search }}">
-                                    <div class="input-group-prepend">
-                                        <button type="button" class="input-group-text">
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -262,8 +258,8 @@
                 <div class="card-body">
                     <table class="table table-hover vw-100">
                         <colgroup>
-                            <col width="5%">
-                            <col width="8%">
+                            <col width="50px">
+                            <col width="100px">
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">

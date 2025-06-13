@@ -31,11 +31,7 @@
                         <div class="input-group mb-2">
                             <input type="date" class="form-control" id="inlineFormInputGroup"
                                    placeholder="Tìm kiếm">
-                            <div class="input-group-prepend">
-                                <button type="button" class="input-group-text">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
+
                         </div>
                     </div>
 
