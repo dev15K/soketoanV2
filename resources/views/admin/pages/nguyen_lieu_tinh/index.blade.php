@@ -258,8 +258,8 @@
                 <div class="card-body">
                     <table class="table table-hover vw-100">
                         <colgroup>
-                            <col width="5%">
-                            <col width="8%">
+                            <col width="50px">
+                            <col width="100px">
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">

@@ -15,24 +15,28 @@ class AdminNguyenLieuPhanLoaiController extends Controller
     public function index(Request $request)
     {
         $ngay = $request->input('ngay');
-        $nguyen_lieu_tho_id = $request->input('nguyen_lieu_tho_id');
+        $keyword = $request->input('keyword');
 
-        $queries = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED());
+        $queries = NguyenLieuPhanLoai::where('nguyen_lieu_phan_loais.trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED());
 
         if ($ngay) {
-            $queries->whereDate('ngay', Carbon::parse($ngay)->format('Y-m-d'));
+            $queries->whereDate('nguyen_lieu_phan_loais.ngay', Carbon::parse($ngay)->format('Y-m-d'));
         }
 
-        if ($nguyen_lieu_tho_id) {
-            $queries->where('nguyen_lieu_tho_id', $nguyen_lieu_tho_id);
+        if ($keyword) {
+            $queries->join('nguyen_lieu_thos', 'nguyen_lieu_phan_loais.nguyen_lieu_tho_id', '=', 'nguyen_lieu_thos.id');
+            $queries->where(function ($q) use ($keyword) {
+                $q->where('nguyen_lieu_thos.ten_nguyen_lieu', 'like', '%' . $keyword . '%')
+                    ->orWhere('nguyen_lieu_thos.code', 'like', '%' . $keyword . '%');
+            });
         }
 
-        $datas = $queries->orderByDesc('id')->paginate(10);
+        $datas = $queries->orderByDesc('nguyen_lieu_phan_loais.id')->paginate(10);
 
         $nlthos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_phan_loai.index', compact('datas', 'nlthos', 'ngay', 'nguyen_lieu_tho_id'));
+        return view('admin.pages.nguyen_lieu_phan_loai.index', compact('datas', 'nlthos', 'ngay', 'keyword'));
     }
 
     public function detail($id)

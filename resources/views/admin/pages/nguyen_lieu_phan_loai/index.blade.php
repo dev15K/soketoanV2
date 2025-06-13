@@ -38,14 +38,8 @@
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
-                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id_search" class="form-control">
-                                    <option value="">Tìm kiếm theo Mã đơn hàng</option>
-                                    @foreach($nlthos as $nltho)
-                                        <option {{ $nltho->id == $nguyen_lieu_tho_id ? 'selected' : '' }}
-                                                value="{{ $nltho->id }}">{{ $nltho->code }}
-                                            - {{ $nltho->ten_nguyen_lieu }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" id="keyword" name="keyword"
+                                       placeholder="Tên nguyên liệu thô, mã đơn hàng" value="{{ $keyword }}">
                             </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center">
@@ -61,8 +55,8 @@
         <script>
             function searchTable() {
                 const ngay_search = $('#ngay_search').val();
-                const nguyen_lieu_tho_id_search = $('#nguyen_lieu_tho_id_search').val();
-                window.location.href = "{{ route('admin.nguyen.lieu.phan.loai.index') }}?ngay=" + ngay_search + "&nguyen_lieu_tho_id=" + nguyen_lieu_tho_id_search;
+                const keyword = $('#keyword').val();
+                window.location.href = "{{ route('admin.nguyen.lieu.phan.loai.index') }}?ngay=" + ngay_search + "&keyword=" + keyword;
             }
         </script>
 
@@ -205,8 +199,8 @@
                             <th scope="col">
                                 <input type="checkbox" name="check_all" id="check_all">
                             </th>
-                            <th scope="col">MÃ ĐH</th>
                             <th scope="col">Hành động</th>
+                            <th scope="col">MÃ ĐH</th>
                             <th scope="col">Ngày phân loại</th>
                             <th scope="col">NL nụ cao cấp (NCC)</th>
                             <th scope="col">NL nụ VIP (NVIP)</th>
