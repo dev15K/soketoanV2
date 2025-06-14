@@ -110,47 +110,47 @@
                                         <td>
                                             <select class="form-control" name="ten_nguyen_lieus[]">
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Nguyên liệu nụ cao cấp (NCC)' ? 'selected' : '' }}
+                                                    {{ trim($nltct->ten_nguyen_lieu) == 'Nguyên liệu nụ cao cấp (NCC)' ? 'selected' : '' }}
                                                     value="Nguyên liệu nụ cao cấp (NCC)">
                                                     Nguyên liệu nụ cao cấp (NCC)
                                                 </option>
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Nguyên liệu nụ VIP (NVIP)' ? 'selected' : '' }}
+                                                    {{ trim($nltct->ten_nguyen_lieu) == 'Nguyên liệu nụ VIP (NVIP)' ? 'selected' : '' }}
                                                     value="Nguyên liệu nụ VIP (NVIP)">
                                                     Nguyên liệu nụ VIP (NVIP)
                                                 </option>
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Nguyên liệu nhang (NLN)' ? 'selected' : '' }}
+                                                    {{ trim($nltct->ten_nguyen_lieu) == 'Nguyên liệu nhang (NLN)' ? 'selected' : '' }}
                                                     value="Nguyên liệu nhang (NLN)">
                                                     Nguyên liệu nhang (NLN)
                                                 </option>
                                                 <option
-                                                    {{  $nltct->ten_nguyen_lieu == 'Nguyên liệu vòng (NLV)' ? 'selected' : '' }}
+                                                    {{  trim($nltct->ten_nguyen_lieu) == 'Nguyên liệu vòng (NLV)' ? 'selected' : '' }}
                                                     value="Nguyên liệu vòng (NLV)">
                                                     Nguyên liệu vòng (NLV)
                                                 </option>
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Tăm dài' ? 'selected' : '' }}
+                                                    {{ trim($nltct->ten_nguyen_lieu) == 'Tăm dài' ? 'selected' : '' }}
                                                     value="Tăm dài">
                                                     Tăm dài
                                                 </option>
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Tăm ngắn' ? 'selected' : '' }}
+                                                    {{ trim($nltct->ten_nguyen_lieu) == 'Tăm ngắn' ? 'selected' : '' }}
                                                     value="Tăm ngắn">
                                                     Tăm ngắn
                                                 </option>
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Nước cất' ? 'selected' : '' }}
+                                                    {{ trim($nltct->ten_nguyen_lieu) == 'Nước cất' ? 'selected' : '' }}
                                                     value="Nước cất">
                                                     Nước cất
                                                 </option>
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Keo' ? 'selected' : '' }}
+                                                    {{ trim($nltct->ten_nguyen_lieu) == 'Keo' ? 'selected' : '' }}
                                                     value="Keo">
                                                     Keo
                                                 </option>
                                                 <option
-                                                    {{ $nltct->ten_nguyen_lieu == 'Nấu dầu' ? 'selected' : '' }}
+                                                    {{ trim($nltct->ten_nguyen_lieu) == 'Nấu dầu' ? 'selected' : '' }}
                                                     value="Nấu dầu">
                                                     Nấu dầu
                                                 </option>
@@ -236,20 +236,31 @@
             }
 
             const nlPhanLoai = $('.nguyen_lieu_phan_loai_ids');
-            selectNLPhanLoai(nlPhanLoai);
+            nlPhanLoai.each(function (index, elm) {
+                selectNLPhanLoai(elm);
+            })
 
             function renderChiTietSanPham(data, elm) {
-                const html = `
-                <option value="Nguyên liệu nụ cao cấp (NCC)">Nguyên liệu nụ cao cấp (NCC) - ${data.nu_cao_cap} kg</option>
-                                            <option value="Nguyên liệu nụ VIP (NVIP)">Nguyên liệu nụ VIP (NVIP) - ${data.nu_vip} kg</option>
-                                            <option value="Nguyên liệu nhang (NLN)">Nguyên liệu nhang (NLN) - ${data.nhang} kg</option>
-                                            <option value="Nguyên liệu vòng (NLV)">Nguyên liệu vòng (NLV) - ${data.vong} kg</option>
-                                            <option value="Tăm dài">Tăm dài - ${data.tam_dai} kg</option>
-                                            <option value="Tăm ngắn">Tăm ngắn - ${data.tam_ngan} kg</option>
-                                            <option value="Nước cất">Nước cất - ${data.nuoc_cat} kg</option>
-                                            <option value="Keo">Keo - ${data.keo} kg</option>
-                                            <option value="Nấu dầu">Nấu dầu - ${data.nau_dau} kg</option>
-                `;
+                const currentValue = $(elm).parent().next().find('select').val();
+                console.log(currentValue);
+
+                const list = {
+                    "Nguyên liệu nụ cao cấp (NCC)": data.nu_cao_cap,
+                    "Nguyên liệu nụ VIP (NVIP)": data.nu_vip,
+                    "Nguyên liệu nhang (NLN)": data.nhang,
+                    "Nguyên liệu vòng (NLV)": data.vong,
+                    "Tăm dài": data.tam_dai,
+                    "Tăm ngắn": data.tam_ngan,
+                    "Nước cất": data.nuoc_cat,
+                    "Keo": data.keo,
+                    "Nấu dầu": data.nau_dau,
+                };
+
+                let html = '';
+                for (const [key, value] of Object.entries(list)) {
+                    const selected = key === currentValue ? 'selected' : '';
+                    html += `<option value="${key}" ${selected}>${key} - ${value} kg</option>`;
+                }
 
                 $(elm).parent().next().find('select').html(html);
             }
