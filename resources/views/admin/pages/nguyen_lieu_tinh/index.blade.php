@@ -1,4 +1,4 @@
-@php use App\Enums\TrangThaiNguyenLieuTho;use Carbon\Carbon; @endphp
+@php use App\Enums\TrangThaiNguyenLieuTho;use App\Enums\TrangThaiNguyenLieuTinh;use Carbon\Carbon; @endphp
 @php @endphp
 @extends('admin.layouts.master')
 @section('title')
@@ -77,12 +77,17 @@
                     <form method="post" action="{{ route('admin.nguyen.lieu.tinh.store') }}" class="d-none">
                         @csrf
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="ma_phieu">Mã phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
                                        name="ma_phieu" value="{{ old('ma_phieu', $ma_phieu) }}" required>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
+                                <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
+                                <input type="text" class="form-control" id="ten_nguyen_lieu"
+                                       name="ten_nguyen_lieu" value="{{ old('ten_nguyen_lieu') }}" required>
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label for="code">Mã lô hàng</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="code"
                                        name="code" value="{{ old('code', $code) }}" required>
@@ -98,13 +103,13 @@
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option value="{{ \App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() }}"
-                                        {{ old('trang_thai') ==\App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() ? 'selected' : '' }}>
-                                        {{\App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() }}
+                                    <option value="{{ TrangThaiNguyenLieuTinh::ACTIVE() }}"
+                                        {{ old('trang_thai') ==TrangThaiNguyenLieuTinh::ACTIVE() ? 'selected' : '' }}>
+                                        {{TrangThaiNguyenLieuTinh::ACTIVE() }}
                                     </option>
-                                    <option value="{{\App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() }}"
-                                        {{ old('trang_thai') ==\App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() ? 'selected' : '' }}>
-                                        {{ \App\Enums\TrangThaiNguyenLieuTinh::INACTIVE() }}
+                                    <option value="{{TrangThaiNguyenLieuTinh::INACTIVE() }}"
+                                        {{ old('trang_thai') ==TrangThaiNguyenLieuTinh::INACTIVE() ? 'selected' : '' }}>
+                                        {{ TrangThaiNguyenLieuTinh::INACTIVE() }}
                                     </option>
                                 </select>
                             </div>
@@ -266,6 +271,7 @@
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
+                            <col width="10%">
                             <col width="x">
                             <col width="10%">
                         </colgroup>
@@ -277,6 +283,7 @@
                             <th scope="col">Hành động</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
+                            <th scope="col">Tên nguyên liệu</th>
                             <th scope="col">Mã lô hàng</th>
                             <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Khối lượng đã dùng</th>
@@ -309,6 +316,7 @@
                                 </td>
                                 <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->ma_phieu }}</td>
+                                <td>{{ $data->ten_nguyen_lieu }}</td>
                                 <td>{{ $data->code }}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
                                 <td>{{ parseNumber($data->so_luong_da_dung, 0) }} kg</td>

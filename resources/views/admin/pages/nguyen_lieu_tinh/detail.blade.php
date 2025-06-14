@@ -29,15 +29,22 @@
                         @method('PUT')
                         @csrf
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="ma_phieu">Mã phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
-                                       name="ma_phieu" value="{{ $ma_phieu }}" required>
+                                       name="ma_phieu" value="{{ old('ma_phieu', $ma_phieu) }}" required>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
+                                <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
+                                <input type="text" class="form-control" id="ten_nguyen_lieu"
+                                       name="ten_nguyen_lieu"
+                                       value="{{ old('ten_nguyen_lieu', $nguyen_lieu_tinh->ten_nguyen_lieu) }}"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label for="code">Mã lô hàng</label>
-                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
-                                       value="{{ $code }}" required>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code"
+                                       name="code" value="{{ old('code', $code) }}" required>
                             </div>
                         </div>
                         <div class="row">
@@ -51,7 +58,7 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        {{ $nguyen_lieu_tinh->trang_thai == \App\Enums\TrangThaiNguyenLieuTinh::ACTIVE() ? 'selected' : '' }}
+                                        {{ $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::ACTIVE() ? 'selected' : '' }}
                                         value="{{ TrangThaiNguyenLieuTinh::ACTIVE() }}">{{ TrangThaiNguyenLieuTinh::ACTIVE() }}</option>
                                     <option
                                         {{ $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::INACTIVE() ? 'selected' : '' }}

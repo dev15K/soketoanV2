@@ -113,6 +113,7 @@ class AdminNguyenLieuTinhController extends Controller
         $ngay = $request->input('ngay');
         $code = $request->input('code');
         $ma_phieu = $request->input('ma_phieu');
+        $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
 
         $tong_khoi_luong = 0;
         $gia_tien = 0;
@@ -139,7 +140,7 @@ class AdminNguyenLieuTinhController extends Controller
 
         $trang_thai = $request->input('trang_thai');
 
-        $NguyenLieuTinh->ten_nguyen_lieu = '';
+        $NguyenLieuTinh->ten_nguyen_lieu = $ten_nguyen_lieu;
         $NguyenLieuTinh->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $NguyenLieuTinh->trang_thai = $trang_thai;
 
@@ -240,6 +241,10 @@ class AdminNguyenLieuTinhController extends Controller
                 ->where('so_luong_da_dung', null)
                 ->orWhere('so_luong_da_dung', 0)
                 ->update(['trang_thai' => TrangThaiNguyenLieuTinh::DELETED()]);
+
+            if ($nguyen_lieu_tinh->so_luong_da_dung) {
+                return redirect()->back()->with('error', 'Không thể xóa nguyên liệu tinh đã dùng!')->withInput();
+            }
 
             $chiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $id)->get();
             foreach ($chiTiets as $chiTiet) {
