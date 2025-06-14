@@ -168,24 +168,21 @@ class AdminPhieuSanXuatController extends Controller
 
         $nguyen_lieu_ids = $nguyen_lieu_ids ?? [];
 
-        PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
-            ->whereNotIn('nguyen_lieu_id', $nguyen_lieu_ids)
-            ->delete();
+        $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->get();
+        foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+            $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+            $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+            $nguyenLieuTinh->save();
+        }
+
+        PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->delete();
 
         for ($i = 0; $i < count($nguyen_lieu_ids); $i++) {
             $nguyen_lieu_id = $nguyen_lieu_ids[$i];
             $ten_nguyen_lieu = $ten_nguyen_lieus[$i];
             $khoi_luong = $khoi_luongs[$i];
 
-            $oldData = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
-                ->where('nguyen_lieu_id', $nguyen_lieu_id)
-                ->first();
-
-            if ($oldData) {
-                $phieuSanXuatChiTiet = $oldData;
-            } else {
-                $phieuSanXuatChiTiet = new PhieuSanXuatChiTiet();
-            }
+            $phieuSanXuatChiTiet = new PhieuSanXuatChiTiet();
 
             $nguyenLieuTinh = NguyenLieuTinh::find($nguyen_lieu_id);
 
@@ -225,10 +222,21 @@ class AdminPhieuSanXuatController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
+            if ($phieu_san_xuat->khoi_luong_da_dung) {
+                return redirect()->back()->with('error', 'Phiếu sản xuất đã dùng không được xoá!');
+            }
+
             PhieuSanXuat::where('id', $id)
                 ->where('khoi_luong_da_dung', null)
                 ->orWhere('khoi_luong_da_dung', 0)
                 ->update(['trang_thai' => TrangThaiPhieuSanXuat::DELETED()]);
+
+            $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)->get();
+            foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+                $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+                $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+                $nguyenLieuTinh->save();
+            }
 
             return redirect()->back()->with('success', 'Đã xoá phiếu sản xuất thành công');
         } catch (\Exception $e) {
@@ -246,6 +254,8 @@ class AdminPhieuSanXuatController extends Controller
 
             $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
             $phieu_san_xuat->save();
+
+            $this->saveDataChiTiet($phieu_san_xuat, $request);
 
             return redirect()->route('admin.phieu.san.xuat.index')->with('success', 'Chỉnh sửa phiếu sản xuất thành công');
         } catch (\Exception $e) {
