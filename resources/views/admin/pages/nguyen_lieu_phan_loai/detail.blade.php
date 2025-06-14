@@ -30,7 +30,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="nguyen_lieu_tho_id">Mã đơn hàng</label>
-                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
+                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control selectCustom">
                                     @foreach($nlthos as $nltho)
                                         <option
                                             {{ $nltho->id == $nguyen_lieu_phan_loai->nguyen_lieu_tho_id ? 'selected' : '' }}

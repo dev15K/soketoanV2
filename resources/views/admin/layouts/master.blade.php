@@ -161,7 +161,17 @@
         })
     })
 </script>
-
+<script>
+    $(document).ready(function () {
+        $('.selectCustom').select2({
+            theme: 'bootstrap-5',
+            placeholder: 'Lựa chọn...',
+            allowClear: true,
+            width: '100%',
+            minimumResultsForSearch: 0
+        });
+    });
+</script>
 <!-- Vendor JS Files -->
 <script src="{{ asset('admin/vendor/apexcharts/apexcharts.min.js') }}"></script>
 <script src="{{ asset('admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

@@ -122,7 +122,7 @@
                                 @foreach($dsNLSXChiTiets as $dsNLSXChiTiet)
                                     <tr>
                                         <td>
-                                            <select class="form-control"
+                                            <select class="form-control selectCustom"
                                                     name="nguyen_lieu_ids[]">
                                                 @foreach($nltinhs as $nltinh)
                                                     <option
@@ -162,10 +162,10 @@
 
         <script>
             const baseHtml = `<tr><td>
-                                        <select class="form-control"
+                                        <select class="form-control selectCustom"
                                                 name="nguyen_lieu_ids[]">
                                             @foreach($nltinhs as $nltinh)
-            <option value="{{ $nltinh->id }}">{{ $nltinh->code }}
+            <option value="{{ $nltinh->id }}">{{ $nltinh->code }} - {{ $nltinh->ten_nguyen_lieu }}
             - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
             </option>
 @endforeach
@@ -186,6 +186,17 @@
 
             function plusItem() {
                 $('#tbodyListNL').append(baseHtml);
+                appendSelect2();
+            }
+
+            function appendSelect2() {
+                $('.selectCustom').select2({
+                    theme: 'bootstrap-5',
+                    placeholder: 'Lựa chọn...',
+                    allowClear: true,
+                    width: '100%',
+                    minimumResultsForSearch: 0
+                });
             }
 
             function removeItems(el) {

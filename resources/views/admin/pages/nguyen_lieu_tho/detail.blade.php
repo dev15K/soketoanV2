@@ -47,7 +47,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nha_cung_cap_id">Nhà cung cấp</label>
-                                    <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control">
+                                    <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control selectCustom">
                                         @foreach($nccs as $ncc)
                                             <option
                                                 {{ $nguyen_lieu_tho->nha_cung_cap_id == $ncc->id ? 'selected' : '' }}
@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="phuong_thuc_thanh_toan">Phương thức thanh toán</label>
-                                    <select class="form-control" name="phuong_thuc_thanh_toan"
+                                    <select class="form-control selectCustom" name="phuong_thuc_thanh_toan"
                                             id="phuong_thuc_thanh_toan">
                                         @foreach($loai_quies as $loai_quy)
                                             <option
@@ -137,7 +137,7 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="nhan_su_xu_li">Nhân sự xử lý</label>
-                                    <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
+                                    <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control selectCustom">
                                         @foreach($nsus as $nsu)
                                             <option
                                                 {{ $nsu->full_name == $nguyen_lieu_tho->nhan_su_xu_li ? 'selected' : '' }}

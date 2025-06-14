@@ -1,3 +1,4 @@
+@php use App\Enums\TrangThaiNguyenLieuThanhPham; @endphp
 @extends('admin.layouts.master')
 @section('title')
     Kho đã đóng gói
@@ -39,7 +40,7 @@
                             </div>
                             <div class="col-md-4 form-group">
                                 <select name="nguyen_lieu_san_xuat_id_search" id="nguyen_lieu_san_xuat_id_search"
-                                        class="form-control">
+                                        class="form-control selectCustom">
                                     <option value="">Lựa chọn Lô SX</option>
                                     @foreach($nlsanxuats as $nlsanxuat)
                                         <option
@@ -52,7 +53,8 @@
                                 </select>
                             </div>
                             <div class="col-md-4 form-group">
-                                <select name="san_pham_id_search" id="san_pham_id_search" class="form-control">
+                                <select name="san_pham_id_search" id="san_pham_id_search"
+                                        class="form-control selectCustom">
                                     <option value="">Lựa chọn Mã sản phẩm</option>
                                     @foreach($products as $product)
                                         <option {{ $product->id == $san_pham_id_search ? 'selected' : '' }}
@@ -105,7 +107,7 @@
                             <div class="form-group col-md-4">
                                 <label for="nguyen_lieu_san_xuat_id">Lô SX</label>
                                 <select name="nguyen_lieu_san_xuat_id" id="nguyen_lieu_san_xuat_id"
-                                        class="form-control">
+                                        class="form-control selectCustom">
                                     @foreach($nlsanxuats as $nlsanxuat)
                                         <option value="{{ $nlsanxuat->id }}"
                                             {{ old('nguyen_lieu_san_xuat_id') == $nlsanxuat->id ? 'selected' : '' }}>
@@ -120,7 +122,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="san_pham_id">Mã sản phẩm</label>
-                                <select name="san_pham_id" id="san_pham_id" class="form-control"
+                                <select name="san_pham_id" id="san_pham_id" class="form-control selectCustom"
                                         onchange="changeSanPham()">
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}"
@@ -183,13 +185,13 @@
                             <div class="form-group col-md-6">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}"
-                                        {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() ? 'selected' : '' }}>
-                                        {{ \App\Enums\TrangThaiNguyenLieuThanhPham::ACTIVE() }}
+                                    <option value="{{ TrangThaiNguyenLieuThanhPham::ACTIVE() }}"
+                                        {{ old('trang_thai') == TrangThaiNguyenLieuThanhPham::ACTIVE() ? 'selected' : '' }}>
+                                        {{ TrangThaiNguyenLieuThanhPham::ACTIVE() }}
                                     </option>
-                                    <option value="{{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}"
-                                        {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() ? 'selected' : '' }}>
-                                        {{ \App\Enums\TrangThaiNguyenLieuThanhPham::INACTIVE() }}
+                                    <option value="{{ TrangThaiNguyenLieuThanhPham::INACTIVE() }}"
+                                        {{ old('trang_thai') == TrangThaiNguyenLieuThanhPham::INACTIVE() ? 'selected' : '' }}>
+                                        {{ TrangThaiNguyenLieuThanhPham::INACTIVE() }}
                                     </option>
                                 </select>
                             </div>
