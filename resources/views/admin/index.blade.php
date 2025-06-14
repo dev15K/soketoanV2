@@ -94,7 +94,7 @@
                             <div class="col-md-6 form-group">
                                 <label for="ma_phieu">Mã phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_phieu"
-                                       name="ma_phieu"
+                                       name="ma_phieu" readonly
                                        value="{{ $ma_phieu }}" required>
                             </div>
                         </div>

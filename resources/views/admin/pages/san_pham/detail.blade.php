@@ -31,7 +31,7 @@
                             <div class="form-group col-md-6">
                                 <label for="ma_san_pham">Mã sản phẩm</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ma_san_pham"
-                                       name="ma_san_pham" value="{{ $code }}" required>
+                                       name="ma_san_pham" value="{{ $code }}" readonly required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="ma_vach">Mã vạch</label>

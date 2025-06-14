@@ -70,17 +70,17 @@
                             <div class="form-group col-md-12">
                                 <label for="ten_san_pham">Tên sản phẩm</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="ten_san_pham"
-                                       name="ten_san_pham" required>
+                                       name="ten_san_pham" readonly required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_rieng">KL rieng gr</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="khoi_luong_rieng"
-                                       name="khoi_luong_rieng" required>
+                                       name="khoi_luong_rieng" readonly required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="don_vi_tinh">Đơn vị tính</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="don_vi_tinh"
-                                       name="don_vi_tinh" required>
+                                       name="don_vi_tinh" readonly required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="price">Giá xuất kho thương mại</label>
@@ -105,7 +105,7 @@
                                 <label for="total_price">Tổng tiền</label>
                                 <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
                                        value="{{ $nguyenLieuThanhPham->total_price }}" id="total_price"
-                                       name="total_price" required>
+                                       name="total_price" readonly required>
                             </div>
                         </div>
                         <div class="row">
