@@ -138,6 +138,7 @@ class AdminPhieuSanXuatController extends Controller
         $thoi_gian_hoan_thanh_san_xuat = $request->input('thoi_gian_hoan_thanh_san_xuat');
         $nguyen_lieu_id = 0;
         $nhan_su_xu_li = $request->input('nhan_su_xu_li');
+        $ten_phieu = $request->input('ten_phieu');
 
         if (!$phieuSanXuat->code) {
             $phieuSanXuat->code = $code;
@@ -152,6 +153,7 @@ class AdminPhieuSanXuatController extends Controller
         $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
         $phieuSanXuat->nhan_su_xu_li_id = $nhan_su_xu_li;
         $phieuSanXuat->thoi_gian_hoan_thanh_san_xuat = $thoi_gian_hoan_thanh_san_xuat;
+        $phieuSanXuat->ten_phieu = $ten_phieu;
 
         return $phieuSanXuat;
     }
