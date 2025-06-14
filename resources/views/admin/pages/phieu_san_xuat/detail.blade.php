@@ -33,7 +33,7 @@
                             <div class="form-group col-md-4">
                                 <label for="code">Mã Phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
-                                       value="{{ old('code', $code) }}" required>
+                                       value="{{ old('code', $code) }}" readonly required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="ten_phieu">Tên nguyên liệu</label>
@@ -45,14 +45,14 @@
                                 <label for="so_lo_san_xuat">Số LÔ SX</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="so_lo_san_xuat"
                                        name="so_lo_san_xuat" value="{{ old('so_lo_san_xuat', $so_lo_san_xuat) }}"
-                                       required>
+                                       readonly required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="tong_khoi_luong">Khối lượng</label>
                                 <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
-                                       id="tong_khoi_luong"
+                                       id="tong_khoi_luong" readonly
                                        name="tong_khoi_luong" value="{{ $phieu_san_xuat->tong_khoi_luong }}" readonly>
                             </div>
                             <div class="form-group col-md-6">
