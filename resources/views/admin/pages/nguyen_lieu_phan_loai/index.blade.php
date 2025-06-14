@@ -73,7 +73,8 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="nguyen_lieu_tho_id">Mã đơn hàng</label>
-                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id" class="form-control">
+                                <select name="nguyen_lieu_tho_id" id="nguyen_lieu_tho_id"
+                                        class="form-control selectNguyenLieuTho">
                                     @foreach($nlthos as $nltho)
                                         <option
                                             value="{{ $nltho->id }}" {{ old('nguyen_lieu_tho_id') == $nltho->id ? 'selected' : '' }}>
@@ -302,4 +303,16 @@
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(function () {
+            $('#nguyen_lieu_tho_id').select2({
+                theme: 'bootstrap-5',
+                placeholder: 'Chọn nguyên liệu thô...',
+                allowClear: true,
+                width: '100%',
+                minimumResultsForSearch: 0
+            });
+        });
+    </script>
+
 @endsection
