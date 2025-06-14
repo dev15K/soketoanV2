@@ -77,12 +77,17 @@
                     <form method="post" action="{{ route('admin.phieu.san.xuat.store') }}" class="d-none">
                         @csrf
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="code">Mã Phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
                                        value="{{ old('code', $code) }}" required>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
+                                <label for="ten_phieu">Tên nguyên liệu</label>
+                                <input type="text" class="form-control" id="ten_phieu"
+                                       name="ten_phieu" value="{{ old('ten_phieu') }}" required>
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label for="so_lo_san_xuat">Số LÔ SX</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="so_lo_san_xuat"
                                        name="so_lo_san_xuat" value="{{ old('so_lo_san_xuat', $so_lo_san_xuat) }}"
@@ -167,7 +172,7 @@
                                                 name="nguyen_lieu_ids[]">
                                             @foreach($nltinhs as $nltinh)
                                                 <option value="{{ $nltinh->id }}">
-                                                    {{ $nltinh->code }}
+                                                    {{ $nltinh->code }} - {{ $nltinh->ten_nguyen_lieu }}
                                                     - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
                                                 </option>
                                             @endforeach
@@ -245,6 +250,7 @@
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
+                            <col width="10%">
                             <col width="x">
                             <col width="10%">
                             <col width="10%">
@@ -259,6 +265,7 @@
                             <th scope="col">Hành động</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Mã phiếu</th>
+                            <th scope="col">Tên nguyên liệu</th>
                             <th scope="col">Số LÔ SX</th>
                             <th scope="col">Tổng KL(kg)</th>
                             <th scope="col">KL đã dùng(kg)</th>
@@ -291,6 +298,7 @@
                                 </td>
                                 <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
                                 <td>{{ $data->code }}</td>
+                                <td>{{ $data->ten_phieu }}</td>
                                 <td>{{ $data->so_lo_san_xuat }}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
                                 <td>{{ number_format($data->khoi_luong_da_dung) }} kg</td>

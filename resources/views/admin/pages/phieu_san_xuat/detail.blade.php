@@ -30,15 +30,22 @@
                         @csrf
                         @csrf
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="code">Mã Phiếu</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
-                                       value="{{ $code }}" required>
+                                       value="{{ old('code', $code) }}" required>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
+                                <label for="ten_phieu">Tên nguyên liệu</label>
+                                <input type="text" class="form-control" id="ten_phieu"
+                                       name="ten_phieu" value="{{ old('ten_phieu', $phieu_san_xuat->ten_phieu) }}"
+                                       required>
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label for="so_lo_san_xuat">Số LÔ SX</label>
                                 <input type="text" class="form-control bg-secondary bg-opacity-10" id="so_lo_san_xuat"
-                                       name="so_lo_san_xuat" value="{{ $so_lo_san_xuat }}" required>
+                                       name="so_lo_san_xuat" value="{{ old('so_lo_san_xuat', $so_lo_san_xuat) }}"
+                                       required>
                             </div>
                         </div>
                         <div class="row">
@@ -121,7 +128,7 @@
                                                     <option
                                                         {{ $dsNLSXChiTiet->nguyen_lieu_id == $nltinh->id ? 'selected' : '' }}
                                                         value="{{ $nltinh->id }}">
-                                                        {{ $nltinh->code }}
+                                                        {{ $nltinh->code }} - {{ $nltinh->ten_nguyen_lieu }}
                                                         - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
                                                     </option>
                                                 @endforeach
