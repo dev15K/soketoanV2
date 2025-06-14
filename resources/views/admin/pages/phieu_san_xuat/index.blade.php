@@ -103,7 +103,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="nhan_su_xu_li">Nhân sự xử lý</label>
-                                <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
+                                <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control selectCustom">
                                     @foreach($nsus as $nsu)
                                         <option value="{{ $nsu->id }}"
                                             {{ old('nhan_su_xu_li') == $nsu->id ? 'selected' : '' }}>
@@ -168,7 +168,7 @@
                                 <tbody id="tbodyListNL" class="text-center">
                                 <tr>
                                     <td>
-                                        <select class="form-control"
+                                        <select class="form-control selectCustom"
                                                 name="nguyen_lieu_ids[]">
                                             @foreach($nltinhs as $nltinh)
                                                 <option value="{{ $nltinh->id }}">
@@ -204,10 +204,10 @@
 
         <script>
             const baseHtml = `<tr><td>
-                                        <select class="form-control"
+                                        <select class="form-control selectCustom"
                                                 name="nguyen_lieu_ids[]">
                                             @foreach($nltinhs as $nltinh)
-            <option value="{{ $nltinh->id }}">{{ $nltinh->code }}
+            <option value="{{ $nltinh->id }}">{{ $nltinh->code }} - {{ $nltinh->ten_nguyen_lieu }}
             - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
             </option>
 @endforeach
@@ -228,6 +228,17 @@
 
             function plusItem() {
                 $('#tbodyListNL').append(baseHtml);
+                appendSelect2();
+            }
+
+            function appendSelect2() {
+                $('.selectCustom').select2({
+                    theme: 'bootstrap-5',
+                    placeholder: 'Lựa chọn...',
+                    allowClear: true,
+                    width: '100%',
+                    minimumResultsForSearch: 0
+                });
             }
 
             function removeItems(el) {

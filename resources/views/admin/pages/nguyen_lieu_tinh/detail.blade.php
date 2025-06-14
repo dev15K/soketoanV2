@@ -94,7 +94,7 @@
                                 @foreach($dsNLTChiTiet as $nltct)
                                     <tr>
                                         <td>
-                                            <select class="form-control nguyen_lieu_phan_loai_ids"
+                                            <select class="form-control selectCustom nguyen_lieu_phan_loai_ids"
                                                     name="nguyen_lieu_phan_loai_ids[]"
                                                     onchange="selectNLPhanLoai(this)">
                                                 @foreach($nlphanloais as $nlphanloai)
@@ -182,7 +182,7 @@
         <script>
             const baseHtml = `<tr>
                                     <td>
-                                        <select class="form-control" name="nguyen_lieu_phan_loai_ids[]" onchange="selectNLPhanLoai(this)">
+                                        <select class="form-control selectCustom" name="nguyen_lieu_phan_loai_ids[]" onchange="selectNLPhanLoai(this)">
                                             @foreach($nlphanloais as $nlphanloai)
             <option  value="{{ $nlphanloai->id }}">
             {{ $nlphanloai->nguyenLieuTho->code }} - {{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
@@ -211,6 +211,17 @@
 
             function plusItem() {
                 $('#tbodyListNL').append(baseHtml);
+                appendSelect2();
+            }
+
+            function appendSelect2() {
+                $('.selectCustom').select2({
+                    theme: 'bootstrap-5',
+                    placeholder: 'Lựa chọn...',
+                    allowClear: true,
+                    width: '100%',
+                    minimumResultsForSearch: 0
+                });
             }
 
             function removeItems(el) {

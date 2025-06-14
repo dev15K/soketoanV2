@@ -52,7 +52,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="khach_hang_id">Khách hàng</label>
-                            <select id="khach_hang_id" name="khach_hang_id" class="form-control" onchange="changeKhachHang()">
+                            <select id="khach_hang_id" name="khach_hang_id" class="form-control selectCustom" onchange="changeKhachHang()">
                                 <option value="0" {{ old('khach_hang_id') == 0 ? 'selected' : '' }}>Khách lẻ</option>
                                 @foreach($khachhangs as $khachhang)
                                     <option value="{{ $khachhang->id }}" {{ old('khach_hang_id') == $khachhang->id ? 'selected' : '' }}>
@@ -91,7 +91,7 @@
 
                             <div class="form-group col-md-6">
                                 <label for="loai_quy_id">Loại quỹ</label>
-                                <select class="form-control" name="loai_quy_id" id="loai_quy_id">
+                                <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
                                     @foreach($loai_quies as $loai_quy)
                                         <option value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
                                             {{ $loai_quy->ten_loai_quy }}
