@@ -231,7 +231,7 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <table class="table table-hover small position-relative" style="min-width: 3000px">
+                    <table class="table table-hover small position-relative" style="min-width: 3000px; max-height: 400px; overflow-y: auto;">
                         <colgroup>
                             <col width="50px">
                             <col width="100px">

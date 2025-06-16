@@ -48,60 +48,62 @@
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
-                <div class="card-body">
+                <div class="card-body p-0">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
                         <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('loai_quy')">Xoá tất
                             cả
                         </button>
                     </div>
-                    <table class="table table-hover">
-                        <colgroup>
-                            <col width="5%">
-                            <col width="10%">
-                            <col width="15%">
-                            <col width="x">
-                            <col width="30%">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
-                            <th scope="col">Hành động</th>
-                            <th scope="col">Ngày tạo</th>
-                            <th scope="col">Tên quỹ</th>
-                            <th scope="col">Tổng số tiền</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($datas as $data)
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-hover">
+                            <colgroup>
+                                <col width="5%">
+                                <col width="10%">
+                                <col width="15%">
+                                <col width="x">
+                                <col width="30%">
+                            </colgroup>
+                            <thead class="table-light" style="position: sticky; top: 0; z-index: 10;">
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.loai.quy.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <form action="{{ route('admin.loai.quy.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
-                                <td>{{ $data->ten_loai_quy }}</td>
-                                <td>{{ parseNumber($data->tong_tien_quy) }} VND</td>
+                                <th scope="col">
+                                    <input type="checkbox" name="check_all" id="check_all">
+                                </th>
+                                <th scope="col">Hành động</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Tên quỹ</th>
+                                <th scope="col">Tổng số tiền</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($datas as $data)
+                                <tr>
+                                    <th scope="row"><input type="checkbox" name="check_item[]"
+                                                           id="check_item{{ $data->id }}"
+                                                           value="{{ $data->id }}"></th>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{{ route('admin.loai.quy.detail', $data->id) }}"
+                                               class="btn btn-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <form action="{{ route('admin.loai.quy.delete', $data->id) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
+                                    <td>{{ $data->ten_loai_quy }}</td>
+                                    <td>{{ parseNumber($data->tong_tien_quy) }} VND</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 {{ $datas->links('pagination::bootstrap-5') }}
             </div>
