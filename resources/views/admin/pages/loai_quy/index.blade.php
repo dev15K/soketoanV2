@@ -50,7 +50,9 @@
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
-                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('loai_quy')">Xoá tất cả</button>
+                        <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('loai_quy')">Xoá tất
+                            cả
+                        </button>
                     </div>
                     <table class="table table-hover">
                         <colgroup>
@@ -74,7 +76,8 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]" id="check_item{{ $data->id }}"
+                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                       id="check_item{{ $data->id }}"
                                                        value="{{ $data->id }}"></th>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
@@ -100,7 +103,7 @@
                         </tbody>
                     </table>
                 </div>
-
+                {{ $datas->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </section>

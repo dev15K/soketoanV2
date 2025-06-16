@@ -478,11 +478,10 @@
                         @endforeach
                         </tbody>
                     </table>
-
-                    {{ $datas->links('pagination::bootstrap-5') }}
                 </div>
 
             </div>
+            {{ $datas->links('pagination::bootstrap-5') }}
         </div>
     </section>
 @endsection
