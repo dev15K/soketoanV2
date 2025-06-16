@@ -87,10 +87,10 @@
                         @endforeach
                         </tbody>
                     </table>
-                    {{ $users->links('pagination::bootstrap-5') }}
                 </div>
 
             </div>
+            {{ $users->links('pagination::bootstrap-5') }}
         </div>
     </section>
 @endsection
