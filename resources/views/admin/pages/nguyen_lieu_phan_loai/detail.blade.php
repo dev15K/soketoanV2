@@ -25,7 +25,7 @@
                     <h5 class="card-title">Chỉnh sửa Kho nguyên liệu phân loại</h5>
 
 
-                    @if($nguyen_lieu_phan_loai->khoi_luong_da_phan_loai > 0)
+                    @if($nguyen_lieu_phan_loai->khoi_luong_da_phan_loai <= 0)
                         <form method="post"
                               action="{{ route('admin.nguyen.lieu.phan.loai.update', $nguyen_lieu_phan_loai->id) }}">
                             @method('PUT')
@@ -138,7 +138,7 @@
                                            value="{{ parseNumber($nguyen_lieu_phan_loai->gia_sau_phan_loai, 3) }}">
                                 </div>
                             </div>
-                            @if($nguyen_lieu_phan_loai->khoi_luong_da_phan_loai > 0)
+                            @if($nguyen_lieu_phan_loai->khoi_luong_da_phan_loai <= 0)
                                 <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
                         </form>
                     @endif
