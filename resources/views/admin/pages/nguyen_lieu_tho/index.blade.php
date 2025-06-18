@@ -287,9 +287,15 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
+                                <th scope="row">
+                                    @if(!$data->allow_change)
+                                        <input type="checkbox" disabled>
+                                    @else
+                                        <input type="checkbox" name="check_item[]"
+                                               id="check_item{{ $data->id }}"
+                                               value="{{ $data->id }}">
+                                    @endif
+                                </th>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.nguyen.lieu.tho.detail', $data->id) }}"
