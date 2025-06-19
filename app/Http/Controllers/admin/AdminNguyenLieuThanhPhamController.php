@@ -11,6 +11,7 @@ use App\Models\NguyenLieuThanhPham;
 use App\Models\SanPham;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminNguyenLieuThanhPhamController extends Controller
 {
@@ -68,16 +69,22 @@ class AdminNguyenLieuThanhPhamController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $nguyenLieuThanhPham = new NguyenLieuThanhPham();
 
             $nguyenLieuThanhPham = $this->saveData($nguyenLieuThanhPham, $request);
             if (!$nguyenLieuThanhPham) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Số lượng không đủ!')->withInput();
             }
             $nguyenLieuThanhPham->save();
 
+            DB::commit();
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu thành phẩm thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
@@ -171,19 +178,25 @@ class AdminNguyenLieuThanhPhamController extends Controller
     public function update($id, Request $request)
     {
         try {
+            DB::beginTransaction();
             $nguyenLieuThanhPham = NguyenLieuThanhPham::find($id);
             if (!$nguyenLieuThanhPham || $nguyenLieuThanhPham->trang_thai == TrangThaiNguyenLieuThanhPham::DELETED()) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thành phẩm');
             }
 
             $nguyenLieuThanhPham = $this->saveData($nguyenLieuThanhPham, $request);
             if (!$nguyenLieuThanhPham) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Số lượng không đủ!');
             }
             $nguyenLieuThanhPham->save();
 
+            DB::commit();
             return redirect()->route('admin.nguyen.lieu.thanh.pham.index')->with('success', 'Chỉnh sửa nguyên liệu thành phẩm thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
