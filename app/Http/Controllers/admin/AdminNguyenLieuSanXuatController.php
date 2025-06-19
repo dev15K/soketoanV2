@@ -12,6 +12,7 @@ use App\Models\PhieuSanXuatChiTiet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminNguyenLieuSanXuatController extends Controller
 {
@@ -69,16 +70,22 @@ class AdminNguyenLieuSanXuatController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $nguyen_lieu_san_xuat = new NguyenLieuSanXuat();
 
             $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
             if (!$nguyen_lieu_san_xuat) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Số lượng không đủ')->withInput();
             }
             $nguyen_lieu_san_xuat->save();
 
+            DB::commit();
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu sản xuất thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
@@ -106,7 +113,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             return false;
         }
 
-        if ($oldKhoiLuong != $khoi_luong){
+        if ($oldKhoiLuong != $khoi_luong) {
             if (!$khoi_luong || $khoi_luong <= 0 || !is_numeric($khoi_luong)) {
                 return false;
             }
@@ -198,19 +205,25 @@ class AdminNguyenLieuSanXuatController extends Controller
     public function update($id, Request $request)
     {
         try {
+            DB::beginTransaction();
             $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
             if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
             }
 
             $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
             if (!$nguyen_lieu_san_xuat) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Số lượng không đủ');
             }
             $nguyen_lieu_san_xuat->save();
 
+            DB::commit();
             return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa nguyên liệu sản xuất thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }

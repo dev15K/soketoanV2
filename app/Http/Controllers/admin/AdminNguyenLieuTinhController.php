@@ -109,6 +109,8 @@ class AdminNguyenLieuTinhController extends Controller
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu tinh thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -326,6 +328,8 @@ class AdminNguyenLieuTinhController extends Controller
             DB::commit();
             return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }

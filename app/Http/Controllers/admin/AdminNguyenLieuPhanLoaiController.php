@@ -72,6 +72,8 @@ class AdminNguyenLieuPhanLoaiController extends Controller
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu phân loại thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -220,6 +222,8 @@ class AdminNguyenLieuPhanLoaiController extends Controller
             DB::commit();
             return redirect()->route('admin.nguyen.lieu.phan.loai.index')->with('success', 'Chỉnh sửa nguyên liệu phân loại thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
