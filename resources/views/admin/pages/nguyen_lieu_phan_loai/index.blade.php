@@ -129,20 +129,25 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="tam_dai">NL Tăm dài</label>
                                 <input type="text" class="onlyNumber form-control" id="tam_dai" name="tam_dai"
                                        value="{{ old('tam_dai') }}">
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="tam_ngan">NL Tăm ngắn</label>
                                 <input type="text" class="onlyNumber form-control" id="tam_ngan" name="tam_ngan"
                                        value="{{ old('tam_ngan') }}">
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="nuoc_cat">Nước cất</label>
                                 <input type="text" class="onlyNumber form-control" id="nuoc_cat" name="nuoc_cat"
                                        value="{{ old('nuoc_cat') }}">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="tam_nhanh_sao">Tăm nhanh sào</label>
+                                <input type="text" class="form-control onlyNumber" id="tam_nhanh_sao"
+                                       name="tam_nhanh_sao" value="{{ old('tam_nhanh_sao')  }}">
                             </div>
                         </div>
 
@@ -186,6 +191,7 @@
                             <col width="180px">
                             <col width="180px">
                             <col width="180px">
+                            <col width="180px">
                             <col width="250px">
                             <col width="200px">
                             <col width="200px">
@@ -212,6 +218,7 @@
                             <th scope="col">Nước cất</th>
                             <th scope="col">Keo</th>
                             <th scope="col">Nấu dầu</th>
+                            <th scope="col">Tăm nhanh sào</th>
                             <th scope="col">Chi phí mua</th>
                             <th scope="col">Tổng khối lượng</th>
                             <th scope="col">Khối lượng ban đầu</th>
@@ -268,6 +275,7 @@
                                 <td>{{ parseNumber($data->nuoc_cat, 0) }} kg</td>
                                 <td>{{ parseNumber($data->keo, 0) }} kg</td>
                                 <td>{{ parseNumber($data->nau_dau, 0) }} kg</td>
+                                <td>{{ parseNumber($data->tam_nhanh_sao, 0) }} kg</td>
                                 <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
                                 <td>{{ parseNumber($data->khoi_luong_ban_dau, 0) }} kg</td>
@@ -296,6 +304,7 @@
                             <th scope="col">{{ parseNumber($datas->sum('nuoc_cat'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('keo'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('nau_dau'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('tam_nhanh_sao'), 0) }} kg</th>
                             <th scope="col"></th>
                             <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
