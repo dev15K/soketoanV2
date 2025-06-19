@@ -21,6 +21,7 @@ use App\Models\NguyenLieuTinh;
 use App\Models\SoQuy;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminBanHangController extends Controller
 {
@@ -86,6 +87,8 @@ class AdminBanHangController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $khach_hang_id = $request->input('khach_hang_id');
             $ten_khach_hang = $request->input('ten_khach_hang');
             $so_dien_thoai = $request->input('so_dien_thoai');
@@ -96,6 +99,7 @@ class AdminBanHangController extends Controller
 
             $loaiQuy = LoaiQuy::find($loai_quy_id);
             if (!$loaiQuy) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy loại quý');
             }
 
@@ -139,6 +143,7 @@ class AdminBanHangController extends Controller
                             $kl = $nguyenLieuTho->khoi_luong - $nguyenLieuTho->khoi_luong_da_ban;
                             if ($kl > $ban_hang_chi_tiet->so_luong) {
                                 $banhang->delete();
+                                DB::rollBack();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuTho->khoi_luong_da_ban = $ban_hang_chi_tiet->so_luong;
@@ -151,6 +156,7 @@ class AdminBanHangController extends Controller
                             $kl = $nguyenLieuPhanLoai->tong_khoi_luong - $nguyenLieuPhanLoai->khoi_luong_da_phan_loai;
                             if ($kl > $ban_hang_chi_tiet->so_luong) {
                                 $banhang->delete();
+                                DB::rollBack();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuPhanLoai->khoi_luong_da_phan_loai = $ban_hang_chi_tiet->so_luong;
@@ -163,6 +169,7 @@ class AdminBanHangController extends Controller
                             $kl = $nguyenLieuTinh->tong_khoi_luong - $nguyenLieuTinh->so_luong_da_dung;
                             if ($kl > $ban_hang_chi_tiet->so_luong) {
                                 $banhang->delete();
+                                DB::rollBack();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuTinh->so_luong_da_dung = $ban_hang_chi_tiet->so_luong;
@@ -175,6 +182,7 @@ class AdminBanHangController extends Controller
                             $kl = $nguyenLieuSanXuat->khoi_luong - $nguyenLieuSanXuat->khoi_luong_da_dung;
                             if ($kl > $ban_hang_chi_tiet->so_luong) {
                                 $banhang->delete();
+                                DB::rollBack();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuSanXuat->khoi_luong_da_dung = $ban_hang_chi_tiet->so_luong;
@@ -187,6 +195,7 @@ class AdminBanHangController extends Controller
                             $kl = $nguyenLieuThanhPham->so_luong - $nguyenLieuThanhPham->so_luong_da_ban;
                             if ($kl > $ban_hang_chi_tiet->so_luong) {
                                 $banhang->delete();
+                                DB::rollBack();
                                 return redirect()->back()->with('error', 'Số lượng không đủ!');
                             }
                             $nguyenLieuThanhPham->so_luong_da_ban = $ban_hang_chi_tiet->so_luong;
@@ -205,6 +214,7 @@ class AdminBanHangController extends Controller
 
             $this->insertBanHang($banhang, false, null, $loai_quy_id);
 
+            DB::commit();
             return redirect()->back()->with('success', 'Thêm mới hóa đơn bán hàng thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
@@ -287,6 +297,8 @@ class AdminBanHangController extends Controller
     public function update($id, Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $khach_hang_id = $request->input('khach_hang_id');
             $ten_khach_hang = $request->input('ten_khach_hang');
             $so_dien_thoai = $request->input('so_dien_thoai');
@@ -297,6 +309,7 @@ class AdminBanHangController extends Controller
 
             $banhang = BanHang::find($id);
             if (!$banhang || $banhang->trang_thai == TrangThaiBanHang::DELETED()) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy hóa đơn bán hàng');
             }
 
@@ -348,6 +361,7 @@ class AdminBanHangController extends Controller
             $idUpdate = SoQuy::where('gia_tri_id', $banhang->id)->first();
             $this->insertBanHang($banhang, true, $idUpdate->id, $loai_quy_id);
 
+            DB::commit();
             return redirect()->route('admin.ban.hang.index')->with('success', 'Chỉnh sửa hóa đơn bán hàng thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
