@@ -14,6 +14,7 @@ use App\Models\PhieuSanXuatChiTiet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminPhieuSanXuatController extends Controller
 {
@@ -111,6 +112,8 @@ class AdminPhieuSanXuatController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $phieu_san_xuat = new PhieuSanXuat();
 
             $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
@@ -120,9 +123,18 @@ class AdminPhieuSanXuatController extends Controller
 
             if (!$success) {
                 PhieuSanXuat::where('id', $phieu_san_xuat->id)->delete();
+
+                $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieu_san_xuat->id)->get();
+                foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+                    $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+                    $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+                    $nguyenLieuTinh->save();
+                }
+                DB::rollBack();
                 return redirect()->route('admin.phieu.san.xuat.index')->with('error', 'Không có đủ nguyên liệu.')->withInput();
             }
 
+            DB::commit();
             return redirect()->back()->with('success', 'Thêm mới phiếu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
@@ -247,6 +259,8 @@ class AdminPhieuSanXuatController extends Controller
     public function update($id, Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $phieu_san_xuat = PhieuSanXuat::find($id);
             if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiphieuSanXuat::DELETED()) {
                 return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
@@ -255,8 +269,12 @@ class AdminPhieuSanXuatController extends Controller
             $phieu_san_xuat = $this->saveData($phieu_san_xuat, $request);
             $phieu_san_xuat->save();
 
-            $this->saveDataChiTiet($phieu_san_xuat, $request);
-
+            $success = $this->saveDataChiTiet($phieu_san_xuat, $request);
+            if (!$success) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh.')->withInput();
+            }
+            DB::commit();
             return redirect()->route('admin.phieu.san.xuat.index')->with('success', 'Chỉnh sửa phiếu sản xuất thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();

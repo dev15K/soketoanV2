@@ -22,8 +22,10 @@ use App\Models\NguyenLieuSanXuat;
 use App\Models\NguyenLieuThanhPham;
 use App\Models\NguyenLieuTho;
 use App\Models\NguyenLieuTinh;
+use App\Models\NguyenLieuTinhChiTiet;
 use App\Models\NhaCungCaps;
 use App\Models\PhieuSanXuat;
+use App\Models\PhieuSanXuatChiTiet;
 use App\Models\SanPham;
 use App\Models\SoQuy;
 use App\Models\ThongTin;
@@ -132,18 +134,93 @@ class AdminHomeController extends Controller
                         ->where('khoi_luong_da_phan_loai', null)
                         ->orWhere('khoi_luong_da_phan_loai', 0)
                         ->update(['trang_thai' => TrangThaiNguyenLieuPhanLoai::DELETED()]);
+
+                    foreach ($list_id as $id) {
+                        $nguyen_lieu_phan_loai = NguyenLieuPhanLoai::where('id', $id)
+                            ->where('khoi_luong_da_phan_loai', null)
+                            ->orWhere('khoi_luong_da_phan_loai', 0)
+                            ->first();
+
+                        if ($nguyen_lieu_phan_loai) {
+                            $nguyenLieuTho = NguyenLieuTho::where('id', $id)->first();
+                            if ($nguyenLieuTho) {
+                                $nguyenLieuTho->khoi_luong_da_phan_loai = $nguyenLieuTho->khoi_luong_da_phan_loai - $nguyen_lieu_phan_loai->khoi_luong_ban_dau;
+                                $nguyenLieuTho->save();
+
+                                $otherNguyenLieuTho = NguyenLieuPhanLoai::where('nguyen_lieu_tho_id', $nguyenLieuTho->id)
+                                    ->where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
+                                    ->first();
+
+                                if (!$otherNguyenLieuTho) {
+                                    $nguyenLieuTho->allow_change = true;
+                                    $nguyenLieuTho->save();
+                                }
+                            }
+                        }
+                    }
                     break;
                 case "tinh":
                     NguyenLieuTinh::whereIn('id', $list_id)
                         ->where('so_luong_da_dung', null)
                         ->orWhere('so_luong_da_dung', 0)
                         ->update(['trang_thai' => TrangThaiNguyenLieuTinh::DELETED()]);
+
+                    foreach ($list_id as $id) {
+                        $nguyenLieuTinh = NguyenLieuTinh::where('id', $id)
+                            ->where('so_luong_da_dung', null)
+                            ->orWhere('so_luong_da_dung', 0)
+                            ->first();
+                        if ($nguyenLieuTinh) {
+                            $chiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $id)->get();
+                            foreach ($chiTiets as $chiTiet) {
+                                $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($chiTiet->nguyen_lieu_phan_loai_id);
+                                if ($nguyenLieuPhanLoai) {
+                                    $mapping = [
+                                        'Nguyên liệu nụ cao cấp (NCC)' => 'nu_cao_cap',
+                                        'Nguyên liệu nụ VIP (NVIP)' => 'nu_vip',
+                                        'Nguyên liệu nhang (NLN)' => 'nhang',
+                                        'Nguyên liệu vòng (NLV)' => 'vong',
+                                        'Tăm dài' => 'tam_dai',
+                                        'Tăm ngắn' => 'tam_ngan',
+                                        'Nước cất' => 'nuoc_cat',
+                                        'Keo' => 'keo',
+                                        'Nấu dầu' => 'nau_dau',
+                                    ];
+
+                                    $ten = $chiTiet->ten_nguyen_lieu;
+
+                                    if (isset($mapping[$ten])) {
+                                        $field = $mapping[$ten];
+                                        $nguyenLieuPhanLoai->$field += $chiTiet->khoi_luong;
+                                    }
+
+                                    $nguyenLieuPhanLoai->khoi_luong_da_phan_loai -= $chiTiet->khoi_luong;
+                                    $nguyenLieuPhanLoai->save();
+                                }
+                            }
+                        }
+                    }
                     break;
                 case "phieu_san_xuat":
                     PhieuSanXuat::whereIn('id', $list_id)
                         ->where('khoi_luong_da_dung', null)
                         ->orWhere('khoi_luong_da_dung', 0)
                         ->update(['trang_thai' => TrangThaiPhieuSanXuat::DELETED()]);
+
+                    foreach ($list_id as $id) {
+                        $phieuSanXuat = PhieuSanXuat::where('id', $id)
+                            ->where('khoi_luong_da_dung', null)
+                            ->orWhere('khoi_luong_da_dung', 0)
+                            ->first();
+                        if ($phieuSanXuat) {
+                            $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)->get();
+                            foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+                                $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+                                $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+                                $nguyenLieuTinh->save();
+                            }
+                        }
+                    }
                     break;
                 case "thanh_pham":
                     NguyenLieuSanXuat::whereIn('id', $list_id)

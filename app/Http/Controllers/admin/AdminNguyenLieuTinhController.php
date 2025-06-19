@@ -10,6 +10,7 @@ use App\Models\NguyenLieuTinh;
 use App\Models\NguyenLieuTinhChiTiet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminNguyenLieuTinhController extends Controller
 {
@@ -90,6 +91,7 @@ class AdminNguyenLieuTinhController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
             $nguyen_lieu_tinh = new NguyenLieuTinh();
 
             $nguyen_lieu_tinh = $this->saveData($nguyen_lieu_tinh, $request);
@@ -99,9 +101,11 @@ class AdminNguyenLieuTinhController extends Controller
 
             if (!$success) {
                 NguyenLieuTinh::where('id', $nguyen_lieu_tinh->id)->delete();
+                DB::rollBack();
                 return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.')->withInput();
             }
 
+            DB::commit();
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu tinh thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
@@ -302,6 +306,8 @@ class AdminNguyenLieuTinhController extends Controller
     public function update($id, Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $nguyen_lieu_tinh = NguyenLieuTinh::find($id);
             if (!$nguyen_lieu_tinh || $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::DELETED()) {
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
@@ -313,9 +319,11 @@ class AdminNguyenLieuTinhController extends Controller
             $success = $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
 
             if (!$success) {
+                DB::rollBack();
                 return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.');
             }
 
+            DB::commit();
             return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();

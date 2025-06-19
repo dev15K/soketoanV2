@@ -13,6 +13,7 @@ use App\Models\SoQuy;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminNguyenLieuThoController extends Controller
 {
@@ -90,11 +91,13 @@ class AdminNguyenLieuThoController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
             $nguyen_lieu_tho = new NguyenLieuTho();
 
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
 
             if (!$nguyen_lieu_tho) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ hoặc tiền quỹ không đủ!')->withInput();
             }
 
@@ -104,6 +107,7 @@ class AdminNguyenLieuThoController extends Controller
 
             $this->insertSoQuy($nguyen_lieu_tho, false, null, $new_id);
 
+            DB::commit();
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu thô thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
@@ -244,8 +248,10 @@ class AdminNguyenLieuThoController extends Controller
     public function update($id, Request $request)
     {
         try {
+            DB::beginTransaction();
             $nguyen_lieu_tho = NguyenLieuTho::find($id);
             if (!$nguyen_lieu_tho || $nguyen_lieu_tho->trang_thai == TrangThaiNguyenLieuTho::DELETED()) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thô');
             }
 
@@ -254,6 +260,7 @@ class AdminNguyenLieuThoController extends Controller
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
 
             if (!$nguyen_lieu_tho) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ hoặc tiền quỹ không đủ!');
             }
 
@@ -263,6 +270,7 @@ class AdminNguyenLieuThoController extends Controller
 
             $this->insertSoQuy($nguyen_lieu_tho, true, $old_id, $new_id);
 
+            DB::commit();
             return redirect()->route('admin.nguyen.lieu.tho.index')->with('success', 'Chỉnh sửa nguyên liệu thô thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
