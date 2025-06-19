@@ -9,6 +9,7 @@ use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuTho;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminNguyenLieuPhanLoaiController extends Controller
 {
@@ -55,16 +56,19 @@ class AdminNguyenLieuPhanLoaiController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
             $nguyen_lieu_phan_loai = new NguyenLieuPhanLoai();
 
             $nguyen_lieu_phan_loai = $this->saveData($nguyen_lieu_phan_loai, $request);
             if (!$nguyen_lieu_phan_loai) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Khối lượng ban đầu không đủ')->withInput();
             }
             $nguyen_lieu_phan_loai->save();
 
             $this->updateNguyenLieuTho();
 
+            DB::commit();
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu phân loại thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
@@ -197,6 +201,8 @@ class AdminNguyenLieuPhanLoaiController extends Controller
     public function update($id, Request $request)
     {
         try {
+            DB::beginTransaction();
+
             $nguyen_lieu_phan_loai = NguyenLieuPhanLoai::find($id);
             if (!$nguyen_lieu_phan_loai || $nguyen_lieu_phan_loai->trang_thai == TrangThaiNguyenLieuPhanLoai::DELETED()) {
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu phân loại');
@@ -204,12 +210,14 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
             $nguyen_lieu_phan_loai = $this->saveData($nguyen_lieu_phan_loai, $request);
             if (!$nguyen_lieu_phan_loai) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Khối lượng ban đầu không đủ');
             }
             $nguyen_lieu_phan_loai->save();
 
             $this->updateNguyenLieuTho();
 
+            DB::commit();
             return redirect()->route('admin.nguyen.lieu.phan.loai.index')->with('success', 'Chỉnh sửa nguyên liệu phân loại thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
