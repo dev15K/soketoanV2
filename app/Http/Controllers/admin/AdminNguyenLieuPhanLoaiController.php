@@ -97,6 +97,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         $nau_dau = $request->input('nau_dau');
         $tam_dai = $request->input('tam_dai');
         $tam_ngan = $request->input('tam_ngan');
+        $tam_nhanh_sao = $request->input('tam_nhanh_sao');
         $nuoc_cat = $request->input('nuoc_cat');
         $ghi_chu = $request->input('ghi_chu');
         $trang_thai = $request->input('trang_thai') ?? TrangThaiNguyenLieuPhanLoai::ACTIVE();
@@ -121,11 +122,12 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         $NguyenLieuPhanLoai->tam_dai = $tam_dai ?? 0;
         $NguyenLieuPhanLoai->tam_ngan = $tam_ngan ?? 0;
         $NguyenLieuPhanLoai->nuoc_cat = $nuoc_cat ?? 0;
+        $NguyenLieuPhanLoai->tam_nhanh_sao = $tam_nhanh_sao ?? 0;
         $NguyenLieuPhanLoai->khoi_luong_ban_dau = $khoi_luong_ban_dau;
         $NguyenLieuPhanLoai->ghi_chu = $ghi_chu;
         $NguyenLieuPhanLoai->trang_thai = $trang_thai;
 
-        $NguyenLieuPhanLoai->tong_khoi_luong = $nu_cao_cap + $nu_vip + $nhang + $vong + $tam_tre + $keo + $nau_dau + $tam_dai + $tam_ngan + $nuoc_cat;
+        $NguyenLieuPhanLoai->tong_khoi_luong = $nu_cao_cap + $nu_vip + $nhang + $vong + $tam_tre + $keo + $nau_dau + $tam_dai + $tam_ngan + $nuoc_cat + $tam_nhanh_sao;
 
         $cp = compareNumbers($khoi_luong_ban_dau, $NguyenLieuPhanLoai->tong_khoi_luong);
         if ($khoi_luong_ban_dau < $NguyenLieuPhanLoai->tong_khoi_luong) {

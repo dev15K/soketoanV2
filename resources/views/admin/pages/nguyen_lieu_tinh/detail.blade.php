@@ -154,6 +154,9 @@
                                                     value="Nấu dầu">
                                                     Nấu dầu
                                                 </option>
+
+                                                <option  {{ trim($nltct->ten_nguyen_lieu) == 'Tăm nhanh sào' ? 'selected' : '' }}
+                                                    value="Tăm nhanh sào">Tăm nhanh sào</option>
                                             </select>
                                         </td>
                                         <td>
@@ -265,6 +268,7 @@
                     "Nước cất": data.nuoc_cat,
                     "Keo": data.keo,
                     "Nấu dầu": data.nau_dau,
+                    "Tăm nhanh sào": data.tam_nhanh_sao
                 };
 
                 let html = '';

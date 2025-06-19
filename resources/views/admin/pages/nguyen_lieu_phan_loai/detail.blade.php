@@ -38,8 +38,8 @@
                                             class="form-control selectCustom">
                                         @foreach($nlthos as $nltho)
                                             <option
-                                                    {{ $nltho->id == $nguyen_lieu_phan_loai->nguyen_lieu_tho_id ? 'selected' : '' }}
-                                                    value="{{ $nltho->id }}">{{ $nltho->code }}
+                                                {{ $nltho->id == $nguyen_lieu_phan_loai->nguyen_lieu_tho_id ? 'selected' : '' }}
+                                                value="{{ $nltho->id }}">{{ $nltho->code }}
                                                 - {{ $nltho->ten_nguyen_lieu }}</option>
                                         @endforeach
                                     </select>
@@ -70,20 +70,25 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="vong">NL vòng (NLV)</label>
                                     <input type="text" class="form-control onlyNumber" id="vong" name="vong"
                                            value="{{ $nguyen_lieu_phan_loai->vong }}">
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="keo">Keo</label>
                                     <input type="text" class="form-control onlyNumber" id="keo" name="keo"
                                            value="{{ $nguyen_lieu_phan_loai->keo }}">
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="nau_dau">Nấu dầu</label>
                                     <input type="text" class="form-control onlyNumber" id="nau_dau" name="nau_dau"
                                            value="{{ $nguyen_lieu_phan_loai->nau_dau }}">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="tam_nhanh_sao">Tăm nhanh sào</label>
+                                    <input type="text" class="form-control onlyNumber" id="tam_nhanh_sao" name="tam_nhanh_sao"
+                                           value="{{ $nguyen_lieu_phan_loai->tam_nhanh_sao }}">
                                 </div>
                             </div>
 

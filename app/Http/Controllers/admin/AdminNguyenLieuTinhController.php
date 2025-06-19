@@ -43,6 +43,14 @@ class AdminNguyenLieuTinhController extends Controller
         return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu', 'ngay', 'code_search'));
     }
 
+    private function generateLHXCode()
+    {
+        $lastItem = NguyenLieuTinh::orderByDesc('id')->first();
+
+        $lastId = $lastItem?->id;
+        return generateLHXCode($lastId + 1);
+    }
+
     private function generateMaPhieu()
     {
         $lastItem = NguyenLieuTinh::orderByDesc('id')
@@ -50,14 +58,6 @@ class AdminNguyenLieuTinhController extends Controller
 
         $lastId = $lastItem?->id;
         return convertNumber($lastId + 1);
-    }
-
-    private function generateLHXCode()
-    {
-        $lastItem = NguyenLieuTinh::orderByDesc('id')->first();
-
-        $lastId = $lastItem?->id;
-        return generateLHXCode($lastId + 1);
     }
 
     public function detail($id)
@@ -181,6 +181,7 @@ class AdminNguyenLieuTinhController extends Controller
                     'Nước cất' => 'nuoc_cat',
                     'Keo' => 'keo',
                     'Nấu dầu' => 'nau_dau',
+                    'Tăm nhanh sào' => 'tam_nhanh_sao',
                 ];
                 $ten = $oldData->ten_nguyen_lieu;
                 $khoi_luong = $oldData->khoi_luong;
@@ -225,6 +226,7 @@ class AdminNguyenLieuTinhController extends Controller
                     'Nước cất' => 'nuoc_cat',
                     'Keo' => 'keo',
                     'Nấu dầu' => 'nau_dau',
+                    'Tăm nhanh sào' => 'tam_nhanh_sao',
                 ];
 
                 $ten = $NguyenLieuTinhChiTiet->ten_nguyen_lieu;

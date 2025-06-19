@@ -257,6 +257,7 @@
                                             <option value="Nước cất">Nước cất - ${data.nuoc_cat} kg</option>
                                             <option value="Keo">Keo - ${data.keo} kg</option>
                                             <option value="Nấu dầu">Nấu dầu - ${data.nau_dau} kg</option>
+                                            <option value="Tăm nhanh sào">Tăm nhanh sào - ${data.tam_nhanh_sao} kg</option>
                 `;
 
                 $(elm).parent().next().find('select').html(html);
