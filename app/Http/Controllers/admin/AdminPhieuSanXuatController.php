@@ -231,12 +231,16 @@ class AdminPhieuSanXuatController extends Controller
     public function delete($id)
     {
         try {
+            DB::beginTransaction();
+
             $phieu_san_xuat = PhieuSanXuat::find($id);
             if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiphieuSanXuat::DELETED()) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
             if ($phieu_san_xuat->khoi_luong_da_dung) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Phiếu sản xuất đã dùng không được xoá!');
             }
 
@@ -252,8 +256,11 @@ class AdminPhieuSanXuatController extends Controller
                 $nguyenLieuTinh->save();
             }
 
+            DB::commit();
             return redirect()->back()->with('success', 'Đã xoá phiếu sản xuất thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }

@@ -259,8 +259,11 @@ class AdminNguyenLieuTinhController extends Controller
     public function delete($id)
     {
         try {
+            DB::beginTransaction();
+
             $nguyen_lieu_tinh = NguyenLieuTinh::find($id);
             if (!$nguyen_lieu_tinh || $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::DELETED()) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
             }
 
@@ -270,6 +273,7 @@ class AdminNguyenLieuTinhController extends Controller
                 ->update(['trang_thai' => TrangThaiNguyenLieuTinh::DELETED()]);
 
             if ($nguyen_lieu_tinh->so_luong_da_dung) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không thể xóa nguyên liệu tinh đã dùng!')->withInput();
             }
 
@@ -301,8 +305,11 @@ class AdminNguyenLieuTinhController extends Controller
                 }
             }
 
+            DB::commit();
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu tinh thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }

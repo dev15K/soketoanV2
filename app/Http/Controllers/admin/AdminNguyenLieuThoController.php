@@ -291,7 +291,7 @@ class AdminNguyenLieuThoController extends Controller
 
             NguyenLieuTho::where('id', $id)
                 ->where('khoi_luong_da_phan_loai', null)
-                ->orderByDesc('khoi_luong_da_phan_loai', 0)
+                ->orWhere('khoi_luong_da_phan_loai', 0)
                 ->update(['trang_thai' => TrangThaiNguyenLieuTho::DELETED()]);
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu thô thành công');
