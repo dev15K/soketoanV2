@@ -233,8 +233,11 @@ class AdminNguyenLieuPhanLoaiController extends Controller
     public function delete($id)
     {
         try {
+            DB::beginTransaction();
+
             $nguyen_lieu_phan_loai = NguyenLieuPhanLoai::find($id);
             if (!$nguyen_lieu_phan_loai || $nguyen_lieu_phan_loai->trang_thai == TrangThaiNguyenLieuPhanLoai::DELETED()) {
+                DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu phân loại');
             }
 
@@ -258,8 +261,11 @@ class AdminNguyenLieuPhanLoaiController extends Controller
                 }
             }
 
+            DB::commit();
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu phân loại thành công');
         } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }

@@ -126,7 +126,7 @@ class AdminHomeController extends Controller
                 case "tho":
                     NguyenLieuTho::whereIn('id', $list_id)
                         ->where('khoi_luong_da_phan_loai', null)
-                        ->orderByDesc('khoi_luong_da_phan_loai', 0)
+                        ->orWhere('khoi_luong_da_phan_loai', 0)
                         ->update(['trang_thai' => TrangThaiNguyenLieuTho::DELETED()]);
                     break;
                 case "phan_loai":
