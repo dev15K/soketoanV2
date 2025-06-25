@@ -205,36 +205,7 @@ class AdminNguyenLieuTinhController extends Controller
 
         $oldNguyenLieuTinhChiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $NguyenLieuTinh->id)
             ->get();
-
-        foreach ($oldNguyenLieuTinhChiTiets as $oldData) {
-            $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($oldData->nguyen_lieu_phan_loai_id);
-            if ($nguyenLieuPhanLoai) {
-                $mapping = [
-                    'Nguyên liệu nụ cao cấp (NCC)' => 'nu_cao_cap',
-                    'Nguyên liệu nụ VIP (NVIP)' => 'nu_vip',
-                    'Nguyên liệu nhang (NLN)' => 'nhang',
-                    'Nguyên liệu vòng (NLV)' => 'vong',
-                    'Tăm dài' => 'tam_dai',
-                    'Tăm ngắn' => 'tam_ngan',
-                    'Nước cất' => 'nuoc_cat',
-                    'Keo' => 'keo',
-                    'Nấu dầu' => 'nau_dau',
-                    'Tăm nhanh sào' => 'tam_nhanh_sao',
-                ];
-                $ten = $oldData->ten_nguyen_lieu;
-                $khoi_luong = $oldData->khoi_luong;
-                if (isset($mapping[$ten])) {
-                    $field = $mapping[$ten];
-                    $nguyenLieuPhanLoai->$field += $khoi_luong;
-                }
-
-                $nguyenLieuPhanLoai->khoi_luong_da_phan_loai -= $khoi_luong;
-                $nguyenLieuPhanLoai->save();
-            }
-        }
-
-        NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $NguyenLieuTinh->id)
-            ->delete();
+        $old_nguyen_lieu_phan_loai_ids = $oldNguyenLieuTinhChiTiets->pluck('nguyen_lieu_phan_loai_id')->toArray();
 
         for ($i = 0; $i < count($nguyen_lieu_phan_loai_ids); $i++) {
             $nguyen_lieu_phan_loai_id = $nguyen_lieu_phan_loai_ids[$i];
@@ -292,6 +263,36 @@ class AdminNguyenLieuTinhController extends Controller
         $NguyenLieuTinh->gia_tien = $gia_tien;
 
         $NguyenLieuTinh->save();
+
+        foreach ($oldNguyenLieuTinhChiTiets as $oldData) {
+            $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($oldData->nguyen_lieu_phan_loai_id);
+            if ($nguyenLieuPhanLoai) {
+                $mapping = [
+                    'Nguyên liệu nụ cao cấp (NCC)' => 'nu_cao_cap',
+                    'Nguyên liệu nụ VIP (NVIP)' => 'nu_vip',
+                    'Nguyên liệu nhang (NLN)' => 'nhang',
+                    'Nguyên liệu vòng (NLV)' => 'vong',
+                    'Tăm dài' => 'tam_dai',
+                    'Tăm ngắn' => 'tam_ngan',
+                    'Nước cất' => 'nuoc_cat',
+                    'Keo' => 'keo',
+                    'Nấu dầu' => 'nau_dau',
+                    'Tăm nhanh sào' => 'tam_nhanh_sao',
+                ];
+                $ten = $oldData->ten_nguyen_lieu;
+                $khoi_luong = $oldData->khoi_luong;
+                if (isset($mapping[$ten])) {
+                    $field = $mapping[$ten];
+                    $nguyenLieuPhanLoai->$field += $khoi_luong;
+                }
+
+                $nguyenLieuPhanLoai->khoi_luong_da_phan_loai -= $khoi_luong;
+                $nguyenLieuPhanLoai->save();
+            }
+        }
+
+        NguyenLieuTinhChiTiet::whereIn('id', $old_nguyen_lieu_phan_loai_ids)
+            ->delete();
 
         DB::commit();
         return $NguyenLieuTinh;
