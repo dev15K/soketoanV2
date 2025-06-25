@@ -100,6 +100,34 @@ class AdminNguyenLieuTinhController extends Controller
             $success = $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
 
             if (!$success) {
+                $chiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)->get();
+                foreach ($chiTiets as $chiTiet) {
+                    $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($chiTiet->nguyen_lieu_phan_loai_id);
+                    if ($nguyenLieuPhanLoai) {
+                        $mapping = [
+                            'Nguyên liệu nụ cao cấp (NCC)' => 'nu_cao_cap',
+                            'Nguyên liệu nụ VIP (NVIP)' => 'nu_vip',
+                            'Nguyên liệu nhang (NLN)' => 'nhang',
+                            'Nguyên liệu vòng (NLV)' => 'vong',
+                            'Tăm dài' => 'tam_dai',
+                            'Tăm ngắn' => 'tam_ngan',
+                            'Nước cất' => 'nuoc_cat',
+                            'Keo' => 'keo',
+                            'Nấu dầu' => 'nau_dau',
+                        ];
+
+                        $ten = $chiTiet->ten_nguyen_lieu;
+
+                        if (isset($mapping[$ten])) {
+                            $field = $mapping[$ten];
+                            $nguyenLieuPhanLoai->$field += $chiTiet->khoi_luong;
+                        }
+
+                        $nguyenLieuPhanLoai->khoi_luong_da_phan_loai -= $chiTiet->khoi_luong;
+                        $nguyenLieuPhanLoai->save();
+                    }
+                }
+
                 NguyenLieuTinh::where('id', $nguyen_lieu_tinh->id)->delete();
                 DB::rollBack();
                 return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.')->withInput();
@@ -114,8 +142,12 @@ class AdminNguyenLieuTinhController extends Controller
         }
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function saveData(NguyenLieuTinh $NguyenLieuTinh, Request $request)
     {
+        DB::beginTransaction();
         $ngay = $request->input('ngay');
         $code = $request->input('code');
         $ma_phieu = $request->input('ma_phieu');
@@ -153,11 +185,16 @@ class AdminNguyenLieuTinhController extends Controller
         $NguyenLieuTinh->tong_khoi_luong = $tong_khoi_luong;
         $NguyenLieuTinh->gia_tien = $gia_tien;
 
+        DB::commit();
         return $NguyenLieuTinh;
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function saveDataChiTiet(NguyenLieuTinh $NguyenLieuTinh, Request $request)
     {
+        DB::beginTransaction();
         $nguyen_lieu_phan_loai_ids = $request->input('nguyen_lieu_phan_loai_ids');
         $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
         $khoi_luongs = $request->input('khoi_luongs');
@@ -234,6 +271,7 @@ class AdminNguyenLieuTinhController extends Controller
                 if (isset($mapping[$ten])) {
                     $field = $mapping[$ten];
                     if ($nguyenLieuPhanLoai->$field < $khoi_luong) {
+                        DB::rollBack();
                         return false;
                     }
                     $nguyenLieuPhanLoai->$field -= $khoi_luong;
@@ -253,6 +291,8 @@ class AdminNguyenLieuTinhController extends Controller
         $NguyenLieuTinh->gia_tien = $gia_tien;
 
         $NguyenLieuTinh->save();
+
+        DB::commit();
         return $NguyenLieuTinh;
     }
 

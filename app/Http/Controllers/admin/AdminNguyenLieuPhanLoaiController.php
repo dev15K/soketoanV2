@@ -77,8 +77,12 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         }
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function saveData(NguyenLieuPhanLoai $NguyenLieuPhanLoai, Request $request)
     {
+        DB::beginTransaction();
         $is_update = false;
         if ($NguyenLieuPhanLoai->nguyen_lieu_tho_id) {
             $is_update = true;
@@ -106,6 +110,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         $khoi_luong_ban_dau = $nguyenLieuTho->khoi_luong;
 
         if ($khoi_luong_ban_dau <= 0) {
+            DB::rollBack();
             return false;
         }
 
@@ -131,6 +136,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
         $cp = compareNumbers($khoi_luong_ban_dau, $NguyenLieuPhanLoai->tong_khoi_luong);
         if ($khoi_luong_ban_dau < $NguyenLieuPhanLoai->tong_khoi_luong) {
+            DB::rollBack();
             return false;
         }
 
@@ -180,12 +186,17 @@ class AdminNguyenLieuPhanLoaiController extends Controller
                 $nguyenLieuTho->save();
             }
         }
+        DB::commit();
 
         return $NguyenLieuPhanLoai;
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function updateNguyenLieuTho()
     {
+        DB::beginTransaction();
         $datas = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
             ->orderByDesc('id')
             ->get();
@@ -195,11 +206,11 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         foreach ($datas as $data) {
             $nguyenLieuTho = NguyenLieuTho::where('id', $data->nguyen_lieu_tho_id)->first();
             if ($nguyenLieuTho) {
-//                $nguyenLieuTho->khoi_luong = $nguyenLieuTho->khoi_luong - $data->tong_khoi_luong;
                 $nguyenLieuTho->allow_change = false;
                 $nguyenLieuTho->save();
             }
         }
+        DB::commit();
     }
 
     public function update($id, Request $request)

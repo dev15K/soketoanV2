@@ -116,8 +116,12 @@ class AdminNguyenLieuThoController extends Controller
         }
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function saveData(NguyenLieuTho $nguyenLieuTho, Request $request)
     {
+        DB::beginTransaction();
         $ngay = $request->input('ngay');
         $nha_cung_cap_id = $request->input('nha_cung_cap_id');
         $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
@@ -151,20 +155,24 @@ class AdminNguyenLieuThoController extends Controller
 
         $loaiQuy = LoaiQuy::find($phuong_thuc_thanh_toan);
         if (!$loaiQuy) {
+            DB::rollBack();
             return false;
         }
 
         $tong_tien = $loaiQuy->tong_tien_quy;
 
         if ($so_tien_thanh_toan < 0) {
+            DB::rollBack();
             return false;
         }
 
         if ($so_tien_thanh_toan > $chi_phi_mua) {
+            DB::rollBack();
             return false;
         }
 
         if ($so_tien_thanh_toan > $tong_tien) {
+            DB::rollBack();
             return false;
         }
 
@@ -180,8 +188,12 @@ class AdminNguyenLieuThoController extends Controller
         return $nguyenLieuTho;
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function insertSoQuy(NguyenLieuTho $nguyenLieuTho, $so_quy_id = null, $old_quy_id = null, $new_quy_id = null)
     {
+        DB::beginTransaction();
         if (!$so_quy_id) {
             $code = $this->generateSoQuyCode();
             $soquy = new SoQuy();
@@ -237,6 +249,8 @@ class AdminNguyenLieuThoController extends Controller
                 }
             }
         }
+
+        DB::commit();
     }
 
     private function generateSoQuyCode()

@@ -143,8 +143,12 @@ class AdminPhieuSanXuatController extends Controller
         }
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function saveData(PhieuSanXuat $phieuSanXuat, Request $request)
     {
+        DB::beginTransaction();
         $ngay = $request->input('ngay');
         $code = $request->input('code');
         $tong_khoi_luong = $request->input('tong_khoi_luong') ?? 0;
@@ -169,11 +173,16 @@ class AdminPhieuSanXuatController extends Controller
         $phieuSanXuat->thoi_gian_hoan_thanh_san_xuat = $thoi_gian_hoan_thanh_san_xuat;
         $phieuSanXuat->ten_phieu = $ten_phieu;
 
+        DB::commit();
         return $phieuSanXuat;
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function saveDataChiTiet(PhieuSanXuat $phieuSanXuat, Request $request)
     {
+        DB::beginTransaction();
         $nguyen_lieu_ids = $request->input('nguyen_lieu_ids');
         $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
         $khoi_luongs = $request->input('khoi_luongs');
@@ -201,11 +210,13 @@ class AdminPhieuSanXuatController extends Controller
             $nguyenLieuTinh = NguyenLieuTinh::find($nguyen_lieu_id);
 
             if (!$nguyenLieuTinh) {
+                DB::rollBack();
                 return false;
             }
 
             $tonkho = $nguyenLieuTinh->tong_khoi_luong - $nguyenLieuTinh->so_luong_da_dung;
             if ($tonkho < $khoi_luong) {
+                DB::rollBack();
                 return false;
             }
             $phieuSanXuatChiTiet->type = '';
@@ -225,6 +236,7 @@ class AdminPhieuSanXuatController extends Controller
 
         $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
 
+        DB::commit();
         return $phieuSanXuat->save();
     }
 
