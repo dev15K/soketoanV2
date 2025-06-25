@@ -114,8 +114,12 @@ class AdminNguyenLieuTinhController extends Controller
         }
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function saveData(NguyenLieuTinh $NguyenLieuTinh, Request $request)
     {
+        DB::beginTransaction();
         $ngay = $request->input('ngay');
         $code = $request->input('code');
         $ma_phieu = $request->input('ma_phieu');
@@ -153,11 +157,16 @@ class AdminNguyenLieuTinhController extends Controller
         $NguyenLieuTinh->tong_khoi_luong = $tong_khoi_luong;
         $NguyenLieuTinh->gia_tien = $gia_tien;
 
+        DB::commit();
         return $NguyenLieuTinh;
     }
 
+    /**
+     * @throws \Throwable
+     */
     private function saveDataChiTiet(NguyenLieuTinh $NguyenLieuTinh, Request $request)
     {
+        DB::beginTransaction();
         $nguyen_lieu_phan_loai_ids = $request->input('nguyen_lieu_phan_loai_ids');
         $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
         $khoi_luongs = $request->input('khoi_luongs');
@@ -234,6 +243,7 @@ class AdminNguyenLieuTinhController extends Controller
                 if (isset($mapping[$ten])) {
                     $field = $mapping[$ten];
                     if ($nguyenLieuPhanLoai->$field < $khoi_luong) {
+                        DB::rollBack();
                         return false;
                     }
                     $nguyenLieuPhanLoai->$field -= $khoi_luong;
@@ -253,6 +263,8 @@ class AdminNguyenLieuTinhController extends Controller
         $NguyenLieuTinh->gia_tien = $gia_tien;
 
         $NguyenLieuTinh->save();
+
+        DB::commit();
         return $NguyenLieuTinh;
     }
 
