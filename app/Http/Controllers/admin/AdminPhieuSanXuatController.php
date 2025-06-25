@@ -183,61 +183,66 @@ class AdminPhieuSanXuatController extends Controller
     private function saveDataChiTiet(PhieuSanXuat $phieuSanXuat, Request $request)
     {
         DB::beginTransaction();
-        $nguyen_lieu_ids = $request->input('nguyen_lieu_ids');
-        $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
-        $khoi_luongs = $request->input('khoi_luongs');
+        try {
+            $nguyen_lieu_ids = $request->input('nguyen_lieu_ids');
+            $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
+            $khoi_luongs = $request->input('khoi_luongs');
 
-        $tong_khoi_luong = 0;
+            $tong_khoi_luong = 0;
 
-        $nguyen_lieu_ids = $nguyen_lieu_ids ?? [];
+            $nguyen_lieu_ids = $nguyen_lieu_ids ?? [];
 
-        $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->get();
-        foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
-            $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
-            $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
-            $nguyenLieuTinh->save();
-        }
-
-        PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->delete();
-
-        for ($i = 0; $i < count($nguyen_lieu_ids); $i++) {
-            $nguyen_lieu_id = $nguyen_lieu_ids[$i];
-            $ten_nguyen_lieu = $ten_nguyen_lieus[$i];
-            $khoi_luong = $khoi_luongs[$i];
-
-            $phieuSanXuatChiTiet = new PhieuSanXuatChiTiet();
-
-            $nguyenLieuTinh = NguyenLieuTinh::find($nguyen_lieu_id);
-
-            if (!$nguyenLieuTinh) {
-                DB::rollBack();
-                return false;
+            $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->get();
+            foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+                $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+                $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+                $nguyenLieuTinh->save();
             }
 
-            $tonkho = $nguyenLieuTinh->tong_khoi_luong - $nguyenLieuTinh->so_luong_da_dung;
-            if ($tonkho < $khoi_luong) {
-                DB::rollBack();
-                return false;
+            PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->delete();
+
+            for ($i = 0; $i < count($nguyen_lieu_ids); $i++) {
+                $nguyen_lieu_id = $nguyen_lieu_ids[$i];
+                $ten_nguyen_lieu = $ten_nguyen_lieus[$i];
+                $khoi_luong = $khoi_luongs[$i];
+
+                $phieuSanXuatChiTiet = new PhieuSanXuatChiTiet();
+
+                $nguyenLieuTinh = NguyenLieuTinh::find($nguyen_lieu_id);
+
+                if (!$nguyenLieuTinh) {
+                    DB::rollBack();
+                    throw new \Exception("Nguyên liệu không tồn tại");
+                }
+
+                $tonkho = $nguyenLieuTinh->tong_khoi_luong - $nguyenLieuTinh->so_luong_da_dung;
+                if ($tonkho < $khoi_luong) {
+                    DB::rollBack();
+                    throw new \Exception("Không đủ tồn kho cho nguyên liệu: $ten_nguyen_lieu");
+                }
+                $phieuSanXuatChiTiet->type = '';
+                $phieuSanXuatChiTiet->phieu_san_xuat_id = $phieuSanXuat->id;
+                $phieuSanXuatChiTiet->nguyen_lieu_id = $nguyen_lieu_id;
+                $phieuSanXuatChiTiet->ten_nguyen_lieu = $ten_nguyen_lieu;
+                $phieuSanXuatChiTiet->khoi_luong = $khoi_luong;
+                $phieuSanXuatChiTiet->so_tien = $khoi_luong * $nguyenLieuTinh->gia_tien;
+
+                $phieuSanXuatChiTiet->save();
+
+                $tong_khoi_luong += $khoi_luong;
+
+                $nguyenLieuTinh->so_luong_da_dung += $khoi_luong;
+                $nguyenLieuTinh->save();
             }
-            $phieuSanXuatChiTiet->type = '';
-            $phieuSanXuatChiTiet->phieu_san_xuat_id = $phieuSanXuat->id;
-            $phieuSanXuatChiTiet->nguyen_lieu_id = $nguyen_lieu_id;
-            $phieuSanXuatChiTiet->ten_nguyen_lieu = $ten_nguyen_lieu;
-            $phieuSanXuatChiTiet->khoi_luong = $khoi_luong;
-            $phieuSanXuatChiTiet->so_tien = $khoi_luong * $nguyenLieuTinh->gia_tien;
 
-            $phieuSanXuatChiTiet->save();
+            $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
 
-            $tong_khoi_luong += $khoi_luong;
-
-            $nguyenLieuTinh->so_luong_da_dung += $khoi_luong;
-            $nguyenLieuTinh->save();
+            DB::commit();
+            return $phieuSanXuat->save();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
         }
-
-        $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
-
-        DB::commit();
-        return $phieuSanXuat->save();
     }
 
     public function delete($id)
