@@ -312,8 +312,8 @@
                                 <td>{{ $data->ten_phieu }}</td>
                                 <td>{{ $data->so_lo_san_xuat }}</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
-                                <td>{{ number_format($data->khoi_luong_da_dung) }} kg</td>
-                                <td>{{ number_format($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
+                                <td>{{ parseNumber($data->khoi_luong_da_dung) }} kg</td>
+                                <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
                                 <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
                                 <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
                             </tr>

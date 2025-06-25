@@ -12,12 +12,14 @@
             </ol>
         </nav>
     </div>
-    <div class="w-100 mb-2 d-flex justify-content-end">
-        <a href="{{ route('admin.nhan.vien.create') }}" class="btn btn-primary btn-sm">Tạo nhân viên</a>
-    </div>
     <section class="section">
-        <div class="d-flex mb-4 mt-3 justify-content-end">
-            <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('user')">Xoá tất cả</button>
+        <div class="d-flex w-100 mb-4 mt-3 justify-content-end gap-2">
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('admin.nhan.vien.create') }}" class="btn btn-primary btn-sm">Tạo nhân viên</a>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('user')">Xoá tất cả</button>
+            </div>
         </div>
         <div class="col-12">
             <div class="card recent-sales overflow-auto">

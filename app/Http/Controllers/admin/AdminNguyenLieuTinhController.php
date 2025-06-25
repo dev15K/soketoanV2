@@ -114,6 +114,7 @@ class AdminNguyenLieuTinhController extends Controller
                             'Nước cất' => 'nuoc_cat',
                             'Keo' => 'keo',
                             'Nấu dầu' => 'nau_dau',
+                            'Tăm nhanh sào' => 'tam_nhanh_sao',
                         ];
 
                         $ten = $chiTiet->ten_nguyen_lieu;
@@ -331,6 +332,7 @@ class AdminNguyenLieuTinhController extends Controller
                         'Nước cất' => 'nuoc_cat',
                         'Keo' => 'keo',
                         'Nấu dầu' => 'nau_dau',
+                        'Tăm nhanh sào' => 'tam_nhanh_sao',
                     ];
 
                     $ten = $chiTiet->ten_nguyen_lieu;
