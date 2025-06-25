@@ -193,13 +193,7 @@ class AdminPhieuSanXuatController extends Controller
             $nguyen_lieu_ids = $nguyen_lieu_ids ?? [];
 
             $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->get();
-            foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
-                $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
-                $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
-                $nguyenLieuTinh->save();
-            }
-
-            PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->delete();
+            $old_nguyen_lieu_ids = $phieuSanXuatChiTiets->pluck('nguyen_lieu_id')->toArray();
 
             for ($i = 0; $i < count($nguyen_lieu_ids); $i++) {
                 $nguyen_lieu_id = $nguyen_lieu_ids[$i];
@@ -236,6 +230,13 @@ class AdminPhieuSanXuatController extends Controller
             }
 
             $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
+
+            foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+                $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+                $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+                $nguyenLieuTinh->save();
+            }
+            PhieuSanXuatChiTiet::whereIn('id', $old_nguyen_lieu_ids)->delete();
 
             DB::commit();
             return $phieuSanXuat->save();
