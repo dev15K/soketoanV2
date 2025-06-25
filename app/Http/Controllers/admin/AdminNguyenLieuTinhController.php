@@ -100,6 +100,34 @@ class AdminNguyenLieuTinhController extends Controller
             $success = $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
 
             if (!$success) {
+                $chiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)->get();
+                foreach ($chiTiets as $chiTiet) {
+                    $nguyenLieuPhanLoai = NguyenLieuPhanLoai::find($chiTiet->nguyen_lieu_phan_loai_id);
+                    if ($nguyenLieuPhanLoai) {
+                        $mapping = [
+                            'Nguyên liệu nụ cao cấp (NCC)' => 'nu_cao_cap',
+                            'Nguyên liệu nụ VIP (NVIP)' => 'nu_vip',
+                            'Nguyên liệu nhang (NLN)' => 'nhang',
+                            'Nguyên liệu vòng (NLV)' => 'vong',
+                            'Tăm dài' => 'tam_dai',
+                            'Tăm ngắn' => 'tam_ngan',
+                            'Nước cất' => 'nuoc_cat',
+                            'Keo' => 'keo',
+                            'Nấu dầu' => 'nau_dau',
+                        ];
+
+                        $ten = $chiTiet->ten_nguyen_lieu;
+
+                        if (isset($mapping[$ten])) {
+                            $field = $mapping[$ten];
+                            $nguyenLieuPhanLoai->$field += $chiTiet->khoi_luong;
+                        }
+
+                        $nguyenLieuPhanLoai->khoi_luong_da_phan_loai -= $chiTiet->khoi_luong;
+                        $nguyenLieuPhanLoai->save();
+                    }
+                }
+
                 NguyenLieuTinh::where('id', $nguyen_lieu_tinh->id)->delete();
                 DB::rollBack();
                 return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.')->withInput();
