@@ -116,6 +116,7 @@ class AdminHomeController extends Controller
         return view('admin.index', compact('datas', 'ton_dau', 'ton_cuoi', 'ma_phieu', 'start_date', 'end_date', 'loai_quies', 'loai_quy_search'));
     }
 
+
     public function deleteItem(Request $request)
     {
         try {
@@ -125,20 +126,27 @@ class AdminHomeController extends Controller
             switch ($type) {
                 case "tho":
                     NguyenLieuTho::whereIn('id', $list_id)
-                        ->where('khoi_luong_da_phan_loai', null)
-                        ->orWhere('khoi_luong_da_phan_loai', 0)
+                        ->where(function ($query) {
+                            $query->whereNull('khoi_luong_da_phan_loai')
+                                ->orWhere('khoi_luong_da_phan_loai', 0);
+                        })
                         ->update(['trang_thai' => TrangThaiNguyenLieuTho::DELETED()]);
+
                     break;
                 case "phan_loai":
                     NguyenLieuPhanLoai::whereIn('id', $list_id)
-                        ->where('khoi_luong_da_phan_loai', null)
-                        ->orWhere('khoi_luong_da_phan_loai', 0)
+                        ->where(function ($query) {
+                            $query->whereNull('khoi_luong_da_phan_loai')
+                                ->orWhere('khoi_luong_da_phan_loai', 0);
+                        })
                         ->update(['trang_thai' => TrangThaiNguyenLieuPhanLoai::DELETED()]);
 
                     foreach ($list_id as $id) {
                         $nguyen_lieu_phan_loai = NguyenLieuPhanLoai::where('id', $id)
-                            ->where('khoi_luong_da_phan_loai', null)
-                            ->orWhere('khoi_luong_da_phan_loai', 0)
+                            ->where(function ($query) {
+                                $query->whereNull('khoi_luong_da_phan_loai')
+                                    ->orWhere('khoi_luong_da_phan_loai', 0);
+                            })
                             ->first();
 
                         if ($nguyen_lieu_phan_loai) {
@@ -161,14 +169,18 @@ class AdminHomeController extends Controller
                     break;
                 case "tinh":
                     NguyenLieuTinh::whereIn('id', $list_id)
-                        ->where('so_luong_da_dung', null)
-                        ->orWhere('so_luong_da_dung', 0)
+                        ->where(function ($query) {
+                            $query->whereNull('so_luong_da_dung')
+                                ->orWhere('so_luong_da_dung', 0);
+                        })
                         ->update(['trang_thai' => TrangThaiNguyenLieuTinh::DELETED()]);
 
                     foreach ($list_id as $id) {
                         $nguyenLieuTinh = NguyenLieuTinh::where('id', $id)
-                            ->where('so_luong_da_dung', null)
-                            ->orWhere('so_luong_da_dung', 0)
+                            ->where(function ($query) {
+                                $query->whereNull('so_luong_da_dung')
+                                    ->orWhere('so_luong_da_dung', 0);
+                            })
                             ->first();
                         if ($nguyenLieuTinh) {
                             $chiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $id)->get();
@@ -204,14 +216,18 @@ class AdminHomeController extends Controller
                     break;
                 case "phieu_san_xuat":
                     PhieuSanXuat::whereIn('id', $list_id)
-                        ->where('khoi_luong_da_dung', null)
-                        ->orWhere('khoi_luong_da_dung', 0)
+                        ->where(function ($query) {
+                            $query->whereNull('khoi_luong_da_dung')
+                                ->orWhere('khoi_luong_da_dung', 0);
+                        })
                         ->update(['trang_thai' => TrangThaiPhieuSanXuat::DELETED()]);
 
                     foreach ($list_id as $id) {
                         $phieuSanXuat = PhieuSanXuat::where('id', $id)
-                            ->where('khoi_luong_da_dung', null)
-                            ->orWhere('khoi_luong_da_dung', 0)
+                            ->where(function ($query) {
+                                $query->whereNull('khoi_luong_da_dung')
+                                    ->orWhere('khoi_luong_da_dung', 0);
+                            })
                             ->first();
                         if ($phieuSanXuat) {
                             $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)->get();
@@ -225,9 +241,12 @@ class AdminHomeController extends Controller
                     break;
                 case "thanh_pham":
                     NguyenLieuSanXuat::whereIn('id', $list_id)
-                        ->where('khoi_luong_da_dung', null)
-                        ->orWhere('khoi_luong_da_dung', 0)
+                        ->where(function ($query) {
+                            $query->whereNull('khoi_luong_da_dung')
+                                ->orWhere('khoi_luong_da_dung', 0);
+                        })
                         ->update(['trang_thai' => TrangThaiNguyenLieuSanXuat::DELETED()]);
+
                     break;
                 case "dong_goi":
                     foreach ($list_id as $id) {
