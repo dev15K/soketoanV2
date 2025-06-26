@@ -79,8 +79,8 @@
                 },
                 success: function (response) {
                     console.log(response)
-                    // alert('Xóa thành công!');
-                    // window.location.reload();
+                    alert('Xóa thành công!');
+                    window.location.reload();
                 },
                 error: function (exception) {
                     console.log(exception)
