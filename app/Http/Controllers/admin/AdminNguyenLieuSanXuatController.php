@@ -113,12 +113,13 @@ class AdminNguyenLieuSanXuatController extends Controller
             return false;
         }
 
-        if ($oldKhoiLuong != $khoi_luong) {
-            if (!$khoi_luong || $khoi_luong <= 0 || !is_numeric($khoi_luong)) {
+        if ($oldPhieuSanXuatId != $phieu_san_xuat_id) {
+            $ton = $phieuSanXuat->tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung;
+            if ($khoi_luong > $ton) {
                 return false;
             }
-
-            $ton = $phieuSanXuat->tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung;
+        } else {
+            $ton = $phieuSanXuat->tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung + $oldKhoiLuong;
             if ($khoi_luong > $ton) {
                 return false;
             }
@@ -156,7 +157,6 @@ class AdminNguyenLieuSanXuatController extends Controller
         $nguyenLieuSanXuat->nhan_vien_san_xuat = $nhan_vien_san_xuat;
 
         if ($oldPhieuSanXuatId != $phieu_san_xuat_id) {
-            $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);
             if ($phieuSanXuat) {
                 $phieuSanXuat->khoi_luong_da_dung += $khoi_luong;
                 $phieuSanXuat->save();
@@ -185,15 +185,17 @@ class AdminNguyenLieuSanXuatController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
             }
 
-            NguyenLieuSanXuat::where('id', $id)
+            $success = NguyenLieuSanXuat::where('id', $id)
                 ->where('khoi_luong_da_dung', null)
                 ->orWhere('khoi_luong_da_dung', 0)
                 ->update(['trang_thai' => TrangThaiNguyenLieuSanXuat::DELETED()]);
 
-            $phieuSanXuat = PhieuSanXuat::find($nguyen_lieu_san_xuat->phieu_san_xuat_id);
-            if ($phieuSanXuat) {
-                $phieuSanXuat->khoi_luong_da_dung -= $nguyen_lieu_san_xuat->khoi_luong;
-                $phieuSanXuat->save();
+            if (!$success) {
+                $phieuSanXuat = PhieuSanXuat::find($nguyen_lieu_san_xuat->phieu_san_xuat_id);
+                if ($phieuSanXuat) {
+                    $phieuSanXuat->khoi_luong_da_dung -= $nguyen_lieu_san_xuat->khoi_luong;
+                    $phieuSanXuat->save();
+                }
             }
 
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu sản xuất thành công');
