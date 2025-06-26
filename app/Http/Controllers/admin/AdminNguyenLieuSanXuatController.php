@@ -53,7 +53,7 @@ class AdminNguyenLieuSanXuatController extends Controller
     {
         $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
         if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
-            return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
+            return redirect()->back()->with('error', 'Không tìm thấy');
         }
 
         $phieu_san_xuats = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
@@ -82,7 +82,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             $nguyen_lieu_san_xuat->save();
 
             DB::commit();
-            return redirect()->back()->with('success', 'Thêm mới nguyên liệu sản xuất thành công');
+            return redirect()->back()->with('success', 'Thêm mới thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $e) {
@@ -182,15 +182,17 @@ class AdminNguyenLieuSanXuatController extends Controller
         try {
             $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
             if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
+                return redirect()->back()->with('error', 'Không tìm thấy');
             }
 
-            $success = NguyenLieuSanXuat::where('id', $id)
-                ->where('khoi_luong_da_dung', null)
-                ->orWhere('khoi_luong_da_dung', 0)
-                ->update(['trang_thai' => TrangThaiNguyenLieuSanXuat::DELETED()]);
+            if ($nguyen_lieu_san_xuat->khoi_luong_da_dung > 0) {
+                return redirect()->back()->with('error', 'Không thể xóa nguyên liệu đã dùng');
+            }
 
-            if (!$success) {
+            $nguyen_lieu_san_xuat->trang_thai = TrangThaiNguyenLieuSanXuat::DELETED();
+            $success = $nguyen_lieu_san_xuat->save();
+
+            if ($success) {
                 $phieuSanXuat = PhieuSanXuat::find($nguyen_lieu_san_xuat->phieu_san_xuat_id);
                 if ($phieuSanXuat) {
                     $phieuSanXuat->khoi_luong_da_dung -= $nguyen_lieu_san_xuat->khoi_luong;
@@ -198,7 +200,7 @@ class AdminNguyenLieuSanXuatController extends Controller
                 }
             }
 
-            return redirect()->back()->with('success', 'Đã xoá nguyên liệu sản xuất thành công');
+            return redirect()->back()->with('success', 'Đã xoá thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
@@ -211,7 +213,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
             if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
                 DB::rollBack();
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu sản xuất');
+                return redirect()->back()->with('error', 'Không tìm thấy');
             }
 
             $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
@@ -222,7 +224,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             $nguyen_lieu_san_xuat->save();
 
             DB::commit();
-            return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa nguyên liệu sản xuất thành công');
+            return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $e) {
