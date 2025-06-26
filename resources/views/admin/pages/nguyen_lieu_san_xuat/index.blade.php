@@ -1,4 +1,4 @@
-@php use App\Enums\TrangThaiNguyenLieuSanXuat; @endphp
+@php use App\Enums\TrangThaiNguyenLieuSanXuat;use Carbon\Carbon; @endphp
 @extends('admin.layouts.master')
 @section('title')
     Kho Thành phẩm sản xuất
@@ -94,7 +94,7 @@
                             <div class="form-group col-md-6">
                                 <label for="ngay">Ngày</label>
                                 <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ old('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
+                                       value="{{ old('ngay', Carbon::now()->format('Y-m-d')) }}" required>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -243,26 +243,38 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
+                                <th scope="row">
+                                    @if($data->khoi_luong_da_dung > 0)
+                                        <input type="checkbox" disabled>
+                                    @else
+                                        <input type="checkbox" name="check_item[]"
+                                               id="check_item{{ $data->id }}"
+                                               value="{{ $data->id }}">
+                                    @endif
+                                </th>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.nguyen.lieu.san.xuat.detail', $data->id) }}"
                                            class="btn btn-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="{{ route('admin.nguyen.lieu.san.xuat.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                        @if($data->khoi_luong_da_dung > 0)
+                                            <button type="button" class="btn btn-danger btn-sm" disabled>
                                                 <i class="bi bi-trash"></i>
                                             </button>
-                                        </form>
+                                        @else
+                                            <form action="{{ route('admin.nguyen.lieu.san.xuat.delete', $data->id) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
-                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
                                 <td>{{ $data->ten_nguyen_lieu }}</td>
                                 <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>

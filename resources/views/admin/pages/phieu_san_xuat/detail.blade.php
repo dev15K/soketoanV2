@@ -25,136 +25,143 @@
 
                 <div class="card-body">
                     <h5 class="card-title">Chỉnh sửa Phiếu sản xuất</h5>
-                    <form method="post" action="{{ route('admin.phieu.san.xuat.update', $phieu_san_xuat) }}">
-                        @method('PUT')
-                        @csrf
-                        @csrf
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="code">Mã Phiếu</label>
-                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="code" name="code"
-                                       value="{{ old('code', $code) }}" readonly required>
+                    @if($phieu_san_xuat->khoi_luong_da_dung <= 0)
+                        <form method="post" action="{{ route('admin.phieu.san.xuat.update', $phieu_san_xuat) }}">
+                            @method('PUT')
+                            @csrf
+                            @endif
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="code">Mã Phiếu</label>
+                                    <input type="text" class="form-control bg-secondary bg-opacity-10" id="code"
+                                           name="code"
+                                           value="{{ old('code', $code) }}" readonly required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="ten_phieu">Tên nguyên liệu</label>
+                                    <input type="text" class="form-control" id="ten_phieu"
+                                           name="ten_phieu" value="{{ old('ten_phieu', $phieu_san_xuat->ten_phieu) }}"
+                                           required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="so_lo_san_xuat">Số LÔ SX</label>
+                                    <input type="text" class="form-control bg-secondary bg-opacity-10"
+                                           id="so_lo_san_xuat"
+                                           name="so_lo_san_xuat" value="{{ old('so_lo_san_xuat', $so_lo_san_xuat) }}"
+                                           readonly required>
+                                </div>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="ten_phieu">Tên nguyên liệu</label>
-                                <input type="text" class="form-control" id="ten_phieu"
-                                       name="ten_phieu" value="{{ old('ten_phieu', $phieu_san_xuat->ten_phieu) }}"
-                                       required>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="tong_khoi_luong">Khối lượng</label>
+                                    <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
+                                           id="tong_khoi_luong" readonly
+                                           name="tong_khoi_luong" value="{{ $phieu_san_xuat->tong_khoi_luong }}"
+                                           readonly>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="nhan_su_xu_li">Nhân sự xử lý</label>
+                                    <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
+                                        @foreach($nsus as $nsu)
+                                            <option
+                                                {{ $nsu->id == $phieu_san_xuat->nhan_su_xu_li_id ? 'selected' : '' }}
+                                                value="{{ $nsu->id }}">{{ $nsu->full_name }}
+                                                /{{ $nsu->email }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="so_lo_san_xuat">Số LÔ SX</label>
-                                <input type="text" class="form-control bg-secondary bg-opacity-10" id="so_lo_san_xuat"
-                                       name="so_lo_san_xuat" value="{{ old('so_lo_san_xuat', $so_lo_san_xuat) }}"
-                                       readonly required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="tong_khoi_luong">Khối lượng</label>
-                                <input type="text" class="form-control onlyNumber bg-secondary bg-opacity-10"
-                                       id="tong_khoi_luong" readonly
-                                       name="tong_khoi_luong" value="{{ $phieu_san_xuat->tong_khoi_luong }}" readonly>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="nhan_su_xu_li">Nhân sự xử lý</label>
-                                <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control">
-                                    @foreach($nsus as $nsu)
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="ngay">Ngày</label>
+                                    <input type="date" class="form-control" id="ngay" name="ngay"
+                                           value="{{ \Illuminate\Support\Carbon::parse($phieu_san_xuat->ngay)->format('Y-m-d') }}"
+                                           required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="trang_thai">Trạng thái</label>
+                                    <select id="trang_thai" name="trang_thai" class="form-control">
                                         <option
-                                            {{ $nsu->id == $phieu_san_xuat->nhan_su_xu_li_id ? 'selected' : '' }}
-                                            value="{{ $nsu->id }}">{{ $nsu->full_name }}
-                                            /{{ $nsu->email }}</option>
-                                    @endforeach
-                                </select>
+                                            {{ $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::ACTIVE() ? 'selected' : '' }}
+                                            value="{{ TrangThaiPhieuSanXuat::ACTIVE() }}">{{ TrangThaiPhieuSanXuat::ACTIVE() }}</option>
+                                        <option
+                                            {{ $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::INACTIVE() ? 'selected' : '' }}
+                                            value="{{ TrangThaiPhieuSanXuat::INACTIVE() }}">{{ TrangThaiPhieuSanXuat::INACTIVE() }}</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ \Illuminate\Support\Carbon::parse($phieu_san_xuat->ngay)->format('Y-m-d') }}"
+
+                            <div class="form-group col-md-12">
+                                <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
+                                <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
+                                       name="thoi_gian_hoan_thanh_san_xuat"
+                                       value="{{ \Illuminate\Support\Carbon::parse($phieu_san_xuat->thoi_gian_hoan_thanh_san_xuat)->format('Y-m-d') }}"
                                        required>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="trang_thai">Trạng thái</label>
-                                <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option
-                                        {{ $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::ACTIVE() ? 'selected' : '' }}
-                                        value="{{ TrangThaiPhieuSanXuat::ACTIVE() }}">{{ TrangThaiPhieuSanXuat::ACTIVE() }}</option>
-                                    <option
-                                        {{ $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::INACTIVE() ? 'selected' : '' }}
-                                        value="{{ TrangThaiPhieuSanXuat::INACTIVE() }}">{{ TrangThaiPhieuSanXuat::INACTIVE() }}</option>
-                                </select>
-                            </div>
-                        </div>
 
-                        <div class="form-group col-md-12">
-                            <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
-                            <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
-                                   name="thoi_gian_hoan_thanh_san_xuat"
-                                   value="{{ \Illuminate\Support\Carbon::parse($phieu_san_xuat->thoi_gian_hoan_thanh_san_xuat)->format('Y-m-d') }}"
-                                   required>
-                        </div>
+                            <div class="mt-2">
+                                <div class="w-100 d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title">Danh sách nguyên liệu</h4>
 
-                        <div class="mt-2">
-                            <div class="w-100 d-flex justify-content-between align-items-center">
-                                <h4 class="card-title">Danh sách nguyên liệu</h4>
-
-                                <button type="button" class="btn btn-success btn-sm" onclick="plusItem()">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
-                            <table class="table table-bordered">
-                                <colgroup>
-                                    <col width="40%">
-                                    <col width="40%">
-                                    <col width="15%">
-                                    <col width="x">
-                                </colgroup>
-                                <thead>
-                                <tr class="text-center">
-                                    <th scope="col">THÀNH PHẦN TRỘN TỪ MÃ ĐƠN HÀNG</th>
-                                    <th scope="col">Tên NVL</th>
-                                    <th scope="col">TỔNG KL</th>
-                                    <th scope="col"></th>
-                                </tr>
-                                </thead>
-                                <tbody id="tbodyListNL" class="text-center">
-                                @foreach($dsNLSXChiTiets as $dsNLSXChiTiet)
-                                    <tr>
-                                        <td>
-                                            <select class="form-control selectCustom"
-                                                    name="nguyen_lieu_ids[]">
-                                                @foreach($nltinhs as $nltinh)
-                                                    <option
-                                                        {{ $dsNLSXChiTiet->nguyen_lieu_id == $nltinh->id ? 'selected' : '' }}
-                                                        value="{{ $nltinh->id }}">
-                                                        {{ $nltinh->code }} - {{ $nltinh->ten_nguyen_lieu }}
-                                                        - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }} kg
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="ten_nguyen_lieus[]" class="form-control"
-                                                   value="{{ $dsNLSXChiTiet->ten_nguyen_lieu }}" required>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="khoi_luongs[]" class="form-control onlyNumber"
-                                                   value="{{ $dsNLSXChiTiet->khoi_luong }}" required>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                    onclick="removeItems(this)">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </td>
+                                    <button type="button" class="btn btn-success btn-sm" onclick="plusItem()">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
+                                <table class="table table-bordered">
+                                    <colgroup>
+                                        <col width="40%">
+                                        <col width="40%">
+                                        <col width="15%">
+                                        <col width="x">
+                                    </colgroup>
+                                    <thead>
+                                    <tr class="text-center">
+                                        <th scope="col">THÀNH PHẦN TRỘN TỪ MÃ ĐƠN HÀNG</th>
+                                        <th scope="col">Tên NVL</th>
+                                        <th scope="col">TỔNG KL</th>
+                                        <th scope="col"></th>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
-                    </form>
+                                    </thead>
+                                    <tbody id="tbodyListNL" class="text-center">
+                                    @foreach($dsNLSXChiTiets as $dsNLSXChiTiet)
+                                        <tr>
+                                            <td>
+                                                <select class="form-control selectCustom"
+                                                        name="nguyen_lieu_ids[]">
+                                                    @foreach($nltinhs as $nltinh)
+                                                        <option
+                                                            {{ $dsNLSXChiTiet->nguyen_lieu_id == $nltinh->id ? 'selected' : '' }}
+                                                            value="{{ $nltinh->id }}">
+                                                            {{ $nltinh->code }} - {{ $nltinh->ten_nguyen_lieu }}
+                                                            - {{ $nltinh->tong_khoi_luong - $nltinh->so_luong_da_dung }}
+                                                            kg
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="ten_nguyen_lieus[]" class="form-control"
+                                                       value="{{ $dsNLSXChiTiet->ten_nguyen_lieu }}" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="khoi_luongs[]" class="form-control onlyNumber"
+                                                       value="{{ $dsNLSXChiTiet->khoi_luong }}" required>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                        onclick="removeItems(this)">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @if($phieu_san_xuat->khoi_luong_da_dung <= 0)
+                                <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
+                        </form>
+                    @endif
                 </div>
 
             </div>
