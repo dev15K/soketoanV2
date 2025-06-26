@@ -257,7 +257,7 @@ class AdminPhieuSanXuatController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
-            if ($phieu_san_xuat->khoi_luong_da_dung) {
+            if ($phieu_san_xuat->khoi_luong_da_dung > 0) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'Phiếu sản xuất đã dùng không được xoá!');
             }
