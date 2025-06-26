@@ -259,6 +259,10 @@
                 const so_luong = $(this).val();
                 const total = price * so_luong;
                 $('#total_price').val(total);
+
+                const khoi_luong_rieng = $('#khoi_luong_rieng').val();
+                const khoi_luong_da_dung = so_luong * khoi_luong_rieng / 1000;
+                $('#khoi_luong_da_dung').val(khoi_luong_da_dung);
             })
 
             $('#price').on('input', function () {

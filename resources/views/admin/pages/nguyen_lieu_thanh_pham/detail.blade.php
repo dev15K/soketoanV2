@@ -96,7 +96,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="khoi_luong_da_dung">Khối lượng đã dùng</label>
-                                <input type="text" class="form-control onlyNumber" id="don_vi_tinh"
+                                <input type="text" class="form-control onlyNumber" id="khoi_luong_da_dung"
                                        name="khoi_luong_da_dung"
                                        value="{{ $nguyenLieuThanhPham->khoi_luong_da_dung }}"
                                        required>
@@ -180,6 +180,10 @@
             const so_luong = $(this).val();
             const total = price * so_luong;
             $('#total_price').val(total);
+
+            const khoi_luong_rieng = $('#khoi_luong_rieng').val();
+            const khoi_luong_da_dung = so_luong * khoi_luong_rieng / 1000;
+            $('#khoi_luong_da_dung').val(khoi_luong_da_dung);
         })
 
         $('#price').on('input', function () {

@@ -114,6 +114,14 @@ class AdminNguyenLieuThanhPhamController extends Controller
                     return false;
                 }
             }
+        } else {
+            $nguyenLieuSanXuat = NguyenLieuSanXuat::find($nguyen_lieu_san_xuat_id);
+            if ($nguyenLieuSanXuat) {
+                $khoi_luong = $nguyenLieuSanXuat->khoi_luong - $nguyenLieuSanXuat->khoi_luong_da_dung + $oldKhoiLuongDaDung;
+                if ($khoi_luong < $khoi_luong_da_dung) {
+                    return false;
+                }
+            }
         }
 
         $nguyenLieuThanhPham->ten_san_pham = $ten_san_pham;
