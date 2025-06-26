@@ -288,23 +288,35 @@
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
+                                <th scope="row">
+                                    @if($data->khoi_luong_da_dung > 0)
+                                        <input type="checkbox" disabled>
+                                    @else
+                                        <input type="checkbox" name="check_item[]"
+                                               id="check_item{{ $data->id }}"
+                                               value="{{ $data->id }}">
+                                    @endif
+                                </th>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <a href="{{ route('admin.phieu.san.xuat.detail', $data->id) }}"
                                            class="btn btn-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="{{ route('admin.phieu.san.xuat.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                        @if($data->khoi_luong_da_dung > 0)
+                                            <button type="button" class="btn btn-danger btn-sm" disabled>
                                                 <i class="bi bi-trash"></i>
                                             </button>
-                                        </form>
+                                        @else
+                                            <form action="{{ route('admin.phieu.san.xuat.delete', $data->id) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                                 <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
