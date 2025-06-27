@@ -51,8 +51,9 @@
                                        value="{{ $item->don_vi_tinh }}" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="khoi_luong_rieng">Khối lượng riêng</label>
-                                <input type="text" class="form-control" id="khoi_luong_rieng" name="khoi_luong_rieng"
+                                <label for="khoi_luong_rieng">Khối lượng riêng(gram)</label>
+                                <input type="text" class="form-control onlyNumber" id="khoi_luong_rieng"
+                                       name="khoi_luong_rieng"
                                        value="{{ $item->khoi_luong_rieng }}" required>
                             </div>
                         </div>
