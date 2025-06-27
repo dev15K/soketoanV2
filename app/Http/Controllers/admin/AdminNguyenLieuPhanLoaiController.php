@@ -169,7 +169,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
                     $NguyenLieuPhanLoai->gia_truoc_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->khoi_luong_ban_dau, 2);
                     $NguyenLieuPhanLoai->gia_sau_phan_loai = round($NguyenLieuPhanLoai->chi_phi_mua / $NguyenLieuPhanLoai->tong_khoi_luong, 2);
 
-                    $nguyenLieuTho->khoi_luong_da_phan_loai = $khoi_luong_ban_dau - $old_khoi_luong_ban_dau ?? 0;
+                    $nguyenLieuTho->khoi_luong_da_phan_loai = $khoi_luong_ban_dau;
                     $nguyenLieuTho->save();
                 }
             }

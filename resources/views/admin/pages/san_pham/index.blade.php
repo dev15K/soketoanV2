@@ -75,8 +75,9 @@
                                        value="{{ old('don_vi_tinh') }}" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="khoi_luong_rieng">Khối lượng riêng</label>
-                                <input type="text" class="form-control" id="khoi_luong_rieng" name="khoi_luong_rieng"
+                                <label for="khoi_luong_rieng">Khối lượng riêng(gram)</label>
+                                <input type="text" class="form-control onlyNumber" id="khoi_luong_rieng"
+                                       name="khoi_luong_rieng"
                                        value="{{ old('khoi_luong_rieng') }}" required>
                             </div>
                         </div>
@@ -132,7 +133,7 @@
                             <th scope="col">Mã vạch</th>
                             <th scope="col">Tên sản phẩm</th>
                             <th scope="col">Đơn vị tính</th>
-                            <th scope="col">Khối lượng riêng</th>
+                            <th scope="col">Khối lượng riêng(gram)</th>
                             <th scope="col">Giá xuất kho ( Giá nhập)</th>
                             <th scope="col">Giá bán (giá bán ra cho KHách hàng)</th>
                             <th scope="col">Tồn kho</th>

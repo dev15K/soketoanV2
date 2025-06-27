@@ -91,23 +91,21 @@ class AdminNguyenLieuThoController extends Controller
     public function store(Request $request)
     {
         try {
-            DB::beginTransaction();
             $nguyen_lieu_tho = new NguyenLieuTho();
 
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
 
             if (!$nguyen_lieu_tho) {
-                DB::rollBack();
                 return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ hoặc tiền quỹ không đủ!')->withInput();
             }
 
             $nguyen_lieu_tho->save();
 
+
             $new_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
 
             $this->insertSoQuy($nguyen_lieu_tho, false, null, $new_id);
 
-            DB::commit();
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu thô thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
@@ -121,7 +119,6 @@ class AdminNguyenLieuThoController extends Controller
      */
     private function saveData(NguyenLieuTho $nguyenLieuTho, Request $request)
     {
-        DB::beginTransaction();
         $ngay = $request->input('ngay');
         $nha_cung_cap_id = $request->input('nha_cung_cap_id');
         $ten_nguyen_lieu = $request->input('ten_nguyen_lieu');
@@ -155,24 +152,20 @@ class AdminNguyenLieuThoController extends Controller
 
         $loaiQuy = LoaiQuy::find($phuong_thuc_thanh_toan);
         if (!$loaiQuy) {
-            DB::rollBack();
             return false;
         }
 
         $tong_tien = $loaiQuy->tong_tien_quy;
 
         if ($so_tien_thanh_toan < 0) {
-            DB::rollBack();
             return false;
         }
 
         if ($so_tien_thanh_toan > $chi_phi_mua) {
-            DB::rollBack();
             return false;
         }
 
         if ($so_tien_thanh_toan > $tong_tien) {
-            DB::rollBack();
             return false;
         }
 
@@ -193,7 +186,6 @@ class AdminNguyenLieuThoController extends Controller
      */
     private function insertSoQuy(NguyenLieuTho $nguyenLieuTho, $so_quy_id = null, $old_quy_id = null, $new_quy_id = null)
     {
-        DB::beginTransaction();
         if (!$so_quy_id) {
             $code = $this->generateSoQuyCode();
             $soquy = new SoQuy();
@@ -249,8 +241,6 @@ class AdminNguyenLieuThoController extends Controller
                 }
             }
         }
-
-        DB::commit();
     }
 
     private function generateSoQuyCode()
@@ -264,7 +254,6 @@ class AdminNguyenLieuThoController extends Controller
     public function update($id, Request $request)
     {
         try {
-            DB::beginTransaction();
             $nguyen_lieu_tho = NguyenLieuTho::find($id);
             if (!$nguyen_lieu_tho || $nguyen_lieu_tho->trang_thai == TrangThaiNguyenLieuTho::DELETED()) {
                 DB::rollBack();
@@ -276,7 +265,6 @@ class AdminNguyenLieuThoController extends Controller
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
 
             if (!$nguyen_lieu_tho) {
-                DB::rollBack();
                 return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ hoặc tiền quỹ không đủ!');
             }
 
@@ -286,7 +274,6 @@ class AdminNguyenLieuThoController extends Controller
 
             $this->insertSoQuy($nguyen_lieu_tho, true, $old_id, $new_id);
 
-            DB::commit();
             return redirect()->route('admin.nguyen.lieu.tho.index')->with('success', 'Chỉnh sửa nguyên liệu thô thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
