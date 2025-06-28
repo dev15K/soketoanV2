@@ -251,27 +251,28 @@ class AdminPhieuSanXuatController extends Controller
         try {
             DB::beginTransaction();
 
-            $phieu_san_xuat = PhieuSanXuat::find($id);
-            if (!$phieu_san_xuat || $phieu_san_xuat->trang_thai == TrangThaiphieuSanXuat::DELETED()) {
+            $phieuSanXuat = PhieuSanXuat::find($id);
+            if (!$phieuSanXuat || $phieuSanXuat->trang_thai == TrangThaiphieuSanXuat::DELETED()) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
-            if ($phieu_san_xuat->khoi_luong_da_dung > 0) {
+            if ($phieuSanXuat->khoi_luong_da_dung > 0) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'Phiếu sản xuất đã dùng không được xoá!');
             }
 
-            PhieuSanXuat::where('id', $id)
-                ->where('khoi_luong_da_dung', null)
-                ->orWhere('khoi_luong_da_dung', 0)
-                ->update(['trang_thai' => TrangThaiPhieuSanXuat::DELETED()]);
-
-            $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)->get();
-            foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
-                $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
-                $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
-                $nguyenLieuTinh->save();
+            if ($phieuSanXuat) {
+                if (!$phieuSanXuat->khoi_luong_da_dung || $phieuSanXuat->khoi_luong_da_dung == 0) {
+                    $phieuSanXuat->trang_thai = TrangThaiPhieuSanXuat::DELETED();
+                    $phieuSanXuat->save();
+                    $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)->get();
+                    foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+                        $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+                        $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+                        $nguyenLieuTinh->save();
+                    }
+                }
             }
 
             DB::commit();
