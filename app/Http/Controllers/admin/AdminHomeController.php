@@ -215,26 +215,26 @@ class AdminHomeController extends Controller
                     }
                     break;
                 case "phieu_san_xuat":
-                    PhieuSanXuat::whereIn('id', $list_id)
-                        ->where(function ($query) {
-                            $query->whereNull('khoi_luong_da_dung')
-                                ->orWhere('khoi_luong_da_dung', 0);
-                        })
-                        ->update(['trang_thai' => TrangThaiPhieuSanXuat::DELETED()]);
+//                    PhieuSanXuat::whereIn('id', $list_id)
+//                        ->where(function ($query) {
+//                            $query->whereNull('khoi_luong_da_dung')
+//                                ->orWhere('khoi_luong_da_dung', 0);
+//                        })
+//                        ->update(['trang_thai' => TrangThaiPhieuSanXuat::DELETED()]);
 
                     foreach ($list_id as $id) {
                         $phieuSanXuat = PhieuSanXuat::where('id', $id)
-                            ->where(function ($query) {
-                                $query->whereNull('khoi_luong_da_dung')
-                                    ->orWhere('khoi_luong_da_dung', 0);
-                            })
                             ->first();
                         if ($phieuSanXuat) {
-                            $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)->get();
-                            foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
-                                $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
-                                $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
-                                $nguyenLieuTinh->save();
+                            if (!$phieuSanXuat->khoi_luong_da_dung || $phieuSanXuat->khoi_luong_da_dung == 0) {
+                                $phieuSanXuat->trang_thai = TrangThaiPhieuSanXuat::DELETED();
+                                $phieuSanXuat->save();
+                                $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $id)->get();
+                                foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+                                    $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+                                    $nguyenLieuTinh->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+                                    $nguyenLieuTinh->save();
+                                }
                             }
                         }
                     }
