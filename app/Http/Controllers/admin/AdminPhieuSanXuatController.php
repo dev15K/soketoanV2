@@ -204,16 +204,16 @@ class AdminPhieuSanXuatController extends Controller
 
                 $nguyenLieuTinh = NguyenLieuTinh::find($nguyen_lieu_id);
 
-                if (!$nguyenLieuTinh) {
-                    DB::rollBack();
-                    throw new \Exception("Nguyên liệu không tồn tại");
+                $tonkho = $nguyenLieuTinh->tong_khoi_luong - $nguyenLieuTinh->so_luong_da_dung;
+
+                if (!is_numeric($khoi_luong)) {
+                    return false;
                 }
 
-                $tonkho = $nguyenLieuTinh->tong_khoi_luong - $nguyenLieuTinh->so_luong_da_dung;
-                if ($tonkho < $khoi_luong) {
-                    DB::rollBack();
-                    throw new \Exception("Không đủ tồn kho cho nguyên liệu: $ten_nguyen_lieu");
+                if (round($tonkho, 3) < round((float)$khoi_luong, 3)) {
+                    return false;
                 }
+
                 $phieuSanXuatChiTiet->type = '';
                 $phieuSanXuatChiTiet->phieu_san_xuat_id = $phieuSanXuat->id;
                 $phieuSanXuatChiTiet->nguyen_lieu_id = $nguyen_lieu_id;
@@ -333,7 +333,7 @@ class AdminPhieuSanXuatController extends Controller
                     }
 
                     $tonkho = $nguyenLieu->tong_khoi_luong - $nguyenLieu->so_luong_da_dung + $tong_khoi_luong_cu;
-                    if ($tonkho < $khoi_luong) {
+                    if (round($tonkho, 3) < round((float)$khoi_luong, 3)) {
                         DB::rollBack();
                         return redirect()->back()->with('error', 'Khối lượng nguyên liệu tinh không đủ')->withInput();
                     }
