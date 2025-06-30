@@ -242,7 +242,7 @@ class AdminNguyenLieuTinhController extends Controller
 
                 if (isset($mapping[$ten])) {
                     $field = $mapping[$ten];
-                    if ($nguyenLieuPhanLoai->$field < $khoi_luong) {
+                    if (round($nguyenLieuPhanLoai->$field, 3) < round((float)$khoi_luong, 3)) {
                         DB::rollBack();
                         return false;
                     }
