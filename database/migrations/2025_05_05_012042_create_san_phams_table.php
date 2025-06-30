@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->id();
 
             $table->string('ma_san_pham')->unique();
-            $table->string('ma_vach')->unique();
+            $table->string('ma_vach')->nullable();
 
             $table->string('ten_san_pham');
             $table->string('don_vi_tinh');
