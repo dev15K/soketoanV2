@@ -313,6 +313,11 @@ class AdminPhieuSanXuatController extends Controller
                 $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
                 $khoi_luongs = $request->input('khoi_luongs');
 
+                $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->get();
+                $old_nguyen_lieu_ids = $phieuSanXuatChiTiets->pluck('nguyen_lieu_id')->toArray();
+
+                $no_ids = array_diff($old_nguyen_lieu_ids, $nguyen_lieu_ids);
+
                 for ($i = 0; $i < count($nguyen_lieu_ids); $i++) {
                     $nguyen_lieu_id = $nguyen_lieu_ids[$i];
                     $ten_nguyen_lieu = $ten_nguyen_lieus[$i];
@@ -357,6 +362,21 @@ class AdminPhieuSanXuatController extends Controller
 
                 $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
                 $phieuSanXuat->save();
+
+                foreach ($no_ids as $no_id) {
+                    $nguyenLieu = NguyenLieuTinh::find($no_id);
+
+                    $phieuSanXuatChiTiet = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)
+                        ->where('nguyen_lieu_id', $no_id)
+                        ->first();
+
+                    if ($nguyenLieu) {
+                        $nguyenLieu->so_luong_da_dung -= $phieuSanXuatChiTiet->khoi_luong;
+                        $nguyenLieu->save();
+                    }
+                }
+
+                PhieuSanXuatChiTiet::whereIn('nguyen_lieu_id', $no_ids)->delete();
 
                 DB::commit();
                 return redirect()->route('admin.phieu.san.xuat.index')->with('success', 'Chỉnh sửa phiếu sản xuất thành công');
