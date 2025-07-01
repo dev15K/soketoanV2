@@ -309,8 +309,8 @@
                             <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>

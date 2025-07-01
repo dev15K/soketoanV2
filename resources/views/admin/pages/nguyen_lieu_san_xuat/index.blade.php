@@ -289,6 +289,24 @@
                             </tr>
                         @endforeach
                         </tbody>
+                        <tfoot class="bg-primary bg-opacity-10">
+                        <tr>
+                            <th scope="col">Tổng:</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_dung'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }} kg</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

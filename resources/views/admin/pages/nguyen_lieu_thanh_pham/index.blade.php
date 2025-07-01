@@ -359,9 +359,27 @@
                             </tr>
                         @endforeach
                         </tbody>
+
+                        <tfoot class="bg-primary bg-opacity-10">
+                        <tr>
+                            <th scope="col">Tổng:</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">{{ parseNumber($datas->sum('so_luong'), 0) }}</th>
+                            <th scope="col">{{ parseNumber($datas->sum('so_luong_da_ban'), 0) }}</th>
+                            <th scope="col">{{ parseNumber($datas->sum('so_luong') - $datas->sum('so_luong_da_ban'), 0) }}</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                        </tfoot>
                     </table>
-
-
                 </div>
 
             </div>
