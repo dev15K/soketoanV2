@@ -357,7 +357,9 @@ class AdminPhieuSanXuatController extends Controller
                     $nguyenLieu->so_luong_da_dung += $khoi_luong - $tong_khoi_luong_cu;
                     $nguyenLieu->save();
 
-                    $chiTietCu->delete();
+                    if ($chiTietCu) {
+                        $chiTietCu->delete();
+                    }
                 }
 
                 $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
@@ -376,7 +378,9 @@ class AdminPhieuSanXuatController extends Controller
                     }
                 }
 
-                PhieuSanXuatChiTiet::whereIn('nguyen_lieu_id', $no_ids)->delete();
+                if (count($no_ids) > 0) {
+                    PhieuSanXuatChiTiet::whereIn('nguyen_lieu_id', $no_ids)->delete();
+                }
 
                 DB::commit();
                 return redirect()->route('admin.phieu.san.xuat.index')->with('success', 'Chỉnh sửa phiếu sản xuất thành công');
