@@ -26,8 +26,17 @@ class AdminPhieuSanXuatController extends Controller
 
         $queries = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED());
 
-        if ($ngay) {
-            $queries->whereDate('ngay', \Carbon\Carbon::parse($ngay)->format('Y-m-d'));
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        if ($start_date && $end_date) {
+            $queries->whereBetween('ngay', [
+                \Carbon\Carbon::parse($start_date)->format('Y-m-d'),
+                Carbon::parse($end_date)->format('Y-m-d')
+            ]);
+        } elseif ($start_date) {
+            $queries->whereDate('ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+        } elseif ($end_date) {
+            $queries->whereDate('ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
         }
 
         if ($keyword) {
@@ -54,7 +63,8 @@ class AdminPhieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'so_lo_san_xuat', 'nltinhs', 'ngay', 'keyword', 'nguyen_lieu_id', 'nsus'));
+        return view('admin.pages.phieu_san_xuat.index', compact('datas', 'code', 'so_lo_san_xuat', 'nltinhs', 'ngay', 'keyword',
+            'nguyen_lieu_id', 'nsus', 'start_date', 'end_date'));
     }
 
     private function generateCode()

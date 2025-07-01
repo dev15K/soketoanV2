@@ -8,9 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuTinh;
 use App\Models\NguyenLieuTinhChiTiet;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class AdminNguyenLieuTinhController extends Controller
 {
@@ -21,15 +23,24 @@ class AdminNguyenLieuTinhController extends Controller
 
         $queries = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED());
 
-        if ($ngay) {
-            $queries->whereDate('ngay', Carbon::parse($ngay)->format('Y-m-d'));
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        if ($start_date && $end_date) {
+            $queries->whereBetween('ngay', [
+                \Carbon\Carbon::parse($start_date)->format('Y-m-d'),
+                Carbon::parse($end_date)->format('Y-m-d')
+            ]);
+        } elseif ($start_date) {
+            $queries->whereDate('ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+        } elseif ($end_date) {
+            $queries->whereDate('ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
         }
 
         if ($code_search) {
             $queries->where('code', 'like', '%' . $code_search . '%');
         }
 
-        $datas = $queries->orderByDesc('id')->paginate(10);;
+        $datas = $queries->orderByDesc('id')->paginate(10);
 
         $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
             ->orderByDesc('id')
@@ -40,7 +51,8 @@ class AdminNguyenLieuTinhController extends Controller
         $ma_phieu = $this->generateMaPhieu();
 
 
-        return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu', 'ngay', 'code_search'));
+        return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu', 'ngay',
+            'code_search', 'start_date', 'end_date'));
     }
 
     private function generateLHXCode()
@@ -136,15 +148,15 @@ class AdminNguyenLieuTinhController extends Controller
 
             DB::commit();
             return redirect()->back()->with('success', 'Thêm mới nguyên liệu tinh thành công');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function saveData(NguyenLieuTinh $NguyenLieuTinh, Request $request)
     {
@@ -191,7 +203,7 @@ class AdminNguyenLieuTinhController extends Controller
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function saveDataChiTiet(NguyenLieuTinh $NguyenLieuTinh, Request $request)
     {
@@ -350,9 +362,9 @@ class AdminNguyenLieuTinhController extends Controller
 
             DB::commit();
             return redirect()->back()->with('success', 'Đã xoá nguyên liệu tinh thành công');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
@@ -379,9 +391,9 @@ class AdminNguyenLieuTinhController extends Controller
 
             DB::commit();
             return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }

@@ -31,14 +31,21 @@
                     </h5>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 <div class="d-flex justify-content-start align-items-center gap-2">
-                                    <label for="ngay">Ngày: </label>
-                                    <input type="date" class="form-control" id="ngay_search"
-                                           value="{{ $ngay_search }}" name="ngay">
+                                    <label for="start_date">Từ ngày: </label>
+                                    <input type="date" class="form-control" id="start_date"
+                                           value="{{ $start_date }}" name="start_date">
                                 </div>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                    <label for="end_date">Đến ngày: </label>
+                                    <input type="date" class="form-control" id="end_date"
+                                           value="{{ $end_date }}" name="end_date">
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
                                 <select name="nguyen_lieu_san_xuat_id_search" id="nguyen_lieu_san_xuat_id_search"
                                         class="form-control selectCustom">
                                     <option value="">Lựa chọn Lô SX</option>
@@ -52,7 +59,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 <select name="san_pham_id_search" id="san_pham_id_search"
                                         class="form-control selectCustom">
                                     <option value="">Lựa chọn Mã sản phẩm</option>
@@ -77,11 +84,13 @@
 
         <script>
             function searchTable() {
-                const ngay_search = $('#ngay_search').val();
+                const start_date = $('#start_date').val();
+                const end_date = $('#end_date').val();
                 const nguyen_lieu_san_xuat_id_search = $('#nguyen_lieu_san_xuat_id_search').val();
                 const san_pham_id_search = $('#san_pham_id_search').val();
 
-                window.location.href = "{{ route('admin.nguyen.lieu.thanh.pham.index') }}?ngay=" + ngay_search
+                window.location.href = "{{ route('admin.nguyen.lieu.thanh.pham.index') }}?start_date=" + start_date
+                    + "&end_date=" + end_date
                     + "&nguyen_lieu_san_xuat_id=" + nguyen_lieu_san_xuat_id_search
                     + "&san_pham_id=" + san_pham_id_search;
             }

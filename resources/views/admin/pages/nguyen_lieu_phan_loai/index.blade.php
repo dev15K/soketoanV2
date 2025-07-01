@@ -30,11 +30,18 @@
                     </h5>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 <div class="d-flex justify-content-start align-items-center gap-2">
-                                    <label for="ngay">Ngày: </label>
-                                    <input type="date" class="form-control" id="ngay_search"
-                                           value="{{ $ngay }}" name="ngay">
+                                    <label for="start_date">Từ ngày: </label>
+                                    <input type="date" class="form-control" id="start_date"
+                                           value="{{ $start_date }}" name="start_date">
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                    <label for="end_date">Đến ngày: </label>
+                                    <input type="date" class="form-control" id="end_date"
+                                           value="{{ $end_date }}" name="end_date">
                                 </div>
                             </div>
                             <div class="col-md-4 form-group">
@@ -54,9 +61,10 @@
 
         <script>
             function searchTable() {
-                const ngay_search = $('#ngay_search').val();
+                const start_date = $('#start_date').val();
+                const end_date = $('#end_date').val();
                 const keyword = $('#keyword').val();
-                window.location.href = "{{ route('admin.nguyen.lieu.phan.loai.index') }}?ngay=" + ngay_search + "&keyword=" + keyword;
+                window.location.href = "{{ route('admin.nguyen.lieu.phan.loai.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&keyword=" + keyword;
             }
         </script>
 

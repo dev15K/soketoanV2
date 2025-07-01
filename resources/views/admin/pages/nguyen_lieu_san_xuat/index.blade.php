@@ -31,21 +31,28 @@
                     </h5>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-start align-items-center gap-4 w-100">
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 <div class="d-flex justify-content-start align-items-center gap-2">
-                                    <label for="ngay">Ngày: </label>
-                                    <input type="date" class="form-control" id="ngay_search"
-                                           value="{{ $ngay_search }}" name="ngay">
+                                    <label for="start_date">Từ ngày: </label>
+                                    <input type="date" class="form-control" id="start_date"
+                                           value="{{ $start_date }}" name="start_date">
                                 </div>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
+                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                    <label for="end_date">Đến ngày: </label>
+                                    <input type="date" class="form-control" id="end_date"
+                                           value="{{ $end_date }}" name="end_date">
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="keyword" name="keyword"
                                            placeholder="Tên nguyên liệu" value="{{ $keyword }}">
 
                                 </div>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 <div class="form-group">
                                     <select id="phieu_san_xuat_id" name="phieu_san_xuat_id"
                                             class="form-control selectCustom">
@@ -73,10 +80,11 @@
 
         <script>
             function searchTable() {
-                const ngay_search = $('#ngay_search').val();
+                const start_date = $('#start_date').val();
+                const end_date = $('#end_date').val();
                 const keyword = $('#keyword').val();
                 const so_lo_san_xuat = $('#phieu_san_xuat_id').val();
-                window.location.href = "{{ route('admin.nguyen.lieu.san.xuat.index') }}?ngay=" + ngay_search + "&keyword=" + keyword + "&phieu_san_xuat_id=" + so_lo_san_xuat;
+                window.location.href = "{{ route('admin.nguyen.lieu.san.xuat.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&keyword=" + keyword + "&phieu_san_xuat_id=" + so_lo_san_xuat;
             }
         </script>
 

@@ -24,8 +24,18 @@ class AdminNguyenLieuSanXuatController extends Controller
 
         $queries = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED());
 
-        if ($ngay_search) {
-            $queries->whereDate('ngay', Carbon::parse($ngay_search)->format('Y-m-d'));
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if ($start_date && $end_date) {
+            $queries->whereBetween('ngay', [
+                \Carbon\Carbon::parse($start_date)->format('Y-m-d'),
+                Carbon::parse($end_date)->format('Y-m-d')
+            ]);
+        } elseif ($start_date) {
+            $queries->whereDate('ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+        } elseif ($end_date) {
+            $queries->whereDate('ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
         }
 
         if ($keyword) {
@@ -46,7 +56,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             ->get();
 
         return view('admin.pages.nguyen_lieu_san_xuat.index', compact('datas', 'phieu_san_xuats',
-            'ngay_search', 'keyword', 'phieu_san_xuat_id', 'nsus'));
+            'ngay_search', 'keyword', 'phieu_san_xuat_id', 'nsus', 'start_date', 'end_date'));
     }
 
     public function detail($id)
