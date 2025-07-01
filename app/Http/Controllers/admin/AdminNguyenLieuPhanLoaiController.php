@@ -20,8 +20,18 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
         $queries = NguyenLieuPhanLoai::where('nguyen_lieu_phan_loais.trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED());
 
-        if ($ngay) {
-            $queries->whereDate('nguyen_lieu_phan_loais.ngay', Carbon::parse($ngay)->format('Y-m-d'));
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if ($start_date && $end_date) {
+            $queries->whereBetween('ngay', [
+                Carbon::parse($start_date)->format('Y-m-d'),
+                Carbon::parse($end_date)->format('Y-m-d')
+            ]);
+        } elseif ($start_date) {
+            $queries->whereDate('ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+        } elseif ($end_date) {
+            $queries->whereDate('ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
         }
 
         if ($keyword) {
@@ -37,7 +47,7 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         $nlthos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.nguyen_lieu_phan_loai.index', compact('datas', 'nlthos', 'ngay', 'keyword'));
+        return view('admin.pages.nguyen_lieu_phan_loai.index', compact('datas', 'nlthos', 'start_date', 'end_date', 'keyword'));
     }
 
     public function detail($id)

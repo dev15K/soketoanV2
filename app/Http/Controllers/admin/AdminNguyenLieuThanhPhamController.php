@@ -23,8 +23,18 @@ class AdminNguyenLieuThanhPhamController extends Controller
 
         $queries = NguyenLieuThanhPham::where('trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED());
 
-        if ($ngay_search) {
-            $queries->whereDate('ngay', Carbon::parse($ngay_search)->format('Y-m-d'));
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if ($start_date && $end_date) {
+            $queries->whereBetween('ngay', [
+                \Carbon\Carbon::parse($start_date)->format('Y-m-d'),
+                Carbon::parse($end_date)->format('Y-m-d')
+            ]);
+        } elseif ($start_date) {
+            $queries->whereDate('ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+        } elseif ($end_date) {
+            $queries->whereDate('ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
         }
 
         if ($nguyen_lieu_san_xuat_id_search) {
@@ -45,7 +55,8 @@ class AdminNguyenLieuThanhPhamController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_thanh_pham.index', compact('datas', 'nlsanxuats', 'products', 'ngay_search', 'nguyen_lieu_san_xuat_id_search', 'san_pham_id_search'));
+        return view('admin.pages.nguyen_lieu_thanh_pham.index', compact('datas', 'nlsanxuats', 'products',
+            'ngay_search', 'nguyen_lieu_san_xuat_id_search', 'san_pham_id_search', 'start_date', 'end_date'));
     }
 
     public function detail($id)
@@ -173,9 +184,9 @@ class AdminNguyenLieuThanhPhamController extends Controller
             }
 
             $nguyenLieuThanhPham->trang_thai = TrangThaiNguyenLieuThanhPham::DELETED();
-            $success =$nguyenLieuThanhPham->save();
+            $success = $nguyenLieuThanhPham->save();
 
-            if($success){
+            if ($success) {
                 $sanPham = SanPham::find($nguyenLieuThanhPham->san_pham_id);
                 if ($sanPham) {
                     $sanPham->ton_kho = $sanPham->ton_kho - $nguyenLieuThanhPham->so_luong;

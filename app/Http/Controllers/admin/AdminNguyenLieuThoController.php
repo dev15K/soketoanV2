@@ -19,14 +19,23 @@ class AdminNguyenLieuThoController extends Controller
 {
     public function index(Request $request)
     {
-        $ngay = $request->input('ngay');
         $keyword = $request->input('keyword');
         $nha_cung_cap_id = $request->input('nha_cung_cap_id');
 
         $queries = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED());
 
-        if ($ngay) {
-            $queries->whereDate('ngay', Carbon::parse($ngay)->format('Y-m-d'));
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if ($start_date && $end_date) {
+            $queries->whereBetween('ngay', [
+                Carbon::parse($start_date)->format('Y-m-d'),
+                Carbon::parse($end_date)->format('Y-m-d')
+            ]);
+        } elseif ($start_date) {
+            $queries->whereDate('ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+        } elseif ($end_date) {
+            $queries->whereDate('ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
         }
 
         if ($keyword) {
@@ -53,7 +62,8 @@ class AdminNguyenLieuThoController extends Controller
             ->get();
 
         $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
-        return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs', 'code', 'nsus', 'ngay', 'keyword', 'nha_cung_cap_id', 'loai_quies'));
+        return view('admin.pages.nguyen_lieu_tho.index', compact('datas', 'nccs', 'code',
+            'nsus', 'start_date', 'end_date', 'keyword', 'nha_cung_cap_id', 'loai_quies'));
     }
 
     private function generateCode()
@@ -251,6 +261,25 @@ class AdminNguyenLieuThoController extends Controller
         return convertNumber($lastId + 1);
     }
 
+    public function delete($id)
+    {
+        try {
+            $nguyen_lieu_tho = NguyenLieuTho::find($id);
+            if (!$nguyen_lieu_tho || $nguyen_lieu_tho->trang_thai == TrangThaiNguyenLieuTho::DELETED()) {
+                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thô');
+            }
+
+            NguyenLieuTho::where('id', $id)
+                ->where('khoi_luong_da_phan_loai', null)
+                ->orWhere('khoi_luong_da_phan_loai', 0)
+                ->update(['trang_thai' => TrangThaiNguyenLieuTho::DELETED()]);
+
+            return redirect()->back()->with('success', 'Đã xoá nguyên liệu thô thành công');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
     public function update($id, Request $request)
     {
         try {
@@ -278,25 +307,6 @@ class AdminNguyenLieuThoController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
-        }
-    }
-
-    public function delete($id)
-    {
-        try {
-            $nguyen_lieu_tho = NguyenLieuTho::find($id);
-            if (!$nguyen_lieu_tho || $nguyen_lieu_tho->trang_thai == TrangThaiNguyenLieuTho::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thô');
-            }
-
-            NguyenLieuTho::where('id', $id)
-                ->where('khoi_luong_da_phan_loai', null)
-                ->orWhere('khoi_luong_da_phan_loai', 0)
-                ->update(['trang_thai' => TrangThaiNguyenLieuTho::DELETED()]);
-
-            return redirect()->back()->with('success', 'Đã xoá nguyên liệu thô thành công');
-        } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
