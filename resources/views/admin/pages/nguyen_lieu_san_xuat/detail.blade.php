@@ -65,9 +65,9 @@
                                            value="{{ $nguyen_lieu_san_xuat->khoi_luong }}" required>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="don_gia">Đơn giá</label>
-                                    <input type="text" class="form-control" id="don_gia" name="don_gia"
-                                           value="{{ $nguyen_lieu_san_xuat->don_gia }}">
+                                    <label for="tong_tien">Tổng tiền lô SX</label>
+                                    <input type="text" class="form-control" id="tong_tien" name="tong_tien"
+                                           value="{{ $nguyen_lieu_san_xuat->tong_tien }}">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="mau_sac">Màu sắc</label>

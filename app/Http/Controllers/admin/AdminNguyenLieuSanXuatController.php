@@ -150,11 +150,12 @@ class AdminNguyenLieuSanXuatController extends Controller
                 $total_price += $chiTiet->so_tien;
             }
 
-            $don_gia = $total_price / $khoi_luong;
+            $don_gia = $total_price / $phieuSanXuat->tong_khoi_luong;
         }
 
         $nguyenLieuSanXuat->ten_nguyen_lieu = $ten_nguyen_lieu;
         $nguyenLieuSanXuat->don_gia = $don_gia;
+        $nguyenLieuSanXuat->tong_tien = $don_gia * $khoi_luong;
         $nguyenLieuSanXuat->ngay = Carbon::parse($ngay)->format('Y-m-d');
         $nguyenLieuSanXuat->phieu_san_xuat_id = $phieu_san_xuat_id;
         $nguyenLieuSanXuat->khoi_luong = $khoi_luong;
