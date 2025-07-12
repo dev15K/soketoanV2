@@ -134,9 +134,9 @@
                                        value="{{ old('khoi_luong') }}" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="don_gia">Đơn giá (Bỏ trống nếu tự tính)</label>
-                                <input type="text" class="form-control onlyNumber" id="don_gia" name="don_gia"
-                                       value="{{ old('don_gia') }}">
+                                <label for="don_gia">Tổng tiền lô SX (Bỏ trống nếu tự tính)</label>
+                                <input type="text" class="form-control onlyNumber" id="tong_tien" name="tong_tien"
+                                       value="{{ old('tong_tien') }}">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="mau_sac">Màu sắc</label>
@@ -222,6 +222,8 @@
                             <col width="8%">
                             <col width="8%">
                             <col width="8%">
+                            <col width="8%">
+                            <col width="8%">
                             <col width="6%">
                             <col width="6%">
                             <col width="6%">
@@ -241,6 +243,8 @@
                             <th scope="col">Khối lượng đã dùng</th>
                             <th scope="col">Khối lượng tồn</th>
                             <th scope="col">Đơn giá</th>
+                            <th scope="col">Tổng tiền lô SX</th>
+                            <th scope="col">Giá trị tồn kho</th>
                             <th scope="col">Màu sắc</th>
                             <th scope="col">Mùi thơm</th>
                             <th scope="col">Chi tiết khác</th>
@@ -289,6 +293,11 @@
                                 <td>{{ parseNumber($data->khoi_luong_da_dung, 0) }} kg</td>
                                 <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_dung, 0) }} kg</td>
                                 <td>{{ parseNumber($data->don_gia, 0) }} VND</td>
+                                <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
+                                <td>
+                                    {{ parseNumber($data->don_gia * ($data->khoi_luong - $data->khoi_luong_da_dung), 0) }}
+                                    VND
+                                </td>
                                 <td>{{ $data->mau_sac }}</td>
                                 <td>{{ $data->mui_thom }}</td>
                                 <td>{{ $data->chi_tiet_khac }}</td>
@@ -306,7 +315,11 @@
                             <th scope="col"></th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong'), 0) }} kg</th>
                             <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_dung'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }} kg</th>
+                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }}
+                                kg
+                            </th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
