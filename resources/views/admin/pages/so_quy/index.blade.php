@@ -1,3 +1,4 @@
+@php use App\Enums\TrangThaiNguyenLieuTho;use App\Models\NguyenLieuTho; @endphp
 @extends('admin.layouts.master')
 @section('title')
     Sổ quỹ
@@ -101,7 +102,8 @@
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label for="loai">Loại phiếu</label>
-                                <select class="form-control" name="loai" id="loai" required>
+                                <select class="form-control" name="loai" id="loai" required
+                                        onchange="show_nha_cung_cap()">
                                     <option value="0" {{ old('loai') === '0' ? 'selected' : '' }}>Phiếu Chi</option>
                                     <option value="1" {{ old('loai') === '1' ? 'selected' : '' }}>Phiếu Thu</option>
                                 </select>
@@ -122,6 +124,31 @@
                                 <input type="text" class="form-control onlyNumber" id="so_tien" name="so_tien"
                                        value="{{ old('so_tien') }}" required>
                             </div>
+                        </div>
+                        <div class="row d-none" id="show_nha_cung_cap">
+                            <div class="col-md-12 form-group">
+                                <label for="nha_cung_cap_id">Nhà cung cập</label>
+                                <select class="form-control selectCustom" name="nha_cung_cap_id" id="nha_cung_cap_id">
+                                    <option value="">Tất cả</option>
+                                    @foreach($nha_cung_caps as $nha_cung_cap)
+                                        @php
+                                            $nguyen_lieu_thos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+                                                ->where('nha_cung_cap_id', $nha_cung_cap->id)
+                                                ->get();
+
+                                            $total = 0;
+                                            foreach ($nguyen_lieu_thos as $nguyen_lieu_tho) {
+                                                $total += $nguyen_lieu_tho->cong_no;
+                                            }
+                                        @endphp
+                                        <option
+                                            value="{{ $nha_cung_cap->id }}" {{ old('nha_cung_cap_id') == $nha_cung_cap->id ? 'selected' : '' }}>
+                                            {{ $nha_cung_cap->ten }} - Công nợ: {{ parseNumber($total, 0) }} VND
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                         <div class="form-group">
                             <label for="noi_dung">Nội dung</label>
@@ -180,6 +207,7 @@
                             <th scope="col">Tên quỹ</th>
                             <th scope="col">Số tiền</th>
                             <th scope="col">Nội dung</th>
+                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -197,6 +225,22 @@
                                 <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                 <td>{{ parseNumber($data->so_tien) }} VND</td>
                                 <td>{{ $data->noi_dung }}</td>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('admin.so.quy.detail', $data->id) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <form action="{{ route('admin.so.quy.delete', $data->id) }}"
+                                              method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -214,4 +258,15 @@
             {{ $datas->links('pagination::bootstrap-5') }}
         </div>
     </section>
+
+    <script>
+        function show_nha_cung_cap() {
+            // let type = $('#loai').val();
+            // if (type == 1) {
+            //     $('#show_nha_cung_cap').removeClass('d-none');
+            // } else {
+            //     $('#show_nha_cung_cap').addClass('d-none');
+            // }
+        }
+    </script>
 @endsection

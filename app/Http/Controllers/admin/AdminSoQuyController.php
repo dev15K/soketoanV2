@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Enums\TrangThaiNhaCungCap;
 use App\Http\Controllers\Controller;
 use App\Models\LoaiQuy;
+use App\Models\NhaCungCaps;
 use App\Models\SoQuy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -88,7 +90,12 @@ class AdminSoQuyController extends Controller
         $ma_phieu = $this->generateCode();
 
         $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
-        return view('admin.pages.so_quy.index', compact('datas', 'ma_phieu', 'ton_dau', 'ton_cuoi', 'start_date', 'end_date', 'loai_quies', 'loai_quy_search'));
+
+        $nha_cung_caps = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
+            ->orderByDesc('id')
+            ->get();
+        return view('admin.pages.so_quy.index', compact('datas', 'ma_phieu', 'ton_dau', 'ton_cuoi',
+            'start_date', 'end_date', 'loai_quies', 'loai_quy_search', 'nha_cung_caps'));
     }
 
     private function generateCode()
@@ -142,6 +149,10 @@ class AdminSoQuyController extends Controller
                     $loai_quy->save();
                 }
             }
+
+//            if ($loai == 1) {
+//
+//            }
 
             return redirect()->back()->with('success', 'Thêm mới sổ quỹ thành công');
         } catch (\Exception $e) {
