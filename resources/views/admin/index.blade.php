@@ -46,7 +46,8 @@
                             <div class="col-md-4 form-group">
                                 <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="loai_quy_search">Loại quỹ: </label>
-                                    <select name="loai_quy_search" id="loai_quy_search" class="form-control selectCustom">
+                                    <select name="loai_quy_search" id="loai_quy_search"
+                                            class="form-control selectCustom">
                                         <option value="">Tất cả</option>
                                         @foreach($loai_quies as $loai_quy)
                                             <option {{ $loai_quy->id == $loai_quy_search ? 'selected' : '' }}
@@ -110,7 +111,9 @@
                                 <label for="loai_quy_id">Tên quỹ</label>
                                 <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
                                     @foreach($loai_quies as $loai_quy)
-                                        <option value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                        <option value="{{ $loai_quy->id }}"> {{ $loai_quy->ten_loai_quy }} - Tổng
+                                            tiền: {{ parseNumber($loai_quy->tong_tien_quy) }} VND
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
