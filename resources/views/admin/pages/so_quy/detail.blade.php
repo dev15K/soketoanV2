@@ -48,7 +48,9 @@
                             <select class="form-control" name="loai_quy_id" id="loai_quy_id">
                                 @foreach($loai_quies as $loai_quy)
                                     <option {{ $loai_quy->id == $soquy->loai_quy_id ? 'selected' : '' }}
-                                            value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                            value="{{ $loai_quy->id }}">
+                                        {{ $loai_quy->ten_loai_quy }} - Tổng tiền: {{ parseNumber($loai_quy->tong_tien_quy) }} VND
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
