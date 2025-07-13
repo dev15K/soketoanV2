@@ -192,28 +192,41 @@
                     </div>
                     <table class="table table-hover">
                         <colgroup>
-                            <col width="5%">
+                            <col width="120px">
                             <col width="120px">
                             <col width="10%">
                             <col width="15%">
-                            <col width="30%">
                             <col width="x">
                         </colgroup>
                         <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">Hành động</th>
                             <th scope="col">Ngày</th>
                             <th scope="col">Loại</th>
                             <th scope="col">Tên quỹ</th>
                             <th scope="col">Số tiền</th>
                             <th scope="col">Nội dung</th>
-                            <th scope="col">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($datas as $data)
                             <tr>
-                                <th scope="row">{{ $loop->index + 1 }}</th>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('admin.so.quy.detail', $data->id) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <form action="{{ route('admin.so.quy.delete', $data->id) }}"
+                                              method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                                 <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
                                 <td>
                                     @if($data->loai == 0)
@@ -225,22 +238,6 @@
                                 <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                 <td>{{ parseNumber($data->so_tien) }} VND</td>
                                 <td>{{ $data->noi_dung }}</td>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.so.quy.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <form action="{{ route('admin.so.quy.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>

@@ -149,6 +149,8 @@ Route::group(['prefix' => 'loai-quy'], function () {
 });
 Route::group(['prefix' => 'so-quy'], function () {
     Route::get('/index', [AdminSoQuyController::class, 'index'])->name('admin.so.quy.index');
+    Route::get('/payment', [AdminSoQuyController::class, 'payment'])->name('admin.so.quy.payment');
+    Route::post('/payment', [AdminSoQuyController::class, 'payment_store'])->name('admin.so.quy.store.payment');
     Route::get('/detail/{id}', [AdminSoQuyController::class, 'detail'])->name('admin.so.quy.detail');
     Route::post('/store', [AdminSoQuyController::class, 'store'])->name('admin.so.quy.store');
     Route::put('/update/{id}', [AdminSoQuyController::class, 'update'])->name('admin.so.quy.update');
