@@ -147,6 +147,12 @@
                         <i class="bi bi-circle"></i><span>Sổ quỹ</span>
                     </a>
                 </li>
+                <li>
+                    <a class="{{ Request::routeIs('admin.so.quy.payment') ? 'active' : '' }}"
+                       href="{{ route('admin.so.quy.payment') }}">
+                        <i class="bi bi-circle"></i><span>Thanh toán</span>
+                    </a>
+                </li>
             </ul>
         </li><!-- End News Nav -->
 

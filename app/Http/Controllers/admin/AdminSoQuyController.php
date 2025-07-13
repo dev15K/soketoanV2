@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNhaCungCap;
 use App\Http\Controllers\Controller;
 use App\Models\LoaiQuy;
+use App\Models\NguyenLieuTho;
 use App\Models\NhaCungCaps;
 use App\Models\SoQuy;
 use Illuminate\Http\Request;
@@ -105,6 +107,64 @@ class AdminSoQuyController extends Controller
 
         $lastId = $lastItem?->id;
         return convertNumber($lastId + 1);
+    }
+
+    public function payment(Request $request)
+    {
+        $nguyenLieuThos = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED())
+            ->where('cong_no', '>', 0)
+            ->orderByDesc('id')
+            ->get();
+
+        $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
+        return view('admin.pages.so_quy.payment', compact('nguyenLieuThos', 'loai_quies'));
+    }
+
+    public function payment_store(Request $request)
+    {
+        try {
+            $ma_phieu = $this->generateCode();
+            $ngay = $request->input('ngay');
+            $so_tien = $request->input('so_tien');
+            $noi_dung = $request->input('noi_dung');
+            $loai_quy_id = $request->input('loai_quy_id');
+
+            $nguyen_lieu_tho_id = $request->input('nguyen_lieu_tho_id');
+
+            $nguyenLieuTho = NguyenLieuTho::find($nguyen_lieu_tho_id);
+
+            if (!$nguyenLieuTho || $nguyenLieuTho->trang_thai == TrangThaiNguyenLieuTho::DELETED()) {
+                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tho');
+            }
+
+            if ($nguyenLieuTho->cong_no < $so_tien) {
+                return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ!');
+            }
+
+            $loai = 1;
+
+            $noi_dung = 'Thanh toán công nợ nhà cung cấp: ' . $nguyenLieuTho->NhaCungCap->ten . ' - Mã đơn hàng: ' . $nguyenLieuTho->code;
+
+            $soquy = new SoQuy();
+
+            $soquy->ma_phieu = $ma_phieu;
+            $soquy->ngay = $ngay;
+            $soquy->so_tien = $so_tien;
+            $soquy->noi_dung = $noi_dung;
+            $soquy->loai = $loai;
+            $soquy->loai_quy_id = $loai_quy_id;
+            $soquy->save();
+
+            $loai_quy = LoaiQuy::find($loai_quy_id);
+            if ($loai_quy) {
+                $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $so_tien;
+                $loai_quy->save();
+            }
+
+            return redirect()->route('admin.so.quy.index')->with('success', 'Thanh toán nguyên liệu thành công');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
     }
 
     public function detail($id)
