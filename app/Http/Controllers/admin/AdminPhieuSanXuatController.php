@@ -158,7 +158,6 @@ class AdminPhieuSanXuatController extends Controller
      */
     private function saveData(PhieuSanXuat $phieuSanXuat, Request $request)
     {
-        DB::beginTransaction();
         $ngay = $request->input('ngay');
         $code = $request->input('code');
         $tong_khoi_luong = $request->input('tong_khoi_luong') ?? 0;
@@ -183,7 +182,10 @@ class AdminPhieuSanXuatController extends Controller
         $phieuSanXuat->thoi_gian_hoan_thanh_san_xuat = $thoi_gian_hoan_thanh_san_xuat;
         $phieuSanXuat->ten_phieu = $ten_phieu;
 
-        DB::commit();
+        $phieuSanXuat->don_gia = 0;
+        $phieuSanXuat->tong_tien = 0;
+        $phieuSanXuat->gia_tri_ton_kho = 0;
+
         return $phieuSanXuat;
     }
 
@@ -204,6 +206,8 @@ class AdminPhieuSanXuatController extends Controller
 
             $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieuSanXuat->id)->get();
             $old_nguyen_lieu_ids = $phieuSanXuatChiTiets->pluck('nguyen_lieu_id')->toArray();
+
+            $tong_tien = 0;
 
             for ($i = 0; $i < count($nguyen_lieu_ids); $i++) {
                 $nguyen_lieu_id = $nguyen_lieu_ids[$i];
@@ -237,9 +241,14 @@ class AdminPhieuSanXuatController extends Controller
 
                 $nguyenLieuTinh->so_luong_da_dung += $khoi_luong;
                 $nguyenLieuTinh->save();
+
+                $tong_tien += $khoi_luong * $nguyenLieuTinh->gia_tien;
             }
 
             $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
+            $phieuSanXuat->tong_tien = $tong_tien;
+            $phieuSanXuat->don_gia = $tong_tien / $tong_khoi_luong;
+            $phieuSanXuat->gia_tri_ton_kho = $tong_tien / $tong_khoi_luong * ($tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung);
 
             foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
                 $nguyenLieuTinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
@@ -319,6 +328,7 @@ class AdminPhieuSanXuatController extends Controller
                 $phieuSanXuat->save();
 
                 $tong_khoi_luong = 0;
+                $tong_tien = 0;
                 $nguyen_lieu_ids = $request->input('nguyen_lieu_ids') ?? [];
                 $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
                 $khoi_luongs = $request->input('khoi_luongs');
@@ -370,9 +380,14 @@ class AdminPhieuSanXuatController extends Controller
                     if ($chiTietCu) {
                         $chiTietCu->delete();
                     }
+
+                    $tong_tien += $khoi_luong * $nguyenLieu->gia_tien;
                 }
 
                 $phieuSanXuat->tong_khoi_luong = $tong_khoi_luong;
+                $phieuSanXuat->tong_tien = $tong_tien;
+                $phieuSanXuat->don_gia = $tong_tien / $tong_khoi_luong;
+                $phieuSanXuat->gia_tri_ton_kho = $tong_tien / $tong_khoi_luong * ($tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung);
                 $phieuSanXuat->save();
 
                 foreach ($no_ids as $no_id) {
