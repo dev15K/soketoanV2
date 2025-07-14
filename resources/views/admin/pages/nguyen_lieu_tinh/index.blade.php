@@ -290,7 +290,9 @@
                             <col width="10%">
                             <col width="10%">
                             <col width="10%">
+                            <col width="10%">
                             <col width="x">
+                            <col width="10%">
                             <col width="10%">
                         </colgroup>
                         <thead>
@@ -307,6 +309,8 @@
                             <th scope="col">Khối lượng đã dùng</th>
                             <th scope="col">Khối lượng tồn</th>
                             <th scope="col">Đơn giá</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Giá trị tồn kho</th>
                             <th scope="col">Trạng thái</th>
                         </tr>
                         </thead>
@@ -352,6 +356,8 @@
                                 <td>{{ parseNumber($data->so_luong_da_dung, 0) }} kg</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong - $data->so_luong_da_dung, 0) }} kg</td>
                                 <td>{{ parseNumber($data->gia_tien, 0) }} VND</td>
+                                <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
+                                <td>{{ parseNumber($data->gia_tri_ton_kho, 0) }} VND</td>
                                 <td>{{ $data->trang_thai }}</td>
                             </tr>
                         @endforeach
@@ -369,6 +375,8 @@
                             <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('so_luong_da_dung'), 0) }}
                                 kg
                             </th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>

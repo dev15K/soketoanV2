@@ -197,6 +197,8 @@ class AdminNguyenLieuTinhController extends Controller
 
         $NguyenLieuTinh->tong_khoi_luong = $tong_khoi_luong;
         $NguyenLieuTinh->gia_tien = $gia_tien;
+        $NguyenLieuTinh->tong_tien = $gia_tien;
+        $NguyenLieuTinh->gia_tri_ton_kho = $gia_tien;
 
         DB::commit();
         return $NguyenLieuTinh;
@@ -272,7 +274,9 @@ class AdminNguyenLieuTinhController extends Controller
         }
 
         $NguyenLieuTinh->tong_khoi_luong = $tong_khoi_luong;
-        $NguyenLieuTinh->gia_tien = $gia_tien;
+        $NguyenLieuTinh->gia_tien = $gia_tien / $tong_khoi_luong;
+        $NguyenLieuTinh->tong_tien = $gia_tien;
+        $NguyenLieuTinh->gia_tri_ton_kho = $gia_tien / $tong_khoi_luong * ($tong_khoi_luong - $NguyenLieuTinh->so_luong_da_dung);
 
         $NguyenLieuTinh->save();
 
