@@ -141,7 +141,13 @@ class AdminSoQuyController extends Controller
                 return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ!');
             }
 
-            $loai = 1;
+            $loai_quy = LoaiQuy::find($loai_quy_id);
+
+            if ($loai_quy->tong_tien_quy < $so_tien) {
+                return redirect()->back()->with('error', 'Số tiền thanh toán không hợp lệ!');
+            }
+
+            $loai = 0;
 
             $noi_dung = 'Thanh toán công nợ nhà cung cấp: ' . $nguyenLieuTho->NhaCungCap->ten . ' - Mã đơn hàng: ' . $nguyenLieuTho->code;
 
@@ -155,11 +161,11 @@ class AdminSoQuyController extends Controller
             $soquy->loai_quy_id = $loai_quy_id;
             $soquy->save();
 
-            $loai_quy = LoaiQuy::find($loai_quy_id);
-            if ($loai_quy) {
-                $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $so_tien;
-                $loai_quy->save();
-            }
+            $nguyenLieuTho->cong_no = $nguyenLieuTho->cong_no - $so_tien;
+            $nguyenLieuTho->save();
+
+            $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $so_tien;
+            $loai_quy->save();
 
             return redirect()->route('admin.so.quy.index')->with('success', 'Thanh toán nguyên liệu thành công');
         } catch (\Exception $e) {
