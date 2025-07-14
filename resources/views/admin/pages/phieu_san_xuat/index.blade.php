@@ -266,15 +266,18 @@
                         <colgroup>
                             <col width="5%">
                             <col width="60px">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="x">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="200px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="250px">
+                            <col width="250px">
+                            <col width="250px">
+                            <col width="150px">
+                            <col width="150px">
                         </colgroup>
                         <thead>
                         <tr>
@@ -289,6 +292,9 @@
                             <th scope="col">Tổng KL(kg)</th>
                             <th scope="col">KL đã dùng(kg)</th>
                             <th scope="col">KL tồn(kg)</th>
+                            <th scope="col">Đơn giá</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Giá trị tồn kho</th>
                             <th scope="col">Nhân sự xử lý</th>
                             <th scope="col">Thời gian dự kiến hoàn thành SX</th>
                         </tr>
@@ -334,6 +340,9 @@
                                 <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
                                 <td>{{ parseNumber($data->khoi_luong_da_dung) }} kg</td>
                                 <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
+                                <td>{{ parseNumber($data->don_gia, 0) }} VND</td>
+                                <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
+                                <td>{{ parseNumber($data->gia_tri_ton_kho, 0) }} VND</td>
                                 <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
                                 <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
                             </tr>
@@ -352,6 +361,9 @@
                             <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }}
                                 kg
                             </th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>

@@ -53,11 +53,8 @@ class UpdateNguyenLieuThanhPham extends Command
                 continue;
             }
 
-            $chiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieu_san_xuat_id)->get();
 
-            $total_price = $chiTiets->sum('so_tien');
-            $don_gia = $total_price / $phieuSanXuat->tong_khoi_luong;
-
+            $don_gia = $phieuSanXuat->don_gia;
             $nguyen_lieu_thanh_pham->don_gia = $don_gia;
             $nguyen_lieu_thanh_pham->tong_tien = $don_gia * $khoi_luong;
             $nguyen_lieu_thanh_pham->save();
