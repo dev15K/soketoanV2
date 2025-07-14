@@ -144,13 +144,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         }
 
         if (!$don_gia || $don_gia <= 0 || !is_numeric($don_gia) || $don_gia == '') {
-            $chiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $phieu_san_xuat_id)->get();
-            $total_price = 0;
-            foreach ($chiTiets as $chiTiet) {
-                $total_price += $chiTiet->so_tien;
-            }
-
-            $don_gia = $total_price / $phieuSanXuat->tong_khoi_luong;
+            $don_gia = $phieuSanXuat->don_gia;
         }
 
         $nguyenLieuSanXuat->ten_nguyen_lieu = $ten_nguyen_lieu;

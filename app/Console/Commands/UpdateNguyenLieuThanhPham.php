@@ -54,8 +54,7 @@ class UpdateNguyenLieuThanhPham extends Command
             }
 
 
-            $don_gia = ;
-
+            $don_gia = $phieuSanXuat->don_gia;
             $nguyen_lieu_thanh_pham->don_gia = $don_gia;
             $nguyen_lieu_thanh_pham->tong_tien = $don_gia * $khoi_luong;
             $nguyen_lieu_thanh_pham->save();
