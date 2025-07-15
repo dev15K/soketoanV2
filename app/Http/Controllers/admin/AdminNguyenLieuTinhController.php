@@ -378,6 +378,19 @@ class AdminNguyenLieuTinhController extends Controller
         try {
             DB::beginTransaction();
 
+            $mapping = [
+                'Nguyên liệu nụ cao cấp (NCC)' => 'nu_cao_cap',
+                'Nguyên liệu nụ VIP (NVIP)' => 'nu_vip',
+                'Nguyên liệu nhang (NLN)' => 'nhang',
+                'Nguyên liệu vòng (NLV)' => 'vong',
+                'Tăm dài' => 'tam_dai',
+                'Tăm ngắn' => 'tam_ngan',
+                'Nước cất' => 'nuoc_cat',
+                'Keo' => 'keo',
+                'Nấu dầu' => 'nau_dau',
+                'Tăm nhanh sào' => 'tam_nhanh_sao',
+            ];
+
             $nguyen_lieu_tinh = NguyenLieuTinh::find($id);
             if (!$nguyen_lieu_tinh || $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::DELETED()) {
                 return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
@@ -397,8 +410,8 @@ class AdminNguyenLieuTinhController extends Controller
             $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
             $khoi_luongs = $request->input('khoi_luongs');
 
-            $nguyen_lieu_tinhChiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)->get();
-            $old_nguyen_lieu_ids = $nguyen_lieu_tinhChiTiets->pluck('nguyen_lieu_phan_loai_id')->toArray();
+            $NguyenLieuTinhChiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)->get();
+            $old_nguyen_lieu_ids = $NguyenLieuTinhChiTiets->pluck('nguyen_lieu_phan_loai_id')->toArray();
 
             $no_ids = array_diff($old_nguyen_lieu_ids, $nguyen_lieu_phan_loai_ids);
 
@@ -421,6 +434,11 @@ class AdminNguyenLieuTinhController extends Controller
                     $tong_khoi_luong_cu = $chiTietCu->khoi_luong;
                 }
 
+                $ten = '';
+                if ($chiTietCu) {
+                    $ten = $chiTietCu->ten_nguyen_lieu;
+                }
+
                 $tonkho = $nguyenLieu->tong_khoi_luong - $nguyenLieu->khoi_luong_da_phan_loai + $tong_khoi_luong_cu;
                 if (round($tonkho, 3) < round((float)$khoi_luong, 3)) {
                     DB::rollBack();
@@ -434,6 +452,11 @@ class AdminNguyenLieuTinhController extends Controller
                     'khoi_luong' => $khoi_luong,
                     'so_tien' => $khoi_luong * $nguyenLieu->gia_sau_phan_loai,
                 ]);
+
+                if (isset($mapping[$ten])) {
+                    $field = $mapping[$ten];
+                    $nguyenLieu->$field = $nguyenLieu->$field - $khoi_luong + $tong_khoi_luong_cu;
+                }
 
                 $tong_khoi_luong += $khoi_luong;
 
@@ -451,12 +474,20 @@ class AdminNguyenLieuTinhController extends Controller
             foreach ($no_ids as $no_id) {
                 $nguyenLieu = NguyenLieuPhanLoai::find($no_id);
 
-                $nguyen_lieu_tinhChiTiet = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)
+                $NguyenLieuTinhChiTiet = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)
                     ->where('nguyen_lieu_phan_loai_id', $no_id)
                     ->first();
 
                 if ($nguyenLieu) {
-                    $nguyenLieu->khoi_luong_da_phan_loai -= $nguyen_lieu_tinhChiTiet->khoi_luong;
+                    $ten = $NguyenLieuTinhChiTiet->ten_nguyen_lieu;
+
+                    $nguyenLieu->khoi_luong_da_phan_loai -= $NguyenLieuTinhChiTiet->khoi_luong;
+
+                    if (isset($mapping[$ten])) {
+                        $field = $mapping[$ten];
+                        $nguyenLieu->$field += $NguyenLieuTinhChiTiet->khoi_luong;
+                    }
+
                     $nguyenLieu->save();
                 }
             }
