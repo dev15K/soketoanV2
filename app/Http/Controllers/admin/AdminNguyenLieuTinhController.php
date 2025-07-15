@@ -380,18 +380,91 @@ class AdminNguyenLieuTinhController extends Controller
 
             $nguyen_lieu_tinh = NguyenLieuTinh::find($id);
             if (!$nguyen_lieu_tinh || $nguyen_lieu_tinh->trang_thai == TrangThaiNguyenLieuTinh::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu tinh');
+                return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
-            $nguyen_lieu_tinh = $this->saveData($nguyen_lieu_tinh, $request);
+            $nguyen_lieu_tinh->fill([
+                'code' => $nguyen_lieu_tinh->code ?: $request->input('code'),
+                'ngay' => Carbon::parse($request->input('ngay'))->format('Y-m-d'),
+                'trang_thai' => $request->input('trang_thai'),
+                'ten_nguyen_lieu' => $request->input('ten_nguyen_lieu'),
+                'ma_phieu' => $request->input('ma_phieu'),
+            ]);
             $nguyen_lieu_tinh->save();
 
-            $success = $this->saveDataChiTiet($nguyen_lieu_tinh, $request);
+            $tong_khoi_luong = 0;
+            $nguyen_lieu_phan_loai_ids = $request->input('nguyen_lieu_phan_loai_ids');
+            $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
+            $khoi_luongs = $request->input('khoi_luongs');
 
-            if (!$success) {
-                DB::rollBack();
-                return redirect()->route('admin.nguyen.lieu.tinh.index')->with('error', 'Không có đủ nguyên liệu.');
+            $nguyen_lieu_tinhChiTiets = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)->get();
+            $old_nguyen_lieu_ids = $nguyen_lieu_tinhChiTiets->pluck('nguyen_lieu_phan_loai_id')->toArray();
+
+            $no_ids = array_diff($old_nguyen_lieu_ids, $nguyen_lieu_phan_loai_ids);
+
+            for ($i = 0; $i < count($nguyen_lieu_phan_loai_ids); $i++) {
+                $nguyen_lieu_id = $nguyen_lieu_phan_loai_ids[$i];
+                $ten_nguyen_lieu = $ten_nguyen_lieus[$i];
+                $khoi_luong = $khoi_luongs[$i];
+
+                $nguyenLieu = NguyenLieuPhanLoai::find($nguyen_lieu_id);
+                if (!$nguyenLieu) {
+                    DB::rollBack();
+                    return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu.')->withInput();
+                }
+
+                $chiTietCu = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)
+                    ->where('nguyen_lieu_phan_loai_id', $nguyen_lieu_id)
+                    ->first();
+                $tong_khoi_luong_cu = 0;
+                if ($chiTietCu) {
+                    $tong_khoi_luong_cu = $chiTietCu->khoi_luong;
+                }
+
+                $tonkho = $nguyenLieu->tong_khoi_luong - $nguyenLieu->khoi_luong_da_phan_loai + $tong_khoi_luong_cu;
+                if (round($tonkho, 3) < round((float)$khoi_luong, 3)) {
+                    DB::rollBack();
+                    return redirect()->back()->with('error', 'Khối lượng nguyên liệu không đủ')->withInput();
+                }
+
+                NguyenLieuTinhChiTiet::create([
+                    'nguyen_lieu_phan_loai_id' => $nguyen_lieu_id,
+                    'nguyen_lieu_tinh_id' => $nguyen_lieu_tinh->id,
+                    'ten_nguyen_lieu' => $ten_nguyen_lieu,
+                    'khoi_luong' => $khoi_luong,
+                    'so_tien' => $khoi_luong * $nguyenLieu->gia_sau_phan_loai,
+                ]);
+
+                $tong_khoi_luong += $khoi_luong;
+
+                $nguyenLieu->khoi_luong_da_phan_loai += $khoi_luong - $tong_khoi_luong_cu;
+                $nguyenLieu->save();
+
+                if ($chiTietCu) {
+                    $chiTietCu->delete();
+                }
             }
+
+            $nguyen_lieu_tinh->tong_khoi_luong = $tong_khoi_luong;
+            $nguyen_lieu_tinh->save();
+
+            foreach ($no_ids as $no_id) {
+                $nguyenLieu = NguyenLieuPhanLoai::find($no_id);
+
+                $nguyen_lieu_tinhChiTiet = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)
+                    ->where('nguyen_lieu_phan_loai_id', $no_id)
+                    ->first();
+
+                if ($nguyenLieu) {
+                    $nguyenLieu->khoi_luong_da_phan_loai -= $nguyen_lieu_tinhChiTiet->khoi_luong;
+                    $nguyenLieu->save();
+                }
+            }
+
+            if (count($no_ids) > 0) {
+                NguyenLieuTinhChiTiet::whereIn('nguyen_lieu_phan_loai_id', $no_ids)->delete();
+            }
+
 
             DB::commit();
             return redirect()->route('admin.nguyen.lieu.tinh.index')->with('success', 'Chỉnh sửa nguyên liệu tinh thành công');
