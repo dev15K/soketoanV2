@@ -30,6 +30,7 @@ class AdminSoQuyController extends Controller
             ->when($loai_quy_search, function ($query) use ($loai_quy_search) {
                 return $query->where('loai_quy_id', $loai_quy_search);
             })
+            ->where('so_tien', '>', 0)
             ->orderByDesc('id')
             ->paginate(10);
 
