@@ -191,18 +191,6 @@
                                         <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
                                                name="da_thanht_toan" value="{{ old('da_thanht_toan') }}" required>
                                     </div>
-
-                                    <div class="form-group col-md-6">
-                                        <label for="loai_quy_id">Loại quỹ</label>
-                                        <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
-                                            @foreach($loai_quies as $loai_quy)
-                                                <option
-                                                    value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
-                                                    {{ $loai_quy->ten_loai_quy }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
                                 </div>
 
                                 <div class="mt-3" id="formSanPham">
@@ -299,11 +287,27 @@
                                                value="{{ old('dia_chi') }}" required>
                                     </div>
                                 </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="loai_quy_id">Loại quỹ</label>
+                                    <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
+                                        @foreach($loai_quies as $loai_quy)
+                                            <option
+                                                value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                                {{ $loai_quy->ten_loai_quy }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
                         <input type="hidden" name="loai_san_pham" id="loai_san_pham">
-                        <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
+
+                        <div class="w-100 d-flex justify-content-end mt-3 gap-2">
+                            <button type="submit" class="btn btn-primary">Thanh toán</button>
+                            <button type="reset" class="btn btn-danger">Hủy</button>
+                        </div>
                     </form>
 
                 </div>
