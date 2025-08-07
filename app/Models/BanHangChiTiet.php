@@ -9,6 +9,14 @@ class BanHangChiTiet extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'ban_hang_id',
+        'san_pham_id',
+        'gia_ban',
+        'so_luong',
+        'tong_tien',
+    ];
+
     public function nguyenLieuTho()
     {
         return $this->belongsTo(NguyenLieuTho::class, 'san_pham_id', 'id');
