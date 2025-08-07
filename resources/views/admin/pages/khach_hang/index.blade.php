@@ -138,6 +138,12 @@
                                                        value="{{ $data->id }}"></th>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
+                                        <button type="button" class="btn btn-outline-success btn-sm"
+                                                data-bs-toggle="modal"
+                                                onclick="show_khach_hang('{{ $data->id }}')"
+                                                data-bs-target="#modalUserInfo">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
                                         <a href="{{ route('admin.khach.hang.detail', $data->id) }}"
                                            class="btn btn-primary btn-sm">
                                             <i class="bi bi-pencil-square"></i>
@@ -181,4 +187,46 @@
             {{ $datas->links('pagination::bootstrap-5') }}
         </div>
     </section>
+
+    <div class="modal fade" id="modalUserInfo" tabindex="-1" aria-labelledby="modalUserInfoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header modal-header-css ">
+                    <h5 class="modal-title text-uppercase" id="modalUserInfoLabel">Chi tiết khách hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalShowInfoStaff">
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function show_khach_hang(id) {
+            const url = `{{ route('api.khach.hang.show') }}?id=${id}`;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                async: false,
+                success: function (res, textStatus) {
+                    const response = res.data.html ?? [];
+                    render_khach_hang(response);
+                },
+                error: function (request, status, error) {
+                    let data = JSON.parse(request.responseText);
+                    alert(data.message);
+                }
+            });
+        }
+
+        function render_khach_hang(response) {
+            $('#modalShowInfoStaff').html(response);
+        }
+    </script>
 @endsection

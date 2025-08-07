@@ -25,18 +25,28 @@ use Illuminate\Support\Facades\DB;
 
 class AdminBanHangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = BanHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED())
-            ->orderByDesc('id')
-            ->paginate(10);
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        $query = BanHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED());
+
+        $query->when($start_date, function ($query) use ($start_date) {
+            return $query->whereDate('created_at', '>=', $start_date);
+        });
+        $query->when($end_date, function ($query) use ($end_date) {
+            return $query->whereDate('created_at', '<=', $end_date);
+        });
+
+        $datas = $query->orderByDesc('id')->paginate(10);
 
         $khachhangs = KhachHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED())
             ->orderByDesc('id')
             ->get();
 
         $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
-        return view('admin.pages.ban_hang.index', compact('datas', 'khachhangs', 'loai_quies'));
+        return view('admin.pages.ban_hang.index', compact('datas', 'khachhangs', 'loai_quies', 'start_date', 'end_date'));;
     }
 
     public function detail($id)
@@ -85,6 +95,133 @@ class AdminBanHangController extends Controller
     }
 
     public function store(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $khach_hang_id = $request->input('khach_hang_id');
+            $banhang = new BanHang([
+                'khach_hang_id' => $khach_hang_id != 0 ? $khach_hang_id : null,
+                'ban_le' => $khach_hang_id == 0,
+                'khach_le' => $request->input('ten_khach_hang'),
+                'so_dien_thoai' => $request->input('so_dien_thoai'),
+                'dia_chi' => $request->input('dia_chi'),
+                'loai_san_pham' => $request->input('loai_san_pham'),
+                'phuong_thuc_thanh_toan' => $request->input('loai_quy_id'),
+                'tong_tien' => 0,
+                'da_thanht_toan' => $request->input('da_thanht_toan') ?? 0,
+                'cong_no' => 0,
+                'trang_thai' => TrangThaiBanHang::ACTIVE()
+            ]);
+
+            $loaiQuy = LoaiQuy::find($banhang->phuong_thuc_thanh_toan);
+            if (!$loaiQuy) {
+                return back()->with('error', 'Không tìm thấy loại quý');
+            }
+
+            $banhang->save();
+
+            $sanPhamIds = $request->input('san_pham_id');
+            $giaBans = $request->input('gia_bans');
+            $soLuongs = $request->input('so_luong');
+
+            $total = 0;
+
+            foreach ($sanPhamIds as $i => $sanPhamId) {
+                $giaBan = $giaBans[$i];
+                $soLuong = $soLuongs[$i];
+                $tongTien = $giaBan * $soLuong;
+
+                BanHangChiTiet::create([
+                    'ban_hang_id' => $banhang->id,
+                    'san_pham_id' => $sanPhamId,
+                    'gia_ban' => $giaBan,
+                    'so_luong' => $soLuong,
+                    'tong_tien' => $tongTien,
+                ]);
+
+                if (!$this->capNhatKho($banhang->loai_san_pham, $sanPhamId, $soLuong)) {
+                    $banhang->delete();
+                    DB::rollBack();
+                    return back()->with('error', 'Số lượng không đủ!');
+                }
+
+                $total += $tongTien;
+            }
+
+            $banhang->update([
+                'tong_tien' => $total,
+                'cong_no' => $total - $banhang->da_thanht_toan,
+            ]);
+
+            $this->insertBanHang($banhang, false, null, $banhang->phuong_thuc_thanh_toan);
+
+            DB::commit();
+            return back()->with('success', 'Thêm mới hóa đơn bán hàng thành công');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    private function capNhatKho($loaiSanPham, $sanPhamId, $soLuong)
+    {
+        switch ($loaiSanPham) {
+            case LoaiSanPham::NGUYEN_LIEU_THO():
+                $item = NguyenLieuTho::find($sanPhamId);
+                $tonKho = $item?->khoi_luong - $item?->khoi_luong_da_ban;
+                if ($item && $tonKho >= $soLuong) {
+                    $item->khoi_luong_da_ban += $soLuong;
+                    $item->save();
+                    return true;
+                }
+                break;
+
+            case LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
+                $item = NguyenLieuPhanLoai::find($sanPhamId);
+                $tonKho = $item?->tong_khoi_luong - $item?->khoi_luong_da_phan_loai;
+                if ($item && $tonKho >= $soLuong) {
+                    $item->khoi_luong_da_phan_loai += $soLuong;
+                    $item->save();
+                    return true;
+                }
+                break;
+
+            case LoaiSanPham::NGUYEN_LIEU_TINH():
+                $item = NguyenLieuTinh::find($sanPhamId);
+                $tonKho = $item?->tong_khoi_luong - $item?->so_luong_da_dung;
+                if ($item && $tonKho >= $soLuong) {
+                    $item->so_luong_da_dung += $soLuong;
+                    $item->save();
+                    return true;
+                }
+                break;
+
+            case LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
+                $item = NguyenLieuSanXuat::find($sanPhamId);
+                $tonKho = $item?->khoi_luong - $item?->khoi_luong_da_dung;
+                if ($item && $tonKho >= $soLuong) {
+                    $item->khoi_luong_da_dung += $soLuong;
+                    $item->save();
+                    return true;
+                }
+                break;
+
+            case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
+                $item = NguyenLieuThanhPham::find($sanPhamId);
+                $tonKho = $item?->so_luong - $item?->so_luong_da_ban;
+                if ($item && $tonKho >= $soLuong) {
+                    $item->so_luong_da_ban += $soLuong;
+                    $item->save();
+                    return true;
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    public function store_bk(Request $request)
     {
         try {
             DB::beginTransaction();

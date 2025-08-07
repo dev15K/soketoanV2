@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Enums\TrangThaiBanHang;
 use App\Enums\TrangThaiKhachHang;
+use App\Enums\TrangThaiNhaCungCap;
 use App\Http\Controllers\Controller;
+use App\Models\BanHang;
 use App\Models\KhachHang;
+use App\Models\NguyenLieuTho;
+use App\Models\NhaCungCaps;
+use App\Models\SoQuy;
 use Illuminate\Http\Request;
 
 class AdminKhachHangController extends Controller
@@ -75,6 +81,30 @@ class AdminKhachHangController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
+    }
+
+    public function show(Request $request)
+    {
+        $id = $request->input('id');
+
+        $khach_hang = KhachHang::find($id);
+        if (!$khach_hang) {
+            return response()->json(null, 400);
+        }
+
+        $histories = BanHang::where('khach_hang_id', $id)
+            ->where('trang_thai', '!=', TrangThaiBanHang::DELETED())
+            ->orderByDesc('id')
+            ->get();
+
+        $html = view('admin.pages.khach_hang.show', compact('histories'))->render();
+
+        $data = [
+            'html' => $html,
+        ];
+
+        $res = returnMessage('1', $data, 'Lấy dữ liệu thành công');
+        return response()->json($res, 200);
     }
 
     public function delete($id)

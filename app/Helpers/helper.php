@@ -3,6 +3,7 @@
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\Setting;
+use App\Models\SoQuy;
 use Illuminate\Support\Facades\Schema;
 
 if (!function_exists('returnMessage')) {
@@ -159,17 +160,93 @@ if (!function_exists('parseNumber')) {
         return number_format($num, $decimalLength);
     }
 
-    function compareNumbers(string $a, string $b): int {
+    function compareNumbers(string $a, string $b): int
+    {
         if (function_exists('bccomp')) {
             return bccomp($a, $b, 10);
         }
 
-        $aFloat = (float) $a;
-        $bFloat = (float) $b;
+        $aFloat = (float)$a;
+        $bFloat = (float)$b;
 
         if ($aFloat > $bFloat) return 1;
         if ($aFloat < $bFloat) return -1;
         return 0;
     }
 
+}
+
+if (!function_exists('get_ton_dau')) {
+    function get_data_so_quy($start_date, $end_date)
+    {
+        return SoQuy::where('deleted_at', null)
+            ->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('created_at', '>=', $start_date);
+            })
+            ->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('created_at', '<=', $end_date);
+            })
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    function get_ton_dau($start_date, $end_date): ?string
+    {
+        $q = SoQuy::where('deleted_at', null);
+
+        if ($start_date) {
+            $q->whereDate('created_at', '<', $start_date);
+        } else {
+            $q->whereDate('created_at', '<', date('Y-m-d'));
+        }
+
+        $q->where('so_tien', '>', 0);
+
+        $old_datas = $q->orderByDesc('id')->get();
+
+        $ton_dau = 0;
+        foreach ($old_datas as $old_data) {
+            if ($old_data->loai == 1) {
+                $ton_dau += $old_data->so_tien;
+            } else {
+                $ton_dau -= $old_data->so_tien;
+            }
+        }
+        return $ton_dau;
+    }
+
+    function get_ton_cuoi($start_date, $end_date): ?string
+    {
+        $ton_dau = get_ton_dau($start_date, $end_date);
+        $thu = get_thu($start_date, $end_date);
+        $chi = get_chi($start_date, $end_date);
+        $ton_cuoi = $ton_dau + $thu - $chi;
+        return $ton_cuoi;
+    }
+
+    function get_thu($start_date, $end_date): ?string
+    {
+        $data = get_data_so_quy($start_date, $end_date);
+        $thu = 0;
+
+        foreach ($data as $item) {
+            if ($item->loai == 1) {
+                $thu += $item->so_tien;
+            }
+        }
+        return $thu;
+    }
+
+    function get_chi($start_date, $end_date): ?string
+    {
+        $data = get_data_so_quy($start_date, $end_date);
+        $chi = 0;
+
+        foreach ($data as $item) {
+            if ($item->loai != 1) {
+                $chi += $item->so_tien;
+            }
+        }
+        return $chi;
+    }
 }

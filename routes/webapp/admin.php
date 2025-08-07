@@ -159,4 +159,12 @@ Route::group(['prefix' => 'so-quy'], function () {
 
 Route::group(['prefix' => 'api'], function () {
     Route::delete('/delete/items', [AdminHomeController::class, 'deleteItem'])->name('api.admin.delete.items');
+
+    Route::group(['prefix' => 'nha-cung-cap'], function () {
+        Route::get('/show', [AdminNhaCungCapController::class, 'show'])->name('api.nha.cung.cap.show');
+    });
+
+    Route::group(['prefix' => 'khach-hang'], function () {
+        Route::get('/show', [AdminKhachHangController::class, 'show'])->name('api.khach.hang.show');
+    });
 });
