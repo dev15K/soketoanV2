@@ -25,18 +25,28 @@ use Illuminate\Support\Facades\DB;
 
 class AdminBanHangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = BanHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED())
-            ->orderByDesc('id')
-            ->paginate(10);
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        $query = BanHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED());
+
+        $query->when($start_date, function ($query) use ($start_date) {
+            return $query->whereDate('created_at', '>=', $start_date);
+        });
+        $query->when($end_date, function ($query) use ($end_date) {
+            return $query->whereDate('created_at', '<=', $end_date);
+        });
+
+        $datas = $query->orderByDesc('id')->paginate(10);
 
         $khachhangs = KhachHang::where('trang_thai', '!=', TrangThaiBanHang::DELETED())
             ->orderByDesc('id')
             ->get();
 
         $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
-        return view('admin.pages.ban_hang.index', compact('datas', 'khachhangs', 'loai_quies'));
+        return view('admin.pages.ban_hang.index', compact('datas', 'khachhangs', 'loai_quies', 'start_date', 'end_date'));;
     }
 
     public function detail($id)

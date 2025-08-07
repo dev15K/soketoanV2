@@ -23,20 +23,149 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="col-12">
-            <div class="card recent-sales overflow-auto">
-                <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm </label></h5>
-                    <div class="col-md-4">
-                        <div class="input-group mb-2">
-                            <input type="date" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm">
 
+        <!-- Modal -->
+        <div class="modal fade" id="orderHistoryModal" tabindex="-1" aria-labelledby="orderHistoryModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="orderHistoryModalLabel">Danh sách lịch sử bán hàng</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-12">
+                            <div class="card recent-sales overflow-auto">
+                                <div class="card-body">
+                                    <h5 class="card-title"><label for="date_">Tìm kiếm </label></h5>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex justify-content-start align-items-center gap-4 w-100">
+                                            <div class="col-md-4 form-group">
+                                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                                    <label for="start_date">Từ ngày: </label>
+                                                    <input type="date" class="form-control" id="start_date"
+                                                           value="{{ $start_date }}" name="start_date">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <div class="d-flex justify-content-start align-items-center gap-2">
+                                                    <label for="end_date">Đến ngày: </label>
+                                                    <input type="date" class="form-control" id="end_date"
+                                                           value="{{ $end_date }}" name="end_date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 d-flex justify-content-end align-items-center">
+                                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm
+                                                kiếm
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex mb-4 mt-3 justify-content-end">
+                                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('ban_hang')">
+                                    Xoá tất cả
+                                </button>
+                            </div>
+                            <div class="card recent-sales overflow-auto">
+
+                                <div class="card-body">
+                                    <table class="table table-hover small min-vw-100">
+                                        <colgroup>
+                                            <col width="50px">
+                                            <col width="100px">
+                                            <col width="150px">
+                                            <col width="300px">
+                                            <col width="200px">
+                                            <col width="300px">
+                                            <col width="250px">
+                                            <col width="250px">
+                                            <col width="250px">
+                                            <col width="250px">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">
+                                                <input type="checkbox" name="check_all" id="check_all">
+                                            </th>
+                                            <th scope="col">Hành động</th>
+                                            <th scope="col">Ngày tạo</th>
+                                            <th scope="col">Khách hàng</th>
+                                            <th scope="col">Số điện thoại</th>
+                                            <th scope="col">Địa chỉ</th>
+                                            <th scope="col">Tổng tiền</th>
+                                            <th scope="col">Đã thanh toán</th>
+                                            <th scope="col">Phương thức thanh toán</th>
+                                            <th scope="col">Công nợ</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($datas as $data)
+                                            <tr>
+                                                <th scope="row"><input type="checkbox" name="check_item[]"
+                                                                       id="check_item{{ $data->id }}"
+                                                                       value="{{ $data->id }}"></th>
+                                                <td>
+                                                    <div class="d-flex gap-2 justify-content-center">
+                                                        <a href="{{ route('admin.ban.hang.detail', $data->id) }}"
+                                                           class="btn btn-primary btn-sm">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <form action="{{ route('admin.ban.hang.delete', $data->id) }}"
+                                                              method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="button"
+                                                                    class="btn btn-danger btn-sm btnDelete">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
+                                                <td>
+                                                    @if($data->ban_le)
+                                                        {{ $data->khach_le }}
+                                                    @else
+                                                        {{ $data->khachHang->ten }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($data->ban_le)
+                                                        {{ $data->so_dien_thoai }}
+                                                    @else
+                                                        {{ $data->khachHang->so_dien_thoai }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($data->ban_le)
+                                                        {{ $data->dia_chi }}
+                                                    @else
+                                                        {{ $data->khachHang->dia_chi }}
+                                                    @endif
+                                                </td>
+                                                <td>{{ parseNumber($data->tong_tien) }} VND</td>
+                                                <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
+                                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
+                                                <td>{{ parseNumber($data->cong_no) }} VND</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                            {{ $datas->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
                 </div>
-
             </div>
         </div>
 
@@ -46,16 +175,22 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Thêm mới bán hàng</h5>
-                        <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#orderHistoryModal">
+                            Xem lịch sử bán hàng
+                        </button>
                     </div>
-                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="d-none">
+                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="">
                         @csrf
                         <div class="form-group">
                             <label for="khach_hang_id">Khách hàng</label>
-                            <select id="khach_hang_id" name="khach_hang_id" class="form-control selectCustom" onchange="changeKhachHang()">
+                            <select id="khach_hang_id" name="khach_hang_id" class="form-control selectCustom"
+                                    onchange="changeKhachHang()">
                                 <option value="0" {{ old('khach_hang_id') == 0 ? 'selected' : '' }}>Khách lẻ</option>
                                 @foreach($khachhangs as $khachhang)
-                                    <option value="{{ $khachhang->id }}" {{ old('khach_hang_id') == $khachhang->id ? 'selected' : '' }}>
+                                    <option
+                                        value="{{ $khachhang->id }}" {{ old('khach_hang_id') == $khachhang->id ? 'selected' : '' }}>
                                         {{ $khachhang->ten }} : {{ $khachhang->so_dien_thoai }}
                                     </option>
                                 @endforeach
@@ -93,7 +228,8 @@
                                 <label for="loai_quy_id">Loại quỹ</label>
                                 <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
                                     @foreach($loai_quies as $loai_quy)
-                                        <option value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
                                             {{ $loai_quy->ten_loai_quy }}
                                         </option>
                                     @endforeach
@@ -388,100 +524,22 @@
                 $(el).parent().closest('tr').remove();
             }
         </script>
-
-        <div class="col-12">
-            <div class="d-flex mb-4 mt-3 justify-content-end">
-                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('ban_hang')">Xoá tất cả
-                </button>
-            </div>
-            <div class="card recent-sales overflow-auto">
-
-                <div class="card-body">
-                    <table class="table table-hover small min-vw-100">
-                        <colgroup>
-                            <col width="50px">
-                            <col width="100px">
-                            <col width="150px">
-                            <col width="300px">
-                            <col width="200px">
-                            <col width="300px">
-                            <col width="250px">
-                            <col width="250px">
-                            <col width="250px">
-                            <col width="250px">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
-                            <th scope="col">Hành động</th>
-                            <th scope="col">Ngày tạo</th>
-                            <th scope="col">Khách hàng</th>
-                            <th scope="col">Số điện thoại</th>
-                            <th scope="col">Địa chỉ</th>
-                            <th scope="col">Tổng tiền</th>
-                            <th scope="col">Đã thanh toán</th>
-                            <th scope="col">Phương thức thanh toán</th>
-                            <th scope="col">Công nợ</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($datas as $data)
-                            <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.ban.hang.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <form action="{{ route('admin.ban.hang.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
-                                <td>
-                                    @if($data->ban_le)
-                                        {{ $data->khach_le }}
-                                    @else
-                                        {{ $data->khachHang->ten }}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($data->ban_le)
-                                        {{ $data->so_dien_thoai }}
-                                    @else
-                                        {{ $data->khachHang->so_dien_thoai }}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($data->ban_le)
-                                        {{ $data->dia_chi }}
-                                    @else
-                                        {{ $data->khachHang->dia_chi }}
-                                    @endif
-                                </td>
-                                <td>{{ parseNumber($data->tong_tien) }} VND</td>
-                                <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
-                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
-                                <td>{{ parseNumber($data->cong_no) }} VND</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-            {{ $datas->links('pagination::bootstrap-5') }}
-        </div>
     </section>
+
+    <script>
+        function searchTable() {
+            const start_date = $('#start_date').val();
+            const end_date = $('#end_date').val();
+            window.location.href = "{{ route('admin.ban.hang.index') }}?start_date=" + start_date + "&end_date=" + end_date;
+        }
+
+        $(document).ready(function () {
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
+            if (start_date || end_date) {
+                const modal = new bootstrap.Modal(document.getElementById('orderHistoryModal'));
+                modal.show();
+            }
+        });
+    </script>
 @endsection
