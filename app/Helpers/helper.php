@@ -3,6 +3,7 @@
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\Setting;
+use App\Models\SoQuy;
 use Illuminate\Support\Facades\Schema;
 
 if (!function_exists('returnMessage')) {
@@ -159,17 +160,57 @@ if (!function_exists('parseNumber')) {
         return number_format($num, $decimalLength);
     }
 
-    function compareNumbers(string $a, string $b): int {
+    function compareNumbers(string $a, string $b): int
+    {
         if (function_exists('bccomp')) {
             return bccomp($a, $b, 10);
         }
 
-        $aFloat = (float) $a;
-        $bFloat = (float) $b;
+        $aFloat = (float)$a;
+        $bFloat = (float)$b;
 
         if ($aFloat > $bFloat) return 1;
         if ($aFloat < $bFloat) return -1;
         return 0;
     }
 
+}
+
+if (!function_exists('get_ton_dau')) {
+    function get_data_so_quy($start_date, $end_date)
+    {
+        return SoQuy::where('deleted_at', null)
+            ->when($start_date, function ($query) use ($start_date) {
+                return $query->whereDate('created_at', '>=', $start_date);
+            })
+            ->when($end_date, function ($query) use ($end_date) {
+                return $query->whereDate('created_at', '<=', $end_date);
+            })
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    function get_ton_dau($start_date, $end_date): ?string
+    {
+        $data = get_data_so_quy($start_date, $end_date);
+        return '';
+    }
+
+    function get_ton_cuoi($start_date, $end_date): ?string
+    {
+        $data = get_data_so_quy($start_date, $end_date);
+        return '';
+    }
+
+    function get_thu($start_date, $end_date): ?string
+    {
+        $data = get_data_so_quy($start_date, $end_date);
+        return '';
+    }
+
+    function get_chi($start_date, $end_date): ?string
+    {
+        $data = get_data_so_quy($start_date, $end_date);
+        return '';
+    }
 }

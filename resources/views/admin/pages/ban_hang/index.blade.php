@@ -183,116 +183,123 @@
                     </div>
                     <form method="post" action="{{ route('admin.ban.hang.store') }}" class="">
                         @csrf
-                        <div class="form-group">
-                            <label for="khach_hang_id">Khách hàng</label>
-                            <select id="khach_hang_id" name="khach_hang_id" class="form-control selectCustom"
-                                    onchange="changeKhachHang()">
-                                <option value="0" {{ old('khach_hang_id') == 0 ? 'selected' : '' }}>Khách lẻ</option>
-                                @foreach($khachhangs as $khachhang)
-                                    <option
-                                        value="{{ $khachhang->id }}" {{ old('khach_hang_id') == $khachhang->id ? 'selected' : '' }}>
-                                        {{ $khachhang->ten }} : {{ $khachhang->so_dien_thoai }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <div class="row">
+                            <div class="col-md-8 col-sm-12 border-end">
+                                <div class="row ">
+                                    <div class="form-group col-md-6">
+                                        <label for="da_thanht_toan">Khách hàng đã thanh toán</label>
+                                        <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
+                                               name="da_thanht_toan" value="{{ old('da_thanht_toan') }}" required>
+                                    </div>
 
-                        <div class="row" id="formKhachLe">
-                            <div class="form-group col-md-12">
-                                <label for="ten_khach_hang">Tên khách hàng</label>
-                                <input type="text" class="form-control" id="ten_khach_hang" name="ten_khach_hang"
-                                       value="{{ old('ten_khach_hang') }}" required>
+                                    <div class="form-group col-md-6">
+                                        <label for="loai_quy_id">Loại quỹ</label>
+                                        <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
+                                            @foreach($loai_quies as $loai_quy)
+                                                <option
+                                                    value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                                    {{ $loai_quy->ten_loai_quy }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3" id="formSanPham">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="form-group col-md-4 mb-2">
+                                            <label for="select_kho">Chọn kho</label>
+                                            <select id="select_kho" name="select_kho" class="form-control"
+                                                    onchange="changeLoaiSanPham()">
+                                                <option value="">Lựa chọn kho</option>
+                                                <option
+                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
+                                                    Kho Nguyên liệu Thô
+                                                </option>
+                                                <option
+                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
+                                                    Kho Nguyên liệu Phân loại
+                                                </option>
+                                                <option
+                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
+                                                    Kho Nguyên liệu Tinh
+                                                </option>
+                                                <option
+                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT }}">
+                                                    Kho Thành phẩm sản xuất
+                                                </option>
+                                                <option
+                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
+                                                    Kho đã Đóng gói
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-primary d-none showForm" type="button"
+                                                onclick="addItems()">
+                                            <i class="bi bi-plus"></i> Thêm sản phẩm
+                                        </button>
+                                    </div>
+                                    <table class="table table-bordered d-none showForm">
+                                        <colgroup>
+                                            <col width="x">
+                                            <col width="25%">
+                                            <col width="15%">
+                                            <col width="25%">
+                                            <col width="5%">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Tên sản phẩm</th>
+                                            <th scope="col">Giá bán</th>
+                                            <th scope="col">Số lượng/Khối lượng</th>
+                                            <th scope="col">Tổng tiền</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbodySanPham">
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="so_dien_thoai">Số điện thoại</label>
-                                <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                       value="{{ old('so_dien_thoai') }}" required>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="dia_chi">Địa chỉ chi tiết</label>
-                                <input type="text" class="form-control" id="dia_chi" name="dia_chi"
-                                       value="{{ old('dia_chi') }}" required>
-                            </div>
-                        </div>
-
-                        <div class="row pt-3 mt-4 border-top">
-                            <div class="form-group col-md-6">
-                                <label for="da_thanht_toan">Khách hàng đã thanh toán</label>
-                                <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
-                                       name="da_thanht_toan" value="{{ old('da_thanht_toan') }}" required>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="loai_quy_id">Loại quỹ</label>
-                                <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
-                                    @foreach($loai_quies as $loai_quy)
-                                        <option
-                                            value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
-                                            {{ $loai_quy->ten_loai_quy }}
+                            <div class="col-md-4 col-sm-12">
+                                <div class="form-group">
+                                    <label for="khach_hang_id">Khách hàng</label>
+                                    <select id="khach_hang_id" name="khach_hang_id" class="form-control selectCustom"
+                                            onchange="changeKhachHang()">
+                                        <option value="0" {{ old('khach_hang_id') == 0 ? 'selected' : '' }}>Khách lẻ
                                         </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mt-3" id="formSanPham">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="form-group col-md-4 mb-2">
-                                    <label for="select_kho">Chọn kho</label>
-                                    <select id="select_kho" name="select_kho" class="form-control"
-                                            onchange="changeLoaiSanPham()">
-                                        <option value="">Lựa chọn kho</option>
-                                        <option
-                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
-                                            Kho Nguyên liệu Thô
-                                        </option>
-                                        <option
-                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
-                                            Kho Nguyên liệu Phân loại
-                                        </option>
-                                        <option
-                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
-                                            Kho Nguyên liệu Tinh
-                                        </option>
-                                        <option
-                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT }}">
-                                            Kho Thành phẩm sản xuất
-                                        </option>
-                                        <option
-                                            value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
-                                            Kho đã Đóng gói
-                                        </option>
+                                        @foreach($khachhangs as $khachhang)
+                                            <option
+                                                value="{{ $khachhang->id }}" {{ old('khach_hang_id') == $khachhang->id ? 'selected' : '' }}>
+                                                {{ $khachhang->ten }} : {{ $khachhang->so_dien_thoai }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
 
-                                <button class="btn btn-sm btn-primary d-none showForm" type="button"
-                                        onclick="addItems()">
-                                    <i class="bi bi-plus"></i> Thêm sản phẩm
-                                </button>
-                            </div>
-                            <table class="table table-bordered d-none showForm">
-                                <colgroup>
-                                    <col width="x">
-                                    <col width="25%">
-                                    <col width="15%">
-                                    <col width="25%">
-                                    <col width="5%">
-                                </colgroup>
-                                <thead>
-                                <tr>
-                                    <th scope="col">Tên sản phẩm</th>
-                                    <th scope="col">Giá bán</th>
-                                    <th scope="col">Số lượng/Khối lượng</th>
-                                    <th scope="col">Tổng tiền</th>
-                                    <th scope="col"></th>
-                                </tr>
-                                </thead>
-                                <tbody id="tbodySanPham">
+                                <div class="row" id="formKhachLe">
+                                    <div class="form-group col-md-12">
+                                        <label for="ten_khach_hang">Tên khách hàng</label>
+                                        <input type="text" class="form-control" id="ten_khach_hang"
+                                               name="ten_khach_hang"
+                                               value="{{ old('ten_khach_hang') }}" required>
+                                    </div>
 
-                                </tbody>
-                            </table>
+                                    <div class="form-group col-md-6">
+                                        <label for="so_dien_thoai">Số điện thoại</label>
+                                        <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
+                                               value="{{ old('so_dien_thoai') }}" required>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="dia_chi">Địa chỉ chi tiết</label>
+                                        <input type="text" class="form-control" id="dia_chi" name="dia_chi"
+                                               value="{{ old('dia_chi') }}" required>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <input type="hidden" name="loai_san_pham" id="loai_san_pham">
