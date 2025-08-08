@@ -440,6 +440,96 @@ class AdminBanHangController extends Controller
         try {
             DB::beginTransaction();
 
+            $banhang = BanHang::find($id);
+            if (!$banhang || $banhang->trang_thai == TrangThaiBanHang::DELETED()) {
+                return back()->with('error', 'Không tìm thấy hóa đơn bán hàng');
+            }
+
+            $khach_hang_id = $request->input('khach_hang_id');
+            $ten_khach_hang = $request->input('ten_khach_hang');
+            $so_dien_thoai = $request->input('so_dien_thoai');
+            $dia_chi = $request->input('dia_chi');
+            $loai_san_pham = $request->input('loai_san_pham');
+            $da_thanht_toan = $request->input('da_thanht_toan');
+            $loai_quy_id = $request->input('loai_quy_id');
+            $tong_tien = $request->input('tong_tien');
+            $note = $request->input('note');
+            $trang_thai = $request->input('trang_thai');
+            $giam_gia = $request->input('giam_gia');
+            $cong_no = $request->input('cong_no');
+
+            $banhang->update([
+                'khach_hang_id' => $khach_hang_id != 0 ? $khach_hang_id : null,
+                'ban_le' => $khach_hang_id == 0,
+                'khach_le' => $ten_khach_hang,
+                'so_dien_thoai' => $so_dien_thoai,
+                'dia_chi' => $dia_chi,
+                'loai_san_pham' => $loai_san_pham,
+                'phuong_thuc_thanh_toan' => $loai_quy_id,
+                'tong_tien' => $tong_tien ?? 0,
+                'da_thanht_toan' => $da_thanht_toan ?? 0,
+                'giam_gia' => $giam_gia ?? 0,
+                'cong_no' => $cong_no ?? 0,
+                'note' => $note,
+                'trang_thai' => $trang_thai ?? TrangThaiBanHang::ACTIVE()
+            ]);
+
+            $banhang->save();
+
+            $sanPhamIds = $request->input('san_pham_id');
+            $giaBans = $request->input('gia_bans');
+            $soLuongs = $request->input('so_luong');
+
+            $ban_hang_chi_tiet = BanHangChiTiet::where('ban_hang_id', $banhang->id)->get();
+            foreach ($ban_hang_chi_tiet as $bh) {
+                $sanPhamId = $bh->san_pham_id;
+                $soLuong = $bh->so_luong;
+
+                $this->rollback_item($loai_san_pham, $sanPhamId, $soLuong);
+            }
+
+            $total = 0;
+
+            foreach ($sanPhamIds as $i => $sanPhamId) {
+                $giaBan = $giaBans[$i];
+                $soLuong = $soLuongs[$i];
+                $tongTien = $giaBan * $soLuong;
+
+                $banHangChiTiet = BanHangChiTiet::updateOrCreate(
+                    ['ban_hang_id' => $id, 'san_pham_id' => $sanPhamId],
+                    ['gia_ban' => $giaBan, 'so_luong' => $soLuong, 'tong_tien' => $tongTien]
+                );
+
+                if (!$this->capNhatKho($banhang->loai_san_pham, $sanPhamId, $soLuong)) {
+                    $banhang->delete();
+                    DB::rollBack();
+                    return back()->with('error', 'Số lượng không đủ!');
+                }
+
+                $total += $tongTien;
+            }
+
+            $banhang->update([
+                'tong_tien' => $total,
+                'cong_no' => $total - $banhang->giam_gia - $banhang->da_thanht_toan,
+            ]);
+
+            $soQuy = SoQuy::where('gia_tri_id', $banhang->id)->first();
+            $this->insertBanHang($banhang, true, optional($soQuy)->id, $request->input('loai_quy_id'));
+            DB::commit();
+
+            return redirect()->route('admin.ban.hang.index')->with('success', 'Chỉnh sửa hóa đơn bán hàng thành công');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function update_bk($id, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
             $khach_hang_id = $request->input('khach_hang_id');
             $ten_khach_hang = $request->input('ten_khach_hang');
             $so_dien_thoai = $request->input('so_dien_thoai');
@@ -522,6 +612,18 @@ class AdminBanHangController extends Controller
             $banhang->trang_thai = TrangThaiBanHang::DELETED();
             $banhang->save();
 
+            $loaiSanPham = $banhang->loai_san_pham;
+
+            $ban_hang_chi_tiet = BanHangChiTiet::where('ban_hang_id', $banhang->id)->get();
+            foreach ($ban_hang_chi_tiet as $bh) {
+                $sanPhamId = $bh->san_pham_id;
+                $soLuong = $bh->so_luong;
+
+                $this->rollback_item($loaiSanPham, $sanPhamId, $soLuong);
+
+                $bh->delete();
+            }
+
             SoQuy::where('gia_tri_id', $banhang->id)
                 ->where('loai', 1)
                 ->delete();
@@ -529,6 +631,41 @@ class AdminBanHangController extends Controller
             return redirect()->back()->with('success', 'Đã xoá hóa đơn bán hàng thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    private function rollback_item($loaiSanPham, $sanPhamId, $soLuong)
+    {
+        switch ($loaiSanPham) {
+            case LoaiSanPham::NGUYEN_LIEU_THO():
+                $item = NguyenLieuTho::find($sanPhamId);
+                $item->khoi_luong_da_ban -= $soLuong;
+                $item->save();
+                break;
+
+            case LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
+                $item = NguyenLieuPhanLoai::find($sanPhamId);
+                $item->khoi_luong_da_phan_loai -= $soLuong;
+                $item->save();
+                break;
+
+            case LoaiSanPham::NGUYEN_LIEU_TINH():
+                $item = NguyenLieuTinh::find($sanPhamId);
+                $item->so_luong_da_dung -= $soLuong;
+                $item->save();
+                break;
+
+            case LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
+                $item = NguyenLieuSanXuat::find($sanPhamId);
+                $item->khoi_luong_da_dung -= $soLuong;
+                $item->save();
+                break;
+
+            case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
+                $item = NguyenLieuThanhPham::find($sanPhamId);
+                $item->so_luong_da_ban -= $soLuong;
+                $item->save();
+                break;
         }
     }
 }

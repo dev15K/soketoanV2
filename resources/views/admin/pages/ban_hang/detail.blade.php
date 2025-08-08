@@ -90,20 +90,40 @@
                                                             onchange="changeThongTinSanPham(this)" required>
                                                         @foreach($nguyenlieus as $nguyenlieu)
                                                             @php
+                                                                $label = '';
+                                                                $gia = null;
+
                                                                 switch ($banhang->loai_san_pham) {
                                                                     case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO():
-                                                                        $label = $nguyenlieu->ten_nguyen_lieu ?? '';
-                                                                        break;
-                                                                    case \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH():
-                                                                        $label = $nguyenlieu->gia_tien ?? '';
-                                                                        break;
-                                                                    case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
-                                                                        $label = $nguyenlieu->sanPham->ten_san_pham ?? '';
+                                                                        $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_phan_loai ?? 0);
+                                                                        $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $gia = ($nguyenlieu->khoi_luong ?? 0) > 0 ? ($nguyenlieu->chi_phi_mua / $nguyenlieu->khoi_luong) : null;
                                                                         break;
 
                                                                     case \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
-                                                                       $label = $nguyenlieu->nguyenLieuTho->ten_nguyen_lieu . ' - ' . $nguyenlieu->nguyenLieuTho->code;
+                                                                        $con_lai = ($nguyenlieu->tong_khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_phan_loai ?? 0);
+                                                                        $label = ($nguyenlieu->ma_don_hang ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $gia = $nguyenlieu->gia_sau_phan_loai ?? null;
                                                                         break;
+
+                                                                    case \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH():
+                                                                        $con_lai = ($nguyenlieu->tong_khoi_luong ?? 0) - ($nguyenlieu->so_luong_da_dung ?? 0);
+                                                                        $label = ($nguyenlieu->code ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $gia = $nguyenlieu->gia_tien ?? null;
+                                                                        break;
+
+                                                                    case \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
+                                                                        $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_dung ?? 0);
+                                                                        $label = ($nguyenlieu->code ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $gia = $nguyenlieu->gia_tien ?? null;
+                                                                        break;
+
+                                                                    case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
+                                                                        $con_lai = ($nguyenlieu->so_luong ?? 0) - ($nguyenlieu->so_luong_da_ban ?? 0);
+                                                                        $label = ($nguyenlieu->ten_san_pham ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $gia = $nguyenlieu->price ?? null;
+                                                                        break;
+
                                                                     default:
                                                                         $label = '';
                                                                 }
@@ -111,7 +131,9 @@
 
                                                             <option
                                                                 {{ $chiTietBanHang->san_pham_id == $nguyenlieu->id ? 'selected' : '' }}
-                                                                value="{{ $nguyenlieu->id }}">{{ $label }}</option>
+                                                                value="{{ $nguyenlieu->id }}">
+                                                                {{ $label }}
+                                                            </option>
                                                         @endforeach
 
                                                     </select>
@@ -282,19 +304,38 @@
                 <select name="san_pham_id[]" class="form-control" onchange="changeThongTinSanPham(this)" required>
                     @foreach($nguyenlieus as $nguyenlieu)
                         @php
+                            $label = '';
+                            $gia = null;
+
                             switch ($banhang->loai_san_pham) {
                                 case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO():
-                                    $label = $nguyenlieu->ten_nguyen_lieu ?? '';
-                                    break;
-                                case \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH():
-                                    $label = $nguyenlieu->gia_tien ?? '';
-                                    break;
-                                case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
-                                    $label = $nguyenlieu->sanPham->ten_san_pham ?? '';
+                                    $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_phan_loai ?? 0);
+                                    $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
+                                    $gia = ($nguyenlieu->khoi_luong ?? 0) > 0 ? ($nguyenlieu->chi_phi_mua / $nguyenlieu->khoi_luong) : null;
                                     break;
 
                                 case \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI():
-                                   $label = $nguyenlieu->nguyenLieuTho->ten_nguyen_lieu ?? '' . ' - ' . $nguyenlieu->nguyenLieuTho->code;
+                                    $con_lai = ($nguyenlieu->tong_khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_phan_loai ?? 0);
+                                    $label = ($nguyenlieu->ma_don_hang ?? '') . ' : ' . $con_lai . 'kg';
+                                    $gia = $nguyenlieu->gia_sau_phan_loai ?? null;
+                                    break;
+
+                                case \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH():
+                                    $con_lai = ($nguyenlieu->tong_khoi_luong ?? 0) - ($nguyenlieu->so_luong_da_dung ?? 0);
+                                    $label = ($nguyenlieu->code ?? '') . ' : ' . $con_lai . 'kg';
+                                    $gia = $nguyenlieu->gia_tien ?? null;
+                                    break;
+
+                                case \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
+                                    $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_dung ?? 0);
+                                    $label = ($nguyenlieu->code ?? '') . ' : ' . $con_lai . 'kg';
+                                    $gia = $nguyenlieu->gia_tien ?? null;
+                                    break;
+
+                                case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
+                                    $con_lai = ($nguyenlieu->so_luong ?? 0) - ($nguyenlieu->so_luong_da_ban ?? 0);
+                                    $label = ($nguyenlieu->ten_san_pham ?? '') . ' : ' . $con_lai . 'kg';
+                                    $gia = $nguyenlieu->price ?? null;
                                     break;
 
                                 default:
@@ -400,23 +441,31 @@
                 let ten_;
                 switch (loaiSanPham) {
                     case 'NGUYEN_LIEU_THO':
-                        ten_ = item.ten_nguyen_lieu + ' - ' + item.ghi_chu ?? '';
-                        gia_ = null;
+                        ten_ = item.ten_nguyen_lieu + ' : ' +
+                            (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_phan_loai)) + 'kg';
+                        gia_ = item.chi_phi_mua / item.khoi_luong;
                         break;
                     case 'NGUYEN_LIEU_PHAN_LOAI':
-                        ten_ = item.ten_nguyen_lieu_tho + ' - ' + item.ma_don_hang + ' - ' + item.ghi_chu ?? '';
+                        ten_ = item.ma_don_hang + ' : ' +
+                            (parseFloat(item.tong_khoi_luong) - parseFloat(item.khoi_luong_da_phan_loai ?? 0)) + 'kg';
                         if (!gia_) {
                             gia_ = item.gia_sau_phan_loai;
                         }
                         break;
                     case 'NGUYEN_LIEU_TINH':
-                        ten_ = item.code;
+                        ten_ = item.code + ' : ' + (parseFloat(item.tong_khoi_luong) - parseFloat(item.so_luong_da_dung ?? 0)) + 'kg';
+                        if (!gia_) {
+                            gia_ = item.gia_tien;
+                        }
+                        break;
+                    case 'NGUYEN_LIEU_SAN_XUAT':
+                        ten_ = item.code + ' : ' + (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_dung ?? 0)) + 'kg';
                         if (!gia_) {
                             gia_ = item.gia_tien;
                         }
                         break;
                     case 'NGUYEN_LIEU_THANH_PHAM':
-                        ten_ = item.ten_san_pham + ' - ' + item.so_lo_san_xuat + ' - ' + item.ghi_chu ?? '';
+                        ten_ = item.ten_san_pham + ' : ' + (parseFloat(item.so_luong) - parseFloat(item.so_luong_da_ban ?? 0)) + 'kg';
                         if (!gia_) {
                             gia_ = item.price;
                         }
