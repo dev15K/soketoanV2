@@ -26,16 +26,21 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
-    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
+    <!-- Sweet Alert -->
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+    <!-- Jquery -->
+    <!-- jQuery (phải nằm trước) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
     <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <!-- Select2 Bootstrap 5 Theme -->
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.2.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
-
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.2.0/dist/select2-bootstrap-5-theme.min.css"
+          rel="stylesheet"/>
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <style>
@@ -88,6 +93,16 @@
             });
         }
     </script>
+    <style>
+        input[readonly] {
+            cursor: not-allowed;
+        }
+
+        input[readonly]:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -171,7 +186,43 @@
             minimumResultsForSearch: 0
         });
     });
+
+    function init_datatable(page_size = 10) {
+        $('.datatable').DataTable({
+            "paging": true,
+            "pageLength": page_size,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "responsive": true,
+            "language": {
+                "search": "",
+                "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                "infoEmpty": "Không có dữ liệu để hiển thị",
+                "infoFiltered": "(lọc từ _MAX_ bản ghi)",
+                "lengthMenu": "Số lượng _MENU_",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
+            "columnDefs": [
+                {"orderable": false, "targets": 0},
+            ],
+            initComplete: function () {
+                $('.dataTables_filter input').attr('placeholder', 'Tìm kiếm');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        init_datatable();
+    });
 </script>
+
 <!-- Vendor JS Files -->
 <script src="{{ asset('admin/vendor/apexcharts/apexcharts.min.js') }}"></script>
 <script src="{{ asset('admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -181,6 +232,8 @@
 <script src="{{ asset('admin/vendor/simple-datatables/simple-datatables.js') }}"></script>
 <script src="{{ asset('admin/vendor/tinymce/tinymce.min.js') }}"></script>
 <script src="{{ asset('admin/vendor/php-email-form/validate.js') }}"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
 <!-- Template Main JS File -->
 <script src="{{ asset('admin/js/main.js') }}"></script>

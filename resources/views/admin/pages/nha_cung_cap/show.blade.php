@@ -12,7 +12,7 @@
 </nav>
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <div class="table-responsive">
+        <div class="table-responsive mt-3">
             <table class="table table-hover datatable" id="table-payment-history">
                 <colgroup>
                     <col width="120px">
@@ -58,7 +58,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th scope="col" colspan="4">Tổng:</th>
+                    <th scope="col" colspan="3">Tổng:</th>
                     <th scope="col" colspan="2">{{ parseNumber($payment_histories->sum('so_tien')) }} VND</th>
                 </tr>
                 </tfoot>
@@ -66,7 +66,7 @@
         </div>
     </div>
     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-        <div class="table-responsive">
+        <div class="table-responsive mt-3">
             <table class="table table-hover datatable" id="table-order-history" style="width: 100vw">
                 <thead>
                 <tr class="sticky-top top-0 position-sticky" style="z-index: 100">
@@ -147,8 +147,7 @@
                     <th scope="col">{{ parseNumber($order_histories->sum('khoi_luong'), 0) }} kg</th>
                     <th scope="col">{{ parseNumber($order_histories->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
                     <th scope="col">{{ parseNumber($order_histories->sum('khoi_luong') - $order_histories->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
+                    <th scope="col">{{ parseNumber($order_histories->sum('chi_phi_mua'), 0) }} VND</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -160,3 +159,7 @@
         </div>
     </div>
 </div>
+
+<script>
+    init_datatable(5);
+</script>

@@ -83,6 +83,7 @@
                                             <col width="200px">
                                             <col width="300px">
                                             <col width="250px">
+                                            <col width="150px">
                                             <col width="250px">
                                             <col width="250px">
                                             <col width="250px">
@@ -98,6 +99,7 @@
                                             <th scope="col">Số điện thoại</th>
                                             <th scope="col">Địa chỉ</th>
                                             <th scope="col">Tổng tiền</th>
+                                            <th scope="col">Giảm giá</th>
                                             <th scope="col">Đã thanh toán</th>
                                             <th scope="col">Phương thức thanh toán</th>
                                             <th scope="col">Công nợ</th>
@@ -149,6 +151,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ parseNumber($data->tong_tien) }} VND</td>
+                                                <td>{{ parseNumber($data->giam_gia) }} VND</td>
                                                 <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
                                                 <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                                 <td>{{ parseNumber($data->cong_no) }} VND</td>
@@ -181,30 +184,10 @@
                             Xem lịch sử bán hàng
                         </button>
                     </div>
-                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="">
+                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="" id="form_submit_order">
                         @csrf
                         <div class="row">
                             <div class="col-md-8 col-sm-12 border-end">
-                                <div class="row ">
-                                    <div class="form-group col-md-6">
-                                        <label for="da_thanht_toan">Khách hàng đã thanh toán</label>
-                                        <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
-                                               name="da_thanht_toan" value="{{ old('da_thanht_toan') }}" required>
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        <label for="loai_quy_id">Loại quỹ</label>
-                                        <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
-                                            @foreach($loai_quies as $loai_quy)
-                                                <option
-                                                    value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
-                                                    {{ $loai_quy->ten_loai_quy }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
                                 <div class="mt-3" id="formSanPham">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="form-group col-md-4 mb-2">
@@ -299,11 +282,96 @@
                                                value="{{ old('dia_chi') }}" required>
                                     </div>
                                 </div>
+
+                                <div class="pt-3 pb-2 border-top border-bottom mt-3 mb-3">
+                                    <table class="table table-bordered">
+                                        <colgroup>
+                                            <col width="50%">
+                                            <col width="50%">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <label for="tong_tien">Tổng tiền</label>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control bg-secondary bg-opacity-10 onlyNumber"
+                                                       id="tong_tien" name="tong_tien" value="{{ old('tong_tien') }}"
+                                                       readonly required>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="giam_gia">Giảm giá</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control onlyNumber" id="giam_gia"
+                                                       oninput="calc_total_item()" name="giam_gia"
+                                                       value="{{ old('giam_gia', 0) }}" required>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="tong_thanh_toan">Tổng thanh toán</label>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control bg-secondary bg-opacity-10 onlyNumber"
+                                                       id="tong_thanh_toan"
+                                                       name="tong_thanh_toan" value="{{ old('tong_thanh_toan') }}"
+                                                       readonly required>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="da_thanht_toan">Khách đưa</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
+                                                       name="da_thanht_toan" value="{{ old('da_thanht_toan', 0) }}"
+                                                       oninput="calc_total_item()" required>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="cong_no">Công nợ</label>
+                                            </td>
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control bg-secondary bg-opacity-10 onlyNumber"
+                                                       id="cong_no" name="cong_no" value="{{ old('cong_no') }}" readonly
+                                                       required>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="loai_quy_id">Loại quỹ</label>
+                                    <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
+                                        @foreach($loai_quies as $loai_quy)
+                                            <option
+                                                value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                                {{ $loai_quy->ten_loai_quy }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea name="note" class="form-control" id="note" rows="5"></textarea>
+                                </div>
                             </div>
                         </div>
 
                         <input type="hidden" name="loai_san_pham" id="loai_san_pham">
-                        <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
+
+                        <div class="w-100 d-flex justify-content-end mt-3 gap-2">
+                            <button type="submit" class="btn btn-primary">Thanh toán</button>
+                            <button type="reset" class="btn btn-danger">Hủy</button>
+                        </div>
                     </form>
 
                 </div>
@@ -467,6 +535,8 @@
                 const so_luong = $(el).closest('tr').find('input.so_luong').val();
 
                 totalEl.val(gia_ * so_luong);
+
+                calc_total_item();
             }
 
             function changeThongTinSanPham(el) {
@@ -525,10 +595,13 @@
                 const tbody = $('#tbodySanPham');
                 const tr = $('#listSanPham').clone();
                 tbody.append(tr);
+
+                calc_total_item();
             }
 
             function removeItems(el) {
                 $(el).parent().closest('tr').remove();
+                calc_total_item();
             }
         </script>
     </section>
@@ -548,5 +621,26 @@
                 modal.show();
             }
         });
+    </script>
+
+    <script>
+        function calc_total_item() {
+            let total = 0;
+
+            $('#form_submit_order input[name="tong_tien[]"]').each(function () {
+                total += parseFloat(this.value) || 0;
+            });
+
+            $('#tong_tien').val(total);
+
+            let giam_gia = $('#giam_gia').val() || 0;
+            let da_thanht_toan = $('#da_thanht_toan').val() || 0;
+
+            let tong_thanh_toan = total - giam_gia;
+            let cong_no = tong_thanh_toan - da_thanht_toan;
+
+            $('#tong_thanh_toan').val(tong_thanh_toan);
+            $('#cong_no').val(cong_no);
+        }
     </script>
 @endsection
