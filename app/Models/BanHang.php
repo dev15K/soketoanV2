@@ -21,6 +21,8 @@ class BanHang extends Model
         'da_thanht_toan',
         'cong_no',
         'trang_thai',
+        'giam_gia',
+        'note',
     ];
 
     public function khachHang()

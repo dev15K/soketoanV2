@@ -147,7 +147,7 @@
                     <th scope="col">{{ parseNumber($order_histories->sum('khoi_luong'), 0) }} kg</th>
                     <th scope="col">{{ parseNumber($order_histories->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
                     <th scope="col">{{ parseNumber($order_histories->sum('khoi_luong') - $order_histories->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
-                    <th scope="col"></th>
+                    <th scope="col">{{ parseNumber($order_histories->sum('chi_phi_mua'), 0) }} VND</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>

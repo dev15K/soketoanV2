@@ -93,6 +93,16 @@
             });
         }
     </script>
+    <style>
+        input[readonly] {
+            cursor: not-allowed;
+        }
+
+        input[readonly]:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
 </head>
 
 <body>

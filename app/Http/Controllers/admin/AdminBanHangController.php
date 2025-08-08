@@ -108,9 +108,11 @@ class AdminBanHangController extends Controller
                 'dia_chi' => $request->input('dia_chi'),
                 'loai_san_pham' => $request->input('loai_san_pham'),
                 'phuong_thuc_thanh_toan' => $request->input('loai_quy_id'),
-                'tong_tien' => 0,
+                'tong_tien' => $request->input('tong_tien') ?? 0,
                 'da_thanht_toan' => $request->input('da_thanht_toan') ?? 0,
-                'cong_no' => 0,
+                'giam_gia' => $request->input('giam_gia') ?? 0,
+                'cong_no' => $request->input('cong_no') ?? 0,
+                'note' => $request->input('note'),
                 'trang_thai' => TrangThaiBanHang::ACTIVE()
             ]);
 
@@ -151,7 +153,7 @@ class AdminBanHangController extends Controller
 
             $banhang->update([
                 'tong_tien' => $total,
-                'cong_no' => $total - $banhang->da_thanht_toan,
+                'cong_no' => $total - $banhang->giam_gia - $banhang->da_thanht_toan,
             ]);
 
             $this->insertBanHang($banhang, false, null, $banhang->phuong_thuc_thanh_toan);
