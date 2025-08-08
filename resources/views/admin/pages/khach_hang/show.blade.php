@@ -12,7 +12,7 @@
 </nav>
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <div class="table-responsive">
+        <div class="table-responsive mt-3">
             <table class="table table-hover datatable" id="table-payment-history">
                 <colgroup>
                     <col width="120px">
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-        <div class="table-responsive">
+        <div class="table-responsive mt-3">
             <table class="table table-hover datatable" id="table-order-history" style="width: 100vw">
                 <colgroup>
                     <col width="50px">
@@ -130,3 +130,7 @@
         </div>
     </div>
 </div>
+
+<script>
+    init_datatable(5);
+</script>
