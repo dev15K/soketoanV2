@@ -103,9 +103,9 @@ class AdminBanHangController extends Controller
             $banhang = new BanHang([
                 'khach_hang_id' => $khach_hang_id != 0 ? $khach_hang_id : null,
                 'ban_le' => $khach_hang_id == 0,
-                'khach_le' => $request->input('ten_khach_hang'),
-                'so_dien_thoai' => $request->input('so_dien_thoai'),
-                'dia_chi' => $request->input('dia_chi'),
+                'khach_le' => $request->input('ten_khach_hang') ?? '',
+                'so_dien_thoai' => $request->input('so_dien_thoai') ?? '',
+                'dia_chi' => $request->input('dia_chi') ?? '',
                 'loai_san_pham' => $request->input('loai_san_pham'),
                 'phuong_thuc_thanh_toan' => $request->input('loai_quy_id'),
                 'tong_tien' => $request->input('tong_tien') ?? 0,

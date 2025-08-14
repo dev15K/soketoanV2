@@ -219,7 +219,7 @@
                                         </div>
 
                                         <button class="btn btn-sm btn-primary d-none showForm" type="button"
-                                                onclick="addItems()">
+                                                onclick="add_items()">
                                             <i class="bi bi-plus"></i> Thêm sản phẩm
                                         </button>
                                     </div>
@@ -267,19 +267,19 @@
                                         <label for="ten_khach_hang">Tên khách hàng</label>
                                         <input type="text" class="form-control" id="ten_khach_hang"
                                                name="ten_khach_hang"
-                                               value="{{ old('ten_khach_hang') }}" required>
+                                               value="{{ old('ten_khach_hang') }}">
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label for="so_dien_thoai">Số điện thoại</label>
                                         <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                               value="{{ old('so_dien_thoai') }}" required>
+                                               value="{{ old('so_dien_thoai') }}">
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label for="dia_chi">Địa chỉ chi tiết</label>
                                         <input type="text" class="form-control" id="dia_chi" name="dia_chi"
-                                               value="{{ old('dia_chi') }}" required>
+                                               value="{{ old('dia_chi') }}">
                                     </div>
                                 </div>
 
@@ -383,7 +383,7 @@
             <tbody>
             <tr id="listSanPham">
                 <td>
-                    <select name="san_pham_id[]" class="form-control" onchange="changeThongTinSanPham(this)" required>
+                    <select name="san_pham_id[]" class="form-control" onchange="change_thong_tin_san_pham(this)" required>
                         <option value="">Lựa chọn sản phẩm</option>
                     </select>
                 </td>
@@ -392,13 +392,13 @@
                 </td>
                 <td>
                     <input type="number" min="1" name="so_luong[]" class="form-control so_luong" value="1"
-                           oninput="changeGiaSanPham(this)" required>
+                           oninput="change_gia_san_pham(this)" required>
                 </td>
                 <td>
                     <input type="text" name="tong_tien[]" class="form-control tong_tien" disabled readonly>
                 </td>
                 <td>
-                    <button type="button" onclick="removeItems(this)" class="btn btn-danger btn-sm">
+                    <button type="button" onclick="remove_items(this)" class="btn btn-danger btn-sm">
                         <i class="bi bi-trash"></i>
                     </button>
                 </td>
@@ -508,7 +508,7 @@
                             }
                             break;
                         case 'NGUYEN_LIEU_SAN_XUAT':
-                            ten_ = item.code + ' : ' + (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_dung ?? 0)) + 'kg';
+                            ten_ = item.code + ' : ' + (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_dung ?? 0)) + item.don_vi_tinh;
                             if (!gia_) {
                                 gia_ = item.gia_tien;
                             }
@@ -529,7 +529,7 @@
                 listSanPham.find('input.tong_tien').val(gia_);
             }
 
-            function changeGiaSanPham(el) {
+            function change_gia_san_pham(el) {
                 const totalEl = $(el).closest('tr').find('input.tong_tien');
                 const gia_ = $(el).closest('tr').find('input.gia_bans').val();
                 const so_luong = $(el).closest('tr').find('input.so_luong').val();
@@ -539,13 +539,13 @@
                 calc_total_item();
             }
 
-            function changeThongTinSanPham(el) {
+            function change_thong_tin_san_pham(el) {
                 const loaiSanPham = $('#loai_san_pham').val();
                 const id = $(el).val();
                 layThongTinNguyenLieu(id, el, loaiSanPham);
             }
 
-            function renderChiTietSanPham(data, element, loaiSanPham) {
+            function render_chi_tiet_san_pham(data, element, loaiSanPham) {
                 let gia_ = null;
                 switch (loaiSanPham) {
                     case 'NGUYEN_LIEU_THO':
@@ -567,7 +567,7 @@
 
                 $(element).closest('tr').find('input.gia_bans').val(gia_);
 
-                changeGiaSanPham(element);
+                change_gia_san_pham(element);
             }
 
             function layThongTinNguyenLieu(id, el, loaiSanPham) {
@@ -578,7 +578,7 @@
                     type: 'GET',
                     async: false,
                     success: function (data, textStatus) {
-                        renderChiTietSanPham(data.data, el, loaiSanPham);
+                        render_chi_tiet_san_pham(data.data, el, loaiSanPham);
                     },
                     error: function (request, status, error) {
                         let data = JSON.parse(request.responseText);
@@ -588,10 +588,10 @@
             }
 
             $(document).ready(function () {
-                addItems();
+                add_items();
             })
 
-            function addItems(el) {
+            function add_items(el) {
                 const tbody = $('#tbodySanPham');
                 const tr = $('#listSanPham').clone();
                 tbody.append(tr);
@@ -599,7 +599,7 @@
                 calc_total_item();
             }
 
-            function removeItems(el) {
+            function remove_items(el) {
                 $(el).parent().closest('tr').remove();
                 calc_total_item();
             }
