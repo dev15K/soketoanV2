@@ -487,7 +487,7 @@
 
             totalEl.val(gia_ * so_luong);
 
-            calc_total_item();
+            change_thanh_toan();
         }
 
         function changeThongTinSanPham(el) {
@@ -539,16 +539,45 @@
             const tbody = $('#tbodySanPham');
             const tr = $('#listSanPham').clone();
             tbody.append(tr);
-            calc_total_item();
+
+            render_select_custom();
+
+            change_thanh_toan();
         }
 
         function removeItems(el) {
             $(el).parent().closest('tr').remove();
-            calc_total_item();
+            change_thanh_toan();
+        }
+
+        function render_select_custom() {
+            $('#tbodySanPham select').select2({
+                theme: 'bootstrap-5',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',
+                allowClear: Boolean($(this).data('allow-clear')) || true,
+                minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,
+                containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',
+                dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',
+                dropdownAutoWidth: $(this).data('dropdown-auto-width'),
+                dropdownParent: $(this).data('dropdown-parent'),
+                dropdownPosition: $(this).data('dropdown-position'),
+                initSelection: function (element, callback) {
+                    const id = element.val();
+                    layThongTinNguyenLieu(id, element, $('#loai_san_pham').val());
+                }
+            });
         }
     </script>
 
     <script>
+        function change_thanh_toan() {
+            let tong_thanh_toan = $('#tong_thanh_toan').val() || 0;
+            $('#da_thanht_toan').val(tong_thanh_toan);
+
+            calc_total_item();
+        }
+
         function calc_total_item() {
             let total = 0;
 
