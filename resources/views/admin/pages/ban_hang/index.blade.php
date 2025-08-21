@@ -78,6 +78,7 @@
                                         <colgroup>
                                             <col width="50px">
                                             <col width="100px">
+                                            <col width="100px">
                                             <col width="150px">
                                             <col width="300px">
                                             <col width="200px">
@@ -85,7 +86,7 @@
                                             <col width="250px">
                                             <col width="150px">
                                             <col width="250px">
-                                            <col width="250px">
+                                            <col width="150px">
                                             <col width="250px">
                                         </colgroup>
                                         <thead>
@@ -95,6 +96,7 @@
                                             </th>
                                             <th scope="col">Hành động</th>
                                             <th scope="col">Ngày tạo</th>
+                                            <th scope="col">Trạng thái đơn hàng</th>
                                             <th scope="col">Khách hàng</th>
                                             <th scope="col">Số điện thoại</th>
                                             <th scope="col">Địa chỉ</th>
@@ -129,6 +131,7 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
+                                                <td>{{ $data->trang_thai }}</td>
                                                 <td>
                                                     @if($data->ban_le)
                                                         {{ $data->khach_le }}
@@ -346,6 +349,36 @@
                                         </tr>
                                         </tbody>
                                     </table>
+                                </div>
+
+
+                                <div class="form-group col-md-12">
+                                    <label for="loai_nguon_hang">Loại nguồn hàng</label>
+                                    <select class="form-control" name="loai_nguon_hang" id="loai_nguon_hang"
+                                            onchange="change_loai_nguon_hang();">
+                                        <option value="">Lựa chọn</option>
+                                        <option value="ncc">Nhà cung cấp</option>
+                                        <option value="kh">Khách hàng</option>
+                                        <option value="nv">Nhân viên</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="nguon_hang">Nguồn hàng</label>
+                                    <select class="form-control selectCustom" name="nguon_hang" id="nguon_hang"
+                                            required>
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="trang_thai">Trạng thái đơn hàng</label>
+                                    <select class="form-control" name="trang_thai" id="trang_thai">
+                                        <option
+                                            value="{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}">{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}</option>
+                                        <option
+                                            value="{{ \App\Enums\TrangThaiBanHang::PENDING() }}">{{ \App\Enums\TrangThaiBanHang::PENDING() }}</option>
+                                    </select>
                                 </div>
 
                                 <div class="form-group col-md-12">
@@ -612,7 +645,7 @@
                     theme: 'bootstrap-5',
                     width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
                     placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',
-                    allowClear: Boolean($(this).data('allow-clear')) ||true,
+                    allowClear: Boolean($(this).data('allow-clear')) || true,
                     minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,
                     containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',
                     dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',
@@ -672,6 +705,50 @@
 
             $('#tong_thanh_toan').val(tong_thanh_toan);
             $('#cong_no').val(cong_no);
+        }
+    </script>
+
+    <script>
+        async function change_loai_nguon_hang() {
+            let loai_nguon_hang = $('#loai_nguon_hang').val();
+
+            if (loai_nguon_hang) {
+                await nguon_hang(loai_nguon_hang);
+            } else {
+                $('#nguon_hang').empty().append('<option value="">Lựa chọn...</option>');
+            }
+        }
+
+        async function nguon_hang(loai_nguon_hang) {
+            let url = `{{ route('api.nguon.hang.ban.hang') }}?loai_nguon_hang=${loai_nguon_hang}`;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                async: false,
+                success: function (data, textStatus) {
+                    render_nguon_hang(data.data, loai_nguon_hang);
+                },
+                error: function (request, status, error) {
+                    let data = JSON.parse(request.responseText);
+                    alert(data.message);
+                }
+            });
+        }
+
+        function render_nguon_hang(data, loai_nguon_hang) {
+            let html = '<option value="">Lựa chọn...</option>';
+            for (let i = 0; i < data.length; i++) {
+                if (loai_nguon_hang == 'ncc') {
+                    html += `<option value="${data[i].id}">${data[i].ten}</option>`;
+                } else if (loai_nguon_hang == 'kh') {
+                    html += `<option value="${data[i].id}">${data[i].ten}</option>`;
+                } else {
+                    html += `<option value="${data[i].id}">${data[i].full_name}</option>`;
+                }
+            }
+
+            $('#nguon_hang').empty().append(html);
         }
     </script>
 @endsection

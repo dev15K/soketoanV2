@@ -113,7 +113,9 @@ class AdminBanHangController extends Controller
                 'giam_gia' => $request->input('giam_gia') ?? 0,
                 'cong_no' => $request->input('cong_no') ?? 0,
                 'note' => $request->input('note'),
-                'trang_thai' => TrangThaiBanHang::ACTIVE()
+                'loai_nguon_hang' => $request->input('loai_nguon_hang'),
+                'nguon_hang' => $request->input('nguon_hang'),
+                'trang_thai' => $request->input('trang_thai') ?? TrangThaiBanHang::ACTIVE(),
             ]);
 
             $loaiQuy = LoaiQuy::find($banhang->phuong_thuc_thanh_toan);
@@ -471,6 +473,8 @@ class AdminBanHangController extends Controller
                 'giam_gia' => $giam_gia ?? 0,
                 'cong_no' => $cong_no ?? 0,
                 'note' => $note,
+                'loai_nguon_hang' => $request->input('loai_nguon_hang'),
+                'nguon_hang' => $request->input('nguon_hang'),
                 'trang_thai' => $trang_thai ?? TrangThaiBanHang::ACTIVE()
             ]);
 

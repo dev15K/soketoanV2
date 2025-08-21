@@ -9,14 +9,18 @@ use App\Enums\TrangThaiNguyenLieuSanXuat;
 use App\Enums\TrangThaiNguyenLieuThanhPham;
 use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNguyenLieuTinh;
+use App\Enums\TrangThaiNhaCungCap;
 use App\Enums\TrangThaiSanPham;
+use App\Enums\UserStatus;
 use App\Models\KhachHang;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuSanXuat;
 use App\Models\NguyenLieuThanhPham;
 use App\Models\NguyenLieuTho;
 use App\Models\NguyenLieuTinh;
+use App\Models\NhaCungCaps;
 use App\Models\SanPham;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -147,6 +151,21 @@ class HomeController extends Controller
                 break;
         }
         $res = returnMessage(1, $data, 'Success!');
+        return response()->json($res);
+    }
+
+    public function get_nguon_hang_ban_hang(Request $request)
+    {
+        $loai_nguon_hang = $request->get('loai_nguon_hang');
+        $nguon_hang = null;
+        if ($loai_nguon_hang == 'ncc') {
+            $nguon_hang = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())->get();
+        } else if ($loai_nguon_hang == 'nv') {
+            $nguon_hang = User::where('status', '!=', UserStatus::DELETED())->get();
+        } else if ($loai_nguon_hang == 'kh') {
+            $nguon_hang = KhachHang::where('trang_thai', '!=', TrangThaiKhachHang::DELETED())->get();
+        }
+        $res = returnMessage(1, $nguon_hang, 'Success!');
         return response()->json($res);
     }
 }
