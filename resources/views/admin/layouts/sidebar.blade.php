@@ -61,7 +61,7 @@
             <a class="nav-link {{ Request::routeIs('admin.san.pham.*') ? '' : 'collapsed' }}"
                data-bs-target="#attributes-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>Quản lý sản phẩm</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
+                        class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="attributes-nav"
                 class="nav-content collapse {{ Request::routeIs('admin.san.pham.*') ? 'show' : '' }}"
@@ -79,7 +79,7 @@
             <a class="nav-link {{ Request::routeIs('admin.nha.cung.cap.*') ? '' : 'collapsed' }}"
                data-bs-target="#properties-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-journal-text"></i><span>Quản lí nhà cung cấp</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
+                        class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="properties-nav"
                 class="nav-content collapse {{ Request::routeIs('admin.nha.cung.cap.*') ? 'show' : '' }}"
@@ -97,7 +97,7 @@
             <a class="nav-link {{ Request::routeIs('admin.ban.hang*') ? '' : 'collapsed' }}"
                data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Bán hàng</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
+                        class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="products-nav" class="nav-content collapse {{ Request::routeIs('admin.ban.hang.*') ? 'show' : '' }}"
                 data-bs-parent="#sidebar-nav">
@@ -111,17 +111,24 @@
         </li><!-- End Products Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('admin.khach.hang.*') ? '' : 'collapsed' }}"
+            <a class="nav-link {{ Request::routeIs('admin.khach.hang.*') || Request::routeIs('admin.nhom.khach.hang.*') ? '' : 'collapsed' }}"
                data-bs-target="#orders-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person-vcard"></i><span>Quản lý khách hàng</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
+                        class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="orders-nav" class="nav-content collapse {{ Request::routeIs('admin.khach.hang.*') ? 'show' : '' }}"
+            <ul id="orders-nav"
+                class="nav-content collapse {{ Request::routeIs('admin.khach.hang.*') || Request::routeIs('admin.nhom.khach.hang.*') ? 'show' : '' }}"
                 data-bs-parent="#sidebar-nav">
                 <li>
                     <a class="{{ Request::routeIs('admin.khach.hang.index') || Request::routeIs('admin.khach.hang.detail') ? 'active' : '' }}"
                        href="{{ route('admin.khach.hang.index') }}">
-                        <i class="bi bi-circle"></i><span>Danh sách</span>
+                        <i class="bi bi-circle"></i><span>Danh sách khách hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ Request::routeIs('admin.nhom.khach.hang.index') || Request::routeIs('admin.nhom.khach.hang.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.nhom.khach.hang.index') }}">
+                        <i class="bi bi-circle"></i><span>Danh sách nhóm khách hàng</span>
                     </a>
                 </li>
             </ul>
@@ -183,7 +190,7 @@
             <a class="nav-link {{ Request::routeIs('admin.thong.tin.*') ? '' : 'collapsed' }}"
                data-bs-target="#consultants-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-question-circle"></i><span>Lương + OKR</span><i
-                    class="bi bi-chevron-down ms-auto"></i>
+                        class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="consultants-nav"
                 class="nav-content collapse {{ Request::routeIs('admin.thong.tin.*') ? 'show' : '' }}"

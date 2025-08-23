@@ -21,6 +21,7 @@ use App\Http\Controllers\admin\AdminNguyenLieuThanhPhamController;
 use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNguyenLieuTinhController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
+use App\Http\Controllers\admin\AdminNhomKhachHangController;
 use App\Http\Controllers\admin\AdminPhieuSanXuatController;
 use App\Http\Controllers\admin\AdminSanPhamController;
 use App\Http\Controllers\admin\AdminSettingController;
@@ -92,6 +93,14 @@ Route::group(['prefix' => 'nguyen-lieu-san-xuat'], function () {
     Route::post('/store', [AdminNguyenLieuSanXuatController::class, 'store'])->name('admin.nguyen.lieu.san.xuat.store');
     Route::put('/update/{id}', [AdminNguyenLieuSanXuatController::class, 'update'])->name('admin.nguyen.lieu.san.xuat.update');
     Route::delete('/delete/{id}', [AdminNguyenLieuSanXuatController::class, 'delete'])->name('admin.nguyen.lieu.san.xuat.delete');
+});
+
+Route::group(['prefix' => 'nhom-khach-hang'], function () {
+    Route::get('/index', [AdminNhomKhachHangController::class, 'index'])->name('admin.nhom.khach.hang.index');
+    Route::get('/detail/{id}', [AdminNhomKhachHangController::class, 'detail'])->name('admin.nhom.khach.hang.detail');
+    Route::post('/store', [AdminNhomKhachHangController::class, 'store'])->name('admin.nhom.khach.hang.store');
+    Route::put('/update/{id}', [AdminNhomKhachHangController::class, 'update'])->name('admin.nhom.khach.hang.update');
+    Route::delete('/delete/{id}', [AdminNhomKhachHangController::class, 'delete'])->name('admin.nhom.khach.hang.delete');
 });
 
 Route::group(['prefix' => 'khach-hang'], function () {
