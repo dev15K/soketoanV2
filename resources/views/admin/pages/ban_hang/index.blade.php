@@ -24,641 +24,239 @@
             </div>
         @endif
 
-        <!-- Modal -->
-        <div class="modal fade" id="orderHistoryModal" tabindex="-1" aria-labelledby="orderHistoryModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="orderHistoryModalLabel">Danh sách lịch sử bán hàng</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-12">
-                            <div class="card recent-sales overflow-auto">
-                                <div class="card-body">
-                                    <h5 class="card-title"><label for="date_">Tìm kiếm </label></h5>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="d-flex justify-content-start align-items-center gap-4 w-100">
-                                            <div class="col-md-4 form-group">
-                                                <div class="d-flex justify-content-start align-items-center gap-2">
-                                                    <label for="start_date">Từ ngày: </label>
-                                                    <input type="date" class="form-control" id="start_date"
-                                                           value="{{ $start_date }}" name="start_date">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 form-group">
-                                                <div class="d-flex justify-content-start align-items-center gap-2">
-                                                    <label for="end_date">Đến ngày: </label>
-                                                    <input type="date" class="form-control" id="end_date"
-                                                           value="{{ $end_date }}" name="end_date">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 d-flex justify-content-end align-items-center">
-                                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm
-                                                kiếm
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="d-flex mb-4 mt-3 justify-content-end">
-                                <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('ban_hang')">
-                                    Xoá tất cả
-                                </button>
-                            </div>
-                            <div class="card recent-sales overflow-auto">
-
-                                <div class="card-body">
-                                    <table class="table table-hover small min-vw-100">
-                                        <colgroup>
-                                            <col width="50px">
-                                            <col width="100px">
-                                            <col width="100px">
-                                            <col width="150px">
-                                            <col width="300px">
-                                            <col width="200px">
-                                            <col width="300px">
-                                            <col width="250px">
-                                            <col width="150px">
-                                            <col width="250px">
-                                            <col width="150px">
-                                            <col width="250px">
-                                        </colgroup>
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">
-                                                <input type="checkbox" name="check_all" id="check_all">
-                                            </th>
-                                            <th scope="col">Hành động</th>
-                                            <th scope="col">Ngày tạo</th>
-                                            <th scope="col">Trạng thái đơn hàng</th>
-                                            <th scope="col">Khách hàng</th>
-                                            <th scope="col">Số điện thoại</th>
-                                            <th scope="col">Địa chỉ</th>
-                                            <th scope="col">Tổng tiền</th>
-                                            <th scope="col">Giảm giá</th>
-                                            <th scope="col">Đã thanh toán</th>
-                                            <th scope="col">Phương thức thanh toán</th>
-                                            <th scope="col">Công nợ</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($datas as $data)
-                                            <tr>
-                                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                                       id="check_item{{ $data->id }}"
-                                                                       value="{{ $data->id }}"></th>
-                                                <td>
-                                                    <div class="d-flex gap-2 justify-content-center">
-                                                        <a href="{{ route('admin.ban.hang.detail', $data->id) }}"
-                                                           class="btn btn-primary btn-sm">
-                                                            <i class="bi bi-eye"></i>
-                                                        </a>
-                                                        <form action="{{ route('admin.ban.hang.delete', $data->id) }}"
-                                                              method="post">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button"
-                                                                    class="btn btn-danger btn-sm btnDelete">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
-                                                <td>{{ $data->trang_thai }}</td>
-                                                <td>
-                                                    @if($data->ban_le)
-                                                        {{ $data->khach_le }}
-                                                    @else
-                                                        {{ $data->khachHang->ten }}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if($data->ban_le)
-                                                        {{ $data->so_dien_thoai }}
-                                                    @else
-                                                        {{ $data->khachHang->so_dien_thoai }}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if($data->ban_le)
-                                                        {{ $data->dia_chi }}
-                                                    @else
-                                                        {{ $data->khachHang->dia_chi }}
-                                                    @endif
-                                                </td>
-                                                <td>{{ parseNumber($data->tong_tien) }} VND</td>
-                                                <td>{{ parseNumber($data->giam_gia) }} VND</td>
-                                                <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
-                                                <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
-                                                <td>{{ parseNumber($data->cong_no) }} VND</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                            {{ $datas->links('pagination::bootstrap-5') }}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">Thêm mới bán hàng</h5>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#orderHistoryModal">
-                            Xem lịch sử bán hàng
-                        </button>
-                    </div>
-                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="" id="form_submit_order">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-8 col-sm-12 border-end">
-                                <div class="mt-3" id="formSanPham">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="form-group col-md-4 mb-2">
-                                            <label for="select_kho">Chọn kho</label>
-                                            <select id="select_kho" name="select_kho" class="form-control"
-                                                    onchange="changeLoaiSanPham()">
-                                                <option value="">Lựa chọn kho</option>
-                                                <option
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
-                                                    Kho Nguyên liệu Thô
-                                                </option>
-                                                <option
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
-                                                    Kho Nguyên liệu Phân loại
-                                                </option>
-                                                <option
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
-                                                    Kho Nguyên liệu Tinh
-                                                </option>
-                                                <option
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT }}">
-                                                    Kho Thành phẩm sản xuất
-                                                </option>
-                                                <option
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
-                                                    Kho đã Đóng gói
-                                                </option>
-                                            </select>
+                    <div class="col-12">
+                        <div class="card recent-sales overflow-auto">
+                            <div class="card-body">
+                                <h5 class="card-title"><label for="date_">Tìm kiếm </label></h5>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex justify-content-start align-items-center gap-4 w-100">
+                                        <div class="col-md-4 form-group">
+                                            <div class="d-flex justify-content-start align-items-center gap-2">
+                                                <label for="start_date">Từ ngày: </label>
+                                                <input type="date" class="form-control" id="start_date"
+                                                       value="{{ $start_date }}" name="start_date">
+                                            </div>
                                         </div>
-
-                                        <button class="btn btn-sm btn-primary d-none showForm" type="button"
-                                                onclick="add_items()">
-                                            <i class="bi bi-plus"></i> Thêm sản phẩm
+                                        <div class="col-md-4 form-group">
+                                            <div class="d-flex justify-content-start align-items-center gap-2">
+                                                <label for="end_date">Đến ngày: </label>
+                                                <input type="date" class="form-control" id="end_date"
+                                                       value="{{ $end_date }}" name="end_date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 d-flex justify-content-end align-items-center">
+                                        <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm
+                                            kiếm
                                         </button>
                                     </div>
-                                    <table class="table table-bordered d-none showForm">
-                                        <colgroup>
-                                            <col width="x">
-                                            <col width="25%">
-                                            <col width="15%">
-                                            <col width="25%">
-                                            <col width="5%">
-                                        </colgroup>
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">Tên sản phẩm</th>
-                                            <th scope="col">Giá bán</th>
-                                            <th scope="col">Số lượng/Khối lượng</th>
-                                            <th scope="col">Tổng tiền</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="tbodySanPham">
-
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-12">
-                                <div class="form-group">
-                                    <label for="khach_hang_id">Khách hàng</label>
-                                    <select id="khach_hang_id" name="khach_hang_id" class="form-control selectCustom"
-                                            onchange="changeKhachHang()">
-                                        <option value="0" {{ old('khach_hang_id') == 0 ? 'selected' : '' }}>Khách lẻ
-                                        </option>
-                                        @foreach($khachhangs as $khachhang)
-                                            <option
-                                                value="{{ $khachhang->id }}" {{ old('khach_hang_id') == $khachhang->id ? 'selected' : '' }}>
-                                                {{ $khachhang->ten }} : {{ $khachhang->so_dien_thoai }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
 
-                                <div class="row" id="formKhachLe">
-                                    <div class="form-group col-md-12">
-                                        <label for="ten_khach_hang">Tên khách hàng</label>
-                                        <input type="text" class="form-control" id="ten_khach_hang"
-                                               name="ten_khach_hang"
-                                               value="{{ old('ten_khach_hang') }}">
-                                    </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex mb-4 mt-3 justify-content-end">
+                            <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('ban_hang')">
+                                Xoá tất cả
+                            </button>
+                        </div>
+                        <div class="card recent-sales overflow-auto">
 
-                                    <div class="form-group col-md-6">
-                                        <label for="so_dien_thoai">Số điện thoại</label>
-                                        <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                               value="{{ old('so_dien_thoai') }}">
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        <label for="dia_chi">Địa chỉ chi tiết</label>
-                                        <input type="text" class="form-control" id="dia_chi" name="dia_chi"
-                                               value="{{ old('dia_chi') }}">
-                                    </div>
-                                </div>
-
-                                <div class="pt-3 pb-2 border-top border-bottom mt-3 mb-3">
-                                    <table class="table table-bordered">
-                                        <colgroup>
-                                            <col width="50%">
-                                            <col width="50%">
-                                        </colgroup>
-                                        <tbody>
+                            <div class="card-body pt-5">
+                                <table class="table table-hover datatable_wrapper small min-vw-100 pt">
+                                    <colgroup>
+                                        <col width="50px">
+                                        <col width="100px">
+                                        <col width="100px">
+                                        <col width="100px">
+                                        <col width="150px">
+                                        <col width="300px">
+                                        <col width="200px">
+                                        <col width="300px">
+                                        <col width="250px">
+                                        <col width="150px">
+                                        <col width="250px">
+                                        <col width="150px">
+                                        <col width="250px">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            <input type="checkbox" name="check_all" id="check_all">
+                                        </th>
+                                        <th scope="col">Hành động</th>
+                                        <th scope="col">Ngày tạo</th>
+                                        <th scope="col">Mã đơn hàng</th>
+                                        <th scope="col">Trạng thái đơn hàng</th>
+                                        <th scope="col">Khách hàng</th>
+                                        <th scope="col">Số điện thoại</th>
+                                        <th scope="col">Địa chỉ</th>
+                                        <th scope="col">Tổng tiền</th>
+                                        <th scope="col">Giảm giá</th>
+                                        <th scope="col">Đã thanh toán</th>
+                                        <th scope="col">Phương thức thanh toán</th>
+                                        <th scope="col">Công nợ</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($datas as $data)
                                         <tr>
+                                            <th scope="row"><input type="checkbox" name="check_item[]"
+                                                                   id="check_item{{ $data->id }}"
+                                                                   value="{{ $data->id }}"></th>
                                             <td>
-                                                <label for="tong_tien">Tổng tiền</label>
+                                                <div class="d-flex gap-2 justify-content-center">
+                                                    <a href="{{ route('admin.ban.hang.detail', $data->id) }}"
+                                                       class="btn btn-primary btn-sm">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                    <form action="{{ route('admin.ban.hang.delete', $data->id) }}"
+                                                          method="post">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                                class="btn btn-danger btn-sm btnDelete">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                             <td>
-                                                <input type="text"
-                                                       class="form-control bg-secondary bg-opacity-10 onlyNumber"
-                                                       id="tong_tien" name="tong_tien" value="{{ old('tong_tien') }}"
-                                                       readonly required>
+                                                <span
+                                                    class="text-nowrap">{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</span>
+                                            </td>
+                                            <td>{{ $data->ma_don_hang }}</td>
+                                            <td>
+                                                @if($data->trang_thai == \App\Enums\TrangThaiBanHang::ACTIVE())
+                                                    {{ $data->trang_thai }}
+                                                @else
+                                                    <span class="text-warning">{{ $data->trang_thai }}</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($data->ban_le)
+                                                    {{ $data->khach_le }}
+                                                @else
+                                                    {{ $data->khachHang->ten }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($data->ban_le)
+                                                    {{ $data->so_dien_thoai }}
+                                                @else
+                                                    {{ $data->khachHang->so_dien_thoai }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($data->ban_le)
+                                                    {{ $data->dia_chi }}
+                                                @else
+                                                    {{ $data->khachHang->dia_chi }}
+                                                @endif
+                                            </td>
+                                            <td>{{ parseNumber($data->tong_tien) }} VND</td>
+                                            <td>{{ parseNumber($data->giam_gia) }} VND</td>
+                                            <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
+                                            <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <span>{{ parseNumber($data->cong_no) }} VND</span>
+                                                    @if($data->cong_no > 0)
+                                                        <button class="btn btn-danger btn-sm" type="button"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modalThanhToan{{ $data->id }}">
+                                                            Thanh toán
+                                                        </button>
+                                                    @endif
+                                                </div>
+
+                                                @if($data->cong_no > 0)
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="modalThanhToan{{ $data->id }}"
+                                                         tabindex="-1"
+                                                         aria-labelledby="modalThanhToanLabel{{ $data->id }}"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <form method="post"
+                                                                      action="{{ route('admin.thanh.toan.store') }}">
+                                                                    @csrf
+                                                                    <div class="modal-header">
+                                                                        <h1 class="modal-title fs-5"
+                                                                            id="modalThanhToanLabel{{ $data->id }}">
+                                                                            Thanh toán công nợ đơn
+                                                                            hàng: {{ $data->ma_don_hang }}</h1>
+                                                                        <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="row">
+                                                                            <div class="form-group col-md-6">
+                                                                                <label for="so_quy_id">Loại
+                                                                                    quỹ</label>
+                                                                                <select
+                                                                                    class="form-control selectCustom"
+                                                                                    name="so_quy_id" id="so_quy_id">
+                                                                                    @foreach($loai_quies as $loai_quy)
+                                                                                        <option
+                                                                                            value="{{ $loai_quy->id }}">
+                                                                                            {{ $loai_quy->ten_loai_quy }}
+                                                                                        </option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label for="so_tien_thanh_toan">Số tiền
+                                                                                    thanh toán</label>
+                                                                                <input type="text"
+                                                                                       class="form-control onlyNumber"
+                                                                                       id="so_tien_thanh_toan"
+                                                                                       name="so_tien_thanh_toan">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="ghi_chu">Ghi chú</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="ghi_chu" name="ghi_chu">
+                                                                        </div>
+
+                                                                        <input type="hidden" name="ban_hang_id"
+                                                                               value="{{ $data->id }}">
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                                data-bs-dismiss="modal">Huỷ
+                                                                        </button>
+                                                                        <button type="submit" class="btn btn-primary">
+                                                                            Xác nhận thanh toán
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="giam_gia">Giảm giá</label>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control onlyNumber" id="giam_gia"
-                                                       oninput="calc_total_item()" name="giam_gia"
-                                                       value="{{ old('giam_gia', 0) }}" required>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="tong_thanh_toan">Tổng thanh toán</label>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control bg-secondary bg-opacity-10 onlyNumber"
-                                                       id="tong_thanh_toan"
-                                                       name="tong_thanh_toan" value="{{ old('tong_thanh_toan') }}"
-                                                       readonly required>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="da_thanht_toan">Khách đưa</label>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
-                                                       name="da_thanht_toan" value="{{ old('da_thanht_toan', 0) }}"
-                                                       oninput="calc_total_item()" required>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="cong_no">Công nợ</label>
-                                            </td>
-                                            <td>
-                                                <input type="text"
-                                                       class="form-control bg-secondary bg-opacity-10 onlyNumber"
-                                                       id="cong_no" name="cong_no" value="{{ old('cong_no') }}" readonly
-                                                       required>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                                <div class="form-group col-md-12">
-                                    <label for="loai_nguon_hang">Loại nguồn hàng</label>
-                                    <select class="form-control" name="loai_nguon_hang" id="loai_nguon_hang"
-                                            onchange="change_loai_nguon_hang();">
-                                        <option value="">Lựa chọn</option>
-                                        <option value="ncc">Nhà cung cấp</option>
-                                        <option value="kh">Khách hàng</option>
-                                        <option value="nv">Nhân viên</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-12">
-                                    <label for="nguon_hang">Nguồn hàng</label>
-                                    <select class="form-control selectCustom" name="nguon_hang" id="nguon_hang"
-                                            required>
-
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-12">
-                                    <label for="trang_thai">Trạng thái đơn hàng</label>
-                                    <select class="form-control" name="trang_thai" id="trang_thai">
-                                        <option
-                                            value="{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}">{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}</option>
-                                        <option
-                                            value="{{ \App\Enums\TrangThaiBanHang::PENDING() }}">{{ \App\Enums\TrangThaiBanHang::PENDING() }}</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-12">
-                                    <label for="loai_quy_id">Loại quỹ</label>
-                                    <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
-                                        @foreach($loai_quies as $loai_quy)
-                                            <option
-                                                value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
-                                                {{ $loai_quy->ten_loai_quy }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label for="note">Ghi chú</label>
-                                    <textarea name="note" class="form-control" id="note" rows="5"></textarea>
-                                </div>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
+
                         </div>
-
-                        <input type="hidden" name="loai_san_pham" id="loai_san_pham">
-
-                        <div class="w-100 d-flex justify-content-end mt-3 gap-2">
-                            <button type="submit" class="btn btn-primary">Thanh toán</button>
-                            <button type="reset" class="btn btn-danger">Hủy</button>
-                        </div>
-                    </form>
-
+                    </div>
                 </div>
 
             </div>
         </div>
 
-        <table class="d-none">
-            <tbody>
-            <tr id="listSanPham">
-                <td>
-                    <select name="san_pham_id[]" class="form-control" onchange="change_thong_tin_san_pham(this)"
-                            required>
-                        <option value="">Lựa chọn sản phẩm</option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" min="0" name="gia_bans[]" class="form-control gia_bans" required>
-                </td>
-                <td>
-                    <input type="number" min="1" name="so_luong[]" class="form-control so_luong" value="1"
-                           oninput="change_gia_san_pham(this)" required>
-                </td>
-                <td>
-                    <input type="text" name="tong_tien[]" class="form-control tong_tien" disabled readonly>
-                </td>
-                <td>
-                    <button type="button" onclick="remove_items(this)" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <script>
-            async function changeKhachHang() {
-                const khachHangId = $('#khach_hang_id').val();
-                if (khachHangId !== 0) {
-                    await selectKhachHang(khachHangId);
-                }
-            }
-
-            async function selectKhachHang(id) {
-                const url = `{{ route('api.khach.hang.detail') }}?id=${id}`;
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    async: false,
-                    success: function (data, textStatus) {
-                        renderKhachHnag(data.data);
-                    },
-                    error: function (request, status, error) {
-                        let data = JSON.parse(request.responseText);
-                        alert(data.message);
-                    }
-                });
-            }
-
-            function renderKhachHnag(data) {
-                const tenKhachHang = data.ten;
-                const soDienThoai = data.so_dien_thoai;
-                const diaChi = data.dia_chi;
-                $('#ten_khach_hang').val(tenKhachHang);
-                $('#so_dien_thoai').val(soDienThoai);
-                $('#dia_chi').val(diaChi);
-            }
-
-            async function changeLoaiSanPham() {
-                const select_kho = $('#select_kho');
-                $('#tbodySanPham').empty();
-                const loaiSanPham = select_kho.val();
-                $('#loai_san_pham').val(loaiSanPham);
-                const showForm = $('.showForm');
-                showForm.removeClass('d-none');
-                await getListSanPham(loaiSanPham);
-            }
-
-            async function getListSanPham(loaiSanPham) {
-                let url = '';
-                switch (loaiSanPham) {
-                    case 'NGUYEN_LIEU_THO':
-                        url = `{{ route('api.nguyen.lieu.tho.list') }}`;
-                        break;
-                    case 'NGUYEN_LIEU_PHAN_LOAI':
-                        url = `{{ route('api.nguyen.lieu.phan.loai.list') }}`;
-                        break;
-                    case 'NGUYEN_LIEU_TINH':
-                        url = `{{ route('api.nguyen.lieu.tinh.list') }}`;
-                        break;
-                    case 'NGUYEN_LIEU_SAN_XUAT':
-                        url = `{{ route('api.nguyen.lieu.san.xuat.list') }}`;
-                        break;
-                    case 'NGUYEN_LIEU_THANH_PHAM':
-                        url = `{{ route('api.nguyen.lieu.thanh.pham.list') }}`;
-                        break;
-                }
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    async: false,
-                    success: function (data, textStatus) {
-                        renderSanPham(data.data, loaiSanPham);
-                    },
-                    error: function (request, status, error) {
-                        let data = JSON.parse(request.responseText);
-                        alert(data.message);
-                    }
-                });
-            }
-
-            function renderSanPham(data, loaiSanPham) {
-                let html = '';
-                let gia_ = null;
-                data.forEach((item) => {
-                    let ten_;
-                    switch (loaiSanPham) {
-                        case 'NGUYEN_LIEU_THO':
-                            ten_ = item.ten_nguyen_lieu + ' : ' +
-                                (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_phan_loai)) + 'kg';
-                            gia_ = item.chi_phi_mua / item.khoi_luong;
-                            break;
-                        case 'NGUYEN_LIEU_PHAN_LOAI':
-                            ten_ = item.ma_don_hang + ' : ' +
-                                (parseFloat(item.tong_khoi_luong) - parseFloat(item.khoi_luong_da_phan_loai ?? 0)) + 'kg';
-                            if (!gia_) {
-                                gia_ = item.gia_sau_phan_loai;
-                            }
-                            break;
-                        case 'NGUYEN_LIEU_TINH':
-                            ten_ = item.code + ' : ' + (parseFloat(item.tong_khoi_luong) - parseFloat(item.so_luong_da_dung ?? 0)) + 'kg';
-                            if (!gia_) {
-                                gia_ = item.gia_tien;
-                            }
-                            break;
-                        case 'NGUYEN_LIEU_SAN_XUAT':
-                            ten_ = item.code + ' : ' + (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_dung ?? 0)) + item.don_vi_tinh;
-                            if (!gia_) {
-                                gia_ = item.gia_tien;
-                            }
-                            break;
-                        case 'NGUYEN_LIEU_THANH_PHAM':
-                            ten_ = item.ten_san_pham + ' : ' + (parseFloat(item.so_luong) - parseFloat(item.so_luong_da_ban ?? 0)) + 'kg';
-                            if (!gia_) {
-                                gia_ = item.price;
-                            }
-                            break;
-                    }
-                    html += `<option value="${item.id}">${ten_}</option>`;
-                });
-
-                const listSanPham = $('#listSanPham');
-                listSanPham.find('select').empty().append(html);
-                listSanPham.find('input.gia_bans').val(gia_);
-                listSanPham.find('input.tong_tien').val(gia_);
-            }
-
-            function change_gia_san_pham(el) {
-                const totalEl = $(el).closest('tr').find('input.tong_tien');
-                const gia_ = $(el).closest('tr').find('input.gia_bans').val();
-                const so_luong = $(el).closest('tr').find('input.so_luong').val();
-
-                totalEl.val(gia_ * so_luong);
-
-                change_thanh_toan();
-            }
-
-            function change_thong_tin_san_pham(el) {
-                const loaiSanPham = $('#loai_san_pham').val();
-                const id = $(el).val();
-                layThongTinNguyenLieu(id, el, loaiSanPham);
-            }
-
-            function render_chi_tiet_san_pham(data, element, loaiSanPham) {
-                let gia_ = null;
-                switch (loaiSanPham) {
-                    case 'NGUYEN_LIEU_THO':
-                        gia_ = data.chi_phi_mua / data.khoi_luong;
-                        break;
-                    case 'NGUYEN_LIEU_PHAN_LOAI':
-                        gia_ = data.gia_sau_phan_loai;
-                        break;
-                    case 'NGUYEN_LIEU_TINH':
-                        gia_ = data.gia_tien;
-                        break;
-                    case 'NGUYEN_LIEU_SAN_XUAT':
-                        gia_ = data.gia_tien;
-                        break;
-                    case 'NGUYEN_LIEU_THANH_PHAM':
-                        gia_ = data.price;
-                        break;
-                }
-
-                $(element).closest('tr').find('input.gia_bans').val(gia_);
-
-                change_gia_san_pham(element);
-            }
-
-            function layThongTinNguyenLieu(id, el, loaiSanPham) {
-                const url = `{{ route('api.chi.tiet.nguyen.lieu') }}?id=${id}&type=${loaiSanPham}`;
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    async: false,
-                    success: function (data, textStatus) {
-                        render_chi_tiet_san_pham(data.data, el, loaiSanPham);
-                    },
-                    error: function (request, status, error) {
-                        let data = JSON.parse(request.responseText);
-                        alert(data.message);
-                    }
-                });
-            }
-
-            $(document).ready(function () {
-                add_items();
-            })
-
-            function add_items(el) {
-                const tbody = $('#tbodySanPham');
-                const tr = $('#listSanPham').clone();
-                tbody.append(tr);
-
-                render_select_custom();
-
-                change_thanh_toan();
-            }
-
-            function remove_items(el) {
-                $(el).parent().closest('tr').remove();
-                change_thanh_toan();
-            }
-
-            function render_select_custom() {
-                $('#tbodySanPham select').select2({
-                    theme: 'bootstrap-5',
-                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                    placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',
-                    allowClear: Boolean($(this).data('allow-clear')) || true,
-                    minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,
-                    containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',
-                    dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',
-                    dropdownAutoWidth: $(this).data('dropdown-auto-width'),
-                    dropdownParent: $(this).data('dropdown-parent'),
-                    dropdownPosition: $(this).data('dropdown-position'),
-                    initSelection: function (element, callback) {
-                        const id = element.val();
-                        layThongTinNguyenLieu(id, element, $('#loai_san_pham').val());
-                    }
-                });
-            }
-        </script>
     </section>
 
     <script>
@@ -668,87 +266,5 @@
             window.location.href = "{{ route('admin.ban.hang.index') }}?start_date=" + start_date + "&end_date=" + end_date;
         }
 
-        $(document).ready(function () {
-            let start_date = $('#start_date').val();
-            let end_date = $('#end_date').val();
-            if (start_date || end_date) {
-                const modal = new bootstrap.Modal(document.getElementById('orderHistoryModal'));
-                modal.show();
-            }
-        });
-    </script>
-
-    <script>
-        function change_thanh_toan() {
-            calc_total_item();
-
-            let tong_thanh_toan = $('#tong_thanh_toan').val() || 0;
-            $('#da_thanht_toan').val(tong_thanh_toan);
-
-            $('#cong_no').val(0);
-        }
-
-        function calc_total_item() {
-            let total = 0;
-
-            $('#form_submit_order input[name="tong_tien[]"]').each(function () {
-                total += parseFloat(this.value) || 0;
-            });
-
-            $('#tong_tien').val(total);
-
-            let giam_gia = $('#giam_gia').val() || 0;
-            let da_thanht_toan = $('#da_thanht_toan').val() || 0;
-
-            let tong_thanh_toan = total - giam_gia;
-            let cong_no = tong_thanh_toan - da_thanht_toan;
-
-            $('#tong_thanh_toan').val(tong_thanh_toan);
-            $('#cong_no').val(cong_no);
-        }
-    </script>
-
-    <script>
-        async function change_loai_nguon_hang() {
-            let loai_nguon_hang = $('#loai_nguon_hang').val();
-
-            if (loai_nguon_hang) {
-                await nguon_hang(loai_nguon_hang);
-            } else {
-                $('#nguon_hang').empty().append('<option value="">Lựa chọn...</option>');
-            }
-        }
-
-        async function nguon_hang(loai_nguon_hang) {
-            let url = `{{ route('api.nguon.hang.ban.hang') }}?loai_nguon_hang=${loai_nguon_hang}`;
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                async: false,
-                success: function (data, textStatus) {
-                    render_nguon_hang(data.data, loai_nguon_hang);
-                },
-                error: function (request, status, error) {
-                    let data = JSON.parse(request.responseText);
-                    alert(data.message);
-                }
-            });
-        }
-
-        function render_nguon_hang(data, loai_nguon_hang) {
-            let html = '<option value="">Lựa chọn...</option>';
-            for (let i = 0; i < data.length; i++) {
-                if (loai_nguon_hang == 'ncc') {
-                    html += `<option value="${data[i].id}">${data[i].ten}</option>`;
-                } else if (loai_nguon_hang == 'kh') {
-                    html += `<option value="${data[i].id}">${data[i].ten}</option>`;
-                } else {
-                    html += `<option value="${data[i].id}">${data[i].full_name}</option>`;
-                }
-            }
-
-            $('#nguon_hang').empty().append(html);
-        }
     </script>
 @endsection

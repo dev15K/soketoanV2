@@ -13,7 +13,7 @@
 <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
         <div class="table-responsive mt-3">
-            <table class="table table-hover datatable" id="table-payment-history">
+            <table class="table table-hover datatable_wrapper" id="table-payment-history">
                 <colgroup>
                     <col width="120px">
                     <col width="120px">
@@ -67,7 +67,7 @@
     </div>
     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <div class="table-responsive mt-3">
-            <table class="table table-hover datatable" id="table-order-history" style="width: 100vw">
+            <table class="table table-hover datatable_wrapper" id="table-order-history" style="width: 100vw">
                 <thead>
                 <tr class="sticky-top top-0 position-sticky" style="z-index: 100">
                     <th scope="col">

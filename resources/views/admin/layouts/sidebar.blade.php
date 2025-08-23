@@ -102,9 +102,9 @@
             <ul id="products-nav" class="nav-content collapse {{ Request::routeIs('admin.ban.hang.*') ? 'show' : '' }}"
                 data-bs-parent="#sidebar-nav">
                 <li>
-                    <a class="{{ Request::routeIs('admin.ban.hang.index') || Request::routeIs('admin.ban.hang.detail') ? 'active' : '' }}"
-                       href="{{ route('admin.ban.hang.index') }}">
-                        <i class="bi bi-circle"></i><span>Danh sách</span>
+                    <a class="{{ Request::routeIs('admin.ban.hang.*') ? 'active' : '' }}"
+                       href="{{ route('admin.ban.hang.create') }}">
+                        <i class="bi bi-circle"></i><span>Thêm mới</span>
                     </a>
                 </li>
             </ul>

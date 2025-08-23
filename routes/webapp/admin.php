@@ -27,6 +27,7 @@ use App\Http\Controllers\admin\AdminSettingController;
 use App\Http\Controllers\admin\AdminSoQuyController;
 use App\Http\Controllers\admin\AdminThongTinController;
 use App\Http\Controllers\admin\AdminUserController;
+use App\Http\Controllers\admin\LichSuThanhToanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -134,10 +135,15 @@ Route::group(['prefix' => 'san-pham'], function () {
 
 Route::group(['prefix' => 'ban-hang'], function () {
     Route::get('/index', [AdminBanHangController::class, 'index'])->name('admin.ban.hang.index');
+    Route::get('/create', [AdminBanHangController::class, 'create'])->name('admin.ban.hang.create');
     Route::get('/detail/{id}', [AdminBanHangController::class, 'detail'])->name('admin.ban.hang.detail');
     Route::post('/store', [AdminBanHangController::class, 'store'])->name('admin.ban.hang.store');
     Route::put('/update/{id}', [AdminBanHangController::class, 'update'])->name('admin.ban.hang.update');
     Route::delete('/delete/{id}', [AdminBanHangController::class, 'delete'])->name('admin.ban.hang.delete');
+});
+
+Route::group(['prefix' => 'lich-su-thanh-toan'], function () {
+    Route::post('/store', [LichSuThanhToanController::class, 'store'])->name('admin.thanh.toan.store');
 });
 
 Route::group(['prefix' => 'loai-quy'], function () {

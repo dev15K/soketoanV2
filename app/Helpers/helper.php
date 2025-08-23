@@ -120,6 +120,11 @@ if (!function_exists('convertNumber')) {
     {
         return 'LH' . convertNumber($num);
     }
+
+    function generateCodeBanHang($num): string
+    {
+        return 'DH' . convertNumber($num);
+    }
 }
 
 if (!function_exists('updateTonKho')) {

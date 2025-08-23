@@ -193,7 +193,7 @@
     });
 
     function init_datatable(page_size = 10) {
-        $('.datatable').DataTable({
+        $('.datatable_wrapper').DataTable({
             "paging": true,
             "pageLength": page_size,
             "searching": true,
