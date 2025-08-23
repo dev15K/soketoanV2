@@ -72,64 +72,66 @@
                     <div class="d-flex mb-4 mt-3 justify-content-end">
                         <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('thong_tin')">Xoá tất cả</button>
                     </div>
-                    <table class="table table-hover">
-                        <colgroup>
-                            <col width="5%">
-                            <col width="x">
-                            <col width="30%">
-                            <col width="10%">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
-                            <th scope="col">Tên hiển thị</th>
-                            <th scope="col">File</th>
-                            <th scope="col">Hành động</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($datas as $data)
+                   <div class="table-responsive pt-3">
+                        <table class="table datatable_wrapper table-hover">
+                            <colgroup>
+                                <col width="5%">
+                                <col width="x">
+                                <col width="30%">
+                                <col width="10%">
+                            </colgroup>
+                            <thead>
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
-                                <td>{{ $data->display_name }}</td>
-                                <td>
-                                    <a href="{{ $data->file_path }}"
-                                       download="{{ $data->file_name }}">
-                                        <i class="bi bi-download"></i> {{ $data->file_name }}</a>
-                                </td>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ $data->file_path }}" target="_blank"
-                                           class="btn btn-success btn-sm">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="{{ route('admin.thong.tin.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <form action="{{ route('admin.thong.tin.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
+                                <th scope="col">
+                                    <input type="checkbox" name="check_all" id="check_all">
+                                </th>
+                                <th scope="col">Tên hiển thị</th>
+                                <th scope="col">File</th>
+                                <th scope="col">Hành động</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($datas as $data)
+                                <tr>
+                                    <th scope="row"><input type="checkbox" name="check_item[]"
+                                                           id="check_item{{ $data->id }}"
+                                                           value="{{ $data->id }}"></th>
+                                    <td>{{ $data->display_name }}</td>
+                                    <td>
+                                        <a href="{{ $data->file_path }}"
+                                           download="{{ $data->file_name }}">
+                                            <i class="bi bi-download"></i> {{ $data->file_name }}</a>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{{ $data->file_path }}" target="_blank"
+                                               class="btn btn-success btn-sm">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.thong.tin.detail', $data->id) }}"
+                                               class="btn btn-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <form action="{{ route('admin.thong.tin.delete', $data->id) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 
             </div>
-            {{ $datas->links('pagination::bootstrap-5') }}
+
         </div>
     </section>
 @endsection

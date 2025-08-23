@@ -19,7 +19,7 @@ class AdminKhachHangController extends Controller
     {
         $datas = KhachHang::where('trang_thai', '!=', TrangThaiKhachHang::DELETED())
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
         return view('admin.pages.khach_hang.index', compact('datas'));
     }
 

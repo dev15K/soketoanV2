@@ -32,7 +32,7 @@ class Controller extends BaseController
             })
             ->where('so_tien', '>', 0)
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
 
         $ton_dau = get_ton_dau($start_date, $end_date);
         $ton_cuoi = get_ton_cuoi($start_date, $end_date);

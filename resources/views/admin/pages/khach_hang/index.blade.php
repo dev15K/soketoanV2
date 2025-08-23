@@ -101,90 +101,91 @@
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
 
-                <div class="card-body">
+                <div class="card-body pt-3">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
                         <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('khach_hang')">Xoá
                             tất cả
                         </button>
                     </div>
-                    <table class="table table-hover">
-                        <colgroup>
-                            <col width="5%">
-                            <col width="10%">
-                            <col width="20%">
-                            <col width="10%">
-                            <col width="x">
-                            <col width="20%">
-                            <col width="10%">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
-                            <th scope="col">Hành động</th>
-                            <th scope="col">Họ và tên</th>
-                            <th scope="col">Số điện thoại</th>
-                            <th scope="col">Địa chỉ</th>
-                            <th scope="col">Công nợ</th>
-                            <th scope="col">Trạng thái</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($datas as $data)
+                   <div class="table-responsive pt-3">
+                        <table class="table table-hover datatable_wrapper">
+                            <colgroup>
+                                <col width="5%">
+                                <col width="10%">
+                                <col width="20%">
+                                <col width="10%">
+                                <col width="x">
+                                <col width="20%">
+                                <col width="10%">
+                            </colgroup>
+                            <thead>
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <button type="button" class="btn btn-outline-success btn-sm"
-                                                data-bs-toggle="modal"
-                                                onclick="show_khach_hang('{{ $data->id }}')"
-                                                data-bs-target="#modalUserInfo">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <a href="{{ route('admin.khach.hang.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <form action="{{ route('admin.khach.hang.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td>{{ $data->ten }}</td>
-                                <td>{{ $data->so_dien_thoai }}</td>
-                                <td>{{ $data->dia_chi }}</td>
-                                <td>
-                                    @php
-                                        $ban_hangs = \App\Models\BanHang::where('trang_thai', '!=', \App\Enums\TrangThaiBanHang::DELETED())
-                                            ->where('khach_hang_id', $data->id)
-                                            ->get();
-
-                                        $total = 0;
-                                        foreach ($ban_hangs as $ban_hang) {
-                                            $total += $ban_hang->cong_no;
-                                        }
-                                    @endphp
-                                    {{ parseNumber($total, 0) }} VND
-                                </td>
-                                <td>{{ $data->trang_thai }}</td>
+                                <th scope="col">
+                                    <input type="checkbox" name="check_all" id="check_all">
+                                </th>
+                                <th scope="col">Hành động</th>
+                                <th scope="col">Họ và tên</th>
+                                <th scope="col">Số điện thoại</th>
+                                <th scope="col">Địa chỉ</th>
+                                <th scope="col">Công nợ</th>
+                                <th scope="col">Trạng thái</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($datas as $data)
+                                <tr>
+                                    <th scope="row"><input type="checkbox" name="check_item[]"
+                                                           id="check_item{{ $data->id }}"
+                                                           value="{{ $data->id }}"></th>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <button type="button" class="btn btn-outline-success btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    onclick="show_khach_hang('{{ $data->id }}')"
+                                                    data-bs-target="#modalUserInfo">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <a href="{{ route('admin.khach.hang.detail', $data->id) }}"
+                                               class="btn btn-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <form action="{{ route('admin.khach.hang.delete', $data->id) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    <td>{{ $data->ten }}</td>
+                                    <td>{{ $data->so_dien_thoai }}</td>
+                                    <td>{{ $data->dia_chi }}</td>
+                                    <td>
+                                        @php
+                                            $ban_hangs = \App\Models\BanHang::where('trang_thai', '!=', \App\Enums\TrangThaiBanHang::DELETED())
+                                                ->where('khach_hang_id', $data->id)
+                                                ->get();
 
+                                            $total = 0;
+                                            foreach ($ban_hangs as $ban_hang) {
+                                                $total += $ban_hang->cong_no;
+                                            }
+                                        @endphp
+                                        {{ parseNumber($total, 0) }} VND
+                                    </td>
+                                    <td>{{ $data->trang_thai }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 
             </div>
-            {{ $datas->links('pagination::bootstrap-5') }}
+
         </div>
     </section>
 

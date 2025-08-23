@@ -106,81 +106,83 @@
                             tất cả
                         </button>
                     </div>
-                    <table class="table table-hover">
-                        <colgroup>
-                            <col width="5%">
-                            <col width="10%">
-                            <col width="20%">
-                            <col width="10%">
-                            <col width="x">
-                            <col width="20%">
-                            <col width="10%">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
-                            <th scope="col">Hành động</th>
-                            <th scope="col">Họ và tên</th>
-                            <th scope="col">Số điện thoại</th>
-                            <th scope="col">Địa chỉ</th>
-                            <th scope="col">Công nợ</th>
-                            <th scope="col">Trạng thái</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($datas as $data)
+                   <div class="table-responsive pt-3">
+                        <table class="table datatable_wrapper table-hover">
+                            <colgroup>
+                                <col width="5%">
+                                <col width="10%">
+                                <col width="20%">
+                                <col width="10%">
+                                <col width="x">
+                                <col width="20%">
+                                <col width="10%">
+                            </colgroup>
+                            <thead>
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('api.nha.cung.cap.show') }}?id={{ $data->id }}"
-                                           class="btn btn-outline-success btn-sm">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="{{ route('admin.nha.cung.cap.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <form action="{{ route('admin.nha.cung.cap.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td>{{ $data->ten }}</td>
-                                <td>{{ $data->so_dien_thoai }}</td>
-                                <td>{{ $data->dia_chi }}</td>
-                                <td>
-                                    @php
-                                        $nguyen_lieu_thos = \App\Models\NguyenLieuTho::where('trang_thai', '!=', \App\Enums\TrangThaiNguyenLieuTho::DELETED())
-                                            ->where('nha_cung_cap_id', $data->id)
-                                            ->get();
-
-                                        $total = 0;
-                                        foreach ($nguyen_lieu_thos as $nguyen_lieu_tho) {
-                                            $total += $nguyen_lieu_tho->cong_no;
-                                        }
-                                    @endphp
-                                    {{ parseNumber($total, 0) }} VND
-                                </td>
-                                <td>{{ $data->trang_thai }}</td>
+                                <th scope="col">
+                                    <input type="checkbox" name="check_all" id="check_all">
+                                </th>
+                                <th scope="col">Hành động</th>
+                                <th scope="col">Họ và tên</th>
+                                <th scope="col">Số điện thoại</th>
+                                <th scope="col">Địa chỉ</th>
+                                <th scope="col">Công nợ</th>
+                                <th scope="col">Trạng thái</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($datas as $data)
+                                <tr>
+                                    <th scope="row"><input type="checkbox" name="check_item[]"
+                                                           id="check_item{{ $data->id }}"
+                                                           value="{{ $data->id }}"></th>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{{ route('api.nha.cung.cap.show') }}?id={{ $data->id }}"
+                                               class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.nha.cung.cap.detail', $data->id) }}"
+                                               class="btn btn-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <form action="{{ route('admin.nha.cung.cap.delete', $data->id) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    <td>{{ $data->ten }}</td>
+                                    <td>{{ $data->so_dien_thoai }}</td>
+                                    <td>{{ $data->dia_chi }}</td>
+                                    <td>
+                                        @php
+                                            $nguyen_lieu_thos = \App\Models\NguyenLieuTho::where('trang_thai', '!=', \App\Enums\TrangThaiNguyenLieuTho::DELETED())
+                                                ->where('nha_cung_cap_id', $data->id)
+                                                ->get();
+
+                                            $total = 0;
+                                            foreach ($nguyen_lieu_thos as $nguyen_lieu_tho) {
+                                                $total += $nguyen_lieu_tho->cong_no;
+                                            }
+                                        @endphp
+                                        {{ parseNumber($total, 0) }} VND
+                                    </td>
+                                    <td>{{ $data->trang_thai }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 
             </div>
-            {{ $datas->links('pagination::bootstrap-5') }}
+
         </div>
     </section>
 @endsection

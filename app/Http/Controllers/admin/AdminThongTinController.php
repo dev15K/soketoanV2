@@ -12,7 +12,7 @@ class AdminThongTinController extends Controller
     {
         $datas = ThongTin::where('is_deleted', null)
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
         return view('admin.pages.thong_tin.index', compact('datas'));
     }
 

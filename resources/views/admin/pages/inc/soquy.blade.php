@@ -98,67 +98,69 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-hover">
-                <colgroup>
-                    <col width="120px">
-                    <col width="120px">
-                    <col width="10%">
-                    <col width="15%">
-                    <col width="x">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th scope="col">Hành động</th>
-                    <th scope="col">Ngày</th>
-                    <th scope="col">Loại</th>
-                    <th scope="col">Tên quỹ</th>
-                    <th scope="col">Số tiền</th>
-                    <th scope="col">Nội dung</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($datas as $data)
+           <div class="table-responsive pt-3">
+                <table class="table datatable_wrapper table-hover">
+                    <colgroup>
+                        <col width="120px">
+                        <col width="120px">
+                        <col width="10%">
+                        <col width="15%">
+                        <col width="x">
+                    </colgroup>
+                    <thead>
                     <tr>
-                        <td>
-                            <div class="d-flex gap-2 justify-content-center">
-                                <a href="{{ route('admin.so.quy.detail', $data->id) }}"
-                                   class="btn btn-primary btn-sm">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <form action="{{ route('admin.so.quy.delete', $data->id) }}"
-                                      method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                        <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                        <td>
-                            @if($data->loai == 0)
-                                Phiếu Chi
-                            @else
-                                Phiếu Thu
-                            @endif
-                        </td>
-                        <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
-                        <td>{{ parseNumber($data->so_tien) }} VND</td>
-                        <td>{{ $data->noi_dung }}</td>
+                        <th scope="col">Hành động</th>
+                        <th scope="col">Ngày</th>
+                        <th scope="col">Loại</th>
+                        <th scope="col">Tên quỹ</th>
+                        <th scope="col">Số tiền</th>
+                        <th scope="col">Nội dung</th>
                     </tr>
-                @endforeach
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th scope="col" colspan="4">Tổng:</th>
-                    <th scope="col" colspan="2">{{ parseNumber($datas->sum('so_tien')) }} VND</th>
-                </tr>
-                </tfoot>
-            </table>
+                    </thead>
+                    <tbody>
+                    @foreach($datas as $data)
+                        <tr>
+                            <td>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a href="{{ route('admin.so.quy.detail', $data->id) }}"
+                                       class="btn btn-primary btn-sm">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form action="{{ route('admin.so.quy.delete', $data->id) }}"
+                                          method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                            <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                            <td>
+                                @if($data->loai == 0)
+                                    Phiếu Chi
+                                @else
+                                    Phiếu Thu
+                                @endif
+                            </td>
+                            <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
+                            <td>{{ parseNumber($data->so_tien) }} VND</td>
+                            <td>{{ $data->noi_dung }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th scope="col" colspan="4">Tổng:</th>
+                        <th scope="col" colspan="2">{{ parseNumber($datas->sum('so_tien')) }} VND</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
 
         </div>
 
     </div>
-    {{ $datas->links('pagination::bootstrap-5') }}
+
 </div>

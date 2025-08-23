@@ -262,118 +262,120 @@
             </div>
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                    <table class="table table-hover table-sm">
-                        <colgroup>
-                            <col width="5%">
-                            <col width="60px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="200px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="250px">
-                            <col width="250px">
-                            <col width="250px">
-                            <col width="150px">
-                            <col width="150px">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
-                            <th scope="col">Hành động</th>
-                            <th scope="col">Ngày</th>
-                            <th scope="col">Mã phiếu</th>
-                            <th scope="col">Tên nguyên liệu</th>
-                            <th scope="col">Số LÔ SX</th>
-                            <th scope="col">Tổng KL(kg)</th>
-                            <th scope="col">KL đã dùng(kg)</th>
-                            <th scope="col">KL tồn(kg)</th>
-                            <th scope="col">Đơn giá</th>
-                            <th scope="col">Tổng tiền</th>
-                            <th scope="col">Giá trị tồn kho</th>
-                            <th scope="col">Nhân sự xử lý</th>
-                            <th scope="col">Thời gian dự kiến hoàn thành SX</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($datas as $data)
+                   <div class="table-responsive pt-3">
+                        <table class="table datatable_wrapper table-hover table-sm">
+                            <colgroup>
+                                <col width="5%">
+                                <col width="60px">
+                                <col width="150px">
+                                <col width="150px">
+                                <col width="150px">
+                                <col width="150px">
+                                <col width="200px">
+                                <col width="150px">
+                                <col width="150px">
+                                <col width="250px">
+                                <col width="250px">
+                                <col width="250px">
+                                <col width="150px">
+                                <col width="150px">
+                            </colgroup>
+                            <thead>
                             <tr>
-                                <th scope="row">
-                                    @if($data->khoi_luong_da_dung > 0)
-                                        <input type="checkbox" disabled>
-                                    @else
-                                        <input type="checkbox" name="check_item[]"
-                                               id="check_item{{ $data->id }}"
-                                               value="{{ $data->id }}">
-                                    @endif
+                                <th scope="col">
+                                    <input type="checkbox" name="check_all" id="check_all">
                                 </th>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.phieu.san.xuat.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
+                                <th scope="col">Hành động</th>
+                                <th scope="col">Ngày</th>
+                                <th scope="col">Mã phiếu</th>
+                                <th scope="col">Tên nguyên liệu</th>
+                                <th scope="col">Số LÔ SX</th>
+                                <th scope="col">Tổng KL(kg)</th>
+                                <th scope="col">KL đã dùng(kg)</th>
+                                <th scope="col">KL tồn(kg)</th>
+                                <th scope="col">Đơn giá</th>
+                                <th scope="col">Tổng tiền</th>
+                                <th scope="col">Giá trị tồn kho</th>
+                                <th scope="col">Nhân sự xử lý</th>
+                                <th scope="col">Thời gian dự kiến hoàn thành SX</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($datas as $data)
+                                <tr>
+                                    <th scope="row">
                                         @if($data->khoi_luong_da_dung > 0)
-                                            <button type="button" class="btn btn-danger btn-sm" disabled>
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                            <input type="checkbox" disabled>
                                         @else
-                                            <form action="{{ route('admin.phieu.san.xuat.delete', $data->id) }}"
-                                                  method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                            <input type="checkbox" name="check_item[]"
+                                                   id="check_item{{ $data->id }}"
+                                                   value="{{ $data->id }}">
+                                        @endif
+                                    </th>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{{ route('admin.phieu.san.xuat.detail', $data->id) }}"
+                                               class="btn btn-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            @if($data->khoi_luong_da_dung > 0)
+                                                <button type="button" class="btn btn-danger btn-sm" disabled>
                                                     <i class="bi bi-trash"></i>
                                                 </button>
-                                            </form>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
-                                <td>{{ $data->code }}</td>
-                                <td>{{ $data->ten_phieu }}</td>
-                                <td>{{ $data->so_lo_san_xuat }}</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
-                                <td>{{ parseNumber($data->khoi_luong_da_dung) }} kg</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
-                                <td>{{ parseNumber($data->don_gia, 0) }} VND</td>
-                                <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
-                                <td>{{ parseNumber($data->gia_tri_ton_kho, 0) }} VND</td>
-                                <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
-                                <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
+                                            @else
+                                                <form action="{{ route('admin.phieu.san.xuat.delete', $data->id) }}"
+                                                      method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
+                                    <td>{{ $data->code }}</td>
+                                    <td>{{ $data->ten_phieu }}</td>
+                                    <td>{{ $data->so_lo_san_xuat }}</td>
+                                    <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_da_dung) }} kg</td>
+                                    <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
+                                    <td>{{ parseNumber($data->don_gia, 0) }} VND</td>
+                                    <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
+                                    <td>{{ parseNumber($data->gia_tri_ton_kho, 0) }} VND</td>
+                                    <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
+                                    <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                            <tfoot class="bg-primary bg-opacity-10">
+                            <tr>
+                                <th scope="col">Tổng:</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_dung'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }}
+                                    kg
+                                </th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                        <tfoot class="bg-primary bg-opacity-10">
-                        <tr>
-                            <th scope="col">Tổng:</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_dung'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }}
-                                kg
-                            </th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
+                    </div>
 
                 </div>
 
             </div>
-            {{ $datas->links('pagination::bootstrap-5') }}
+
         </div>
     </section>
 @endsection
