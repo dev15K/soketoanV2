@@ -270,6 +270,35 @@
                                 </div>
 
                                 <div class="form-group col-md-12">
+                                    <label for="loai_nguon_hang">Loại nguồn hàng</label>
+                                    <select class="form-control" name="loai_nguon_hang" id="loai_nguon_hang"
+                                            onchange="change_loai_nguon_hang();">
+                                        <option value="">Lựa chọn</option>
+                                        <option {{ $banhang->loai_nguon_hang == 'ncc' ? 'selected' : '' }} value="ncc">Nhà cung cấp</option>
+                                        <option {{ $banhang->loai_nguon_hang == 'kh' ? 'selected' : '' }} value="kh">Khách hàng</option>
+                                        <option {{ $banhang->loai_nguon_hang == 'nv' ? 'selected' : '' }} value="nv">Nhân viên</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="nguon_hang">Nguồn hàng</label>
+                                    <select class="form-control selectCustom" name="nguon_hang" id="nguon_hang"
+                                            required>
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="trang_thai">Trạng thái đơn hàng</label>
+                                    <select class="form-control" name="trang_thai" id="trang_thai">
+                                        <option {{ $banhang->trang_thai == \App\Enums\TrangThaiBanHang::ACTIVE() ? 'selected' : '' }}
+                                            value="{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}">{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}</option>
+                                        <option {{ $banhang->trang_thai == \App\Enums\TrangThaiBanHang::PENDING() ? 'selected' : '' }}
+                                            value="{{ \App\Enums\TrangThaiBanHang::PENDING() }}">{{ \App\Enums\TrangThaiBanHang::PENDING() }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-12">
                                     <label for="loai_quy_id">Loại quỹ</label>
                                     <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
                                         @foreach($loai_quies as $loai_quy)
@@ -487,7 +516,7 @@
 
             totalEl.val(gia_ * so_luong);
 
-            calc_total_item();
+            change_thanh_toan();
         }
 
         function changeThongTinSanPham(el) {
@@ -539,16 +568,45 @@
             const tbody = $('#tbodySanPham');
             const tr = $('#listSanPham').clone();
             tbody.append(tr);
-            calc_total_item();
+
+            render_select_custom();
+
+            change_thanh_toan();
         }
 
         function removeItems(el) {
             $(el).parent().closest('tr').remove();
-            calc_total_item();
+            change_thanh_toan();
+        }
+
+        function render_select_custom() {
+            $('#tbodySanPham select').select2({
+                theme: 'bootstrap-5',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',
+                allowClear: Boolean($(this).data('allow-clear')) || true,
+                minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,
+                containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',
+                dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',
+                dropdownAutoWidth: $(this).data('dropdown-auto-width'),
+                dropdownParent: $(this).data('dropdown-parent'),
+                dropdownPosition: $(this).data('dropdown-position'),
+                initSelection: function (element, callback) {
+                    const id = element.val();
+                    layThongTinNguyenLieu(id, element, $('#loai_san_pham').val());
+                }
+            });
         }
     </script>
 
     <script>
+        function change_thanh_toan() {
+            let tong_thanh_toan = $('#tong_thanh_toan').val() || 0;
+            $('#da_thanht_toan').val(tong_thanh_toan);
+
+            calc_total_item();
+        }
+
         function calc_total_item() {
             let total = 0;
 
@@ -566,6 +624,54 @@
 
             $('#tong_thanh_toan').val(tong_thanh_toan);
             $('#cong_no').val(cong_no);
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            change_loai_nguon_hang()
+        });
+
+        async function change_loai_nguon_hang() {
+            let loai_nguon_hang = $('#loai_nguon_hang').val();
+
+            if (loai_nguon_hang) {
+                await nguon_hang(loai_nguon_hang);
+            } else {
+                $('#nguon_hang').empty().append('<option value="">Lựa chọn...</option>');
+            }
+        }
+
+        async function nguon_hang(loai_nguon_hang) {
+            let url = `{{ route('api.nguon.hang.ban.hang') }}?loai_nguon_hang=${loai_nguon_hang}`;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                async: false,
+                success: function (data, textStatus) {
+                    render_nguon_hang(data.data, loai_nguon_hang, `{{ $banhang->nguon_hang }}`);
+                },
+                error: function (request, status, error) {
+                    let data = JSON.parse(request.responseText);
+                    alert(data.message);
+                }
+            });
+        }
+
+        function render_nguon_hang(data, loai_nguon_hang, selected = null) {
+            let html = '<option value="">Lựa chọn...</option>';
+            for (let i = 0; i < data.length; i++) {
+                if (loai_nguon_hang == 'ncc') {
+                    html += `<option ${selected == data[i].id ? 'selected' : ''} value="${data[i].id}">${data[i].ten}</option>`;
+                } else if (loai_nguon_hang == 'kh') {
+                    html += `<option ${selected == data[i].id ? 'selected' : ''} value="${data[i].id}">${data[i].ten}</option>`;
+                } else {
+                    html += `<option ${selected == data[i].id ? 'selected' : ''} value="${data[i].id}">${data[i].full_name}</option>`;
+                }
+            }
+
+            $('#nguon_hang').empty().append(html);
         }
     </script>
 @endsection

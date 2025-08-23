@@ -180,15 +180,20 @@
     $(document).ready(function () {
         $('.selectCustom').select2({
             theme: 'bootstrap-5',
-            placeholder: 'Lựa chọn...',
-            allowClear: true,
-            width: '100%',
-            minimumResultsForSearch: 0
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',
+            allowClear: Boolean($(this).data('allow-clear')) ||true,
+            minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,
+            containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',
+            dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',
+            dropdownAutoWidth: $(this).data('dropdown-auto-width'),
+            dropdownParent: $(this).data('dropdown-parent'),
+            dropdownPosition: $(this).data('dropdown-position'),
         });
     });
 
     function init_datatable(page_size = 10) {
-        $('.datatable').DataTable({
+        $('.datatable_wrapper').DataTable({
             "paging": true,
             "pageLength": page_size,
             "searching": true,

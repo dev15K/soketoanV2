@@ -120,6 +120,11 @@ if (!function_exists('convertNumber')) {
     {
         return 'LH' . convertNumber($num);
     }
+
+    function generateCodeBanHang($num): string
+    {
+        return 'DH' . convertNumber($num);
+    }
 }
 
 if (!function_exists('updateTonKho')) {
@@ -174,6 +179,70 @@ if (!function_exists('parseNumber')) {
         return 0;
     }
 
+}
+
+
+if (!function_exists('cleanNumber')) {
+    function cleanNumber($num): float|int
+    {
+        if (!is_numeric($num)) {
+            return 0;
+        }
+
+        $num = (float)$num;
+
+        // Nếu là số nguyên
+        if (fmod($num, 1.0) == 0.0) {
+            return (int)$num;
+        }
+
+        // Làm tròn đến tối đa 3 chữ số thập phân
+        $rounded = round($num, 3);
+
+        // Nếu sau khi làm tròn lại là số nguyên
+        if (fmod($rounded, 1.0) == 0.0) {
+            return (int)$rounded;
+        }
+
+        return $rounded;
+    }
+}
+
+if (!function_exists('optimizeNumber')) {
+    function optimizeNumber($input)
+    {
+        // Nếu là số thì chuyển thành chuỗi
+        if (is_numeric($input)) {
+            return $input + 0; // Giữ nguyên kiểu số (int hoặc float)
+        }
+
+        // Xoá dấu phẩy phân tách hàng nghìn
+        $normalized = str_replace(',', '', $input);
+
+        // Nếu là số sau khi xóa dấu phẩy thì ép kiểu phù hợp
+        if (is_numeric($normalized)) {
+            return $normalized + 0; // Tự động ép kiểu float nếu có dấu chấm
+        }
+
+        // Trả về nguyên nếu không hợp lệ
+        return 0;
+    }
+}
+if (!function_exists('formatNumber')) {
+    function formatNumber($num): array|string|null
+    {
+        if (!$num) {
+            return 0;
+        }
+
+        if (is_array($num)) {
+            return array_map(function ($item) {
+                return formatNumber($item);
+            }, $num);
+        }
+
+        return preg_replace('/[^0-9\.\-]/', '', $num);
+    }
 }
 
 if (!function_exists('get_ton_dau')) {

@@ -25,5 +25,6 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/thong-tin-san-pham/detail', [HomeController::class, 'thongTinSanPham'])->name('api.thong.tin.san.pham.detail');
     Route::get('/thong-tin-khach-hang/detail', [HomeController::class, 'thongTinKhachHang'])->name('api.khach.hang.detail');
     Route::get('/chi-tiet-nguyen-lieu', [HomeController::class, 'chiTietNguyenLieu'])->name('api.chi.tiet.nguyen.lieu');
+    Route::get('/nguon-hang-ban-hang', [HomeController::class, 'get_nguon_hang_ban_hang'])->name('api.nguon.hang.ban.hang');
 });
 
