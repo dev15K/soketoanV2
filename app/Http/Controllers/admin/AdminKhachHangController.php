@@ -10,6 +10,7 @@ use App\Models\BanHang;
 use App\Models\KhachHang;
 use App\Models\NguyenLieuTho;
 use App\Models\NhaCungCaps;
+use App\Models\NhomKhachHang;
 use App\Models\SoQuy;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,9 @@ class AdminKhachHangController extends Controller
         $datas = KhachHang::where('trang_thai', '!=', TrangThaiKhachHang::DELETED())
             ->orderByDesc('id')
             ->get();
-        return view('admin.pages.khach_hang.index', compact('datas'));
+
+        $nhom_khach_hangs = NhomKhachHang::orderByDesc('id')->get();
+        return view('admin.pages.khach_hang.index', compact('datas', 'nhom_khach_hangs'));
     }
 
     public function detail($id)
@@ -29,7 +32,9 @@ class AdminKhachHangController extends Controller
         if (!$khachhang || $khachhang->trang_thai == TrangThaiKhachHang::DELETED()) {
             return redirect()->back()->with('error', 'Không tìm thấy nhà cung cấp');
         }
-        return view('admin.pages.khach_hang.detail', compact('khachhang'));
+
+        $nhom_khach_hangs = NhomKhachHang::orderByDesc('id')->get();
+        return view('admin.pages.khach_hang.detail', compact('khachhang', 'nhom_khach_hangs'));
     }
 
     public function store(Request $request)
@@ -40,6 +45,7 @@ class AdminKhachHangController extends Controller
             $so_dien_thoai = $request->input('so_dien_thoai');
             $tinh_thanh = $request->input('tinh_thanh');
             $trang_thai = $request->input('trang_thai');
+            $nhom_khach_hang_id = $request->input('nhom_khach_hang_id');
 
             $khachhang = new KhachHang();
 
@@ -48,6 +54,7 @@ class AdminKhachHangController extends Controller
             $khachhang->so_dien_thoai = $so_dien_thoai ?? '';
             $khachhang->tinh_thanh = $tinh_thanh ?? '';
             $khachhang->trang_thai = $trang_thai;
+            $khachhang->nhom_khach_hang_id = $nhom_khach_hang_id;
             $khachhang->save();
 
             return redirect()->back()->with('success', 'Thêm mới nhà cung cấp thành công');
@@ -64,6 +71,7 @@ class AdminKhachHangController extends Controller
             $so_dien_thoai = $request->input('so_dien_thoai');
             $tinh_thanh = $request->input('tinh_thanh');
             $trang_thai = $request->input('trang_thai');
+            $nhom_khach_hang_id = $request->input('nhom_khach_hang_id');
 
             $khachhang = KhachHang::find($id);
             if (!$khachhang || $khachhang->trang_thai == TrangThaiKhachHang::DELETED()) {
@@ -75,6 +83,7 @@ class AdminKhachHangController extends Controller
             $khachhang->so_dien_thoai = $so_dien_thoai ?? '';
             $khachhang->tinh_thanh = $tinh_thanh ?? '';
             $khachhang->trang_thai = $trang_thai;
+            $khachhang->nhom_khach_hang_id = $nhom_khach_hang_id;
             $khachhang->save();
 
             return redirect()->route('admin.khach.hang.index')->with('success', 'Chỉnh sửa nhà cung cấp thành công');

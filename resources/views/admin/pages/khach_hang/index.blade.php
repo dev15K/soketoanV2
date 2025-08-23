@@ -57,27 +57,37 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="tinh_thanh">Tỉnh thành</label>
                                 <input type="text" class="form-control" id="tinh_thanh" name="tinh_thanh"
                                        value="{{ old('tinh_thanh') }}">
                             </div>
 
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="so_dien_thoai">Số điện thoại</label>
                                 <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
                                        value="{{ old('so_dien_thoai') }}">
                             </div>
 
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
+                                <label for="nhom_khach_hang_id">Nhóm khách hàng</label>
+                                <select id="nhom_khach_hang_id" name="nhom_khach_hang_id" class="form-control">
+                                    @foreach($nhom_khach_hangs as $nhom_khach_hang)
+                                        <option {{ old('nhom_khach_hang_id') == $nhom_khach_hang->id ? 'selected' : ''}}
+                                                value="{{ $nhom_khach_hang->id }}">{{ $nhom_khach_hang->ten_nhom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-3">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option
-                                        value="{{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}" {{ old('trang_thai') == \App\Enums\TrangThaiKhachHang::ACTIVE() ? 'selected' : '' }}>
+                                            value="{{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}" {{ old('trang_thai') == \App\Enums\TrangThaiKhachHang::ACTIVE() ? 'selected' : '' }}>
                                         {{ \App\Enums\TrangThaiKhachHang::ACTIVE() }}
                                     </option>
                                     <option
-                                        value="{{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}" {{ old('trang_thai') == \App\Enums\TrangThaiKhachHang::INACTIVE() ? 'selected' : '' }}>
+                                            value="{{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}" {{ old('trang_thai') == \App\Enums\TrangThaiKhachHang::INACTIVE() ? 'selected' : '' }}>
                                         {{ \App\Enums\TrangThaiKhachHang::INACTIVE() }}
                                     </option>
                                 </select>
@@ -107,7 +117,7 @@
                             tất cả
                         </button>
                     </div>
-                   <div class="table-responsive pt-3">
+                    <div class="table-responsive pt-3">
                         <table class="table table-hover datatable_wrapper">
                             <colgroup>
                                 <col width="5%">
@@ -116,6 +126,7 @@
                                 <col width="10%">
                                 <col width="x">
                                 <col width="20%">
+                                <col width="10%">
                                 <col width="10%">
                             </colgroup>
                             <thead>
@@ -128,6 +139,7 @@
                                 <th scope="col">Số điện thoại</th>
                                 <th scope="col">Địa chỉ</th>
                                 <th scope="col">Công nợ</th>
+                                <th scope="col">Nhóm khách hàng</th>
                                 <th scope="col">Trạng thái</th>
                             </tr>
                             </thead>
@@ -175,6 +187,7 @@
                                         @endphp
                                         {{ parseNumber($total, 0) }} VND
                                     </td>
+                                    <td>{{ $data->nhom_khach_hang_id ? $data->nhom_khach_hang->ten_nhom : '' }}</td>
                                     <td>{{ $data->trang_thai }}</td>
                                 </tr>
                             @endforeach
