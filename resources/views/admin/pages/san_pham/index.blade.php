@@ -23,22 +23,6 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="col-12">
-            <div class="card recent-sales overflow-auto">
-                <div class="card-body">
-                    <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên...</label></h5>
-                    <div class="col-md-4">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm theo tên...">
-
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
@@ -109,8 +93,8 @@
             </div>
             <div class="card recent-sales overflow-auto">
 
-                <div class="card-body">
-                    <table class="table table-hover vw-100">
+                <div class="card-body pt-3">
+                    <table class="table table-hover datatable_wrapper vw-100">
                         <colgroup>
                             <col width="3%">
                             <col width="8%">
@@ -177,7 +161,6 @@
                 </div>
 
             </div>
-            {{ $datas->links('pagination::bootstrap-5') }}
         </div>
     </section>
 @endsection

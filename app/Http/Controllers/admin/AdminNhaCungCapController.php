@@ -103,15 +103,7 @@ class AdminNhaCungCapController extends Controller
             ->orderByDesc('so_quies.id')
             ->select('so_quies.*')
             ->get();
-
-        $html = view('admin.pages.nha_cung_cap.show', compact('order_histories', 'payment_histories'))->render();
-
-        $data = [
-            'html' => $html,
-        ];
-
-        $res = returnMessage('1', $data, 'Lấy dữ liệu thành công');
-        return response()->json($res, 200);
+        return view('admin.pages.nha_cung_cap.show', compact('order_histories', 'payment_histories'));
     }
 
     public function delete($id)
