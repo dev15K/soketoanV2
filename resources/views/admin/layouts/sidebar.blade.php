@@ -135,17 +135,23 @@
         </li><!-- End Orders Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('admin.so.quy.*') ||  Request::routeIs('admin.loai.quy.*') ? '' : 'collapsed' }}"
+            <a class="nav-link {{ Request::routeIs('admin.so.quy.*') ||  Request::routeIs('admin.loai.quy.*') ||  Request::routeIs('admin.nhom.quy.*') ? '' : 'collapsed' }}"
                data-bs-target="#news-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-piggy-bank"></i><span>Sổ quỹ</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="news-nav"
-                class="nav-content collapse {{ Request::routeIs('admin.so.quy.*') ||  Request::routeIs('admin.loai.quy.*') ? 'show' : '' }}"
+                class="nav-content collapse {{ Request::routeIs('admin.so.quy.*') ||  Request::routeIs('admin.loai.quy.*') ||  Request::routeIs('admin.nhom.quy.*') ? 'show' : '' }}"
                 data-bs-parent="#sidebar-nav">
                 <li>
                     <a class="{{ Request::routeIs('admin.loai.quy.index') || Request::routeIs('admin.loai.quy.detail') ? 'active' : '' }}"
                        href="{{ route('admin.loai.quy.index') }}">
                         <i class="bi bi-circle"></i><span>Loại quỹ</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ Request::routeIs('admin.nhom.quy.*') ? 'active' : '' }}"
+                       href="{{ route('admin.nhom.quy.index') }}">
+                        <i class="bi bi-circle"></i><span>Nhóm quỹ</span>
                     </a>
                 </li>
                 <li>

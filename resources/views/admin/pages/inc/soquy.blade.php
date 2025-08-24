@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <label for="loai">Loại phiếu</label>
                         <select class="form-control" name="loai" id="loai" required
                                 onchange="show_nha_cung_cap()">
@@ -31,7 +31,7 @@
                             <option value="1" {{ old('loai') === '1' ? 'selected' : '' }}>Phiếu Thu</option>
                         </select>
                     </div>
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <label for="loai_quy_id">Tên quỹ</label>
                         <select class="form-control" name="loai_quy_id" id="loai_quy_id" required>
                             @foreach($loai_quies as $loai_quy)
@@ -43,10 +43,42 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
+                        <label for="nhom_quy_id">Nhóm quỹ</label>
+                        <select class="form-control" name="nhom_quy_id" id="nhom_quy_id" required>
+                            @foreach($nhom_quies as $nhom_quy)
+                                <option
+                                    value="{{ $nhom_quy->id }}" {{ old('loai_quy_id') == $nhom_quy->id ? 'selected' : '' }}>
+                                    {{ $nhom_quy->ten_nhom }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group">
                         <label for="so_tien">Số tiền</label>
                         <input type="text" class="form-control onlyNumber" id="so_tien" name="so_tien"
                                value="{{ old('so_tien') }}" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="loai_noi_nhan">Loại nơi nhận</label>
+                        <select class="form-control" name="loai_noi_nhan" id="loai_noi_nhan"
+                                onchange="change_loai_nguon_hang();">
+                            <option value="">Lựa chọn</option>
+                            <option value="ncc">Nhà cung cấp</option>
+                            <option value="kh">Khách hàng</option>
+                            <option value="nv">Nhân viên</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="noi_nhan">Nơi nhận</label>
+                        <select class="form-control selectCustom" name="noi_nhan" id="noi_nhan"
+                                required>
+
+                        </select>
                     </div>
                 </div>
 
@@ -98,11 +130,12 @@
                     </div>
                 </div>
             </div>
-           <div class="table-responsive pt-3">
+            <div class="table-responsive pt-3">
                 <table class="table datatable_wrapper table-hover">
                     <colgroup>
                         <col width="120px">
                         <col width="120px">
+                        <col width="10%">
                         <col width="10%">
                         <col width="15%">
                         <col width="x">
@@ -112,6 +145,7 @@
                         <th scope="col">Hành động</th>
                         <th scope="col">Ngày</th>
                         <th scope="col">Loại</th>
+                        <th scope="col">Nhóm quỹ</th>
                         <th scope="col">Tên quỹ</th>
                         <th scope="col">Số tiền</th>
                         <th scope="col">Nội dung</th>
@@ -145,6 +179,7 @@
                                 @endif
                             </td>
                             <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
+                            <td>{{ $data->nhomQuy?->ten_nhom }}</td>
                             <td>{{ parseNumber($data->so_tien) }} VND</td>
                             <td>{{ $data->noi_dung }}</td>
                         </tr>
@@ -162,5 +197,47 @@
         </div>
 
     </div>
-
 </div>
+<script>
+    async function change_loai_nguon_hang() {
+        let loai_noi_nhan = $('#loai_noi_nhan').val();
+
+        if (loai_noi_nhan) {
+            await nguon_hang(loai_noi_nhan);
+        } else {
+            $('#noi_nhan').empty().append('<option value="">Lựa chọn...</option>');
+        }
+    }
+
+    async function nguon_hang(loai_nguon_hang) {
+        let url = `{{ route('api.nguon.hang.ban.hang') }}?loai_nguon_hang=${loai_nguon_hang}`;
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            async: false,
+            success: function (data, textStatus) {
+                render_nguon_hang(data.data, loai_nguon_hang);
+            },
+            error: function (request, status, error) {
+                let data = JSON.parse(request.responseText);
+                alert(data.message);
+            }
+        });
+    }
+
+    function render_nguon_hang(data, loai_nguon_hang) {
+        let html = '<option value="">Lựa chọn...</option>';
+        for (let i = 0; i < data.length; i++) {
+            if (loai_nguon_hang == 'ncc') {
+                html += `<option value="${data[i].id}">${data[i].ten}</option>`;
+            } else if (loai_nguon_hang == 'kh') {
+                html += `<option value="${data[i].id}">${data[i].ten}</option>`;
+            } else {
+                html += `<option value="${data[i].id}">${data[i].full_name}</option>`;
+            }
+        }
+
+        $('#noi_nhan').empty().append(html);
+    }
+</script>

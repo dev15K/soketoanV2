@@ -22,6 +22,7 @@ use App\Http\Controllers\admin\AdminNguyenLieuThoController;
 use App\Http\Controllers\admin\AdminNguyenLieuTinhController;
 use App\Http\Controllers\admin\AdminNhaCungCapController;
 use App\Http\Controllers\admin\AdminNhomKhachHangController;
+use App\Http\Controllers\admin\AdminNhomQuyController;
 use App\Http\Controllers\admin\AdminPhieuSanXuatController;
 use App\Http\Controllers\admin\AdminSanPhamController;
 use App\Http\Controllers\admin\AdminSettingController;
@@ -162,6 +163,7 @@ Route::group(['prefix' => 'loai-quy'], function () {
     Route::put('/update/{id}', [AdminLoaiQuyController::class, 'update'])->name('admin.loai.quy.update');
     Route::delete('/delete/{id}', [AdminLoaiQuyController::class, 'delete'])->name('admin.loai.quy.delete');
 });
+
 Route::group(['prefix' => 'so-quy'], function () {
     Route::get('/index', [AdminSoQuyController::class, 'index'])->name('admin.so.quy.index');
     Route::get('/payment', [AdminSoQuyController::class, 'payment'])->name('admin.so.quy.payment');
@@ -170,6 +172,14 @@ Route::group(['prefix' => 'so-quy'], function () {
     Route::post('/store', [AdminSoQuyController::class, 'store'])->name('admin.so.quy.store');
     Route::put('/update/{id}', [AdminSoQuyController::class, 'update'])->name('admin.so.quy.update');
     Route::delete('/delete/{id}', [AdminSoQuyController::class, 'delete'])->name('admin.so.quy.delete');
+});
+
+Route::group(['prefix' => 'nhom-quy'], function () {
+    Route::get('/index', [AdminNhomQuyController::class, 'index'])->name('admin.nhom.quy.index');
+    Route::get('/detail/{id}', [AdminNhomQuyController::class, 'detail'])->name('admin.nhom.quy.detail');
+    Route::post('/store', [AdminNhomQuyController::class, 'store'])->name('admin.nhom.quy.store');
+    Route::put('/update/{id}', [AdminNhomQuyController::class, 'update'])->name('admin.nhom.quy.update');
+    Route::delete('/delete/{id}', [AdminNhomQuyController::class, 'delete'])->name('admin.nhom.quy.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {

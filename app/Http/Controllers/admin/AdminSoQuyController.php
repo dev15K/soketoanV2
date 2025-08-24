@@ -3,29 +3,18 @@
 namespace App\Http\Controllers\admin;
 
 use App\Enums\TrangThaiNguyenLieuTho;
-use App\Enums\TrangThaiNhaCungCap;
 use App\Http\Controllers\Controller;
 use App\Models\LoaiQuy;
 use App\Models\NguyenLieuTho;
-use App\Models\NhaCungCaps;
+use App\Models\NhomQuy;
 use App\Models\SoQuy;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 
 class AdminSoQuyController extends Controller
 {
     public function index(Request $request)
     {
         return $this->get_data_so_quy_index($request, 'admin.pages.so_quy.index');
-    }
-
-    private function generateCode()
-    {
-        $lastItem = SoQuy::orderByDesc('id')
-            ->first();
-
-        $lastId = $lastItem?->id;
-        return convertNumber($lastId + 1);
     }
 
     public function payment(Request $request)
@@ -92,6 +81,15 @@ class AdminSoQuyController extends Controller
         }
     }
 
+    private function generateCode()
+    {
+        $lastItem = SoQuy::orderByDesc('id')
+            ->first();
+
+        $lastId = $lastItem?->id;
+        return convertNumber($lastId + 1);
+    }
+
     public function detail($id)
     {
         $soquy = SoQuy::find($id);
@@ -99,7 +97,8 @@ class AdminSoQuyController extends Controller
             return redirect()->back()->with('error', 'Không tìm thấy sổ quỹ');
         }
         $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
-        return view('admin.pages.so_quy.detail', compact('soquy', 'loai_quies'));
+        $nhom_quies = NhomQuy::orderByDesc('id')->get();
+        return view('admin.pages.so_quy.detail', compact('soquy', 'nhom_quies', 'loai_quies'));
     }
 
     public function store(Request $request)
@@ -110,6 +109,9 @@ class AdminSoQuyController extends Controller
             $noi_dung = $request->input('noi_dung');
             $ngay = $request->input('ngay');
             $loai_quy_id = $request->input('loai_quy_id');
+            $nhom_quy_id = $request->input('nhom_quy_id');
+            $loai_noi_nhan = $request->input('loai_noi_nhan');
+            $noi_nhan = $request->input('noi_nhan');
 
             $soquy = new SoQuy();
 
@@ -121,6 +123,9 @@ class AdminSoQuyController extends Controller
             $soquy->noi_dung = $noi_dung;
             $soquy->ngay = $ngay;
             $soquy->loai_quy_id = $loai_quy_id;
+            $soquy->nhom_quy_id = $nhom_quy_id;
+            $soquy->loai_noi_nhan = $loai_noi_nhan;
+            $soquy->noi_nhan = $noi_nhan;
 
             $soquy->save();
 
@@ -153,6 +158,9 @@ class AdminSoQuyController extends Controller
             $noi_dung = $request->input('noi_dung');
             $ngay = $request->input('ngay');
             $loai_quy_id = $request->input('loai_quy_id');
+            $nhom_quy_id = $request->input('nhom_quy_id');
+            $loai_noi_nhan = $request->input('loai_noi_nhan');
+            $noi_nhan = $request->input('noi_nhan');
 
             $soquy = SoQuy::find($id);
             if (!$soquy || $soquy->deleted_at != null) {
@@ -167,6 +175,9 @@ class AdminSoQuyController extends Controller
             $soquy->noi_dung = $noi_dung;
             $soquy->ngay = $ngay;
             $soquy->loai_quy_id = $loai_quy_id;
+            $soquy->nhom_quy_id = $nhom_quy_id;
+            $soquy->loai_noi_nhan = $loai_noi_nhan;
+            $soquy->noi_nhan = $noi_nhan;
             $soquy->save();
 
             if ($old_id != $loai_quy_id) {
