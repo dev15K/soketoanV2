@@ -13,4 +13,9 @@ class SoQuy extends Model
     {
         return $this->belongsTo(LoaiQuy::class, 'loai_quy_id', 'id');
     }
+
+    public function nhomQuy()
+    {
+        return $this->belongsTo(NhomQuy::class, 'nhom_quy_id', 'id');
+    }
 }

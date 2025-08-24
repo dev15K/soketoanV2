@@ -184,150 +184,155 @@
                     $total_nu_cao_cap = $total_nu_vip = $total_nhang = $total_vong = $total_tam_tre = $total_keo = $total_nau_dau = $total_ghi_chu = 0;
                 @endphp
                 <div class="card-body">
-                    <table class="table table-hover small" style="min-width: 2500px">
-                        <colgroup>
-                            <col width="50px">
-                            <col width="100px">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="120px">
-                            <col width="120px">
-                            <col width="120px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="180px">
-                            <col width="250px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="200px">
-                            <col width="250px">
-                            <col width="100px">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
-                            <th scope="col">Hành động</th>
-                            <th scope="col">MÃ ĐH</th>
-                            <th scope="col">Ngày phân loại</th>
-                            <th scope="col">NL nụ cao cấp (NCC)</th>
-                            <th scope="col">NL nụ VIP (NVIP)</th>
-                            <th scope="col">NL nhang (NLN)</th>
-                            <th scope="col">NL vòng (NLV)</th>
-                            <th scope="col">NL Tăm dài</th>
-                            <th scope="col">NL Tăm ngắn</th>
-                            <th scope="col">Nước cất</th>
-                            <th scope="col">Keo</th>
-                            <th scope="col">Nấu dầu</th>
-                            <th scope="col">Tăm nhanh sào</th>
-                            <th scope="col">Chi phí mua</th>
-                            <th scope="col">Tổng khối lượng</th>
-                            <th scope="col">Khối lượng ban đầu</th>
-                            <th scope="col">Khối lượng hao hụt</th>
-                            <th scope="col">Khối lượng đã dùng</th>
-                            <th scope="col">Khối lượng tồn</th>
-                            <th scope="col">Giá trước phân loại</th>
-                            <th scope="col">Giá sau phân loại</th>
-                            <th scope="col">Trạng thái</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($datas as $data)
+                   <div class="table-responsive pt-3">
+                        <table class="table datatable_wrapper table-hover small" style="min-width: 2500px">
+                            <colgroup>
+                                <col width="50px">
+                                <col width="100px">
+                                <col width="150px">
+                                <col width="150px">
+                                <col width="120px">
+                                <col width="120px">
+                                <col width="120px">
+                                <col width="180px">
+                                <col width="180px">
+                                <col width="180px">
+                                <col width="180px">
+                                <col width="180px">
+                                <col width="180px">
+                                <col width="180px">
+                                <col width="250px">
+                                <col width="200px">
+                                <col width="200px">
+                                <col width="200px">
+                                <col width="200px">
+                                <col width="200px">
+                                <col width="250px">
+                                <col width="100px">
+                            </colgroup>
+                            <thead>
                             <tr>
-                                <th scope="row">
-                                    @if($data->khoi_luong_da_phan_loai > 0)
-                                        <input type="checkbox" disabled>
-                                    @else
-                                        <input type="checkbox" name="check_item[]"
-                                               id="check_item{{ $data->id }}"
-                                               value="{{ $data->id }}">
-                                    @endif
+                                <th scope="col">
+                                    <input type="checkbox" name="check_all" id="check_all">
                                 </th>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.nguyen.lieu.phan.loai.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
+                                <th scope="col">Hành động</th>
+                                <th scope="col">MÃ ĐH</th>
+                                <th scope="col">Ngày phân loại</th>
+                                <th scope="col">NL nụ cao cấp (NCC)</th>
+                                <th scope="col">NL nụ VIP (NVIP)</th>
+                                <th scope="col">NL nhang (NLN)</th>
+                                <th scope="col">NL vòng (NLV)</th>
+                                <th scope="col">NL Tăm dài</th>
+                                <th scope="col">NL Tăm ngắn</th>
+                                <th scope="col">Nước cất</th>
+                                <th scope="col">Keo</th>
+                                <th scope="col">Nấu dầu</th>
+                                <th scope="col">Tăm nhanh sào</th>
+                                <th scope="col">Chi phí mua</th>
+                                <th scope="col">Tổng khối lượng</th>
+                                <th scope="col">Khối lượng ban đầu</th>
+                                <th scope="col">Khối lượng hao hụt</th>
+                                <th scope="col">Khối lượng đã dùng</th>
+                                <th scope="col">Khối lượng tồn</th>
+                                <th scope="col">Giá trước phân loại</th>
+                                <th scope="col">Giá sau phân loại</th>
+                                <th scope="col">Trạng thái</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($datas as $data)
+                                <tr>
+                                    <th scope="row">
                                         @if($data->khoi_luong_da_phan_loai > 0)
-                                            <button type="button" class="btn btn-danger btn-sm" disabled>
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                            <input type="checkbox" disabled>
                                         @else
-                                            <form action="{{ route('admin.nguyen.lieu.phan.loai.delete', $data->id) }}"
-                                                  method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                            <input type="checkbox" name="check_item[]"
+                                                   id="check_item{{ $data->id }}"
+                                                   value="{{ $data->id }}">
+                                        @endif
+                                    </th>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{{ route('admin.nguyen.lieu.phan.loai.detail', $data->id) }}"
+                                               class="btn btn-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            @if($data->khoi_luong_da_phan_loai > 0)
+                                                <button type="button" class="btn btn-danger btn-sm" disabled>
                                                     <i class="bi bi-trash"></i>
                                                 </button>
-                                            </form>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td>{{ $data->nguyenLieuTho->code }}</td>
-                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                <td>{{ parseNumber($data->nu_cao_cap, 0) }} kg</td>
-                                <td>{{ parseNumber($data->nu_vip, 0) }} kg</td>
-                                <td>{{ parseNumber($data->nhang, 0) }} kg</td>
-                                <td>{{ parseNumber($data->vong, 0) }} kg</td>
-                                <td>{{ parseNumber($data->tam_dai, 0) }} kg</td>
-                                <td>{{ parseNumber($data->tam_ngan, 0) }} kg</td>
-                                <td>{{ parseNumber($data->nuoc_cat, 0) }} kg</td>
-                                <td>{{ parseNumber($data->keo, 0) }} kg</td>
-                                <td>{{ parseNumber($data->nau_dau, 0) }} kg</td>
-                                <td>{{ parseNumber($data->tam_nhanh_sao, 0) }} kg</td>
-                                <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
-                                <td>{{ parseNumber($data->khoi_luong_ban_dau, 0) }} kg</td>
-                                <td>{{ parseNumber($data->khoi_luong_hao_hut, 0) }} kg</td>
-                                <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
-                                <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_phan_loai, 0) }}kg
-                                </td>
-                                <td>{{ parseNumber($data->gia_truoc_phan_loai, 0) }} VND</td>
-                                <td>{{ parseNumber($data->gia_sau_phan_loai, 0) }} VND</td>
-                                <td>{{ $data->trang_thai }}</td>
+                                            @else
+                                                <form
+                                                    action="{{ route('admin.nguyen.lieu.phan.loai.delete', $data->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>{{ $data->nguyenLieuTho->code }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                    <td>{{ parseNumber($data->nu_cao_cap, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->nu_vip, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->nhang, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->vong, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->tam_dai, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->tam_ngan, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->nuoc_cat, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->keo, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->nau_dau, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->tam_nhanh_sao, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
+                                    <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_ban_dau, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_hao_hut, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_phan_loai, 0) }}kg
+                                    </td>
+                                    <td>{{ parseNumber($data->gia_truoc_phan_loai, 0) }} VND</td>
+                                    <td>{{ parseNumber($data->gia_sau_phan_loai, 0) }} VND</td>
+                                    <td>{{ $data->trang_thai }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                            <tfoot class="bg-primary bg-opacity-10">
+                            <tr>
+                                <th scope="col">Tổng:</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col">{{ parseNumber($datas->sum('nu_cao_cap'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nu_vip'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nhang'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('vong'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tam_dai'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tam_ngan'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nuoc_cat'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('keo'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nau_dau'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tam_nhanh_sao'), 0) }} kg</th>
+                                <th scope="col"></th>
+                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_phan_loai'), 0) }}
+                                    kg
+                                </th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                        <tfoot class="bg-primary bg-opacity-10">
-                        <tr>
-                            <th scope="col">Tổng:</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col">{{ parseNumber($datas->sum('nu_cao_cap'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('nu_vip'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('nhang'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('vong'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('tam_dai'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('tam_ngan'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('nuoc_cat'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('keo'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('nau_dau'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('tam_nhanh_sao'), 0) }} kg</th>
-                            <th scope="col"></th>
-                            <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
-                            <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
-            {{ $datas->links('pagination::bootstrap-5') }}
+
         </div>
     </section>
 @endsection

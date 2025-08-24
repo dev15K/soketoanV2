@@ -32,18 +32,27 @@
                                    required>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="tinh_thanh">Tỉnh thành</label>
                                 <input type="text" class="form-control" id="tinh_thanh"
                                        value="{{ $khachhang->tinh_thanh }}"
                                        name="tinh_thanh">
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="so_dien_thoai">Số điện thoại</label>
                                 <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
                                        value="{{ $khachhang->so_dien_thoai }}">
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
+                                <label for="nhom_khach_hang_id">Nhóm khách hàng</label>
+                                <select id="nhom_khach_hang_id" name="nhom_khach_hang_id" class="form-control">
+                                    @foreach($nhom_khach_hangs as $nhom_khach_hang)
+                                        <option {{ old('nhom_khach_hang_id', $khachhang->nhom_khach_hang_id) == $nhom_khach_hang->id ? 'selected' : ''}}
+                                                value="{{ $nhom_khach_hang->id }}">{{ $nhom_khach_hang->ten_nhom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option

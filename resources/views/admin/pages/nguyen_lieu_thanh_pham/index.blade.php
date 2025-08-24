@@ -291,108 +291,110 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <table class="table table-hover vw-100">
-                        <colgroup>
-                            <col width="3%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="x">
-                            <col width="6%">
-                            <col width="6%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="6%">
-                            <col width="6%">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" name="check_all" id="check_all">
-                            </th>
-                            <th scope="col">Hành động</th>
-                            <th scope="col">Ngày</th>
-                            <th scope="col">Lô SX</th>
-                            <th scope="col">SL (cái/hộp)</th>
-                            <th scope="col">SL đã bán</th>
-                            <th scope="col">SL tồn kho</th>
-                            <th scope="col">Mã SP</th>
-                            <th scope="col">Tên sản phẩm</th>
-                            <th scope="col">KL riêng gr</th>
-                            <th scope="col">Đơn vị tính</th>
-                            <th scope="col">Giá xuất kho thương mại</th>
-                            <th scope="col">Tổng giá</th>
-                            <th scope="col">Ngày sản xuất</th>
-                            <th scope="col">Trạng thái</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($datas as $data)
+                    <div class="table-responsive pt-3">
+                        <table class="table datatable_wrapper table-hover vw-100">
+                            <colgroup>
+                                <col width="3%">
+                                <col width="6%">
+                                <col width="6%">
+                                <col width="6%">
+                                <col width="6%">
+                                <col width="6%">
+                                <col width="6%">
+                                <col width="6%">
+                                <col width="x">
+                                <col width="6%">
+                                <col width="6%">
+                                <col width="10%">
+                                <col width="10%">
+                                <col width="6%">
+                                <col width="6%">
+                            </colgroup>
+                            <thead>
                             <tr>
-                                <th scope="row"><input type="checkbox" name="check_item[]"
-                                                       id="check_item{{ $data->id }}"
-                                                       value="{{ $data->id }}"></th>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.nguyen.lieu.thanh.pham.detail', $data->id) }}"
-                                           class="btn btn-primary btn-sm">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <form action="{{ route('admin.nguyen.lieu.thanh.pham.delete', $data->id) }}"
-                                              method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                <td>{{ $data->nguyenLieuSanXuat->PhieuSanXuat->so_lo_san_xuat }}</td>
-                                <td>{{ parseNumber($data->so_luong) }}</td>
-                                <td>{{ parseNumber($data->so_luong_da_ban) }}</td>
-                                <td>{{ parseNumber($data->so_luong - $data->so_luong_da_ban) }}</td>
-                                <td>{{ $data->sanPham->ma_san_pham }}</td>
-                                <td>{{ $data->sanPham->ten_san_pham }}</td>
-                                <td>{{ $data->sanPham->khoi_luong_rieng }}</td>
-                                <td>{{ $data->sanPham->don_vi_tinh }}</td>
-                                <td>{{ parseNumber($data->price) }} VND</td>
-                                <td>{{ parseNumber($data->total_price) }} VND</td>
-                                <td>{{ \Carbon\Carbon::parse($data->ngay_san_xuat)->format('d-m-Y') }}</td>
-                                <td>{{ $data->trang_thai }}</td>
+                                <th scope="col">
+                                    <input type="checkbox" name="check_all" id="check_all">
+                                </th>
+                                <th scope="col">Hành động</th>
+                                <th scope="col">Ngày</th>
+                                <th scope="col">Lô SX</th>
+                                <th scope="col">SL (cái/hộp)</th>
+                                <th scope="col">SL đã bán</th>
+                                <th scope="col">SL tồn kho</th>
+                                <th scope="col">Mã SP</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">KL riêng gr</th>
+                                <th scope="col">Đơn vị tính</th>
+                                <th scope="col">Giá xuất kho thương mại</th>
+                                <th scope="col">Tổng giá</th>
+                                <th scope="col">Ngày sản xuất</th>
+                                <th scope="col">Trạng thái</th>
                             </tr>
-                        @endforeach
-                        </tbody>
+                            </thead>
+                            <tbody>
+                            @foreach($datas as $data)
+                                <tr>
+                                    <th scope="row"><input type="checkbox" name="check_item[]"
+                                                           id="check_item{{ $data->id }}"
+                                                           value="{{ $data->id }}"></th>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <a href="{{ route('admin.nguyen.lieu.thanh.pham.detail', $data->id) }}"
+                                               class="btn btn-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <form action="{{ route('admin.nguyen.lieu.thanh.pham.delete', $data->id) }}"
+                                                  method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
+                                    <td>{{ $data->nguyenLieuSanXuat->PhieuSanXuat->so_lo_san_xuat }}</td>
+                                    <td>{{ parseNumber($data->so_luong) }}</td>
+                                    <td>{{ parseNumber($data->so_luong_da_ban) }}</td>
+                                    <td>{{ parseNumber($data->so_luong - $data->so_luong_da_ban) }}</td>
+                                    <td>{{ $data->sanPham->ma_san_pham }}</td>
+                                    <td>{{ $data->sanPham->ten_san_pham }}</td>
+                                    <td>{{ $data->sanPham->khoi_luong_rieng }}</td>
+                                    <td>{{ $data->sanPham->don_vi_tinh }}</td>
+                                    <td>{{ parseNumber($data->price) }} VND</td>
+                                    <td>{{ parseNumber($data->total_price) }} VND</td>
+                                    <td>{{ \Carbon\Carbon::parse($data->ngay_san_xuat)->format('d-m-Y') }}</td>
+                                    <td>{{ $data->trang_thai }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
 
-                        <tfoot class="bg-primary bg-opacity-10">
-                        <tr>
-                            <th scope="col">Tổng:</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col">{{ parseNumber($datas->sum('so_luong'), 0) }}</th>
-                            <th scope="col">{{ parseNumber($datas->sum('so_luong_da_ban'), 0) }}</th>
-                            <th scope="col">{{ parseNumber($datas->sum('so_luong') - $datas->sum('so_luong_da_ban'), 0) }}</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            <tfoot class="bg-primary bg-opacity-10">
+                            <tr>
+                                <th scope="col">Tổng:</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col">{{ parseNumber($datas->sum('so_luong'), 0) }}</th>
+                                <th scope="col">{{ parseNumber($datas->sum('so_luong_da_ban'), 0) }}</th>
+                                <th scope="col">{{ parseNumber($datas->sum('so_luong') - $datas->sum('so_luong_da_ban'), 0) }}</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
 
             </div>
-            {{ $datas->links('pagination::bootstrap-5') }}
+
         </div>
     </section>
 @endsection

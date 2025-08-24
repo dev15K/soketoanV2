@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\LoaiQuy;
+use App\Models\NhomQuy;
 use App\Models\SoQuy;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Carbon;
 
 class Controller extends BaseController
 {
@@ -32,7 +32,7 @@ class Controller extends BaseController
             })
             ->where('so_tien', '>', 0)
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
 
         $ton_dau = get_ton_dau($start_date, $end_date);
         $ton_cuoi = get_ton_cuoi($start_date, $end_date);
@@ -42,7 +42,9 @@ class Controller extends BaseController
         $ma_phieu = $this->generateCode();
 
         $loai_quies = LoaiQuy::where('deleted_at', null)->orderByDesc('id')->get();
-        return view($view_prefix, compact('datas', 'ton_dau', 'ton_cuoi', 'ma_phieu', 'thu', 'chi',
+
+        $nhom_quies = NhomQuy::orderByDesc('id')->get();
+        return view($view_prefix, compact('datas', 'nhom_quies', 'ton_dau', 'ton_cuoi', 'ma_phieu', 'thu', 'chi',
             'start_date', 'end_date', 'loai_quies', 'loai_quy_search'));
     }
 
@@ -59,7 +61,7 @@ class Controller extends BaseController
         $model::whereIn('id', $list_id)
             ->where(function ($query) use ($field) {
                 $query->whereNull($field)
-                    ->orWhere($field, '<=', 0.00001);
+                    ->orWhere($field, ' <= ', 0.00001);
             })
             ->update(['trang_thai' => $trang_thai]);
     }

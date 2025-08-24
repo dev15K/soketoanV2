@@ -48,14 +48,14 @@
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
-                <div class="card-body p-0">
+                <div class="card-body">
                     <div class="d-flex mb-4 mt-3 justify-content-end">
                         <button class="btn btn-sm btn-danger" type="button" onclick="confirmDelete('loai_quy')">Xoá tất
                             cả
                         </button>
                     </div>
-                    <div style="max-height: 400px; overflow-y: auto;">
-                        <table class="table table-hover">
+                    <div class="table-responsive pt-3">
+                        <table class="table datatable_wrapper table-hover">
                             <colgroup>
                                 <col width="5%">
                                 <col width="10%">
@@ -105,7 +105,7 @@
                         </table>
                     </div>
                 </div>
-                {{ $datas->links('pagination::bootstrap-5') }}
+
             </div>
         </div>
     </section>
