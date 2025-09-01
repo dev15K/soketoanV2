@@ -277,7 +277,8 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" min="0" name="gia_bans[]" class="form-control gia_bans" required>
+                    <input type="text" min="0" name="gia_bans[]" class="form-control gia_bans"
+                           oninput="change_gia_san_pham(this)" required>
                 </td>
                 <td>
                     <input type="number" min="1" name="so_luong[]" class="form-control so_luong" value="1"
@@ -375,40 +376,57 @@
             function renderSanPham(data, loaiSanPham) {
                 let html = '';
                 let gia_ = null;
+
                 data.forEach((item) => {
                     let ten_;
+
                     switch (loaiSanPham) {
                         case 'NGUYEN_LIEU_THO':
-                            ten_ = item.ten_nguyen_lieu + ' : ' +
-                                (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_phan_loai)) + 'kg';
-                            gia_ = item.chi_phi_mua / item.khoi_luong;
+                            ten_ = item.code + ' : ' +
+                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_phan_loai)).toFixed(3) + 'kg';
+                            if (!gia_) {
+                                gia_ = Number(item.chi_phi_mua) / Number(item.khoi_luong || 1);
+                                gia_ = Number(gia_.toFixed(3));
+                            }
                             break;
+
                         case 'NGUYEN_LIEU_PHAN_LOAI':
                             ten_ = item.ma_don_hang + ' : ' +
-                                (parseFloat(item.tong_khoi_luong) - parseFloat(item.khoi_luong_da_phan_loai ?? 0)) + 'kg';
+                                (Number(item.tong_khoi_luong) - Number(item.khoi_luong_da_phan_loai ?? 0)).toFixed(3) + 'kg';
                             if (!gia_) {
-                                gia_ = item.gia_sau_phan_loai;
+                                gia_ = Number(item.gia_sau_phan_loai ?? 0);
+                                gia_ = Number(gia_.toFixed(3));
                             }
                             break;
+
                         case 'NGUYEN_LIEU_TINH':
-                            ten_ = item.code + ' : ' + (parseFloat(item.tong_khoi_luong) - parseFloat(item.so_luong_da_dung ?? 0)) + 'kg';
+                            ten_ = item.code + ' : ' +
+                                (Number(item.tong_khoi_luong) - Number(item.so_luong_da_dung ?? 0)).toFixed(3) + 'kg';
                             if (!gia_) {
-                                gia_ = item.gia_tien;
+                                gia_ = Number(item.gia_tien ?? 0);
+                                gia_ = Number(gia_.toFixed(3));
                             }
                             break;
+
                         case 'NGUYEN_LIEU_SAN_XUAT':
-                            ten_ = item.code + ' : ' + (parseFloat(item.khoi_luong) - parseFloat(item.khoi_luong_da_dung ?? 0)) + item.don_vi_tinh;
+                            ten_ = item.code + ' : ' +
+                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_dung ?? 0)).toFixed(3) + (item.don_vi_tinh || '');
                             if (!gia_) {
-                                gia_ = item.gia_tien;
+                                gia_ = Number(item.gia_tien ?? 0);
+                                gia_ = Number(gia_.toFixed(3));
                             }
                             break;
+
                         case 'NGUYEN_LIEU_THANH_PHAM':
-                            ten_ = item.ten_san_pham + ' : ' + (parseFloat(item.so_luong) - parseFloat(item.so_luong_da_ban ?? 0)) + 'kg';
+                            ten_ = item.ten_san_pham + ' : ' +
+                                (Number(item.so_luong) - Number(item.so_luong_da_ban ?? 0)).toFixed(3) + 'kg';
                             if (!gia_) {
-                                gia_ = item.price;
+                                gia_ = Number(item.gia_ban ?? 0);
+                                gia_ = Number(gia_.toFixed(3));
                             }
                             break;
                     }
+
                     html += `<option value="${item.id}">${ten_}</option>`;
                 });
 
@@ -434,23 +452,28 @@
                 layThongTinNguyenLieu(id, el, loaiSanPham);
             }
 
-            function render_chi_tiet_san_pham(data, element, loaiSanPham) {
+            function render_chi_tiet_san_pham(item, element, loaiSanPham) {
                 let gia_ = null;
                 switch (loaiSanPham) {
                     case 'NGUYEN_LIEU_THO':
-                        gia_ = data.chi_phi_mua / data.khoi_luong;
+                        gia_ = Number(item.chi_phi_mua) / Number(item.khoi_luong || 1);
+                        gia_ = Number(gia_.toFixed(3));
                         break;
                     case 'NGUYEN_LIEU_PHAN_LOAI':
-                        gia_ = data.gia_sau_phan_loai;
+                        gia_ = Number(item.gia_sau_phan_loai ?? 0);
+                        gia_ = Number(gia_.toFixed(3));
                         break;
                     case 'NGUYEN_LIEU_TINH':
-                        gia_ = data.gia_tien;
+                        gia_ = Number(item.gia_tien ?? 0);
+                        gia_ = Number(gia_.toFixed(3));
                         break;
                     case 'NGUYEN_LIEU_SAN_XUAT':
-                        gia_ = data.gia_tien;
+                        gia_ = Number(item.gia_tien ?? 0);
+                        gia_ = Number(gia_.toFixed(3));
                         break;
                     case 'NGUYEN_LIEU_THANH_PHAM':
-                        gia_ = data.price;
+                        gia_ = Number(item.gia_ban ?? 0);
+                        gia_ = Number(gia_.toFixed(3));
                         break;
                 }
 
