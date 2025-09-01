@@ -26,6 +26,7 @@ class BanHang extends Model
         'ma_don_hang',
         'nguon_hang',
         'loai_nguon_hang',
+        'type_discount',
     ];
 
     public function khachHang()

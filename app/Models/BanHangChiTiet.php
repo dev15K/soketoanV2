@@ -15,6 +15,8 @@ class BanHangChiTiet extends Model
         'gia_ban',
         'so_luong',
         'tong_tien',
+        'discount_percent',
+        'discount_amount',
     ];
 
     public function nguyenLieuTho()
