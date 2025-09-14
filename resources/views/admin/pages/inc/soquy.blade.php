@@ -1,4 +1,4 @@
-@php use App\Enums\TrangThaiNguyenLieuTho;use App\Models\NguyenLieuTho; @endphp
+@php @endphp
 <div class="col-12">
     <div class="card recent-sales overflow-auto">
 
@@ -36,7 +36,7 @@
                         <select class="form-control" name="loai_quy_id" id="loai_quy_id" required>
                             @foreach($loai_quies as $loai_quy)
                                 <option
-                                    value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                        value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
                                     {{ $loai_quy->ten_loai_quy }} - Tổng
                                     tiền: {{ parseNumber($loai_quy->tong_tien_quy) }} VND
                                 </option>
@@ -48,7 +48,7 @@
                         <select class="form-control" name="nhom_quy_id" id="nhom_quy_id" required>
                             @foreach($nhom_quies as $nhom_quy)
                                 <option
-                                    value="{{ $nhom_quy->id }}" {{ old('loai_quy_id') == $nhom_quy->id ? 'selected' : '' }}>
+                                        value="{{ $nhom_quy->id }}" {{ old('loai_quy_id') == $nhom_quy->id ? 'selected' : '' }}>
                                     {{ $nhom_quy->ten_nhom }}
                                 </option>
                             @endforeach
@@ -131,23 +131,30 @@
                 </div>
             </div>
             <div class="table-responsive pt-3">
-                <table class="table datatable_wrapper table-hover">
+                <table class="table datatable_wrapper table-sm table-hover">
                     <colgroup>
                         <col width="120px">
                         <col width="120px">
+                        <col width="120px">
+                        <col width="120px">
                         <col width="10%">
                         <col width="10%">
-                        <col width="15%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
                         <col width="x">
                     </colgroup>
                     <thead>
                     <tr>
                         <th scope="col">Hành động</th>
                         <th scope="col">Ngày</th>
-                        <th scope="col">Loại</th>
-                        <th scope="col">Nhóm quỹ</th>
-                        <th scope="col">Tên quỹ</th>
+                        <th scope="col">Mã phiếu</th>
+                        <th scope="col">Thu/chi</th>
+                        <th scope="col">Nhóm thu/chi</th>
                         <th scope="col">Số tiền</th>
+                        <th scope="col">Tên quỹ</th>
+                        <th scope="col">Nơi nhận</th>
+                        <th scope="col">Đối tượng</th>
                         <th scope="col">Nội dung</th>
                     </tr>
                     </thead>
@@ -171,16 +178,49 @@
                                 </div>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                            <td>
-                                @if($data->loai == 0)
+                            <td>{{ $data->ma_phieu }}</td>
+                            <td>@if($data->loai == 0)
                                     Phiếu Chi
                                 @else
                                     Phiếu Thu
                                 @endif
                             </td>
-                            <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                             <td>{{ $data->nhomQuy?->ten_nhom }}</td>
                             <td>{{ parseNumber($data->so_tien) }} VND</td>
+                            <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
+                            <td>
+                                @php
+                                    switch ($data->loai_noi_nhan){
+                                        case 'ncc':
+                                            $loai_noi_nhan = 'Nhà cung cấp';
+                                            break;
+                                        case 'kh':
+                                            $loai_noi_nhan = 'Khách hàng';
+                                            break;
+                                        default:
+                                            $loai_noi_nhan = 'Nhân viên';
+                                            break;
+                                    }
+                                @endphp
+
+                                {{ $loai_noi_nhan }}
+                            </td>
+                            <td>
+                                @php
+                                    switch ($data->loai_noi_nhan){
+                                        case 'ncc':
+                                            $noi_nhan = \App\Models\NhaCungCaps::where('id', $data->noi_nhan)->first()?->ten;
+                                            break;
+                                        case 'kh':
+                                            $noi_nhan = \App\Models\KhachHang::where('id', $data->noi_nhan)->first()?->ten;
+                                            break;
+                                        default:
+                                            $noi_nhan = \App\Models\User::where('id', $data->noi_nhan)->first()?->full_name;
+                                            break;
+                                    }
+                                @endphp
+                                {{ $noi_nhan }}
+                            </td>
                             <td>{{ $data->noi_dung }}</td>
                         </tr>
                     @endforeach

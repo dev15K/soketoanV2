@@ -90,6 +90,12 @@
                         <i class="bi bi-circle"></i><span>Danh sách</span>
                     </a>
                 </li>
+                <li>
+                    <a class="{{ Request::routeIs('admin.nha.cung.cap.payment') ? 'active' : '' }}"
+                       href="{{ route('admin.nha.cung.cap.payment') }}">
+                        <i class="bi bi-circle"></i><span>Thanh toán NCC</span>
+                    </a>
+                </li>
             </ul>
         </li><!-- End Properties Nav -->
 
@@ -158,12 +164,6 @@
                     <a class="{{ Request::routeIs('admin.so.quy.index') || Request::routeIs('admin.so.quy.detail') ? 'active' : '' }}"
                        href="{{ route('admin.so.quy.index') }}">
                         <i class="bi bi-circle"></i><span>Sổ quỹ</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="{{ Request::routeIs('admin.so.quy.payment') ? 'active' : '' }}"
-                       href="{{ route('admin.so.quy.payment') }}">
-                        <i class="bi bi-circle"></i><span>Thanh toán</span>
                     </a>
                 </li>
             </ul>

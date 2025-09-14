@@ -26,7 +26,7 @@
 
                 <div class="card-body pt-3">
 
-                   <div class="table-responsive pt-3">
+                    <div class="table-responsive pt-3">
                         <table class="table datatable_wrapper table-hover">
                             <colgroup>
                                 <col width="5%">
@@ -66,13 +66,16 @@
                                                class="btn btn-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                            <form action="{{ route('admin.nhan.vien.delete', $user) }}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
+                                            @if($user->role_name != \App\Enums\RoleName::ADMIN)
+                                                <form action="{{ route('admin.nhan.vien.delete', $user) }}"
+                                                      method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </td>
                                     <td>

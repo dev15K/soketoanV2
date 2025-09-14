@@ -36,7 +36,7 @@ class AdminNhomQuyController extends Controller
 
             $old_nhom_quy = NhomQuy::where('ten_nhom', $ten_nhom)->first();
             if ($old_nhom_quy) {
-                return redirect()->back()->with('error', 'Nhom khach hang nay da ton tai')->withInput();
+                return redirect()->back()->with('error', 'Nhóm quỹ này đã tồn tại!')->withInput();
             };
 
             $nhom_quy = new NhomQuy();
