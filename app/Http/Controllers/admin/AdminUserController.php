@@ -17,7 +17,6 @@ class AdminUserController extends Controller
         $users = User::where('users.status', '!=', UserStatus::DELETED())
             ->join('role_users', 'users.id', '=', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', '=', 'roles.id')
-            ->where('roles.name', '!=', RoleName::ADMIN())
             ->orderByDesc('users.id')
             ->select('users.*', 'roles.name as role_name')
             ->get();

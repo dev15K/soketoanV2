@@ -83,7 +83,7 @@ class HomeController extends Controller
             ->join('nguyen_lieu_san_xuats', 'nguyen_lieu_san_xuats.id', '=', 'nguyen_lieu_thanh_phams.nguyen_lieu_san_xuat_id')
             ->join('phieu_san_xuats', 'phieu_san_xuats.id', '=', 'nguyen_lieu_san_xuats.phieu_san_xuat_id')
             ->orderByDesc('nguyen_lieu_thanh_phams.id')
-            ->select('nguyen_lieu_thanh_phams.*', 'san_phams.ten_san_pham as ten_san_pham', 'san_phams.gia_ban as gia_ban', 'phieu_san_xuats.so_lo_san_xuat as so_lo_san_xuat')
+            ->select('nguyen_lieu_thanh_phams.*', 'san_phams.ten_san_pham as ten_san_pham', 'san_phams.gia_ban as gia_ban', 'san_phams.don_vi_tinh as don_vi_tinh', 'phieu_san_xuats.so_lo_san_xuat as so_lo_san_xuat')
             ->get();
 
         $data = returnMessage(1, $nhthanhphams, 'Success!');

@@ -124,7 +124,7 @@
                                     <div class="form-group col-md-12">
                                         <label for="ten_khach_hang">Tên khách hàng</label>
                                         <input type="text" class="form-control" id="ten_khach_hang"
-                                               name="ten_khach_hang"
+                                               name="ten_khach_hang" required
                                                value="{{ old('ten_khach_hang') }}">
                                     </div>
 
@@ -220,8 +220,7 @@
 
                                 <div class="form-group col-md-12">
                                     <label for="nguon_hang">Nguồn hàng</label>
-                                    <select class="form-control selectCustom" name="nguon_hang" id="nguon_hang"
-                                            required>
+                                    <select class="form-control selectCustom" name="nguon_hang" id="nguon_hang">
 
                                     </select>
                                 </div>
@@ -409,7 +408,7 @@
                             break;
 
                         case 'NGUYEN_LIEU_SAN_XUAT':
-                            ten_ = item.code + ' : ' +
+                            ten_ = item.ten_nguyen_lieu + ' : ' +
                                 (Number(item.khoi_luong) - Number(item.khoi_luong_da_dung ?? 0)).toFixed(3) + (item.don_vi_tinh || '');
                             if (!gia_) {
                                 gia_ = Number(item.gia_tien ?? 0);
@@ -418,8 +417,8 @@
                             break;
 
                         case 'NGUYEN_LIEU_THANH_PHAM':
-                            ten_ = item.ten_san_pham + ' : ' +
-                                (Number(item.so_luong) - Number(item.so_luong_da_ban ?? 0)).toFixed(3) + 'kg';
+                            ten_ = item.ten_san_pham + ' - ' + item.so_lo_san_xuat + ' : ' +
+                                (Number(item.so_luong) - Number(item.so_luong_da_ban ?? 0)).toFixed(3) + ' ' + item.don_vi_tinh;
                             if (!gia_) {
                                 gia_ = Number(item.gia_ban ?? 0);
                                 gia_ = Number(gia_.toFixed(3));
@@ -561,9 +560,9 @@
             calc_total_item();
 
             let tong_thanh_toan = $('#tong_thanh_toan').val() || 0;
-            $('#da_thanht_toan').val(tong_thanh_toan);
+            $('#da_thanht_toan').val(0);
 
-            $('#cong_no').val(0);
+            $('#cong_no').val(tong_thanh_toan);
         }
 
         function calc_total_item() {

@@ -18,6 +18,7 @@ use App\Models\NguyenLieuSanXuat;
 use App\Models\NguyenLieuThanhPham;
 use App\Models\NguyenLieuTho;
 use App\Models\NguyenLieuTinh;
+use App\Models\SanPham;
 use App\Models\SoQuy;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -81,8 +82,12 @@ class AdminBanHangController extends Controller
                 $nguyenlieus = [];
                 break;
             case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
-                $nguyenlieus = NguyenLieuThanhPham::where('trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED())
-                    ->orderByDesc('id')
+                $nguyenlieus = NguyenLieuThanhPham::where('nguyen_lieu_thanh_phams.trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED())
+                    ->join('san_phams', 'san_phams.id', '=', 'nguyen_lieu_thanh_phams.san_pham_id')
+                    ->join('nguyen_lieu_san_xuats', 'nguyen_lieu_san_xuats.id', '=', 'nguyen_lieu_thanh_phams.nguyen_lieu_san_xuat_id')
+                    ->join('phieu_san_xuats', 'phieu_san_xuats.id', '=', 'nguyen_lieu_san_xuats.phieu_san_xuat_id')
+                    ->orderByDesc('nguyen_lieu_thanh_phams.id')
+                    ->select('nguyen_lieu_thanh_phams.*', 'san_phams.ten_san_pham as ten_san_pham', 'san_phams.gia_ban as gia_ban', 'san_phams.don_vi_tinh as don_vi_tinh', 'phieu_san_xuats.so_lo_san_xuat as so_lo_san_xuat')
                     ->get();
                 break;
         }
@@ -115,8 +120,8 @@ class AdminBanHangController extends Controller
                 'giam_gia' => $request->input('giam_gia') ?? 0,
                 'cong_no' => $request->input('cong_no') ?? 0,
                 'note' => $request->input('note'),
-                'loai_nguon_hang' => $request->input('loai_nguon_hang'),
-                'nguon_hang' => $request->input('nguon_hang'),
+                'loai_nguon_hang' => $request->input('loai_nguon_hang') ?? '',
+                'nguon_hang' => $request->input('nguon_hang') ?? 0,
                 'trang_thai' => $request->input('trang_thai') ?? TrangThaiBanHang::ACTIVE(),
             ]);
 
@@ -189,9 +194,9 @@ class AdminBanHangController extends Controller
         switch ($loaiSanPham) {
             case LoaiSanPham::NGUYEN_LIEU_THO():
                 $item = NguyenLieuTho::find($sanPhamId);
-                $tonKho = $item?->khoi_luong - $item?->khoi_luong_da_ban;
+                $tonKho = $item?->khoi_luong - $item?->khoi_luong_da_phan_loai;
                 if ($item && $tonKho >= $soLuong) {
-                    $item->khoi_luong_da_ban += $soLuong;
+                    $item->khoi_luong_da_phan_loai += $soLuong;
                     $item->save();
                     return true;
                 }
@@ -233,6 +238,10 @@ class AdminBanHangController extends Controller
                 if ($item && $tonKho >= $soLuong) {
                     $item->so_luong_da_ban += $soLuong;
                     $item->save();
+
+                    $sanPham = SanPham::find($item->san_pham_id);
+                    $sanPham->ton_kho -= $soLuong;
+                    $sanPham->save();
                     return true;
                 }
                 break;
@@ -264,9 +273,25 @@ class AdminBanHangController extends Controller
                 $bh->delete();
             }
 
-            SoQuy::where('gia_tri_id', $banhang->id)
+            $soquy = SoQuy::where('gia_tri_id', $banhang->id)
                 ->where('loai', 1)
-                ->delete();
+                ->first();
+
+            if ($soquy) {
+                $loai_quy = LoaiQuy::find($soquy->loai_quy_id);
+                if ($loai_quy) {
+                    if ($soquy->loai == 1) {
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $soquy->so_tien;
+                        $loai_quy->save();
+                    } else {
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $soquy->so_tien;
+                        $loai_quy->save();
+                    }
+                }
+
+
+                $soquy->delete();
+            }
 
             return redirect()->back()->with('success', 'Đã xoá hóa đơn bán hàng thành công');
         } catch (\Exception $e) {
@@ -279,7 +304,7 @@ class AdminBanHangController extends Controller
         switch ($loaiSanPham) {
             case LoaiSanPham::NGUYEN_LIEU_THO():
                 $item = NguyenLieuTho::find($sanPhamId);
-                $item->khoi_luong_da_ban -= $soLuong;
+                $item->khoi_luong_da_phan_loai -= $soLuong;
                 $item->save();
                 break;
 
@@ -305,6 +330,10 @@ class AdminBanHangController extends Controller
                 $item = NguyenLieuThanhPham::find($sanPhamId);
                 $item->so_luong_da_ban -= $soLuong;
                 $item->save();
+
+                $sanPham = SanPham::find($item->san_pham_id);
+                $sanPham->ton_kho += $soLuong;
+                $sanPham->save();
                 break;
         }
     }
@@ -345,8 +374,8 @@ class AdminBanHangController extends Controller
                 'giam_gia' => $giam_gia ?? 0,
                 'cong_no' => $cong_no ?? 0,
                 'note' => $note,
-                'loai_nguon_hang' => $request->input('loai_nguon_hang'),
-                'nguon_hang' => $request->input('nguon_hang'),
+                'loai_nguon_hang' => $request->input('loai_nguon_hang') ?? '',
+                'nguon_hang' => $request->input('nguon_hang') ?? 0,
                 'trang_thai' => $trang_thai ?? TrangThaiBanHang::ACTIVE()
             ]);
 
@@ -401,7 +430,7 @@ class AdminBanHangController extends Controller
         }
     }
 
-    private function insertBanHang(BanHang $banhang, $isUpdate = false, $idUpdate = null, $loai_quy_id)
+    private function insertBanHang(BanHang $banhang, $isUpdate, $idUpdate, $loai_quy_id)
     {
         if (!$isUpdate) {
             $code = $this->generateCode();

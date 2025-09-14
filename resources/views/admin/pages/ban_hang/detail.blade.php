@@ -38,23 +38,23 @@
                                                     onchange="changeLoaiSanPham()" disabled readonly="">
                                                 <option value="">Lựa chọn kho</option>
                                                 <option
-                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO ? 'selected' : '' }}
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
+                                                        {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO ? 'selected' : '' }}
+                                                        value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
                                                     Nguyên liệu Thô
                                                 </option>
                                                 <option
-                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI ? 'selected' : '' }}
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
+                                                        {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI ? 'selected' : '' }}
+                                                        value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
                                                     Nguyên liệu Phân loại
                                                 </option>
                                                 <option
-                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH ? 'selected' : '' }}
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
+                                                        {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH ? 'selected' : '' }}
+                                                        value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
                                                     Nguyên liệu Tinh
                                                 </option>
                                                 <option
-                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM ? 'selected' : '' }}
-                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
+                                                        {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM ? 'selected' : '' }}
+                                                        value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
                                                     Nguyên liệu Thành phẩm
                                                 </option>
                                             </select>
@@ -96,7 +96,7 @@
                                                                 switch ($banhang->loai_san_pham) {
                                                                     case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO():
                                                                         $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_phan_loai ?? 0);
-                                                                        $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $label = ($nguyenlieu->code ?? '') . ' : ' . $con_lai . 'kg';
                                                                         $gia = ($nguyenlieu->khoi_luong ?? 0) > 0 ? ($nguyenlieu->chi_phi_mua / $nguyenlieu->khoi_luong) : null;
                                                                         break;
 
@@ -114,13 +114,13 @@
 
                                                                     case \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
                                                                         $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_dung ?? 0);
-                                                                        $label = ($nguyenlieu->code ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
                                                                         $gia = $nguyenlieu->gia_tien ?? null;
                                                                         break;
 
                                                                     case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
                                                                         $con_lai = ($nguyenlieu->so_luong ?? 0) - ($nguyenlieu->so_luong_da_ban ?? 0);
-                                                                        $label = ($nguyenlieu->ten_san_pham ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $label = ($nguyenlieu->ten_san_pham ?? '') . ' - ' . ($nguyenlieu->so_lo_san_xuat ?? '') . ' : ' . $con_lai . ' ' . $nguyenlieu->don_vi_tinh;
                                                                         $gia = $nguyenlieu->price ?? null;
                                                                         break;
 
@@ -130,8 +130,8 @@
                                                             @endphp
 
                                                             <option
-                                                                {{ $chiTietBanHang->san_pham_id == $nguyenlieu->id ? 'selected' : '' }}
-                                                                value="{{ $nguyenlieu->id }}">
+                                                                    {{ $chiTietBanHang->san_pham_id == $nguyenlieu->id ? 'selected' : '' }}
+                                                                    value="{{ $nguyenlieu->id }}">
                                                                 {{ $label }}
                                                             </option>
                                                         @endforeach
@@ -175,8 +175,8 @@
                                         </option>
                                         @foreach($khachhangs as $khachhang)
                                             <option
-                                                {{ $khachhang->id == $banhang->khach_hang_id ? 'selected' : '' }}
-                                                value="{{ $khachhang->id }}">{{ $khachhang->ten }}
+                                                    {{ $khachhang->id == $banhang->khach_hang_id ? 'selected' : '' }}
+                                                    value="{{ $khachhang->id }}">{{ $khachhang->ten }}
                                                 - {{ $khachhang->so_dien_thoai }}</option>
                                         @endforeach
                                     </select>
@@ -289,8 +289,7 @@
 
                                 <div class="form-group col-md-12">
                                     <label for="nguon_hang">Nguồn hàng</label>
-                                    <select class="form-control selectCustom" name="nguon_hang" id="nguon_hang"
-                                            required>
+                                    <select class="form-control selectCustom" name="nguon_hang" id="nguon_hang">
 
                                     </select>
                                 </div>
@@ -299,11 +298,11 @@
                                     <label for="trang_thai">Trạng thái đơn hàng</label>
                                     <select class="form-control" name="trang_thai" id="trang_thai">
                                         <option
-                                            {{ $banhang->trang_thai == \App\Enums\TrangThaiBanHang::ACTIVE() ? 'selected' : '' }}
-                                            value="{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}">{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}</option>
+                                                {{ $banhang->trang_thai == \App\Enums\TrangThaiBanHang::ACTIVE() ? 'selected' : '' }}
+                                                value="{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}">{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}</option>
                                         <option
-                                            {{ $banhang->trang_thai == \App\Enums\TrangThaiBanHang::PENDING() ? 'selected' : '' }}
-                                            value="{{ \App\Enums\TrangThaiBanHang::PENDING() }}">{{ \App\Enums\TrangThaiBanHang::PENDING() }}</option>
+                                                {{ $banhang->trang_thai == \App\Enums\TrangThaiBanHang::PENDING() ? 'selected' : '' }}
+                                                value="{{ \App\Enums\TrangThaiBanHang::PENDING() }}">{{ \App\Enums\TrangThaiBanHang::PENDING() }}</option>
                                     </select>
                                 </div>
 
@@ -312,8 +311,8 @@
                                     <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
                                         @foreach($loai_quies as $loai_quy)
                                             <option
-                                                {{ $loai_quy->id == $banhang->phuong_thuc_thanh_toan ? 'selected' : '' }}
-                                                value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                                    {{ $loai_quy->id == $banhang->phuong_thuc_thanh_toan ? 'selected' : '' }}
+                                                    value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -348,7 +347,7 @@
                             switch ($banhang->loai_san_pham) {
                                 case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO():
                                     $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_phan_loai ?? 0);
-                                    $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
+                                    $label = ($nguyenlieu->code ?? '') . ' : ' . $con_lai . 'kg';
                                     $gia = ($nguyenlieu->khoi_luong ?? 0) > 0 ? ($nguyenlieu->chi_phi_mua / $nguyenlieu->khoi_luong) : null;
                                     break;
 
@@ -366,13 +365,13 @@
 
                                 case \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
                                     $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_dung ?? 0);
-                                    $label = ($nguyenlieu->code ?? '') . ' : ' . $con_lai . 'kg';
+                                    $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
                                     $gia = $nguyenlieu->gia_tien ?? null;
                                     break;
 
                                 case \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
                                     $con_lai = ($nguyenlieu->so_luong ?? 0) - ($nguyenlieu->so_luong_da_ban ?? 0);
-                                    $label = ($nguyenlieu->ten_san_pham ?? '') . ' : ' . $con_lai . 'kg';
+                                    $label = ($nguyenlieu->ten_san_pham ?? '') . ' - ' . ($nguyenlieu->so_lo_san_xuat ?? '') . ' : ' . $con_lai . ' ' . $nguyenlieu->don_vi_tinh;
                                     $gia = $nguyenlieu->price ?? null;
                                     break;
 
@@ -509,7 +508,7 @@
                         break;
 
                     case 'NGUYEN_LIEU_SAN_XUAT':
-                        ten_ = item.code + ' : ' +
+                        ten_ = item.ten_nguyen_lieu + ' : ' +
                             (Number(item.khoi_luong) - Number(item.khoi_luong_da_dung ?? 0)).toFixed(3) + (item.don_vi_tinh || '');
                         if (!gia_) {
                             gia_ = Number(item.gia_tien ?? 0);
@@ -518,8 +517,8 @@
                         break;
 
                     case 'NGUYEN_LIEU_THANH_PHAM':
-                        ten_ = item.ten_san_pham + ' : ' +
-                            (Number(item.so_luong) - Number(item.so_luong_da_ban ?? 0)).toFixed(3) + 'kg';
+                        ten_ = item.ten_san_pham + ' - ' + item.so_lo_san_xuat + ' : ' +
+                            (Number(item.so_luong) - Number(item.so_luong_da_ban ?? 0)).toFixed(3) + ' ' + item.don_vi_tinh;
                         if (!gia_) {
                             gia_ = Number(item.gia_ban ?? 0);
                             gia_ = Number(gia_.toFixed(3));
