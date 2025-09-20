@@ -253,7 +253,6 @@
                                     </table>
                                 </div>
 
-
                                 <div class="form-group col-md-12">
                                     <label for="loai_nguon_hang">Loại nguồn hàng</label>
                                     <select class="form-control" name="loai_nguon_hang" id="loai_nguon_hang"
