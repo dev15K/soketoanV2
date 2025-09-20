@@ -44,7 +44,7 @@
                                         <div class="form-group col-md-4 mb-2">
                                             <label for="select_kho">Chọn kho</label>
                                             <select id="select_kho" name="select_kho" class="form-control"
-                                                    onchange="changeLoaiSanPham()">
+                                                    onchange="change_loai_san_pham()">
                                                 <option value="">Lựa chọn kho</option>
                                                 <option
                                                     value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
@@ -69,12 +69,8 @@
                                             </select>
                                         </div>
 
-                                        <button class="btn btn-sm btn-primary d-none showForm" type="button"
-                                                onclick="add_items()">
-                                            <i class="bi bi-plus"></i> Thêm sản phẩm
-                                        </button>
                                     </div>
-                                    <table class="table table-bordered d-none showForm">
+                                    <table class="table table-bordered showForm">
                                         <colgroup>
                                             <col width="x">
                                             <col width="25%">
@@ -92,6 +88,57 @@
                                         </tr>
                                         </thead>
                                         <tbody id="tbodySanPham">
+                                        <tr id="listSanPham">
+                                            <td>
+                                                <select id="san_pham_id" name="n_san_pham_id" class="form-control"
+                                                        onchange="change_thong_tin_san_pham(this)"
+                                                        required>
+                                                    <option value="">Lựa chọn sản phẩm</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input id="gia_ban" type="number" min="0" name="n_gia_ban"
+                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                       required>
+                                            </td>
+                                            <td>
+                                                <input id="so_luong" type="number" min="1" name="n_so_luong"
+                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                       value="1" required>
+                                            </td>
+                                            <td>
+                                                <input id="tong_tien_temp" type="text" name="n_tong_tien"
+                                                       class="form-control" disabled readonly>
+                                            </td>
+                                            <td>
+                                                <button type="button" onclick="add_new_items(this)"
+                                                        class="btn btn-success btn-sm">
+                                                    <i class="bi bi-check"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h4>Các sản phẩm đã chọn</h4>
+                                    <table class="table table-bordered">
+                                        <colgroup>
+                                            <col width="x">
+                                            <col width="25%">
+                                            <col width="15%">
+                                            <col width="25%">
+                                            <col width="5%">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Tên sản phẩm</th>
+                                            <th scope="col">Giá bán</th>
+                                            <th scope="col">Số lượng/Khối lượng</th>
+                                            <th scope="col">Tổng tiền</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbodySanPhamSelected">
 
                                         </tbody>
                                     </table>
@@ -206,7 +253,6 @@
                                     </table>
                                 </div>
 
-
                                 <div class="form-group col-md-12">
                                     <label for="loai_nguon_hang">Loại nguồn hàng</label>
                                     <select class="form-control" name="loai_nguon_hang" id="loai_nguon_hang"
@@ -266,35 +312,6 @@
             </div>
         </div>
 
-        <table class="d-none">
-            <tbody>
-            <tr id="listSanPham">
-                <td>
-                    <select name="san_pham_id[]" class="form-control" onchange="change_thong_tin_san_pham(this)"
-                            required>
-                        <option value="">Lựa chọn sản phẩm</option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" min="0" name="gia_bans[]" class="form-control gia_bans"
-                           oninput="change_gia_san_pham(this)" required>
-                </td>
-                <td>
-                    <input type="number" min="1" name="so_luong[]" class="form-control so_luong" value="1"
-                           oninput="change_gia_san_pham(this)" required>
-                </td>
-                <td>
-                    <input type="text" name="tong_tien[]" class="form-control tong_tien" disabled readonly>
-                </td>
-                <td>
-                    <button type="button" onclick="remove_items(this)" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
         <script>
             async function changeKhachHang() {
                 const khachHangId = $('#khach_hang_id').val();
@@ -328,17 +345,14 @@
                 $('#dia_chi').val(diaChi);
             }
 
-            async function changeLoaiSanPham() {
+            async function change_loai_san_pham() {
                 const select_kho = $('#select_kho');
-                $('#tbodySanPham').empty();
                 const loaiSanPham = select_kho.val();
                 $('#loai_san_pham').val(loaiSanPham);
-                const showForm = $('.showForm');
-                showForm.removeClass('d-none');
-                await getListSanPham(loaiSanPham);
+                await get_list_san_pham(loaiSanPham);
             }
 
-            async function getListSanPham(loaiSanPham) {
+            async function get_list_san_pham(loaiSanPham) {
                 let url = '';
                 switch (loaiSanPham) {
                     case 'NGUYEN_LIEU_THO':
@@ -363,7 +377,7 @@
                     type: 'GET',
                     async: false,
                     success: function (data, textStatus) {
-                        renderSanPham(data.data, loaiSanPham);
+                        render_san_pham(data.data, loaiSanPham);
                     },
                     error: function (request, status, error) {
                         let data = JSON.parse(request.responseText);
@@ -372,7 +386,7 @@
                 });
             }
 
-            function renderSanPham(data, loaiSanPham) {
+            function render_san_pham(data, loaiSanPham) {
                 let html = '';
                 let gia_ = null;
 
@@ -382,7 +396,7 @@
                     switch (loaiSanPham) {
                         case 'NGUYEN_LIEU_THO':
                             ten_ = item.code + ' : ' +
-                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_phan_loai)).toFixed(3) + 'kg';
+                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_phan_loai) - Number(item.khoi_luong_da_ban)).toFixed(3) + 'kg';
                             if (!gia_) {
                                 gia_ = Number(item.chi_phi_mua) / Number(item.khoi_luong || 1);
                                 gia_ = Number(gia_.toFixed(3));
@@ -408,8 +422,8 @@
                             break;
 
                         case 'NGUYEN_LIEU_SAN_XUAT':
-                            ten_ = item.ten_nguyen_lieu + ' : ' +
-                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_dung ?? 0)).toFixed(3) + (item.don_vi_tinh || '');
+                            ten_ = item.ten_nguyen_lieu + ' - ' + item.phieu_san_xuat.so_lo_san_xuat + ' : ' +
+                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_dung ?? 0)).toFixed(3) + (item.don_vi_tinh || 'kg');
                             if (!gia_) {
                                 gia_ = Number(item.gia_tien ?? 0);
                                 gia_ = Number(gia_.toFixed(3));
@@ -431,24 +445,39 @@
 
                 const listSanPham = $('#listSanPham');
                 listSanPham.find('select').empty().append(html);
-                listSanPham.find('input.gia_bans').val(gia_);
-                listSanPham.find('input.tong_tien').val(gia_);
+                listSanPham.find('input#gia_ban').val(gia_);
+                listSanPham.find('input#so_luong').val(1);
+                listSanPham.find('input#tong_tien_temp').val(gia_);
             }
 
-            function change_gia_san_pham(el) {
-                const totalEl = $(el).closest('tr').find('input.tong_tien');
-                const gia_ = $(el).closest('tr').find('input.gia_bans').val();
-                const so_luong = $(el).closest('tr').find('input.so_luong').val();
-
+            function change_gia_san_pham_temp(el) {
+                const totalEl = $(el).closest('tr').find('input#tong_tien_temp');
+                const gia_ = $(el).closest('tr').find('input#gia_ban').val();
+                const so_luong = $(el).closest('tr').find('input#so_luong').val();
                 totalEl.val(gia_ * so_luong);
-
-                change_thanh_toan();
             }
 
             function change_thong_tin_san_pham(el) {
                 const loaiSanPham = $('#loai_san_pham').val();
                 const id = $(el).val();
-                layThongTinNguyenLieu(id, el, loaiSanPham);
+                lay_thong_tin_nguyen_lieu(id, el, loaiSanPham);
+            }
+
+            function lay_thong_tin_nguyen_lieu(id, el, loaiSanPham) {
+                const url = `{{ route('api.chi.tiet.nguyen.lieu') }}?id=${id}&type=${loaiSanPham}`;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        render_chi_tiet_san_pham(data.data, el, loaiSanPham);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
+                    }
+                });
             }
 
             function render_chi_tiet_san_pham(item, element, loaiSanPham) {
@@ -476,38 +505,74 @@
                         break;
                 }
 
-                $(element).closest('tr').find('input.gia_bans').val(gia_);
+                $(element).closest('tr').find('input#gia_ban').val(gia_);
 
-                change_gia_san_pham(element);
+                change_gia_san_pham_temp(element);
             }
 
-            function layThongTinNguyenLieu(id, el, loaiSanPham) {
-                const url = `{{ route('api.chi.tiet.nguyen.lieu') }}?id=${id}&type=${loaiSanPham}`;
+            function add_new_items(elm) {
+                let tr = $(elm).closest('tr');
 
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    async: false,
-                    success: function (data, textStatus) {
-                        render_chi_tiet_san_pham(data.data, el, loaiSanPham);
-                    },
-                    error: function (request, status, error) {
-                        let data = JSON.parse(request.responseText);
-                        alert(data.message);
-                    }
-                });
+                let select = tr.find('#san_pham_id');
+                let elm_gia_ban = tr.find('#gia_ban');
+                let elm_so_luong = tr.find('#so_luong');
+                let elm_tong_tien = tr.find('#tong_tien_temp');
+
+                let txt = $('#san_pham_id option:selected').text();
+                let san_pham_id = select.val();
+
+                if (!san_pham_id) {
+                    alert('Vui lòng chọn sản phẩm!');
+                    return false;
+                }
+
+                let gia_ban = elm_gia_ban.val();
+                let so_luong = elm_so_luong.val();
+
+                let total = gia_ban * so_luong;
+
+                let html = `<tr>
+                                            <td>
+                                                <span class="h6">${txt}</span>
+                                                <input type="hidden" name="san_pham_id[]" value="${san_pham_id}">
+                                            </td>
+                                            <td>
+                                                <input type="number" min="0" name="gia_bans[]"
+                                                       class="form-control gia_bans" value="${gia_ban}"
+                                                       oninput="change_gia_san_pham(this)" required>
+                                            </td>
+                                            <td>
+                                                <input type="number" min="1" name="so_luong[]"
+                                                       class="form-control so_luong" value="${so_luong}"
+                                                       oninput="change_gia_san_pham(this)" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="tong_tien[]" class="form-control tong_tien"
+                                                       disabled readonly value="${total}">
+                                            </td>
+                                            <td>
+                                                <button type="button" onclick="remove_items(this)"
+                                                        class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>`;
+
+                $('#tbodySanPhamSelected').append(html);
+
+                elm_gia_ban.val(0);
+                elm_so_luong.val(1);
+                elm_tong_tien.val(0);
+
+                change_thanh_toan();
             }
 
-            $(document).ready(function () {
-                add_items();
-            })
+            function change_gia_san_pham(el) {
+                const totalEl = $(el).closest('tr').find('input.tong_tien');
+                const gia_ = $(el).closest('tr').find('input.gia_bans').val();
+                const so_luong = $(el).closest('tr').find('input.so_luong').val();
 
-            function add_items(el) {
-                const tbody = $('#tbodySanPham');
-                const tr = $('#listSanPham').clone();
-                tbody.append(tr);
-
-                render_select_custom();
+                totalEl.val(gia_ * so_luong);
 
                 change_thanh_toan();
             }
@@ -517,115 +582,90 @@
                 change_thanh_toan();
             }
 
-            function render_select_custom() {
-                $('#tbodySanPham select').select2({
-                    theme: 'bootstrap-5',
-                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                    placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',
-                    allowClear: Boolean($(this).data('allow-clear')) || true,
-                    minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,
-                    containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',
-                    dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',
-                    dropdownAutoWidth: $(this).data('dropdown-auto-width'),
-                    dropdownParent: $(this).data('dropdown-parent'),
-                    dropdownPosition: $(this).data('dropdown-position'),
-                    initSelection: function (element, callback) {
-                        const id = element.val();
-                        layThongTinNguyenLieu(id, element, $('#loai_san_pham').val());
+            function searchTable() {
+                const start_date = $('#start_date').val();
+                const end_date = $('#end_date').val();
+                window.location.href = "{{ route('admin.ban.hang.index') }}?start_date=" + start_date + "&end_date=" + end_date;
+            }
+
+            $(document).ready(function () {
+                let start_date = $('#start_date').val();
+                let end_date = $('#end_date').val();
+                if (start_date || end_date) {
+                    const modal = new bootstrap.Modal(document.getElementById('orderHistoryModal'));
+                    modal.show();
+                }
+            });
+
+            function change_thanh_toan() {
+                calc_total_item();
+
+                let tong_thanh_toan = $('#tong_thanh_toan').val() || 0;
+                $('#da_thanht_toan').val(0);
+
+                $('#cong_no').val(tong_thanh_toan);
+            }
+
+            function calc_total_item() {
+                let total = 0;
+
+                $('#form_submit_order input[name="tong_tien[]"]').each(function () {
+                    total += parseFloat(this.value) || 0;
+                });
+
+                $('#tong_tien').val(total);
+
+                let giam_gia = $('#giam_gia').val() || 0;
+                let da_thanht_toan = $('#da_thanht_toan').val() || 0;
+
+                let tong_thanh_toan = total - giam_gia;
+                let cong_no = tong_thanh_toan - da_thanht_toan;
+
+                $('#tong_thanh_toan').val(tong_thanh_toan);
+                $('#cong_no').val(cong_no);
+            }
+
+            async function change_loai_nguon_hang() {
+                let loai_nguon_hang = $('#loai_nguon_hang').val();
+
+                if (loai_nguon_hang) {
+                    await nguon_hang(loai_nguon_hang);
+                } else {
+                    $('#nguon_hang').empty().append('<option value="">Lựa chọn...</option>');
+                }
+            }
+
+            async function nguon_hang(loai_nguon_hang) {
+                let url = `{{ route('api.nguon.hang.ban.hang') }}?loai_nguon_hang=${loai_nguon_hang}`;
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: false,
+                    success: function (data, textStatus) {
+                        render_nguon_hang(data.data, loai_nguon_hang);
+                    },
+                    error: function (request, status, error) {
+                        let data = JSON.parse(request.responseText);
+                        alert(data.message);
                     }
                 });
             }
+
+            function render_nguon_hang(data, loai_nguon_hang) {
+                let html = '<option value="">Lựa chọn...</option>';
+                for (let i = 0; i < data.length; i++) {
+                    if (loai_nguon_hang == 'ncc') {
+                        html += `<option value="${data[i].id}">${data[i].ten}</option>`;
+                    } else if (loai_nguon_hang == 'kh') {
+                        html += `<option value="${data[i].id}">${data[i].ten}</option>`;
+                    } else {
+                        html += `<option value="${data[i].id}">${data[i].full_name}</option>`;
+                    }
+                }
+
+                $('#nguon_hang').empty().append(html);
+            }
         </script>
     </section>
-
-    <script>
-        function searchTable() {
-            const start_date = $('#start_date').val();
-            const end_date = $('#end_date').val();
-            window.location.href = "{{ route('admin.ban.hang.index') }}?start_date=" + start_date + "&end_date=" + end_date;
-        }
-
-        $(document).ready(function () {
-            let start_date = $('#start_date').val();
-            let end_date = $('#end_date').val();
-            if (start_date || end_date) {
-                const modal = new bootstrap.Modal(document.getElementById('orderHistoryModal'));
-                modal.show();
-            }
-        });
-    </script>
-
-    <script>
-        function change_thanh_toan() {
-            calc_total_item();
-
-            let tong_thanh_toan = $('#tong_thanh_toan').val() || 0;
-            $('#da_thanht_toan').val(0);
-
-            $('#cong_no').val(tong_thanh_toan);
-        }
-
-        function calc_total_item() {
-            let total = 0;
-
-            $('#form_submit_order input[name="tong_tien[]"]').each(function () {
-                total += parseFloat(this.value) || 0;
-            });
-
-            $('#tong_tien').val(total);
-
-            let giam_gia = $('#giam_gia').val() || 0;
-            let da_thanht_toan = $('#da_thanht_toan').val() || 0;
-
-            let tong_thanh_toan = total - giam_gia;
-            let cong_no = tong_thanh_toan - da_thanht_toan;
-
-            $('#tong_thanh_toan').val(tong_thanh_toan);
-            $('#cong_no').val(cong_no);
-        }
-    </script>
-
-    <script>
-        async function change_loai_nguon_hang() {
-            let loai_nguon_hang = $('#loai_nguon_hang').val();
-
-            if (loai_nguon_hang) {
-                await nguon_hang(loai_nguon_hang);
-            } else {
-                $('#nguon_hang').empty().append('<option value="">Lựa chọn...</option>');
-            }
-        }
-
-        async function nguon_hang(loai_nguon_hang) {
-            let url = `{{ route('api.nguon.hang.ban.hang') }}?loai_nguon_hang=${loai_nguon_hang}`;
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                async: false,
-                success: function (data, textStatus) {
-                    render_nguon_hang(data.data, loai_nguon_hang);
-                },
-                error: function (request, status, error) {
-                    let data = JSON.parse(request.responseText);
-                    alert(data.message);
-                }
-            });
-        }
-
-        function render_nguon_hang(data, loai_nguon_hang) {
-            let html = '<option value="">Lựa chọn...</option>';
-            for (let i = 0; i < data.length; i++) {
-                if (loai_nguon_hang == 'ncc') {
-                    html += `<option value="${data[i].id}">${data[i].ten}</option>`;
-                } else if (loai_nguon_hang == 'kh') {
-                    html += `<option value="${data[i].id}">${data[i].ten}</option>`;
-                } else {
-                    html += `<option value="${data[i].id}">${data[i].full_name}</option>`;
-                }
-            }
-
-            $('#nguon_hang').empty().append(html);
-        }
-    </script>
 @endsection

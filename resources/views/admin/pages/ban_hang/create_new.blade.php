@@ -1,39 +1,42 @@
 @extends('admin.layouts.master')
 @section('title')
-    Chỉnh sửa bán hàng
+    Bán hàng
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Chỉnh sửa bán hàng</h1>
+        <h1>Bán hàng</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active">Chỉnh sửa bán hàng</li>
+                <li class="breadcrumb-item active">Bán hàng</li>
             </ol>
         </nav>
     </div>
-    @if(session('error'))
-        <div class="alert alert-danger" role="alert">
-            {{ session('error') }}
-        </div>
-    @endif
-    @if(session('success'))
-        <div class="alert alert-success" role="alert">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <section class="section">
+        @if(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if(session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Chỉnh sửa bán hàng</h5>
-                    <form method="post" action="{{ route('admin.ban.hang.update', $banhang) }}" class=""
-                          id="form_submit_order">
-                        @method('PUT')
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Thêm mới bán hàng</h5>
+                        <!-- Button trigger modal -->
+                        <a href="{{ route('admin.ban.hang.index') }}" class="btn btn-primary">
+                            Xem lịch sử bán hàng
+                        </a>
+                    </div>
+                    <form method="post" action="{{ route('admin.ban.hang.store') }}" class="" id="form_submit_order">
                         @csrf
-
                         <div class="row">
                             <div class="col-md-8 col-sm-12 border-end">
                                 <div class="mt-3" id="formSanPham">
@@ -44,24 +47,24 @@
                                                     onchange="change_loai_san_pham()">
                                                 <option value="">Lựa chọn kho</option>
                                                 <option
-                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO ? 'selected' : '' }}
                                                     value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO }}">
-                                                    Nguyên liệu Thô
+                                                    Kho Nguyên liệu Thô
                                                 </option>
                                                 <option
-                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI ? 'selected' : '' }}
                                                     value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_PHAN_LOAI }}">
-                                                    Nguyên liệu Phân loại
+                                                    Kho Nguyên liệu Phân loại
                                                 </option>
                                                 <option
-                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH ? 'selected' : '' }}
                                                     value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
-                                                    Nguyên liệu Tinh
+                                                    Kho Nguyên liệu Tinh
                                                 </option>
                                                 <option
-                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM ? 'selected' : '' }}
+                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT }}">
+                                                    Kho Thành phẩm sản xuất
+                                                </option>
+                                                <option
                                                     value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM }}">
-                                                    Nguyên liệu Thành phẩm
+                                                    Kho đã Đóng gói
                                                 </option>
                                             </select>
                                         </div>
@@ -94,7 +97,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input id="gia_ban" type="number" min="0" name="n_gia_ban"
+                                                <input id="gia_ban" type="text" min="0" name="n_gia_ban"
                                                        oninput="change_gia_san_pham_temp(this)" class="form-control"
                                                        required>
                                             </td>
@@ -104,7 +107,7 @@
                                                        value="1" required>
                                             </td>
                                             <td>
-                                                <input id="tong_tien_temp" type="text" name="n_tong_tien"
+                                                <input id="tong_tien" type="text" name="n_tong_tien"
                                                        class="form-control" disabled readonly>
                                             </td>
                                             <td>
@@ -136,41 +139,32 @@
                                         </tr>
                                         </thead>
                                         <tbody id="tbodySanPhamSelected">
-                                        @foreach($chiTietBanHangs as $chiTietBanHang)
-                                            <tr>
-                                                <td>
-                                                    @php
-                                                        $banhangData = $chiTietBanHang->getNguyenLieu($banhang->loai_san_pham, $chiTietBanHang->san_pham_id);
-                                                    @endphp
-
-                                                    <span class="h6">{{ $banhangData['label'] }}</span>
-                                                    <input type="hidden" name="san_pham_id[]"
-                                                           value="{{ $chiTietBanHang->san_pham_id }}">
-                                                </td>
-                                                <td>
-                                                    <input type="number" min="0" name="gia_bans[]"
-                                                           class="form-control gia_bans"
-                                                           value="{{ $chiTietBanHang->gia_ban }}"
-                                                           oninput="change_gia_san_pham(this)" required>
-                                                </td>
-                                                <td>
-                                                    <input type="number" min="1" name="so_luong[]"
-                                                           class="form-control so_luong"
-                                                           value="{{ $chiTietBanHang->so_luong }}"
-                                                           oninput="change_gia_san_pham(this)" required>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="tong_tien[]" class="form-control tong_tien"
-                                                           disabled readonly value="{{ $chiTietBanHang->tong_tien }}">
-                                                </td>
-                                                <td>
-                                                    <button type="button" onclick="remove_items(this)"
-                                                            class="btn btn-danger btn-sm">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                        <tr>
+                                            <td>
+                                                <span class="h6">ANV</span>
+                                                <input type="hidden">
+                                            </td>
+                                            <td>
+                                                <input type="text" min="0" name="gia_bans[]"
+                                                       class="form-control gia_bans"
+                                                       oninput="change_gia_san_pham(this)" required>
+                                            </td>
+                                            <td>
+                                                <input type="number" min="1" name="so_luong[]"
+                                                       class="form-control so_luong" value="1"
+                                                       oninput="change_gia_san_pham(this)" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="tong_tien[]" class="form-control tong_tien"
+                                                       disabled readonly>
+                                            </td>
+                                            <td>
+                                                <button type="button" onclick="remove_items(this)"
+                                                        class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -180,7 +174,7 @@
                                     <label for="ma_don_hang">Mã đơn hàng</label>
                                     <input type="text" class="form-control" id="ma_don_hang"
                                            name="ma_don_hang" readonly disabled
-                                           value="{{ old('ma_don_hang', $banhang->ma_don_hang) }}">
+                                           value="{{ old('ma_don_hang', $ma_don_hang) }}">
                                 </div>
 
                                 <div class="form-group">
@@ -191,9 +185,9 @@
                                         </option>
                                         @foreach($khachhangs as $khachhang)
                                             <option
-                                                {{ $khachhang->id == $banhang->khach_hang_id ? 'selected' : '' }}
-                                                value="{{ $khachhang->id }}">{{ $khachhang->ten }}
-                                                - {{ $khachhang->so_dien_thoai }}</option>
+                                                value="{{ $khachhang->id }}" {{ old('khach_hang_id') == $khachhang->id ? 'selected' : '' }}>
+                                                {{ $khachhang->ten }} : {{ $khachhang->so_dien_thoai }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -202,19 +196,20 @@
                                     <div class="form-group col-md-12">
                                         <label for="ten_khach_hang">Tên khách hàng</label>
                                         <input type="text" class="form-control" id="ten_khach_hang"
-                                               name="ten_khach_hang" value="{{ $banhang->khach_le }}" required>
+                                               name="ten_khach_hang" required
+                                               value="{{ old('ten_khach_hang') }}">
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label for="so_dien_thoai">Số điện thoại</label>
                                         <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                               value="{{ $banhang->so_dien_thoai }}" required>
+                                               value="{{ old('so_dien_thoai') }}">
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label for="dia_chi">Địa chỉ chi tiết</label>
-                                        <input type="text" class="form-control" id="dia_chi"
-                                               value="{{ $banhang->dia_chi }}" name="dia_chi" required>
+                                        <input type="text" class="form-control" id="dia_chi" name="dia_chi"
+                                               value="{{ old('dia_chi') }}">
                                     </div>
                                 </div>
 
@@ -232,8 +227,7 @@
                                             <td>
                                                 <input type="text"
                                                        class="form-control bg-secondary bg-opacity-10 onlyNumber"
-                                                       id="tong_tien" name="tong_tien"
-                                                       value="{{ old('tong_tien', $banhang->tong_tien) }}"
+                                                       id="tong_tien" name="tong_tien" value="{{ old('tong_tien') }}"
                                                        readonly required>
                                             </td>
                                         </tr>
@@ -244,7 +238,7 @@
                                             <td>
                                                 <input type="text" class="form-control onlyNumber" id="giam_gia"
                                                        oninput="calc_total_item()" name="giam_gia"
-                                                       value="{{ old('giam_gia', $banhang->giam_gia) }}" required>
+                                                       value="{{ old('giam_gia', 0) }}" required>
                                             </td>
                                         </tr>
                                         <tr>
@@ -254,8 +248,8 @@
                                             <td>
                                                 <input type="text"
                                                        class="form-control bg-secondary bg-opacity-10 onlyNumber"
-                                                       id="tong_thanh_toan" name="tong_thanh_toan"
-                                                       value="{{ old('tong_thanh_toan', $banhang->tong_tien - $banhang->giam_gia) }}"
+                                                       id="tong_thanh_toan"
+                                                       name="tong_thanh_toan" value="{{ old('tong_thanh_toan') }}"
                                                        readonly required>
                                             </td>
                                         </tr>
@@ -265,8 +259,7 @@
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control onlyNumber" id="da_thanht_toan"
-                                                       name="da_thanht_toan"
-                                                       value="{{ old('da_thanht_toan', $banhang->da_thanht_toan) }}"
+                                                       name="da_thanht_toan" value="{{ old('da_thanht_toan', 0) }}"
                                                        oninput="calc_total_item()" required>
                                             </td>
                                         </tr>
@@ -277,8 +270,7 @@
                                             <td>
                                                 <input type="text"
                                                        class="form-control bg-secondary bg-opacity-10 onlyNumber"
-                                                       id="cong_no" name="cong_no"
-                                                       value="{{ old('cong_no', $banhang->cong_no) }}" readonly
+                                                       id="cong_no" name="cong_no" value="{{ old('cong_no') }}" readonly
                                                        required>
                                             </td>
                                         </tr>
@@ -286,20 +278,15 @@
                                     </table>
                                 </div>
 
+
                                 <div class="form-group col-md-12">
                                     <label for="loai_nguon_hang">Loại nguồn hàng</label>
                                     <select class="form-control" name="loai_nguon_hang" id="loai_nguon_hang"
                                             onchange="change_loai_nguon_hang();">
                                         <option value="">Lựa chọn</option>
-                                        <option {{ $banhang->loai_nguon_hang == 'ncc' ? 'selected' : '' }} value="ncc">
-                                            Nhà cung cấp
-                                        </option>
-                                        <option {{ $banhang->loai_nguon_hang == 'kh' ? 'selected' : '' }} value="kh">
-                                            Khách hàng
-                                        </option>
-                                        <option {{ $banhang->loai_nguon_hang == 'nv' ? 'selected' : '' }} value="nv">
-                                            Nhân viên
-                                        </option>
+                                        <option value="ncc">Nhà cung cấp</option>
+                                        <option value="kh">Khách hàng</option>
+                                        <option value="nv">Nhân viên</option>
                                     </select>
                                 </div>
 
@@ -314,10 +301,8 @@
                                     <label for="trang_thai">Trạng thái đơn hàng</label>
                                     <select class="form-control" name="trang_thai" id="trang_thai">
                                         <option
-                                            {{ $banhang->trang_thai == \App\Enums\TrangThaiBanHang::ACTIVE() ? 'selected' : '' }}
                                             value="{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}">{{ \App\Enums\TrangThaiBanHang::ACTIVE() }}</option>
                                         <option
-                                            {{ $banhang->trang_thai == \App\Enums\TrangThaiBanHang::PENDING() ? 'selected' : '' }}
                                             value="{{ \App\Enums\TrangThaiBanHang::PENDING() }}">{{ \App\Enums\TrangThaiBanHang::PENDING() }}</option>
                                     </select>
                                 </div>
@@ -327,22 +312,25 @@
                                     <select class="form-control selectCustom" name="loai_quy_id" id="loai_quy_id">
                                         @foreach($loai_quies as $loai_quy)
                                             <option
-                                                {{ $loai_quy->id == $banhang->phuong_thuc_thanh_toan ? 'selected' : '' }}
-                                                value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}</option>
+                                                value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                                {{ $loai_quy->ten_loai_quy }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label for="note">Ghi chú</label>
-                                    <textarea name="note" class="form-control" id="note"
-                                              rows="5">{{ old('note', $banhang->note) }}</textarea>
+                                    <textarea name="note" class="form-control" id="note" rows="5"></textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <input type="hidden" name="loai_san_pham" id="loai_san_pham"
-                               value="{{ $banhang->loai_san_pham }}">
-                        <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>
+                        <input type="hidden" name="loai_san_pham" id="loai_san_pham">
+
+                        <div class="w-100 d-flex justify-content-end mt-3 gap-2">
+                            <button type="submit" class="btn btn-primary">Thanh toán</button>
+                            <button type="reset" class="btn btn-danger">Hủy</button>
+                        </div>
                     </form>
 
                 </div>
@@ -434,7 +422,7 @@
                     switch (loaiSanPham) {
                         case 'NGUYEN_LIEU_THO':
                             ten_ = item.code + ' : ' +
-                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_phan_loai) - Number(item.khoi_luong_da_ban)).toFixed(3) + 'kg';
+                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_phan_loai)).toFixed(3) + 'kg';
                             if (!gia_) {
                                 gia_ = Number(item.chi_phi_mua) / Number(item.khoi_luong || 1);
                                 gia_ = Number(gia_.toFixed(3));
@@ -485,11 +473,11 @@
                 listSanPham.find('select').empty().append(html);
                 listSanPham.find('input#gia_ban').val(gia_);
                 listSanPham.find('input#so_luong').val(1);
-                listSanPham.find('input#tong_tien_temp').val(gia_);
+                listSanPham.find('input#tong_tien').val(gia_);
             }
 
             function change_gia_san_pham_temp(el) {
-                const totalEl = $(el).closest('tr').find('input#tong_tien_temp');
+                const totalEl = $(el).closest('tr').find('input#tong_tien');
                 const gia_ = $(el).closest('tr').find('input#gia_ban').val();
                 const so_luong = $(el).closest('tr').find('input#so_luong').val();
                 totalEl.val(gia_ * so_luong);
@@ -552,72 +540,13 @@
                 let tr = $(elm).closest('tr');
 
                 let select = tr.find('#san_pham_id');
-                let elm_gia_ban = tr.find('#gia_ban');
-                let elm_so_luong = tr.find('#so_luong');
-                let elm_tong_tien = tr.find('#tong_tien_temp');
+                let gia_ban = tr.find('#gia_ban');
+                let so_luong = tr.find('#so_luong');
 
                 let txt = $('#san_pham_id option:selected').text();
                 let san_pham_id = select.val();
 
-                if (!san_pham_id) {
-                    alert('Vui lòng chọn sản phẩm!');
-                    return false;
-                }
 
-                let gia_ban = elm_gia_ban.val();
-                let so_luong = elm_so_luong.val();
-
-                let total = gia_ban * so_luong;
-
-                let html = `<tr>
-                                            <td>
-                                                <span class="h6">${txt}</span>
-                                                <input type="hidden" name="san_pham_id[]" value="${san_pham_id}">
-                                            </td>
-                                            <td>
-                                                <input type="number" min="0" name="gia_bans[]"
-                                                       class="form-control gia_bans" value="${gia_ban}"
-                                                       oninput="change_gia_san_pham(this)" required>
-                                            </td>
-                                            <td>
-                                                <input type="number" min="1" name="so_luong[]"
-                                                       class="form-control so_luong" value="${so_luong}"
-                                                       oninput="change_gia_san_pham(this)" required>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="tong_tien[]" class="form-control tong_tien"
-                                                       disabled readonly value="${total}">
-                                            </td>
-                                            <td>
-                                                <button type="button" onclick="remove_items(this)"
-                                                        class="btn btn-danger btn-sm">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>`;
-
-                $('#tbodySanPhamSelected').append(html);
-
-                elm_gia_ban.val(0);
-                elm_so_luong.val(1);
-                elm_tong_tien.val(0);
-
-                change_thanh_toan();
-            }
-
-            function change_gia_san_pham(el) {
-                const totalEl = $(el).closest('tr').find('input.tong_tien');
-                const gia_ = $(el).closest('tr').find('input.gia_bans').val();
-                const so_luong = $(el).closest('tr').find('input.so_luong').val();
-
-                totalEl.val(gia_ * so_luong);
-
-                change_thanh_toan();
-            }
-
-            function remove_items(el) {
-                $(el).parent().closest('tr').remove();
-                change_thanh_toan();
             }
 
             function searchTable() {
@@ -627,8 +556,12 @@
             }
 
             $(document).ready(function () {
-                change_loai_san_pham();
-                change_loai_nguon_hang();
+                let start_date = $('#start_date').val();
+                let end_date = $('#end_date').val();
+                if (start_date || end_date) {
+                    const modal = new bootstrap.Modal(document.getElementById('orderHistoryModal'));
+                    modal.show();
+                }
             });
 
             function change_thanh_toan() {
@@ -687,24 +620,123 @@
             }
 
             function render_nguon_hang(data, loai_nguon_hang) {
-                let id = `{{ $banhang->nguon_hang }}`;
                 let html = '<option value="">Lựa chọn...</option>';
                 for (let i = 0; i < data.length; i++) {
-                    let selected = '';
-                    if (id == data[i].id) {
-                        selected = 'selected';
-                    }
                     if (loai_nguon_hang == 'ncc') {
-                        html += `<option value="${data[i].id}" ${selected}>${data[i].ten}</option>`;
+                        html += `<option value="${data[i].id}">${data[i].ten}</option>`;
                     } else if (loai_nguon_hang == 'kh') {
-                        html += `<option value="${data[i].id}" ${selected}>${data[i].ten}</option>`;
+                        html += `<option value="${data[i].id}">${data[i].ten}</option>`;
                     } else {
-                        html += `<option value="${data[i].id}" ${selected}>${data[i].full_name}</option>`;
+                        html += `<option value="${data[i].id}">${data[i].full_name}</option>`;
                     }
                 }
 
                 $('#nguon_hang').empty().append(html);
             }
         </script>
+
+        {{--        <script>--}}
+
+        {{--            function change_gia_san_pham(el) {--}}
+        {{--                const totalEl = $(el).closest('tr').find('input.tong_tien');--}}
+        {{--                const gia_ = $(el).closest('tr').find('input.gia_bans').val();--}}
+        {{--                const so_luong = $(el).closest('tr').find('input.so_luong').val();--}}
+
+        {{--                totalEl.val(gia_ * so_luong);--}}
+
+        {{--                change_thanh_toan();--}}
+        {{--            }--}}
+
+        {{--            function change_thong_tin_san_pham(el) {--}}
+        {{--                const loaiSanPham = $('#loai_san_pham').val();--}}
+        {{--                const id = $(el).val();--}}
+        {{--                layThongTinNguyenLieu(id, el, loaiSanPham);--}}
+        {{--            }--}}
+
+        {{--            function render_chi_tiet_san_pham(item, element, loaiSanPham) {--}}
+        {{--                let gia_ = null;--}}
+        {{--                switch (loaiSanPham) {--}}
+        {{--                    case 'NGUYEN_LIEU_THO':--}}
+        {{--                        gia_ = Number(item.chi_phi_mua) / Number(item.khoi_luong || 1);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                    case 'NGUYEN_LIEU_PHAN_LOAI':--}}
+        {{--                        gia_ = Number(item.gia_sau_phan_loai ?? 0);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                    case 'NGUYEN_LIEU_TINH':--}}
+        {{--                        gia_ = Number(item.gia_tien ?? 0);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                    case 'NGUYEN_LIEU_SAN_XUAT':--}}
+        {{--                        gia_ = Number(item.gia_tien ?? 0);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                    case 'NGUYEN_LIEU_THANH_PHAM':--}}
+        {{--                        gia_ = Number(item.gia_ban ?? 0);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                }--}}
+
+        {{--                $(element).closest('tr').find('input.gia_bans').val(gia_);--}}
+
+        {{--                change_gia_san_pham(element);--}}
+        {{--            }--}}
+
+        {{--            function layThongTinNguyenLieu(id, el, loaiSanPham) {--}}
+        {{--                const url = `{{ route('api.chi.tiet.nguyen.lieu') }}?id=${id}&type=${loaiSanPham}`;--}}
+
+        {{--                $.ajax({--}}
+        {{--                    url: url,--}}
+        {{--                    type: 'GET',--}}
+        {{--                    async: false,--}}
+        {{--                    success: function (data, textStatus) {--}}
+        {{--                        render_chi_tiet_san_pham(data.data, el, loaiSanPham);--}}
+        {{--                    },--}}
+        {{--                    error: function (request, status, error) {--}}
+        {{--                        let data = JSON.parse(request.responseText);--}}
+        {{--                        alert(data.message);--}}
+        {{--                    }--}}
+        {{--                });--}}
+        {{--            }--}}
+
+        {{--            $(document).ready(function () {--}}
+        {{--                add_items();--}}
+        {{--            })--}}
+
+        {{--            function add_items(el) {--}}
+        {{--                // const tbody = $('#tbodySanPham');--}}
+        {{--                // const tr = $('#listSanPham').clone();--}}
+        {{--                // tbody.append(tr);--}}
+
+        {{--                render_select_custom();--}}
+
+        {{--                change_thanh_toan();--}}
+        {{--            }--}}
+
+        {{--            function remove_items(el) {--}}
+        {{--                $(el).parent().closest('tr').remove();--}}
+        {{--                change_thanh_toan();--}}
+        {{--            }--}}
+
+        {{--            function render_select_custom() {--}}
+        {{--                $('#tbodySanPham select').select2({--}}
+        {{--                    theme: 'bootstrap-5',--}}
+        {{--                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',--}}
+        {{--                    placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',--}}
+        {{--                    allowClear: Boolean($(this).data('allow-clear')) || true,--}}
+        {{--                    minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,--}}
+        {{--                    containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',--}}
+        {{--                    dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',--}}
+        {{--                    dropdownAutoWidth: $(this).data('dropdown-auto-width'),--}}
+        {{--                    dropdownParent: $(this).data('dropdown-parent'),--}}
+        {{--                    dropdownPosition: $(this).data('dropdown-position'),--}}
+        {{--                    initSelection: function (element, callback) {--}}
+        {{--                        const id = element.val();--}}
+        {{--                        layThongTinNguyenLieu(id, element, $('#loai_san_pham').val());--}}
+        {{--                    }--}}
+        {{--                });--}}
+        {{--            }--}}
+        {{--        </script>--}}
     </section>
 @endsection
