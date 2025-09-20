@@ -88,35 +88,7 @@
                                         </tr>
                                         </thead>
                                         <tbody id="tbodySanPham">
-                                        <tr id="listSanPham">
-                                            <td>
-                                                <select id="san_pham_id" name="n_san_pham_id" class="form-control"
-                                                        onchange="change_thong_tin_san_pham(this)"
-                                                        required>
-                                                    <option value="">Lựa chọn sản phẩm</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input id="gia_ban" type="number" min="0" name="n_gia_ban"
-                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
-                                                       required>
-                                            </td>
-                                            <td>
-                                                <input id="so_luong" type="number" min="1" name="n_so_luong"
-                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
-                                                       value="1" required>
-                                            </td>
-                                            <td>
-                                                <input id="tong_tien_temp" type="text" name="n_tong_tien"
-                                                       class="form-control" disabled readonly>
-                                            </td>
-                                            <td>
-                                                <button type="button" onclick="add_new_items(this)"
-                                                        class="btn btn-success btn-sm">
-                                                    <i class="bi bi-check"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+
                                         </tbody>
                                     </table>
 
@@ -397,7 +369,7 @@
                     switch (loaiSanPham) {
                         case 'NGUYEN_LIEU_THO':
                             ten_ = item.code + ' : ' +
-                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_phan_loai) - Number(item.khoi_luong_da_ban)).toFixed(3) + 'kg';
+                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_phan_loai)).toFixed(3) + 'kg';
                             if (!gia_) {
                                 gia_ = Number(item.chi_phi_mua) / Number(item.khoi_luong || 1);
                                 gia_ = Number(gia_.toFixed(3));
@@ -448,11 +420,11 @@
                 listSanPham.find('select').empty().append(html);
                 listSanPham.find('input#gia_ban').val(gia_);
                 listSanPham.find('input#so_luong').val(1);
-                listSanPham.find('input#tong_tien_temp').val(gia_);
+                listSanPham.find('input#tong_tien').val(gia_);
             }
 
             function change_gia_san_pham_temp(el) {
-                const totalEl = $(el).closest('tr').find('input#tong_tien_temp');
+                const totalEl = $(el).closest('tr').find('input#tong_tien');
                 const gia_ = $(el).closest('tr').find('input#gia_ban').val();
                 const so_luong = $(el).closest('tr').find('input#so_luong').val();
                 totalEl.val(gia_ * so_luong);
@@ -517,7 +489,6 @@
                 let select = tr.find('#san_pham_id');
                 let elm_gia_ban = tr.find('#gia_ban');
                 let elm_so_luong = tr.find('#so_luong');
-                let elm_tong_tien = tr.find('#tong_tien_temp');
 
                 let txt = $('#san_pham_id option:selected').text();
                 let san_pham_id = select.val();
@@ -538,7 +509,7 @@
                                                 <input type="hidden" name="san_pham_id[]" value="${san_pham_id}">
                                             </td>
                                             <td>
-                                                <input type="number" min="0" name="gia_bans[]"
+                                                <input type="text" min="0" name="gia_bans[]"
                                                        class="form-control gia_bans" value="${gia_ban}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
@@ -559,28 +530,10 @@
                                             </td>
                                         </tr>`;
 
-                $('#tbodySanPhamSelected').append(html);
+                $('#tbodySanPham').append(html);
 
-                elm_gia_ban.val(0);
-                elm_so_luong.val(1);
-                elm_tong_tien.val(0);
-
-                change_thanh_toan();
-            }
-
-            function change_gia_san_pham(el) {
-                const totalEl = $(el).closest('tr').find('input.tong_tien');
-                const gia_ = $(el).closest('tr').find('input.gia_bans').val();
-                const so_luong = $(el).closest('tr').find('input.so_luong').val();
-
-                totalEl.val(gia_ * so_luong);
-
-                change_thanh_toan();
-            }
-
-            function remove_items(el) {
-                $(el).parent().closest('tr').remove();
-                change_thanh_toan();
+                elm_gia_ban.val('');
+                so_luong.val(1);
             }
 
             function searchTable() {
@@ -668,5 +621,109 @@
                 $('#nguon_hang').empty().append(html);
             }
         </script>
+
+        {{--        <script>--}}
+
+        {{--            function change_gia_san_pham(el) {--}}
+        {{--                const totalEl = $(el).closest('tr').find('input.tong_tien');--}}
+        {{--                const gia_ = $(el).closest('tr').find('input.gia_bans').val();--}}
+        {{--                const so_luong = $(el).closest('tr').find('input.so_luong').val();--}}
+
+        {{--                totalEl.val(gia_ * so_luong);--}}
+
+        {{--                change_thanh_toan();--}}
+        {{--            }--}}
+
+        {{--            function change_thong_tin_san_pham(el) {--}}
+        {{--                const loaiSanPham = $('#loai_san_pham').val();--}}
+        {{--                const id = $(el).val();--}}
+        {{--                layThongTinNguyenLieu(id, el, loaiSanPham);--}}
+        {{--            }--}}
+
+        {{--            function render_chi_tiet_san_pham(item, element, loaiSanPham) {--}}
+        {{--                let gia_ = null;--}}
+        {{--                switch (loaiSanPham) {--}}
+        {{--                    case 'NGUYEN_LIEU_THO':--}}
+        {{--                        gia_ = Number(item.chi_phi_mua) / Number(item.khoi_luong || 1);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                    case 'NGUYEN_LIEU_PHAN_LOAI':--}}
+        {{--                        gia_ = Number(item.gia_sau_phan_loai ?? 0);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                    case 'NGUYEN_LIEU_TINH':--}}
+        {{--                        gia_ = Number(item.gia_tien ?? 0);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                    case 'NGUYEN_LIEU_SAN_XUAT':--}}
+        {{--                        gia_ = Number(item.gia_tien ?? 0);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                    case 'NGUYEN_LIEU_THANH_PHAM':--}}
+        {{--                        gia_ = Number(item.gia_ban ?? 0);--}}
+        {{--                        gia_ = Number(gia_.toFixed(3));--}}
+        {{--                        break;--}}
+        {{--                }--}}
+
+        {{--                $(element).closest('tr').find('input.gia_bans').val(gia_);--}}
+
+        {{--                change_gia_san_pham(element);--}}
+        {{--            }--}}
+
+        {{--            function layThongTinNguyenLieu(id, el, loaiSanPham) {--}}
+        {{--                const url = `{{ route('api.chi.tiet.nguyen.lieu') }}?id=${id}&type=${loaiSanPham}`;--}}
+
+        {{--                $.ajax({--}}
+        {{--                    url: url,--}}
+        {{--                    type: 'GET',--}}
+        {{--                    async: false,--}}
+        {{--                    success: function (data, textStatus) {--}}
+        {{--                        render_chi_tiet_san_pham(data.data, el, loaiSanPham);--}}
+        {{--                    },--}}
+        {{--                    error: function (request, status, error) {--}}
+        {{--                        let data = JSON.parse(request.responseText);--}}
+        {{--                        alert(data.message);--}}
+        {{--                    }--}}
+        {{--                });--}}
+        {{--            }--}}
+
+        {{--            $(document).ready(function () {--}}
+        {{--                add_items();--}}
+        {{--            })--}}
+
+        {{--            function add_items(el) {--}}
+        {{--                // const tbody = $('#tbodySanPham');--}}
+        {{--                // const tr = $('#listSanPham').clone();--}}
+        {{--                // tbody.append(tr);--}}
+
+        {{--                render_select_custom();--}}
+
+        {{--                change_thanh_toan();--}}
+        {{--            }--}}
+
+        {{--            function remove_items(el) {--}}
+        {{--                $(el).parent().closest('tr').remove();--}}
+        {{--                change_thanh_toan();--}}
+        {{--            }--}}
+
+        {{--            function render_select_custom() {--}}
+        {{--                $('#tbodySanPham select').select2({--}}
+        {{--                    theme: 'bootstrap-5',--}}
+        {{--                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',--}}
+        {{--                    placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',--}}
+        {{--                    allowClear: Boolean($(this).data('allow-clear')) || true,--}}
+        {{--                    minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,--}}
+        {{--                    containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',--}}
+        {{--                    dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',--}}
+        {{--                    dropdownAutoWidth: $(this).data('dropdown-auto-width'),--}}
+        {{--                    dropdownParent: $(this).data('dropdown-parent'),--}}
+        {{--                    dropdownPosition: $(this).data('dropdown-position'),--}}
+        {{--                    initSelection: function (element, callback) {--}}
+        {{--                        const id = element.val();--}}
+        {{--                        layThongTinNguyenLieu(id, element, $('#loai_san_pham').val());--}}
+        {{--                    }--}}
+        {{--                });--}}
+        {{--            }--}}
+        {{--        </script>--}}
     </section>
 @endsection
