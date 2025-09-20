@@ -408,8 +408,8 @@
                             break;
 
                         case 'NGUYEN_LIEU_SAN_XUAT':
-                            ten_ = item.ten_nguyen_lieu + ' : ' +
-                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_dung ?? 0)).toFixed(3) + (item.don_vi_tinh || '');
+                            ten_ = item.ten_nguyen_lieu + ' - ' + item.phieu_san_xuat.so_lo_san_xuat + ' : ' +
+                                (Number(item.khoi_luong) - Number(item.khoi_luong_da_dung ?? 0)).toFixed(3) + (item.don_vi_tinh || 'kg');
                             if (!gia_) {
                                 gia_ = Number(item.gia_tien ?? 0);
                                 gia_ = Number(gia_.toFixed(3));

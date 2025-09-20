@@ -70,6 +70,7 @@ class HomeController extends Controller
     {
         $nlsanxuats = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
             ->orderByDesc('id')
+            ->with('phieuSanXuat')
             ->get();
 
         $data = returnMessage(1, $nlsanxuats, 'Success!');

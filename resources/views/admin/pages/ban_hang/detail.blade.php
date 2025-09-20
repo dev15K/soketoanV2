@@ -114,7 +114,7 @@
 
                                                                     case \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
                                                                         $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_dung ?? 0);
-                                                                        $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
+                                                                        $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . $nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
                                                                         $gia = $nguyenlieu->gia_tien ?? null;
                                                                         break;
 
@@ -508,7 +508,7 @@
                         break;
 
                     case 'NGUYEN_LIEU_SAN_XUAT':
-                        ten_ = item.ten_nguyen_lieu + ' : ' +
+                        ten_ = item.ten_nguyen_lieu + ' - ' + item.phieu_san_xuat.so_lo_san_xuat + ' : ' +
                             (Number(item.khoi_luong) - Number(item.khoi_luong_da_dung ?? 0)).toFixed(3) + (item.don_vi_tinh || '');
                         if (!gia_) {
                             gia_ = Number(item.gia_tien ?? 0);

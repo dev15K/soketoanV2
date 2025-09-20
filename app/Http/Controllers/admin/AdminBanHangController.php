@@ -194,9 +194,9 @@ class AdminBanHangController extends Controller
         switch ($loaiSanPham) {
             case LoaiSanPham::NGUYEN_LIEU_THO():
                 $item = NguyenLieuTho::find($sanPhamId);
-                $tonKho = $item?->khoi_luong - $item?->khoi_luong_da_phan_loai;
+                $tonKho = $item?->khoi_luong - $item?->khoi_luong_da_phan_loai - $item?->khoi_luong_da_ban;
                 if ($item && $tonKho >= $soLuong) {
-                    $item->khoi_luong_da_phan_loai += $soLuong;
+                    $item->khoi_luong_da_ban += $soLuong;
                     $item->save();
                     return true;
                 }
@@ -304,7 +304,7 @@ class AdminBanHangController extends Controller
         switch ($loaiSanPham) {
             case LoaiSanPham::NGUYEN_LIEU_THO():
                 $item = NguyenLieuTho::find($sanPhamId);
-                $item->khoi_luong_da_phan_loai -= $soLuong;
+                $item->khoi_luong_da_ban -= $soLuong;
                 $item->save();
                 break;
 
