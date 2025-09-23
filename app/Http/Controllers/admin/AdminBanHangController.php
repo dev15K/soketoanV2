@@ -391,6 +391,8 @@ class AdminBanHangController extends Controller
                 $soLuong = $bh->so_luong;
 
                 $this->rollback_item($loai_san_pham, $sanPhamId, $soLuong);
+
+                $bh->delete();
             }
 
             $total = 0;
@@ -420,7 +422,7 @@ class AdminBanHangController extends Controller
             ]);
 
             $soQuy = SoQuy::where('gia_tri_id', $banhang->id)->first();
-            $this->insertBanHang($banhang, true, optional($soQuy)->id, $request->input('loai_quy_id'));
+            $this->insertBanHang($banhang, true, $soQuy->id, $request->input('loai_quy_id'));
             DB::commit();
 
             return redirect()->route('admin.ban.hang.index')->with('success', 'Chỉnh sửa hóa đơn bán hàng thành công');

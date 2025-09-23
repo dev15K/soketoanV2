@@ -73,9 +73,10 @@
                                     <table class="table table-bordered showForm">
                                         <colgroup>
                                             <col width="x">
-                                            <col width="25%">
-                                            <col width="15%">
-                                            <col width="25%">
+                                            <col width="20%">
+                                            <col width="10%">
+                                            <col width="10%">
+                                            <col width="20%">
                                             <col width="5%">
                                         </colgroup>
                                         <thead>
@@ -83,6 +84,7 @@
                                             <th scope="col">Tên sản phẩm</th>
                                             <th scope="col">Giá bán</th>
                                             <th scope="col">Số lượng/Khối lượng</th>
+                                            <th scope="col">Giảm giá(%)</th>
                                             <th scope="col">Tổng tiền</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -107,6 +109,11 @@
                                                        value="1" required>
                                             </td>
                                             <td>
+                                                <input id="giam_gia" type="number" name="n_giam_gia"
+                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                       value="0" min="0" maxlength="100" required>
+                                            </td>
+                                            <td>
                                                 <input id="tong_tien_temp" type="text" name="n_tong_tien"
                                                        class="form-control" disabled readonly>
                                             </td>
@@ -124,9 +131,10 @@
                                     <table class="table table-bordered">
                                         <colgroup>
                                             <col width="x">
-                                            <col width="25%">
-                                            <col width="15%">
-                                            <col width="25%">
+                                            <col width="20%">
+                                            <col width="10%">
+                                            <col width="20%">
+                                            <col width="20%">
                                             <col width="5%">
                                         </colgroup>
                                         <thead>
@@ -134,6 +142,7 @@
                                             <th scope="col">Tên sản phẩm</th>
                                             <th scope="col">Giá bán</th>
                                             <th scope="col">Số lượng/Khối lượng</th>
+                                            <th scope="col">Giảm giá</th>
                                             <th scope="col">Tổng tiền</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -454,7 +463,10 @@
                 const totalEl = $(el).closest('tr').find('input#tong_tien_temp');
                 const gia_ = $(el).closest('tr').find('input#gia_ban').val();
                 const so_luong = $(el).closest('tr').find('input#so_luong').val();
-                totalEl.val(gia_ * so_luong);
+                const giam_gia = $(el).closest('tr').find('input#giam_gia').val();
+
+                const total_giam_gia = giam_gia * gia_ * so_luong / 100;
+                totalEl.val(gia_ * so_luong - total_giam_gia);
             }
 
             function change_thong_tin_san_pham(el) {
@@ -516,6 +528,7 @@
                 let select = tr.find('#san_pham_id');
                 let elm_gia_ban = tr.find('#gia_ban');
                 let elm_so_luong = tr.find('#so_luong');
+                let elm_giam_gia = tr.find('#giam_gia');
                 let elm_tong_tien = tr.find('#tong_tien_temp');
 
                 let txt = $('#san_pham_id option:selected').text();
@@ -528,8 +541,10 @@
 
                 let gia_ban = elm_gia_ban.val();
                 let so_luong = elm_so_luong.val();
+                let giam_gia = elm_giam_gia.val();
 
-                let total = gia_ban * so_luong;
+                let total_giam_gia = giam_gia * gia_ban * so_luong / 100;
+                let total = gia_ban * so_luong - total_giam_gia;
 
                 let html = `<tr>
                                             <td>
@@ -544,6 +559,11 @@
                                             <td>
                                                 <input type="number" min="1" name="so_luong[]"
                                                        class="form-control so_luong" value="${so_luong}"
+                                                       oninput="change_gia_san_pham(this)" required>
+                                            </td>
+                                            <td>
+                                                <input type="number" min="0" name="giam_gia[]"
+                                                       class="form-control so_luong" value="${total_giam_gia}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>

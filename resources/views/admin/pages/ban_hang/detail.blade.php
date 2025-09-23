@@ -208,13 +208,13 @@
                                     <div class="form-group col-md-6">
                                         <label for="so_dien_thoai">Số điện thoại</label>
                                         <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai"
-                                               value="{{ $banhang->so_dien_thoai }}" required>
+                                               value="{{ $banhang->so_dien_thoai }}">
                                     </div>
 
                                     <div class="form-group col-md-6">
                                         <label for="dia_chi">Địa chỉ chi tiết</label>
                                         <input type="text" class="form-control" id="dia_chi"
-                                               value="{{ $banhang->dia_chi }}" name="dia_chi" required>
+                                               value="{{ $banhang->dia_chi }}" name="dia_chi">
                                     </div>
                                 </div>
 
