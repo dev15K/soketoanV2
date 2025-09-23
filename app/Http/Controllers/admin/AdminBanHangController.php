@@ -116,8 +116,9 @@ class AdminBanHangController extends Controller
                 'loai_san_pham' => $request->input('loai_san_pham'),
                 'phuong_thuc_thanh_toan' => $request->input('loai_quy_id'),
                 'tong_tien' => $request->input('tong_tien') ?? 0,
-                'da_thanht_toan' => $request->input('da_thanht_toan') ?? 0,
-                'giam_gia' => $request->input('giam_gia') ?? 0,
+                'da_thanht_toan' => $request->input('da_thanht_toan') ?? '',
+                'giam_gia' => $request->input('tong_giam_gia') ?? 0,
+                'type_discount' => $request->input('type_discount') ?? 0,
                 'cong_no' => $request->input('cong_no') ?? 0,
                 'note' => $request->input('note'),
                 'loai_nguon_hang' => $request->input('loai_nguon_hang') ?? '',
@@ -135,19 +136,22 @@ class AdminBanHangController extends Controller
             $sanPhamIds = $request->input('san_pham_id');
             $giaBans = $request->input('gia_bans');
             $soLuongs = $request->input('so_luong');
+            $giam_gias = $request->input('giam_gia');
 
             $total = 0;
 
             foreach ($sanPhamIds as $i => $sanPhamId) {
                 $giaBan = $giaBans[$i];
                 $soLuong = $soLuongs[$i];
-                $tongTien = $giaBan * $soLuong;
+                $giam_gia = $giam_gias[$i];
+                $tongTien = $giaBan * $soLuong - $giam_gia;
 
                 BanHangChiTiet::create([
                     'ban_hang_id' => $banhang->id,
                     'san_pham_id' => $sanPhamId,
                     'gia_ban' => $giaBan,
                     'so_luong' => $soLuong,
+                    'discount_amount' => $giam_gia,
                     'tong_tien' => $tongTien,
                 ]);
 

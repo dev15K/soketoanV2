@@ -217,12 +217,24 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label for="giam_gia">Giảm giá</label>
+                                                <label for="type_discount">Loại giảm giá</label>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control onlyNumber" id="giam_gia"
-                                                       oninput="calc_total_item()" name="giam_gia"
-                                                       value="{{ old('giam_gia', 0) }}" required>
+                                                <select class="form-control" name="type_discount" id="type_discount">
+                                                    <option value="">Chọn loại giảm giá</option>
+                                                    <option value="percent">%(Phần trăm)</option>
+                                                    <option value="money">Tiền mặt</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="tong_giam_gia">Giảm giá</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control onlyNumber" id="tong_giam_gia"
+                                                       oninput="calc_total_item()" name="tong_giam_gia"
+                                                       value="{{ old('tong_giam_gia', 0) }}" required>
                                             </td>
                                         </tr>
                                         <tr>
@@ -320,7 +332,16 @@
 
             </div>
         </div>
+        <script>
+            const form = document.getElementById('form_submit_order');
 
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+
+                form.submit();
+            });
+        </script>
         <script>
             async function changeKhachHang() {
                 const khachHangId = $('#khach_hang_id').val();
@@ -563,7 +584,7 @@
                                             </td>
                                             <td>
                                                 <input type="number" min="0" name="giam_gia[]"
-                                                       class="form-control so_luong" value="${total_giam_gia}"
+                                                       class="form-control giam_gia" value="${total_giam_gia}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>
@@ -591,8 +612,9 @@
                 const totalEl = $(el).closest('tr').find('input.tong_tien');
                 const gia_ = $(el).closest('tr').find('input.gia_bans').val();
                 const so_luong = $(el).closest('tr').find('input.so_luong').val();
+                const giam_gia = $(el).closest('tr').find('input.giam_gia').val();
 
-                totalEl.val(gia_ * so_luong);
+                totalEl.val(gia_ * so_luong - giam_gia);
 
                 change_thanh_toan();
             }
@@ -608,15 +630,6 @@
                 window.location.href = "{{ route('admin.ban.hang.index') }}?start_date=" + start_date + "&end_date=" + end_date;
             }
 
-            $(document).ready(function () {
-                let start_date = $('#start_date').val();
-                let end_date = $('#end_date').val();
-                if (start_date || end_date) {
-                    const modal = new bootstrap.Modal(document.getElementById('orderHistoryModal'));
-                    modal.show();
-                }
-            });
-
             function change_thanh_toan() {
                 calc_total_item();
 
@@ -626,21 +639,53 @@
                 $('#cong_no').val(tong_thanh_toan);
             }
 
+            $('#type_discount').on('change', function () {
+                calc_total_item();
+            });
+
             function calc_total_item() {
                 let total = 0;
 
+                // Tính tổng tiền từ các input hidden/array tong_tien[]
                 $('#form_submit_order input[name="tong_tien[]"]').each(function () {
-                    total += parseFloat(this.value) || 0;
+                    total += parseFloat($(this).val()) || 0;
                 });
 
+                // Gán vào ô tổng tiền
                 $('#tong_tien').val(total);
 
-                let giam_gia = $('#giam_gia').val() || 0;
-                let da_thanht_toan = $('#da_thanht_toan').val() || 0;
+                // Loại giảm giá
+                let loai_giam_gia = $('#type_discount').val();
+                loai_giam_gia = loai_giam_gia.trim();
+                // Lấy giá trị giảm giá, đảm bảo là số >= 0
+                let giam_gia = parseFloat($('#tong_giam_gia').val()) || 0;
+                if (giam_gia < 0) giam_gia = 0;
 
-                let tong_thanh_toan = total - giam_gia;
+                let tien_giam_gia = 0;
+                if (loai_giam_gia == 'percent') {
+                    tien_giam_gia = total * giam_gia / 100;
+                } else {
+                    tien_giam_gia = giam_gia;
+                }
+
+                // Không cho tiền giảm giá vượt quá tổng
+                if (tien_giam_gia > total) {
+                    tien_giam_gia = total;
+                }
+
+                // Khách đã thanh toán
+                let da_thanht_toan = parseFloat($('#da_thanht_toan').val()) || 0;
+                if (da_thanht_toan < 0) da_thanht_toan = 0;
+
+                // Tính toán
+                let tong_thanh_toan = total - tien_giam_gia;
+
                 let cong_no = tong_thanh_toan - da_thanht_toan;
 
+                // Không cho công nợ < 0
+                if (cong_no < 0) cong_no = 0;
+
+                // Gán giá trị ra input
                 $('#tong_thanh_toan').val(tong_thanh_toan);
                 $('#cong_no').val(cong_no);
             }
