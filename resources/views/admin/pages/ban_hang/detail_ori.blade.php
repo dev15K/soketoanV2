@@ -77,7 +77,7 @@
                                         <tr>
                                             <th scope="col">Tên sản phẩm</th>
                                             <th scope="col">Giá bán</th>
-                                            <th scope="col">Số lượng/Khối lượng</th>
+                                            <th scope="col">SL/KL</th>
                                             <th scope="col">Tổng tiền</th>
                                             <th scope="col"></th>
                                         </tr>

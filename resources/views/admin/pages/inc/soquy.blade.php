@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         <label for="nhom_quy_id">Nhóm quỹ</label>
-                        <select class="form-control" name="nhom_quy_id" id="nhom_quy_id" required>
+                        <select class="form-control" name="nhom_quy_id" id="nhom_quy_id">
                             @foreach($nhom_quies as $nhom_quy)
                                 <option
                                         value="{{ $nhom_quy->id }}" {{ old('loai_quy_id') == $nhom_quy->id ? 'selected' : '' }}>
@@ -75,8 +75,7 @@
 
                     <div class="form-group col-md-6">
                         <label for="noi_nhan">Nơi nhận</label>
-                        <select class="form-control selectCustom" name="noi_nhan" id="noi_nhan"
-                                required>
+                        <select class="form-control selectCustom" name="noi_nhan" id="noi_nhan">
 
                         </select>
                     </div>
