@@ -70,9 +70,10 @@
                                     <table class="table table-bordered showForm">
                                         <colgroup>
                                             <col width="x">
-                                            <col width="25%">
-                                            <col width="15%">
-                                            <col width="25%">
+                                            <col width="20%">
+                                            <col width="10%">
+                                            <col width="10%">
+                                            <col width="20%">
                                             <col width="5%">
                                         </colgroup>
                                         <thead>
@@ -80,6 +81,7 @@
                                             <th scope="col">Tên sản phẩm</th>
                                             <th scope="col">Giá bán</th>
                                             <th scope="col">Số lượng/Khối lượng</th>
+                                            <th scope="col">Giảm giá(%)</th>
                                             <th scope="col">Tổng tiền</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -104,6 +106,11 @@
                                                        value="1" required>
                                             </td>
                                             <td>
+                                                <input id="giam_gia" type="number" name="n_giam_gia"
+                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                       value="0" min="0" maxlength="100" required>
+                                            </td>
+                                            <td>
                                                 <input id="tong_tien_temp" type="text" name="n_tong_tien"
                                                        class="form-control" disabled readonly>
                                             </td>
@@ -121,9 +128,10 @@
                                     <table class="table table-bordered">
                                         <colgroup>
                                             <col width="x">
-                                            <col width="25%">
-                                            <col width="15%">
-                                            <col width="25%">
+                                            <col width="20%">
+                                            <col width="10%">
+                                            <col width="20%">
+                                            <col width="20%">
                                             <col width="5%">
                                         </colgroup>
                                         <thead>
@@ -131,6 +139,7 @@
                                             <th scope="col">Tên sản phẩm</th>
                                             <th scope="col">Giá bán</th>
                                             <th scope="col">Số lượng/Khối lượng</th>
+                                            <th scope="col">Giảm giá</th>
                                             <th scope="col">Tổng tiền</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -157,6 +166,11 @@
                                                     <input type="number" min="1" name="so_luong[]"
                                                            class="form-control so_luong"
                                                            value="{{ $chiTietBanHang->so_luong }}"
+                                                           oninput="change_gia_san_pham(this)" required>
+                                                </td>
+                                                <td>
+                                                    <input type="number" min="0" name="giam_gia[]"
+                                                           class="form-control giam_gia"   value="{{ $chiTietBanHang->discount_amount }}"
                                                            oninput="change_gia_san_pham(this)" required>
                                                 </td>
                                                 <td>
@@ -239,12 +253,24 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label for="giam_gia">Giảm giá</label>
+                                                <label for="type_discount">Loại giảm giá</label>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control onlyNumber" id="giam_gia"
-                                                       oninput="calc_total_item()" name="giam_gia"
-                                                       value="{{ old('giam_gia', $banhang->giam_gia) }}" required>
+                                                <select class="form-control" name="type_discount" id="type_discount">
+                                                    <option value="">Chọn loại giảm giá</option>
+                                                    <option {{ $banhang->type_discount == 'percent' ? 'selected' : '' }} value="percent">%(Phần trăm)</option>
+                                                    <option {{ $banhang->type_discount == 'money' ? 'selected' : '' }} value="money">Tiền mặt</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="tong_giam_gia">Giảm giá</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control onlyNumber" id="tong_giam_gia"
+                                                       oninput="calc_total_item()" name="tong_giam_gia"
+                                                       value="{{ old('tong_giam_gia', $banhang->giam_gia) }}" required>
                                             </td>
                                         </tr>
                                         <tr>
@@ -349,7 +375,14 @@
 
             </div>
         </div>
+        <script>
+            const form = document.getElementById('form_submit_order');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
 
+                form.submit();
+            });
+        </script>
         <script>
             async function changeKhachHang() {
                 const khachHangId = $('#khach_hang_id').val();
@@ -492,7 +525,10 @@
                 const totalEl = $(el).closest('tr').find('input#tong_tien_temp');
                 const gia_ = $(el).closest('tr').find('input#gia_ban').val();
                 const so_luong = $(el).closest('tr').find('input#so_luong').val();
-                totalEl.val(gia_ * so_luong);
+                const giam_gia = $(el).closest('tr').find('input#giam_gia').val();
+
+                const total_giam_gia = giam_gia * gia_ * so_luong / 100;
+                totalEl.val(gia_ * so_luong - total_giam_gia);
             }
 
             function change_thong_tin_san_pham(el) {
@@ -554,6 +590,7 @@
                 let select = tr.find('#san_pham_id');
                 let elm_gia_ban = tr.find('#gia_ban');
                 let elm_so_luong = tr.find('#so_luong');
+                let elm_giam_gia = tr.find('#giam_gia');
                 let elm_tong_tien = tr.find('#tong_tien_temp');
 
                 let txt = $('#san_pham_id option:selected').text();
@@ -566,8 +603,10 @@
 
                 let gia_ban = elm_gia_ban.val();
                 let so_luong = elm_so_luong.val();
+                let giam_gia = elm_giam_gia.val();
 
-                let total = gia_ban * so_luong;
+                let total_giam_gia = giam_gia * gia_ban * so_luong / 100;
+                let total = gia_ban * so_luong - total_giam_gia;
 
                 let html = `<tr>
                                             <td>
@@ -582,6 +621,11 @@
                                             <td>
                                                 <input type="number" min="1" name="so_luong[]"
                                                        class="form-control so_luong" value="${so_luong}"
+                                                       oninput="change_gia_san_pham(this)" required>
+                                            </td>
+                                            <td>
+                                                <input type="number" min="0" name="giam_gia[]"
+                                                       class="form-control giam_gia" value="${total_giam_gia}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>
@@ -609,8 +653,9 @@
                 const totalEl = $(el).closest('tr').find('input.tong_tien');
                 const gia_ = $(el).closest('tr').find('input.gia_bans').val();
                 const so_luong = $(el).closest('tr').find('input.so_luong').val();
+                const giam_gia = $(el).closest('tr').find('input.giam_gia').val();
 
-                totalEl.val(gia_ * so_luong);
+                totalEl.val(gia_ * so_luong - giam_gia);
 
                 change_thanh_toan();
             }
@@ -640,21 +685,53 @@
                 $('#cong_no').val(tong_thanh_toan);
             }
 
+            $('#type_discount').on('change', function () {
+                calc_total_item();
+            });
+
             function calc_total_item() {
                 let total = 0;
 
+                // Tính tổng tiền từ các input hidden/array tong_tien[]
                 $('#form_submit_order input[name="tong_tien[]"]').each(function () {
-                    total += parseFloat(this.value) || 0;
+                    total += parseFloat($(this).val()) || 0;
                 });
 
+                // Gán vào ô tổng tiền
                 $('#tong_tien').val(total);
 
-                let giam_gia = $('#giam_gia').val() || 0;
-                let da_thanht_toan = $('#da_thanht_toan').val() || 0;
+                // Loại giảm giá
+                let loai_giam_gia = $('#type_discount').val();
+                loai_giam_gia = loai_giam_gia.trim();
+                // Lấy giá trị giảm giá, đảm bảo là số >= 0
+                let giam_gia = parseFloat($('#tong_giam_gia').val()) || 0;
+                if (giam_gia < 0) giam_gia = 0;
 
-                let tong_thanh_toan = total - giam_gia;
+                let tien_giam_gia = 0;
+                if (loai_giam_gia == 'percent') {
+                    tien_giam_gia = total * giam_gia / 100;
+                } else {
+                    tien_giam_gia = giam_gia;
+                }
+
+                // Không cho tiền giảm giá vượt quá tổng
+                if (tien_giam_gia > total) {
+                    tien_giam_gia = total;
+                }
+
+                // Khách đã thanh toán
+                let da_thanht_toan = parseFloat($('#da_thanht_toan').val()) || 0;
+                if (da_thanht_toan < 0) da_thanht_toan = 0;
+
+                // Tính toán
+                let tong_thanh_toan = total - tien_giam_gia;
+
                 let cong_no = tong_thanh_toan - da_thanht_toan;
 
+                // Không cho công nợ < 0
+                if (cong_no < 0) cong_no = 0;
+
+                // Gán giá trị ra input
                 $('#tong_thanh_toan').val(tong_thanh_toan);
                 $('#cong_no').val(cong_no);
             }

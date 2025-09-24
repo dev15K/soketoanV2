@@ -106,6 +106,11 @@ class AdminBanHangController extends Controller
             $ma_don_hang = generateCodeBanHang($lastId + 1);
 
             $khach_hang_id = $request->input('khach_hang_id');
+
+            $tong_tien = $request->input('tong_tien');
+            $type_discount = $request->input('type_discount');
+            $giam_gia = $request->input('giam_gia');
+
             $banhang = new BanHang([
                 'khach_hang_id' => $khach_hang_id != 0 ? $khach_hang_id : null,
                 'ban_le' => $khach_hang_id == 0,
@@ -116,14 +121,21 @@ class AdminBanHangController extends Controller
                 'loai_san_pham' => $request->input('loai_san_pham'),
                 'phuong_thuc_thanh_toan' => $request->input('loai_quy_id'),
                 'tong_tien' => $request->input('tong_tien') ?? 0,
-                'da_thanht_toan' => $request->input('da_thanht_toan') ?? 0,
-                'giam_gia' => $request->input('giam_gia') ?? 0,
+                'da_thanht_toan' => $request->input('da_thanht_toan') ?? '',
+                'giam_gia' => $request->input('tong_giam_gia') ?? 0,
+                'type_discount' => $request->input('type_discount') ?? 0,
                 'cong_no' => $request->input('cong_no') ?? 0,
                 'note' => $request->input('note'),
                 'loai_nguon_hang' => $request->input('loai_nguon_hang') ?? '',
                 'nguon_hang' => $request->input('nguon_hang') ?? 0,
                 'trang_thai' => $request->input('trang_thai') ?? TrangThaiBanHang::ACTIVE(),
             ]);
+
+            if ($type_discount == 'percent') {
+                $tong_giam_gia = $tong_tien * $giam_gia / 100;
+            } else {
+                $tong_giam_gia = $giam_gia;
+            }
 
             $loaiQuy = LoaiQuy::find($banhang->phuong_thuc_thanh_toan);
             if (!$loaiQuy) {
@@ -135,19 +147,22 @@ class AdminBanHangController extends Controller
             $sanPhamIds = $request->input('san_pham_id');
             $giaBans = $request->input('gia_bans');
             $soLuongs = $request->input('so_luong');
+            $giam_gias = $request->input('giam_gia');
 
             $total = 0;
 
             foreach ($sanPhamIds as $i => $sanPhamId) {
                 $giaBan = $giaBans[$i];
                 $soLuong = $soLuongs[$i];
-                $tongTien = $giaBan * $soLuong;
+                $giam_gia = $giam_gias[$i];
+                $tongTien = $giaBan * $soLuong - $giam_gia;
 
                 BanHangChiTiet::create([
                     'ban_hang_id' => $banhang->id,
                     'san_pham_id' => $sanPhamId,
                     'gia_ban' => $giaBan,
                     'so_luong' => $soLuong,
+                    'discount_amount' => $giam_gia,
                     'tong_tien' => $tongTien,
                 ]);
 
@@ -162,7 +177,7 @@ class AdminBanHangController extends Controller
 
             $banhang->update([
                 'tong_tien' => $total,
-                'cong_no' => $total - $banhang->giam_gia - $banhang->da_thanht_toan,
+                'cong_no' => $total - $tong_giam_gia - $banhang->da_thanht_toan,
             ]);
 
             $this->insertBanHang($banhang, false, null, $banhang->phuong_thuc_thanh_toan);
@@ -358,8 +373,15 @@ class AdminBanHangController extends Controller
             $tong_tien = $request->input('tong_tien');
             $note = $request->input('note');
             $trang_thai = $request->input('trang_thai');
-            $giam_gia = $request->input('giam_gia');
+            $giam_gia = $request->input('tong_giam_gia') ?? 0;
+            $type_discount = $request->input('type_discount') ?? 0;
             $cong_no = $request->input('cong_no');
+
+            if ($type_discount == 'percent') {
+                $tong_giam_gia = $tong_tien * $giam_gia / 100;
+            } else {
+                $tong_giam_gia = $giam_gia;
+            }
 
             $banhang->update([
                 'khach_hang_id' => $khach_hang_id != 0 ? $khach_hang_id : null,
@@ -372,6 +394,7 @@ class AdminBanHangController extends Controller
                 'tong_tien' => $tong_tien ?? 0,
                 'da_thanht_toan' => $da_thanht_toan ?? 0,
                 'giam_gia' => $giam_gia ?? 0,
+                'type_discount' => $type_discount ?? 0,
                 'cong_no' => $cong_no ?? 0,
                 'note' => $note,
                 'loai_nguon_hang' => $request->input('loai_nguon_hang') ?? '',
@@ -384,6 +407,7 @@ class AdminBanHangController extends Controller
             $sanPhamIds = $request->input('san_pham_id');
             $giaBans = $request->input('gia_bans');
             $soLuongs = $request->input('so_luong');
+            $giam_gias = $request->input('giam_gia');
 
             $ban_hang_chi_tiet = BanHangChiTiet::where('ban_hang_id', $banhang->id)->get();
             foreach ($ban_hang_chi_tiet as $bh) {
@@ -400,11 +424,13 @@ class AdminBanHangController extends Controller
             foreach ($sanPhamIds as $i => $sanPhamId) {
                 $giaBan = $giaBans[$i];
                 $soLuong = $soLuongs[$i];
-                $tongTien = $giaBan * $soLuong;
+                $giamGia = $giam_gias[$i];
+
+                $tongTien = $giaBan * $soLuong - $giamGia;
 
                 $banHangChiTiet = BanHangChiTiet::updateOrCreate(
                     ['ban_hang_id' => $id, 'san_pham_id' => $sanPhamId],
-                    ['gia_ban' => $giaBan, 'so_luong' => $soLuong, 'tong_tien' => $tongTien]
+                    ['gia_ban' => $giaBan, 'so_luong' => $soLuong, 'tong_tien' => $tongTien, 'discount_amount' => $giamGia]
                 );
 
                 if (!$this->capNhatKho($banhang->loai_san_pham, $sanPhamId, $soLuong)) {
@@ -418,7 +444,7 @@ class AdminBanHangController extends Controller
 
             $banhang->update([
                 'tong_tien' => $total,
-                'cong_no' => $total - $banhang->giam_gia - $banhang->da_thanht_toan,
+                'cong_no' => $total - $tong_giam_gia - $banhang->da_thanht_toan,
             ]);
 
             $soQuy = SoQuy::where('gia_tri_id', $banhang->id)->first();
