@@ -109,9 +109,9 @@ class AdminSoQuyController extends Controller
             $noi_dung = $request->input('noi_dung');
             $ngay = $request->input('ngay');
             $loai_quy_id = $request->input('loai_quy_id');
-            $nhom_quy_id = $request->input('nhom_quy_id');
-            $loai_noi_nhan = $request->input('loai_noi_nhan');
-            $noi_nhan = $request->input('noi_nhan');
+            $nhom_quy_id = $request->input('nhom_quy_id') ?? null;
+            $loai_noi_nhan = $request->input('loai_noi_nhan') ?? '';
+            $noi_nhan = $request->input('noi_nhan') ?? '';
 
             $soquy = new SoQuy();
 

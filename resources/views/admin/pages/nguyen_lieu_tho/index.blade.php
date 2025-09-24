@@ -170,7 +170,7 @@
                                     @foreach($loai_quies as $loai_quy)
                                         <option
                                                 value="{{ $loai_quy->id }}" {{ old('phuong_thuc_thanh_toan') == $loai_quy->id ? 'selected' : '' }}>
-                                            {{ $loai_quy->ten_loai_quy }} - {{ parseNumber($loai_quy->tong_tien_quy) }}
+                                            {{ $loai_quy->ten_loai_quy }}: {{ parseNumber($loai_quy->tong_tien_quy) }}
                                             VND
                                         </option>
                                     @endforeach

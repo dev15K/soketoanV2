@@ -47,7 +47,8 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nha_cung_cap_id">Nhà cung cấp</label>
-                                    <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control selectCustom">
+                                    <select name="nha_cung_cap_id" id="nha_cung_cap_id"
+                                            class="form-control selectCustom">
                                         @foreach($nccs as $ncc)
                                             <option
                                                 {{ $nguyen_lieu_tho->nha_cung_cap_id == $ncc->id ? 'selected' : '' }}
@@ -114,7 +115,7 @@
                                             <option
                                                 {{ $nguyen_lieu_tho->phuong_thuc_thanh_toan == $loai_quy->id ? 'selected' : '' }}
                                                 value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}
-                                                - {{ parseNumber($loai_quy->tong_tien_quy) }} VND
+                                                : {{ parseNumber($loai_quy->tong_tien_quy) }} VND
                                             </option>
                                         @endforeach
                                     </select>

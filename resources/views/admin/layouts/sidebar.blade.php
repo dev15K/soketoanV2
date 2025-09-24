@@ -61,7 +61,7 @@
             <a class="nav-link {{ Request::routeIs('admin.san.pham.*') ? '' : 'collapsed' }}"
                data-bs-target="#attributes-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>Quản lý sản phẩm</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="attributes-nav"
                 class="nav-content collapse {{ Request::routeIs('admin.san.pham.*') ? 'show' : '' }}"
@@ -79,7 +79,7 @@
             <a class="nav-link {{ Request::routeIs('admin.nha.cung.cap.*') ? '' : 'collapsed' }}"
                data-bs-target="#properties-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-journal-text"></i><span>Quản lí nhà cung cấp</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="properties-nav"
                 class="nav-content collapse {{ Request::routeIs('admin.nha.cung.cap.*') ? 'show' : '' }}"
@@ -103,14 +103,20 @@
             <a class="nav-link {{ Request::routeIs('admin.ban.hang*') ? '' : 'collapsed' }}"
                data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Bán hàng</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="products-nav" class="nav-content collapse {{ Request::routeIs('admin.ban.hang.*') ? 'show' : '' }}"
                 data-bs-parent="#sidebar-nav">
                 <li>
-                    <a class="{{ Request::routeIs('admin.ban.hang.*') ? 'active' : '' }}"
+                    <a class="{{ Request::routeIs('admin.ban.hang.create') ? 'active' : '' }}"
                        href="{{ route('admin.ban.hang.create') }}">
                         <i class="bi bi-circle"></i><span>Thêm mới</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="{{ Request::routeIs('admin.ban.hang.index') || Request::routeIs('admin.ban.hang.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.ban.hang.index') }}">
+                        <i class="bi bi-circle"></i><span>Lịch sử bán hàng</span>
                     </a>
                 </li>
             </ul>
@@ -120,7 +126,7 @@
             <a class="nav-link {{ Request::routeIs('admin.khach.hang.*') || Request::routeIs('admin.nhom.khach.hang.*') ? '' : 'collapsed' }}"
                data-bs-target="#orders-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person-vcard"></i><span>Quản lý khách hàng</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="orders-nav"
                 class="nav-content collapse {{ Request::routeIs('admin.khach.hang.*') || Request::routeIs('admin.nhom.khach.hang.*') ? 'show' : '' }}"
@@ -151,19 +157,19 @@
                 <li>
                     <a class="{{ Request::routeIs('admin.loai.quy.index') || Request::routeIs('admin.loai.quy.detail') ? 'active' : '' }}"
                        href="{{ route('admin.loai.quy.index') }}">
-                        <i class="bi bi-circle"></i><span>Loại quỹ</span>
+                        <i class="bi bi-circle"></i><span>Danh sách quỹ</span>
                     </a>
                 </li>
                 <li>
                     <a class="{{ Request::routeIs('admin.nhom.quy.*') ? 'active' : '' }}"
                        href="{{ route('admin.nhom.quy.index') }}">
-                        <i class="bi bi-circle"></i><span>Nhóm quỹ</span>
+                        <i class="bi bi-circle"></i><span>Quản lý nhóm quỹ</span>
                     </a>
                 </li>
                 <li>
                     <a class="{{ Request::routeIs('admin.so.quy.index') || Request::routeIs('admin.so.quy.detail') ? 'active' : '' }}"
                        href="{{ route('admin.so.quy.index') }}">
-                        <i class="bi bi-circle"></i><span>Sổ quỹ</span>
+                        <i class="bi bi-circle"></i><span>Chi tiết sổ quỹ</span>
                     </a>
                 </li>
             </ul>
@@ -196,7 +202,7 @@
             <a class="nav-link {{ Request::routeIs('admin.thong.tin.*') ? '' : 'collapsed' }}"
                data-bs-target="#consultants-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-question-circle"></i><span>Lương + OKR</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="consultants-nav"
                 class="nav-content collapse {{ Request::routeIs('admin.thong.tin.*') ? 'show' : '' }}"
