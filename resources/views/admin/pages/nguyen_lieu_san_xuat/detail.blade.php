@@ -69,30 +69,8 @@
                                     <input type="text" class="form-control" id="tong_tien" name="tong_tien"
                                            value="{{ $nguyen_lieu_san_xuat->tong_tien }}">
                                 </div>
+
                                 <div class="form-group col-md-4">
-                                    <label for="mau_sac">Màu sắc</label>
-                                    <input type="text" class="form-control" id="mau_sac" name="mau_sac"
-                                           value="{{ $nguyen_lieu_san_xuat->mau_sac }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="mui_thom">Mùi thơm</label>
-                                    <input type="text" class="form-control" id="mui_thom" name="mui_thom"
-                                           value="{{ $nguyen_lieu_san_xuat->mui_thom }}">
-                                </div>
-                                <div class="form-group d-none">
-                                    <label for="trang_thai">Trạng thái</label>
-                                    <select id="trang_thai" name="trang_thai" class="form-control">
-                                        <option
-                                            {{  $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::ACTIVE() ? 'selected' : '' }}
-                                            value="{{ TrangThaiNguyenLieuSanXuat::ACTIVE() }}">{{ TrangThaiNguyenLieuSanXuat::ACTIVE() }}</option>
-                                        <option
-                                            {{ $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::INACTIVE() ? 'selected' : '' }}
-                                            value="{{ TrangThaiNguyenLieuSanXuat::INACTIVE() }}">{{ TrangThaiNguyenLieuSanXuat::INACTIVE() }}</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6">
                                     <label for="nhan_vien_san_xuat">Nhân viên SX</label>
                                     <select id="nhan_vien_san_xuat" name="nhan_vien_san_xuat"
                                             class="form-control selectCustom">
@@ -104,11 +82,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            <div class="form-group ">
-                                <label for="bao_quan">Bảo quản</label>
-                                <input type="text" class="form-control" id="bao_quan" name="bao_quan"
-                                       value="{{ $nguyen_lieu_san_xuat->bao_quan }}">
                             </div>
                             <div class="form-group">
                                 <label for="chi_tiet_khac">Chi tiết khác</label>

@@ -103,16 +103,16 @@ class AdminNguyenLieuSanXuatController extends Controller
         $nhan_vien_san_xuat = $request->input('nhan_vien_san_xuat');
         $phieu_san_xuat_id = $request->input('phieu_san_xuat_id');
         $don_vi_tinh = $request->input('don_vi_tinh') ?? '';
+        $mau_sac = $request->input('mau_sac') ?? '';
+        $mui_thom = $request->input('mui_thom') ?? '';
+        $bao_quan = $request->input('bao_quan') ?? '';
 
         $ngays = $request->input('ngay');
         $ten_nguyen_lieus = $request->input('ten_nguyen_lieu');
         $khoi_luongs = $request->input('khoi_luong');;
         $don_gias = $request->input('gia_lo_san_xuat');
         $tong_tiens = $request->input('tong_tien');
-        $mau_sacs = $request->input('mau_sac');
-        $mui_thoms = $request->input('mui_thom');
         $chi_tiet_khacs = $request->input('chi_tiet_khac');
-        $bao_quans = $request->input('bao_quan');
         $trang_thai = TrangThaiPhieuSanXuat::ACTIVE();
 
         foreach ($ten_nguyen_lieus as $key => $ten_nguyen_lieu) {
@@ -122,9 +122,6 @@ class AdminNguyenLieuSanXuatController extends Controller
             $khoi_luong = $khoi_luongs[$key];
             $don_gia = $don_gias[$key];
             $tong_tien = $tong_tiens[$key];
-            $mau_sac = $mau_sacs[$key] ?? '';
-            $mui_thom = $mui_thoms[$key] ?? '';
-            $bao_quan = $bao_quans[$key] ?? '';
             $chi_tiet_khac = $chi_tiet_khacs[$key] ?? '';
 
             $oldPhieuSanXuatId = $nguyenLieuSanXuat->phieu_san_xuat_id;
@@ -267,7 +264,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         $mui_thom = $request->input('mui_thom');
         $chi_tiet_khac = $request->input('chi_tiet_khac');
         $bao_quan = $request->input('bao_quan');
-        $trang_thai = $request->input('trang_thai');
+        $trang_thai = TrangThaiPhieuSanXuat::ACTIVE();
         $nhan_vien_san_xuat = $request->input('nhan_vien_san_xuat');
 
         $oldPhieuSanXuatId = $nguyenLieuSanXuat->phieu_san_xuat_id;

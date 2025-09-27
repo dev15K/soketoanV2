@@ -96,7 +96,7 @@
                         <h5 class="card-title">Thêm mới Kho Thành phẩm sản xuất</h5>
                         <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
                     </div>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.san.xuat.store') }}" class="">
+                    <form method="post" action="{{ route('admin.nguyen.lieu.san.xuat.store') }}" class="d-none">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -138,14 +138,11 @@
                             <table class="table table-hover table-bordered table-sm">
                                 <colgroup>
                                     <col width="50px">
-                                    <col width="8%">
+                                    <col width="10%">
                                     <col width="x">
-                                    <col width="14%">
-                                    <col width="14%">
-                                    <col width="9%">
-                                    <col width="9%">
-                                    <col width="9%">
-                                    <col width="9%">
+                                    <col width="15%">
+                                    <col width="15%">
+                                    <col width="20%">
                                 </colgroup>
                                 <thead>
                                 <tr>
@@ -154,9 +151,6 @@
                                     <th scope="col">Tên nguyên liệu</th>
                                     <th scope="col">Khối lượng(kg)</th>
                                     <th scope="col">Tổng tiền lô SX</th>
-                                    <th scope="col">Màu sắc</th>
-                                    <th scope="col">Mùi thơm</th>
-                                    <th scope="col">Bảo quản</th>
                                     <th scope="col">Chi tiết khác</th>
                                 </tr>
                                 </thead>
@@ -165,7 +159,11 @@
                                 </tbody>
                             </table>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
+                       <div class="">
+                           <button type="button" class="btn btn-primary mt-2">Lưu tạm</button>
+                           <button type="submit" class="btn btn-warning mt-2">Hoàn thành</button>
+                           <button type="reset" class="btn btn-danger mt-2">Huỷ</button>
+                       </div>
                     </form>
 
                 </div>
@@ -209,20 +207,9 @@
                                                name="tong_tien[]" value="">
                                     </td>
                                     <td>
-                                        <textarea name="mau_sac[]" class="form-control"
-                                                  rows="5"></textarea>
-                                    </td>
-                                    <td>
-                                        <textarea name="mui_thom[]" class="form-control"
-                                                  rows="5"></textarea>
-                                    </td>
-                                    <td>
-                                        <textarea name="bao_quan[]" class="form-control"
-                                                  rows="5"></textarea>
-                                    </td>
-                                    <td>
-                                        <textarea name="chi_tiet_khac[]" class="form-control"
-                                                  rows="5"></textarea>
+
+                                                  <input type="text" name="chi_tiet_khac[]" class="form-control"
+                                               value="">
                                     </td>
                                 </tr>`;
 
