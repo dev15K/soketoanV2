@@ -89,7 +89,7 @@
                                         <tbody id="tbodySanPham">
                                         <tr id="listSanPham">
                                             <td>
-                                                <select id="san_pham_id" name="n_san_pham_id" class="form-control"
+                                                <select id="san_pham_id" name="n_san_pham_id" class="form-control selectCustom"
                                                         onchange="change_thong_tin_san_pham(this)"
                                                         required>
                                                     <option value="">Lựa chọn sản phẩm</option>

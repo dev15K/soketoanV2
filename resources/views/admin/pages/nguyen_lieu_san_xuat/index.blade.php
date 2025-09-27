@@ -100,9 +100,16 @@
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="ngay">Ngày</label>
-                                <input type="date" class="form-control" id="ngay" name="ngay"
-                                       value="{{ old('ngay', Carbon::now()->format('Y-m-d')) }}" required>
+                                <label for="nhan_vien_san_xuat">Nhân viên SX</label>
+                                <select id="nhan_vien_san_xuat" name="nhan_vien_san_xuat"
+                                        class="form-control selectCustom">
+                                    @foreach($nsus as $nsu)
+                                        <option value="{{ $nsu->id }}"
+                                            {{ old('nhan_vien_san_xuat') == $nsu->id ? 'selected' : '' }}>
+                                            {{ $nsu->full_name }}/{{ $nsu->email }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="form-group col-md-6">
@@ -121,86 +128,94 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="ten_nguyen_lieu">Tên nguyên liệu</label>
-                            <input type="text" class="form-control" id="ten_nguyen_lieu" name="ten_nguyen_lieu"
-                                   value="{{ old('ten_nguyen_lieu') }}" required>
+                        <div class="w-100 d-flex mt-3 justify-content-end">
+                            <button class="btn btn-primary btn-sm" type="button" onclick="init_form_product();">
+                                Thêm
+                            </button>
                         </div>
 
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="khoi_luong">Khối lượng(kg)</label>
-                                <input type="text" class="form-control onlyNumber" id="khoi_luong" name="khoi_luong"
-                                       value="{{ old('khoi_luong') }}" required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="don_gia">Tổng tiền lô SX (Bỏ trống nếu tự tính)</label>
-                                <input type="text" class="form-control onlyNumber" id="tong_tien" name="tong_tien"
-                                       value="{{ old('tong_tien') }}">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="mau_sac">Màu sắc</label>
-                                <input type="text" class="form-control" id="mau_sac" name="mau_sac"
-                                       value="{{ old('mau_sac') }}">
-                            </div>
+                        <div class="table-responsive pt-3">
+                            <table class="table table-hover table-bordered table-sm">
+                                <colgroup>
+                                    <col width="50px">
+                                    <col width="10%">
+                                    <col width="x">
+                                    <col width="15%">
+                                    <col width="15%">
+                                    <col width="20%">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Ngày</th>
+                                    <th scope="col">Tên nguyên liệu</th>
+                                    <th scope="col">Khối lượng(kg)</th>
+                                    <th scope="col">Tổng tiền lô SX</th>
+                                    <th scope="col">Chi tiết khác</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbodyFormCreate">
+
+                                </tbody>
+                            </table>
                         </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="mui_thom">Mùi thơm</label>
-                                <input type="text" class="form-control" id="mui_thom" name="mui_thom"
-                                       value="{{ old('mui_thom') }}">
-                            </div>
-
-                            <div class="form-group d-none">
-                                <label for="trang_thai">Trạng thái</label>
-                                <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option value="{{ TrangThaiNguyenLieuSanXuat::ACTIVE() }}"
-                                        {{ old('trang_thai') == TrangThaiNguyenLieuSanXuat::ACTIVE() ? 'selected' : '' }}>
-                                        {{ TrangThaiNguyenLieuSanXuat::ACTIVE() }}
-                                    </option>
-                                    <option value="{{ TrangThaiNguyenLieuSanXuat::INACTIVE() }}"
-                                        {{ old('trang_thai') == TrangThaiNguyenLieuSanXuat::INACTIVE() ? 'selected' : '' }}>
-                                        {{ TrangThaiNguyenLieuSanXuat::INACTIVE() }}
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="nhan_vien_san_xuat">Nhân viên SX</label>
-                                <select id="nhan_vien_san_xuat" name="nhan_vien_san_xuat"
-                                        class="form-control selectCustom">
-                                    @foreach($nsus as $nsu)
-                                        <option value="{{ $nsu->id }}"
-                                            {{ old('nhan_vien_san_xuat') == $nsu->id ? 'selected' : '' }}>
-                                            {{ $nsu->full_name }}/{{ $nsu->email }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="bao_quan">Bảo quản</label>
-                            <input type="text" class="form-control" id="bao_quan" name="bao_quan"
-                                   value="{{ old('bao_quan') }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="chi_tiet_khac">Chi tiết khác</label>
-                            <textarea name="chi_tiet_khac" id="chi_tiet_khac" class="form-control"
-                                      rows="5">{{ old('chi_tiet_khac') }}</textarea>
-                        </div>
-
-                        <input type="hidden" name="gia_lo_san_xuat" id="gia_lo_san_xuat"
-                               value="{{ old('gia_lo_san_xuat') }}">
-                        <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
+                       <div class="">
+                           <button type="button" class="btn btn-primary mt-2">Lưu tạm</button>
+                           <button type="submit" class="btn btn-warning mt-2">Hoàn thành</button>
+                           <button type="reset" class="btn btn-danger mt-2">Huỷ</button>
+                       </div>
                     </form>
 
                 </div>
 
             </div>
         </div>
+
+        <script>
+            $(document).ready(function () {
+                init_form_product();
+            })
+
+            function remove_items(elm) {
+                $(elm).parent().closest('tr').remove();
+            }
+
+            function init_form_product() {
+                let html = `<tr>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="remove_items(this)">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <input type="date" class="form-control" name="ngay[]"
+                                               value="{{ Carbon::now()->format('Y-m-d') }}" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control"
+                                               name="ten_nguyen_lieu[]" value="" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control onlyNumber"
+                                               name="khoi_luong[]" value="" required>
+
+                                        <input type="hidden" name="gia_lo_san_xuat[]"
+                                               value="">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control onlyNumber"
+                                               name="tong_tien[]" value="">
+                                    </td>
+                                    <td>
+
+                                                  <input type="text" name="chi_tiet_khac[]" class="form-control"
+                                               value="">
+                                    </td>
+                                </tr>`;
+
+                $('#tbodyFormCreate').append(html);
+            }
+        </script>
 
         <div class="col-12">
             <div class="d-flex mb-4 mt-3 justify-content-end">
@@ -211,7 +226,7 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                   <div class="table-responsive pt-3">
+                    <div class="table-responsive pt-3">
                         <table class="table datatable_wrapper table-hover " style="min-width: 2000px">
                             <colgroup>
                                 <col width="50px">
@@ -276,8 +291,9 @@
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             @else
-                                                <form action="{{ route('admin.nguyen.lieu.san.xuat.delete', $data->id) }}"
-                                                      method="post">
+                                                <form
+                                                    action="{{ route('admin.nguyen.lieu.san.xuat.delete', $data->id) }}"
+                                                    method="post">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button" class="btn btn-danger btn-sm btnDelete">

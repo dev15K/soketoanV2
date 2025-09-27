@@ -109,7 +109,8 @@ class AdminBanHangController extends Controller
 
             $tong_tien = $request->input('tong_tien');
             $type_discount = $request->input('type_discount');
-            $giam_gia = $request->input('giam_gia');
+
+            $tong_giam_gia = $request->input('tong_giam_gia');
 
             $banhang = new BanHang([
                 'khach_hang_id' => $khach_hang_id != 0 ? $khach_hang_id : null,
@@ -132,9 +133,7 @@ class AdminBanHangController extends Controller
             ]);
 
             if ($type_discount == 'percent') {
-                $tong_giam_gia = $tong_tien * $giam_gia / 100;
-            } else {
-                $tong_giam_gia = $giam_gia;
+                $tong_giam_gia = $tong_tien * $tong_giam_gia / 100;
             }
 
             $loaiQuy = LoaiQuy::find($banhang->phuong_thuc_thanh_toan);
@@ -185,6 +184,7 @@ class AdminBanHangController extends Controller
             DB::commit();
             return back()->with('success', 'Thêm mới hóa đơn bán hàng thành công');
         } catch (\Throwable $e) {
+            dd($e);
             DB::rollBack();
             return back()->with('error', $e->getMessage())->withInput();
         }

@@ -8,7 +8,6 @@ use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuSanXuat;
 use App\Models\PhieuSanXuat;
-use App\Models\PhieuSanXuatChiTiet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -84,15 +83,168 @@ class AdminNguyenLieuSanXuatController extends Controller
 
             $nguyen_lieu_san_xuat = new NguyenLieuSanXuat();
 
-            $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
+            $nguyen_lieu_san_xuat = $this->saveDataCreate($nguyen_lieu_san_xuat, $request);
             if (!$nguyen_lieu_san_xuat) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'Số lượng không đủ')->withInput();
             }
-            $nguyen_lieu_san_xuat->save();
 
             DB::commit();
             return redirect()->back()->with('success', 'Thêm mới thành công');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    private function saveDataCreate(NguyenLieuSanXuat $nguyenLieuSanXuat, Request $request)
+    {
+        $nhan_vien_san_xuat = $request->input('nhan_vien_san_xuat');
+        $phieu_san_xuat_id = $request->input('phieu_san_xuat_id');
+        $don_vi_tinh = $request->input('don_vi_tinh') ?? '';
+        $mau_sac = $request->input('mau_sac') ?? '';
+        $mui_thom = $request->input('mui_thom') ?? '';
+        $bao_quan = $request->input('bao_quan') ?? '';
+
+        $ngays = $request->input('ngay');
+        $ten_nguyen_lieus = $request->input('ten_nguyen_lieu');
+        $khoi_luongs = $request->input('khoi_luong');;
+        $don_gias = $request->input('gia_lo_san_xuat');
+        $tong_tiens = $request->input('tong_tien');
+        $chi_tiet_khacs = $request->input('chi_tiet_khac');
+        $trang_thai = TrangThaiPhieuSanXuat::ACTIVE();
+
+        foreach ($ten_nguyen_lieus as $key => $ten_nguyen_lieu) {
+            $nguyenLieuSanXuat = new NguyenLieuSanXuat();
+
+            $ngay = $ngays[$key];
+            $khoi_luong = $khoi_luongs[$key];
+            $don_gia = $don_gias[$key];
+            $tong_tien = $tong_tiens[$key];
+            $chi_tiet_khac = $chi_tiet_khacs[$key] ?? '';
+
+            $oldPhieuSanXuatId = $nguyenLieuSanXuat->phieu_san_xuat_id;
+            $oldKhoiLuong = $nguyenLieuSanXuat->khoi_luong;
+
+            $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);
+            if (!$phieuSanXuat || $phieuSanXuat->trang_thai == TrangThaiPhieuSanXuat::DELETED()) {
+                return false;
+            }
+
+            if ($oldPhieuSanXuatId != $phieu_san_xuat_id) {
+                $ton = $phieuSanXuat->tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung;
+                if ($khoi_luong > $ton) {
+                    return false;
+                }
+            } else {
+                $ton = $phieuSanXuat->tong_khoi_luong - $phieuSanXuat->khoi_luong_da_dung + $oldKhoiLuong;
+                if ($khoi_luong > $ton) {
+                    return false;
+                }
+            }
+
+            if (!$nguyenLieuSanXuat->code) {
+                do {
+                    $code = generateRandomString(8);
+                } while (NguyenLieuSanXuat::where('code', $code)->where('id', '!=', $nguyenLieuSanXuat->id)->exists());
+
+                $nguyenLieuSanXuat->code = $code;
+            }
+
+            if (!$tong_tien || $tong_tien <= 0 || !is_numeric($tong_tien) || $tong_tien == '') {
+                $don_gia = $phieuSanXuat->don_gia;
+                $tong_tien = $don_gia * $khoi_luong;
+            } else {
+                $don_gia = $tong_tien / $khoi_luong;
+            }
+
+            $nguyenLieuSanXuat->ten_nguyen_lieu = $ten_nguyen_lieu;
+            $nguyenLieuSanXuat->don_gia = $don_gia;
+            $nguyenLieuSanXuat->tong_tien = $tong_tien;
+            $nguyenLieuSanXuat->ngay = Carbon::parse($ngay)->format('Y-m-d');
+            $nguyenLieuSanXuat->phieu_san_xuat_id = $phieu_san_xuat_id;
+            $nguyenLieuSanXuat->khoi_luong = $khoi_luong;
+            $nguyenLieuSanXuat->don_vi_tinh = $don_vi_tinh;
+            $nguyenLieuSanXuat->mau_sac = $mau_sac ?? '';
+            $nguyenLieuSanXuat->mui_thom = $mui_thom ?? '';
+            $nguyenLieuSanXuat->chi_tiet_khac = $chi_tiet_khac ?? '';
+            $nguyenLieuSanXuat->bao_quan = $bao_quan ?? '';
+            $nguyenLieuSanXuat->trang_thai = $trang_thai;
+            $nguyenLieuSanXuat->nhan_vien_san_xuat = $nhan_vien_san_xuat;
+
+            if ($oldPhieuSanXuatId != $phieu_san_xuat_id) {
+                if ($phieuSanXuat) {
+                    $phieuSanXuat->khoi_luong_da_dung += $khoi_luong;
+                    $phieuSanXuat->save();
+                }
+
+                $phieuSanXuat = PhieuSanXuat::find($oldPhieuSanXuatId);
+                if ($phieuSanXuat) {
+                    $phieuSanXuat->khoi_luong_da_dung -= $oldKhoiLuong;
+                    $phieuSanXuat->save();
+                }
+            } else {
+                $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);
+                if ($phieuSanXuat) {
+                    $phieuSanXuat->khoi_luong_da_dung += $khoi_luong - $oldKhoiLuong;
+                    $phieuSanXuat->save();
+                }
+            }
+
+            $nguyenLieuSanXuat->save();
+        }
+        return true;
+    }
+
+    public function delete($id)
+    {
+        try {
+            $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
+            if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
+                return redirect()->back()->with('error', 'Không tìm thấy');
+            }
+
+            if ($nguyen_lieu_san_xuat->khoi_luong_da_dung > 0) {
+                return redirect()->back()->with('error', 'Không thể xóa nguyên liệu đã dùng');
+            }
+
+            $nguyen_lieu_san_xuat->trang_thai = TrangThaiNguyenLieuSanXuat::DELETED();
+            $success = $nguyen_lieu_san_xuat->save();
+
+            if ($success) {
+                $phieuSanXuat = PhieuSanXuat::find($nguyen_lieu_san_xuat->phieu_san_xuat_id);
+                if ($phieuSanXuat) {
+                    $phieuSanXuat->khoi_luong_da_dung -= $nguyen_lieu_san_xuat->khoi_luong;
+                    $phieuSanXuat->save();
+                }
+            }
+
+            return redirect()->back()->with('success', 'Đã xoá thành công');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function update($id, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
+            if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Không tìm thấy');
+            }
+
+            $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
+            if (!$nguyen_lieu_san_xuat) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Số lượng không đủ');
+            }
+            $nguyen_lieu_san_xuat->save();
+
+            DB::commit();
+            return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $e) {
@@ -112,7 +264,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         $mui_thom = $request->input('mui_thom');
         $chi_tiet_khac = $request->input('chi_tiet_khac');
         $bao_quan = $request->input('bao_quan');
-        $trang_thai = $request->input('trang_thai');
+        $trang_thai = TrangThaiPhieuSanXuat::ACTIVE();
         $nhan_vien_san_xuat = $request->input('nhan_vien_san_xuat');
 
         $oldPhieuSanXuatId = $nguyenLieuSanXuat->phieu_san_xuat_id;
@@ -180,60 +332,5 @@ class AdminNguyenLieuSanXuatController extends Controller
             }
         }
         return $nguyenLieuSanXuat;
-    }
-
-    public function delete($id)
-    {
-        try {
-            $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
-            if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
-                return redirect()->back()->with('error', 'Không tìm thấy');
-            }
-
-            if ($nguyen_lieu_san_xuat->khoi_luong_da_dung > 0) {
-                return redirect()->back()->with('error', 'Không thể xóa nguyên liệu đã dùng');
-            }
-
-            $nguyen_lieu_san_xuat->trang_thai = TrangThaiNguyenLieuSanXuat::DELETED();
-            $success = $nguyen_lieu_san_xuat->save();
-
-            if ($success) {
-                $phieuSanXuat = PhieuSanXuat::find($nguyen_lieu_san_xuat->phieu_san_xuat_id);
-                if ($phieuSanXuat) {
-                    $phieuSanXuat->khoi_luong_da_dung -= $nguyen_lieu_san_xuat->khoi_luong;
-                    $phieuSanXuat->save();
-                }
-            }
-
-            return redirect()->back()->with('success', 'Đã xoá thành công');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
-        }
-    }
-
-    public function update($id, Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            $nguyen_lieu_san_xuat = NguyenLieuSanXuat::find($id);
-            if (!$nguyen_lieu_san_xuat || $nguyen_lieu_san_xuat->trang_thai == TrangThaiNguyenLieuSanXuat::DELETED()) {
-                DB::rollBack();
-                return redirect()->back()->with('error', 'Không tìm thấy');
-            }
-
-            $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
-            if (!$nguyen_lieu_san_xuat) {
-                DB::rollBack();
-                return redirect()->back()->with('error', 'Số lượng không đủ');
-            }
-            $nguyen_lieu_san_xuat->save();
-
-            DB::commit();
-            return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa thành công');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
-        } catch (\Throwable $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
-        }
     }
 }

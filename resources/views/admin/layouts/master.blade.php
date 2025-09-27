@@ -27,6 +27,12 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.9/autoNumeric.min.js"
+            integrity="sha512-cVa6IRDb7tSr/KZqJkq/FgnWMwBaRfi49qe3CVW4DhYMU30vHAXsIgbWu17w/OuVa0jyGly6/kJvcIzr8vFrDQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
     <!-- Jquery -->
@@ -43,6 +49,7 @@
           rel="stylesheet"/>
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <style>
         .table-responsive {
             overflow-x: auto !important;
@@ -148,12 +155,12 @@
 
         $('.onlyNumber').on('keypress', function (e) {
             const char = String.fromCharCode(e.which);
-            if (!/[0-9.]/.test(char)) {
+            if (!/[0-9,.]/.test(char)) {
                 e.preventDefault(); // Chặn ký tự không hợp lệ
             }
         }).on('input', function () {
             $(this).val(function (i, val) {
-                return val.replace(/[^0-9.]/g, ''); // Xoá ký tự không hợp lệ
+                return val.replace(/[^0-9,.]/g, ''); // Xoá ký tự không hợp lệ
             });
         });
 
@@ -182,7 +189,7 @@
             theme: 'bootstrap-5',
             width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
             placeholder: $(this).data('placeholder') ?? 'Lựa chọn...',
-            allowClear: Boolean($(this).data('allow-clear')) ||true,
+            allowClear: Boolean($(this).data('allow-clear')) || true,
             minimumResultsForSearch: $(this).data('minimum-results-for-search') ? $(this).data('minimum-results-for-search') : 0,
             containerCssClass: $(this).data('container-css-class') ? $(this).data('container-css-class') : '',
             dropdownCssClass: $(this).data('dropdown-css-class') ? $(this).data('dropdown-css-class') : '',
@@ -226,6 +233,29 @@
     $(document).ready(function () {
         init_datatable();
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // init_number_formater_input();
+    });
+
+    function init_number_formater_input() {
+        const instances = AutoNumeric.multiple('.onlyNumber', {
+            digitGroupSeparator: ',',
+            decimalPlaces: 3
+        });
+
+
+        const elements = document.querySelectorAll('.onlyNumber');
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function () {
+                elements.forEach((el, i) => {
+                    el.value = instances[i].getNumber();
+                });
+            });
+        });
+    }
 </script>
 
 <!-- Vendor JS Files -->
