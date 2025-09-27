@@ -169,6 +169,7 @@ class AdminSoQuyController extends Controller
 
             $old_id = $soquy->loai_quy_id;
             $old_tien = $soquy->so_tien;
+            $old_loai = $soquy->loai;
 
             $soquy->loai = $loai;
             $soquy->so_tien = $so_tien;
@@ -209,12 +210,16 @@ class AdminSoQuyController extends Controller
             } else {
                 $loai_quy = LoaiQuy::find($loai_quy_id);
                 if ($loai_quy) {
-                    if ($loai == 1) {
-                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $so_tien - $old_tien;
-                        $loai_quy->save();
+                    if ($old_loai != $loai) {
+
                     } else {
-                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $so_tien + $old_tien;
-                        $loai_quy->save();
+                        if ($loai == 1) {
+                            $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $so_tien - $old_tien;
+                            $loai_quy->save();
+                        } else {
+                            $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $so_tien + $old_tien;
+                            $loai_quy->save();
+                        }
                     }
                 }
             }
