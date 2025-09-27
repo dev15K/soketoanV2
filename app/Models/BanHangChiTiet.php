@@ -63,7 +63,7 @@ class BanHangChiTiet extends Model
                 $nguyenlieu = NguyenLieuPhanLoai::find($id);
 
                 $con_lai = ($nguyenlieu->tong_khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_phan_loai ?? 0);
-                $label = ($nguyenlieu->ma_don_hang ?? '') . ' : ' . $con_lai . 'kg';
+                $label = ($nguyenlieu->nguyenLieuTho->code ?? '') . ' : ' . $con_lai . 'kg';
                 $gia = $nguyenlieu->gia_sau_phan_loai ?? null;
                 break;
 
