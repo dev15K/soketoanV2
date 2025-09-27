@@ -89,7 +89,8 @@
                                         <tbody id="tbodySanPham">
                                         <tr id="listSanPham">
                                             <td>
-                                                <select id="san_pham_id" name="n_san_pham_id" class="form-control selectCustom"
+                                                <select id="san_pham_id" name="n_san_pham_id"
+                                                        class="form-control selectCustom"
                                                         onchange="change_thong_tin_san_pham(this)"
                                                         required>
                                                     <option value="">Lựa chọn sản phẩm</option>
@@ -170,7 +171,8 @@
                                                 </td>
                                                 <td>
                                                     <input type="number" min="0" name="giam_gia[]"
-                                                           class="form-control giam_gia"   value="{{ $chiTietBanHang->discount_amount }}"
+                                                           class="form-control giam_gia"
+                                                           value="{{ $chiTietBanHang->discount_amount }}"
                                                            oninput="change_gia_san_pham(this)" required>
                                                 </td>
                                                 <td>
@@ -258,8 +260,14 @@
                                             <td>
                                                 <select class="form-control" name="type_discount" id="type_discount">
                                                     <option value="">Chọn loại giảm giá</option>
-                                                    <option {{ $banhang->type_discount == 'percent' ? 'selected' : '' }} value="percent">%(Phần trăm)</option>
-                                                    <option {{ $banhang->type_discount == 'money' ? 'selected' : '' }} value="money">Tiền mặt</option>
+                                                    <option
+                                                        {{ $banhang->type_discount == 'percent' ? 'selected' : '' }} value="percent">
+                                                        %(Phần trăm)
+                                                    </option>
+                                                    <option
+                                                        {{ $banhang->type_discount == 'money' ? 'selected' : '' }} value="money">
+                                                        Tiền mặt
+                                                    </option>
                                                 </select>
                                             </td>
                                         </tr>

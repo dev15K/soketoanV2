@@ -76,11 +76,11 @@ class BanHangChiTiet extends Model
                 break;
 
             case LoaiSanPham::NGUYEN_LIEU_SAN_XUAT():
-                $nguyenlieu = NguyenLieuSanXuat::find($id)->with('phieuSanXuat');
+                $nguyenlieu = NguyenLieuSanXuat::find($id);
 
                 $con_lai = ($nguyenlieu->khoi_luong ?? 0) - ($nguyenlieu->khoi_luong_da_dung ?? 0);
                 $label = ($nguyenlieu->ten_nguyen_lieu ?? '') . ' : ' . $con_lai . 'kg';
-                $gia = $nguyenlieu->gia_tien ?? null;
+                $gia = $nguyenlieu->don_gia ?? null;
                 break;
 
             case LoaiSanPham::NGUYEN_LIEU_THANH_PHAM():
