@@ -40,8 +40,8 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="form-group col-md-4 mb-2">
                                             <label for="select_kho">Chọn kho</label>
-                                            <select id="select_kho" name="select_kho" class="form-control"
-                                                    onchange="change_loai_san_pham()">
+                                            <select id="select_kho" name="select_kho" class="form-control disabled "
+                                                    onchange="change_loai_san_pham()" readonly disabled>
                                                 <option value="">Lựa chọn kho</option>
                                                 <option
                                                     {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THO ? 'selected' : '' }}
@@ -57,6 +57,11 @@
                                                     {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH ? 'selected' : '' }}
                                                     value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_TINH }}">
                                                     Nguyên liệu Tinh
+                                                </option>
+                                                <option
+                                                    {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT ? 'selected' : '' }}
+                                                    value="{{ \App\Enums\LoaiSanPham::NGUYEN_LIEU_SAN_XUAT }}">
+                                                    Kho Thành phẩm sản xuất
                                                 </option>
                                                 <option
                                                     {{ $banhang->loai_san_pham == \App\Enums\LoaiSanPham::NGUYEN_LIEU_THANH_PHAM ? 'selected' : '' }}
@@ -97,18 +102,21 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input id="gia_ban" type="number" min="0" name="n_gia_ban"
-                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                <input id="gia_ban" type="text" min="0" name="n_gia_ban"
+                                                       oninput="change_gia_san_pham_temp(this)"
+                                                       class="form-control onlyNumber"
                                                        required>
                                             </td>
                                             <td>
-                                                <input id="so_luong" type="number" min="1" name="n_so_luong"
-                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                <input id="so_luong" type="text" min="1" name="n_so_luong"
+                                                       oninput="change_gia_san_pham_temp(this)"
+                                                       class="form-control onlyNumber"
                                                        value="1" required>
                                             </td>
                                             <td>
-                                                <input id="giam_gia" type="number" name="n_giam_gia"
-                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                <input id="giam_gia" type="text" name="n_giam_gia"
+                                                       oninput="change_gia_san_pham_temp(this)"
+                                                       class="form-control onlyNumber"
                                                        value="0" min="0" maxlength="100" required>
                                             </td>
                                             <td>
@@ -158,20 +166,20 @@
                                                            value="{{ $chiTietBanHang->san_pham_id }}">
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="gia_bans[]"
-                                                           class="form-control gia_bans"
+                                                    <input type="text" min="0" name="gia_bans[]"
+                                                           class="form-control onlyNumber gia_bans"
                                                            value="{{ $chiTietBanHang->gia_ban }}"
                                                            oninput="change_gia_san_pham(this)" required>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="1" name="so_luong[]"
-                                                           class="form-control so_luong"
+                                                    <input type="text" min="1" name="so_luong[]"
+                                                           class="form-control onlyNumber so_luong"
                                                            value="{{ $chiTietBanHang->so_luong }}"
                                                            oninput="change_gia_san_pham(this)" required>
                                                 </td>
                                                 <td>
-                                                    <input type="number" min="0" name="giam_gia[]"
-                                                           class="form-control giam_gia"
+                                                    <input type="text" min="0" name="giam_gia[]"
+                                                           class="form-control onlyNumber giam_gia"
                                                            value="{{ $chiTietBanHang->discount_amount }}"
                                                            oninput="change_gia_san_pham(this)" required>
                                                 </td>
@@ -622,18 +630,18 @@
                                                 <input type="hidden" name="san_pham_id[]" value="${san_pham_id}">
                                             </td>
                                             <td>
-                                                <input type="number" min="0" name="gia_bans[]"
-                                                       class="form-control gia_bans" value="${gia_ban}"
+                                                <input type="text" min="0" name="gia_bans[]"
+                                                       class="form-control onlyNumber gia_bans" value="${gia_ban}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>
-                                                <input type="number" min="1" name="so_luong[]"
-                                                       class="form-control so_luong" value="${so_luong}"
+                                                <input type="text" min="1" name="so_luong[]"
+                                                       class="form-control onlyNumberso_luong" value="${so_luong}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>
-                                                <input type="number" min="0" name="giam_gia[]"
-                                                       class="form-control giam_gia" value="${total_giam_gia}"
+                                                <input type="text" min="0" name="giam_gia[]"
+                                                       class="form-control onlyNumber giam_gia" value="${total_giam_gia}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>
