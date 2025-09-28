@@ -106,6 +106,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         $mau_sac = $request->input('mau_sac') ?? '';
         $mui_thom = $request->input('mui_thom') ?? '';
         $bao_quan = $request->input('bao_quan') ?? '';
+        $type_submit = $request->input('type_submit') ?? '';
 
         $ngays = $request->input('ngay');
         $ten_nguyen_lieus = $request->input('ten_nguyen_lieu');
@@ -194,6 +195,13 @@ class AdminNguyenLieuSanXuatController extends Controller
 
             $nguyenLieuSanXuat->save();
         }
+
+        if ($type_submit == 'save') {
+            $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);
+            $phieuSanXuat->khoi_luong_da_dung = $phieuSanXuat->tong_khoi_luong;
+            $phieuSanXuat->save();
+        }
+
         return true;
     }
 
