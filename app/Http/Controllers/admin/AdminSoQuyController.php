@@ -182,45 +182,59 @@ class AdminSoQuyController extends Controller
             $soquy->save();
 
             if ($old_id != $loai_quy_id) {
-                if ($loai == 1) {
-                    $loai_quy = LoaiQuy::find($old_id);
-                    if ($loai_quy) {
-                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $old_tien;
-                        $loai_quy->save();
+                $old_quy = LoaiQuy::find($old_id);
+                if ($old_quy) {
+                    $delta = 0; // số tiền chênh lệch cần cập nhật
+
+                    if ($old_loai != $loai) {
+                        // Trả lại số tiền cũ
+                        $delta += ($old_loai == 1) ? -$old_tien : $old_tien;
+
+                        // Áp dụng số tiền mới
+                        $delta += ($loai == 1) ? $so_tien : -$so_tien;
+                    } else {
+                        // Cùng loại => chỉ tính chênh lệch
+                        if ($loai == 1) {
+                            $delta += ($so_tien - $old_tien);
+                        } else {
+                            $delta += (-$so_tien + $old_tien);
+                        }
                     }
 
-                    $loai_quy = LoaiQuy::find($loai_quy_id);
-                    if ($loai_quy) {
-                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $so_tien;
-                        $loai_quy->save();
-                    }
-                } else {
-                    $loai_quy = LoaiQuy::find($old_id);
-                    if ($loai_quy) {
-                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $old_tien;
-                        $loai_quy->save();
-                    }
+                    // Cập nhật 1 lần
+                    $old_quy->tong_tien_quy += $delta;
+                    $old_quy->save();
+                }
 
-                    $loai_quy = LoaiQuy::find($loai_quy_id);
-                    if ($loai_quy) {
-                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $so_tien;
-                        $loai_quy->save();
-                    }
+                // Xử lý quỹ mới
+                $new_quy = LoaiQuy::find($loai_quy_id);
+                if ($new_quy) {
+                    $new_quy->tong_tien_quy += ($loai == 1) ? $so_tien : -$so_tien;
+                    $new_quy->save();
                 }
             } else {
                 $loai_quy = LoaiQuy::find($loai_quy_id);
                 if ($loai_quy) {
-                    if ($old_loai != $loai) {
+                    $delta = 0; // số tiền chênh lệch cần cập nhật
 
+                    if ($old_loai != $loai) {
+                        // Trả lại số tiền cũ
+                        $delta += ($old_loai == 1) ? -$old_tien : $old_tien;
+
+                        // Áp dụng số tiền mới
+                        $delta += ($loai == 1) ? $so_tien : -$so_tien;
                     } else {
+                        // Cùng loại => chỉ tính chênh lệch
                         if ($loai == 1) {
-                            $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $so_tien - $old_tien;
-                            $loai_quy->save();
+                            $delta += ($so_tien - $old_tien);
                         } else {
-                            $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $so_tien + $old_tien;
-                            $loai_quy->save();
+                            $delta += (-$so_tien + $old_tien);
                         }
                     }
+
+                    // Cập nhật 1 lần
+                    $loai_quy->tong_tien_quy += $delta;
+                    $loai_quy->save();
                 }
             }
 

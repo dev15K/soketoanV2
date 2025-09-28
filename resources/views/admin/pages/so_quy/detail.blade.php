@@ -88,8 +88,7 @@
 
                             <div class="form-group col-md-6">
                                 <label for="noi_nhan">Nơi nhận</label>
-                                <select class="form-control selectCustom" name="noi_nhan" id="noi_nhan"
-                                        required>
+                                <select class="form-control selectCustom" name="noi_nhan" id="noi_nhan">
 
                                 </select>
                             </div>
