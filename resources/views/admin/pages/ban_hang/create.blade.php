@@ -92,25 +92,26 @@
                                         <tbody id="tbodySanPham">
                                         <tr id="listSanPham">
                                             <td>
-                                                <select id="san_pham_id" name="n_san_pham_id" class="form-control selectCustom"
+                                                <select id="san_pham_id" name="n_san_pham_id"
+                                                        class="form-control selectCustom"
                                                         onchange="change_thong_tin_san_pham(this)"
                                                         required>
                                                     <option value="">Lựa chọn sản phẩm</option>
                                                 </select>
                                             </td>
                                             <td>
-                                                <input id="gia_ban" type="number" min="0" name="n_gia_ban"
-                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                <input id="gia_ban" type="text" min="0" name="n_gia_ban"
+                                                       oninput="change_gia_san_pham_temp(this)" class="form-control onlyNumber"
                                                        required>
                                             </td>
                                             <td>
-                                                <input id="so_luong" type="number" min="1" name="n_so_luong"
-                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                <input id="so_luong" type="text" min="1" name="n_so_luong"
+                                                       oninput="change_gia_san_pham_temp(this)" class="form-control onlyNumber"
                                                        value="1" required>
                                             </td>
                                             <td>
-                                                <input id="giam_gia" type="number" name="n_giam_gia"
-                                                       oninput="change_gia_san_pham_temp(this)" class="form-control"
+                                                <input id="giam_gia" type="text" name="n_giam_gia"
+                                                       oninput="change_gia_san_pham_temp(this)" class="form-control onlyNumber"
                                                        value="0" min="0" maxlength="100" required>
                                             </td>
                                             <td>
@@ -573,18 +574,18 @@
                                                 <input type="hidden" name="san_pham_id[]" value="${san_pham_id}">
                                             </td>
                                             <td>
-                                                <input type="number" min="0" name="gia_bans[]"
-                                                       class="form-control gia_bans" value="${gia_ban}"
+                                                <input type="text" min="0" name="gia_bans[]"
+                                                       class="form-control onlyNumber gia_bans" value="${gia_ban}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>
-                                                <input type="number" min="1" name="so_luong[]"
-                                                       class="form-control so_luong" value="${so_luong}"
+                                                <input type="text" min="1" name="so_luong[]"
+                                                       class="form-control onlyNumber so_luong" value="${so_luong}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>
-                                                <input type="number" min="0" name="giam_gia[]"
-                                                       class="form-control giam_gia" value="${total_giam_gia}"
+                                                <input type="text" min="0" name="giam_gia[]"
+                                                       class="form-control onlyNumber giam_gia" value="${total_giam_gia}"
                                                        oninput="change_gia_san_pham(this)" required>
                                             </td>
                                             <td>
@@ -606,6 +607,8 @@
                 elm_tong_tien.val(0);
 
                 change_thanh_toan();
+
+                init_only_number();
             }
 
             function change_gia_san_pham(el) {

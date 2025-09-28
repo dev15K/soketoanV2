@@ -153,16 +153,7 @@
             }
         });
 
-        $('.onlyNumber').on('keypress', function (e) {
-            const char = String.fromCharCode(e.which);
-            if (!/[0-9,.]/.test(char)) {
-                e.preventDefault(); // Chặn ký tự không hợp lệ
-            }
-        }).on('input', function () {
-            $(this).val(function (i, val) {
-                return val.replace(/[^0-9,.]/g, ''); // Xoá ký tự không hợp lệ
-            });
-        });
+        init_only_number();
 
         $('.btnDelete').on('click', function () {
             if (confirm('Bạn có chắc chắn muốn xóa không?')) {
@@ -182,6 +173,19 @@
             }
         })
     })
+
+    function init_only_number() {
+        $('.onlyNumber').on('keypress', function (e) {
+            const char = String.fromCharCode(e.which);
+            if (!/[0-9,.]/.test(char)) {
+                e.preventDefault(); // Chặn ký tự không hợp lệ
+            }
+        }).on('input', function () {
+            $(this).val(function (i, val) {
+                return val.replace(/[^0-9,.]/g, ''); // Xoá ký tự không hợp lệ
+            });
+        });
+    }
 </script>
 <script>
     $(document).ready(function () {
@@ -236,10 +240,10 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // init_number_formater_input();
+        // init_number_format_input();
     });
 
-    function init_number_formater_input() {
+    function init_number_format_input() {
         const instances = AutoNumeric.multiple('.onlyNumber', {
             digitGroupSeparator: ',',
             decimalPlaces: 3
