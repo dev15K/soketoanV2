@@ -220,6 +220,8 @@
                                 </tr>`;
 
                 $('#tbodyFormCreate').append(html);
+
+                init_number_format_input();
             }
 
             function pre_submit_form(num) {

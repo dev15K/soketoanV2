@@ -56,3 +56,12 @@ function convert_number_to_number(num) {
 
     return parseFloat(rounded);
 }
+
+function convert_string_to_number(num) {
+    if (!num) {
+        return 0;
+    }
+
+    num = num.replaceAll(',', '');
+    return num;
+}

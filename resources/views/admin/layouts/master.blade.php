@@ -175,15 +175,25 @@
     })
 
     function init_only_number() {
-        $('.onlyNumber').on('keypress', function (e) {
-            const char = String.fromCharCode(e.which);
-            if (!/[0-9,.]/.test(char)) {
-                e.preventDefault(); // Chặn ký tự không hợp lệ
-            }
-        }).on('input', function () {
-            $(this).val(function (i, val) {
-                return val.replace(/[^0-9,.]/g, ''); // Xoá ký tự không hợp lệ
-            });
+        $('.onlyNumber').on('input', function () {
+            let val = $(this).val();
+
+            // Xoá hết ký tự không hợp lệ
+            val = val.replace(/[^0-9.]/g, '');
+
+            // Tách phần nguyên & phần thập phân
+            let parts = val.split('.');
+
+            let intPart = parts[0];
+            let decPart = parts[1] || '';
+
+            // Format phần nguyên với dấu phân tách hàng nghìn
+            intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // Chỉ giữ lại 1 dấu "." và phần thập phân (nếu có)
+            val = intPart + (decPart ? "." + decPart.replace(/[^0-9]/g, '') : '');
+
+            $(this).val(val);
         });
     }
 </script>
@@ -240,22 +250,29 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // init_number_format_input();
+        init_number_format_input();
     });
 
     function init_number_format_input() {
+        document.querySelectorAll('.onlyNumber').forEach(el => {
+            const anElement = AutoNumeric.getAutoNumericElement(el);
+            if (anElement) {
+                anElement.remove();
+            }
+        });
+
         const instances = AutoNumeric.multiple('.onlyNumber', {
             digitGroupSeparator: ',',
             decimalPlaces: 3
         });
-
 
         const elements = document.querySelectorAll('.onlyNumber');
 
         document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', function () {
                 elements.forEach((el, i) => {
-                    el.value = instances[i].getNumber();
+                    let num = el.value
+                    el.value = num.replaceAll(',', '');
                 });
             });
         });
@@ -276,6 +293,7 @@
 
 <!-- Template Main JS File -->
 <script src="{{ asset('admin/js/main.js') }}"></script>
+<script src="{{ asset('admin/js/number_formater.js') }}"></script>
 </body>
 
 </html>

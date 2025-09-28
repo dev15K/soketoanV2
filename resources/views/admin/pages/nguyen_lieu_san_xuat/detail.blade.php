@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="tong_tien">Tổng tiền lô SX</label>
-                                    <input type="text" class="form-control" id="tong_tien" name="tong_tien"
+                                    <input type="text" class="form-control onlyNumber" id="tong_tien" name="tong_tien"
                                            value="{{ $nguyen_lieu_san_xuat->tong_tien }}">
                                 </div>
 
