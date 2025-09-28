@@ -4,7 +4,11 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class ExportDataController extends Controller
 {
@@ -198,5 +202,54 @@ class ExportDataController extends Controller
             $data = returnMessage(-1, null, $ex->getMessage());
             return response()->json($data)->setStatusCode(400);
         }
+    }
+
+    private function render_sheet(Spreadsheet $spreadsheet, array $headers, array $result, string $title, callable $mapRow = null)
+    {
+        $lastColumn = Coordinate::stringFromColumnIndex(count($headers));
+
+        $sheet = $spreadsheet->getActiveSheet();
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Tahoma')->setSize(14);
+
+        $sheet->mergeCells("A1:{$lastColumn}1");
+        $sheet->setCellValue('A1', $title);
+        $sheet->getStyle('A1')->applyFromArray([
+            'font' => ['bold' => true, 'size' => 14],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'BDD6EE']],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
+        ]);
+        $sheet->getRowDimension(1)->setRowHeight(40);
+
+        $sheet->fromArray($headers, null, 'A2');
+        $sheet->getStyle("A2:{$lastColumn}2")->applyFromArray([
+            'font' => ['bold' => true, 'size' => 11],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'D8D8D8']],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+        ]);
+        $sheet->getRowDimension(2)->setRowHeight(22);
+
+        $row = 3;
+        foreach ($result as $index => $item) {
+            $data = $mapRow ? $mapRow($item, $index) : (array)$item;
+            $sheet->fromArray($data, null, 'A' . $row);
+            $row++;
+        }
+
+        $lastIndex = Coordinate::columnIndexFromString($lastColumn);
+        for ($col = 1; $col <= $lastIndex; $col++) {
+            $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($col))->setAutoSize(true);
+        }
+
+        if ($row > 3) {
+            $dataRange = "A3:{$lastColumn}" . ($row - 1);
+            $sheet->getStyle($dataRange)->applyFromArray([
+                'font' => ['size' => 11],
+                'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+                'alignment' => ['vertical' => Alignment::VERTICAL_CENTER],
+            ]);
+        }
+
+        return $sheet;
     }
 }
