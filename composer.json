@@ -17,6 +17,9 @@
         "realrashid/sweet-alert": "*",
         "socialiteproviders/manager": "^4.4",
         "stichoza/google-translate-php": "^5.1",
+        "phpoffice/phpspreadsheet": "^1.29",
+        "maatwebsite/excel": "^3.1",
+        "doctrine/dbal": "^3.10",
         "tymon/jwt-auth": "*"
     },
     "require-dev": {
