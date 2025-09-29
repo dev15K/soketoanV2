@@ -27,11 +27,11 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.9/autoNumeric.min.js"
-            integrity="sha512-cVa6IRDb7tSr/KZqJkq/FgnWMwBaRfi49qe3CVW4DhYMU30vHAXsIgbWu17w/OuVa0jyGly6/kJvcIzr8vFrDQ=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.9/autoNumeric.min.js"--}}
+{{--            integrity="sha512-cVa6IRDb7tSr/KZqJkq/FgnWMwBaRfi49qe3CVW4DhYMU30vHAXsIgbWu17w/OuVa0jyGly6/kJvcIzr8vFrDQ=="--}}
+{{--            crossorigin="anonymous" referrerpolicy="no-referrer"></script>--}}
 
-    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+{{--    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>--}}
 
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
@@ -192,26 +192,39 @@
         })
     })
 
+    // function init_only_number() {
+    //     $('.onlyNumber').on('input', function () {
+    //         let val = $(this).val();
+    //
+    //         // Xoá hết ký tự không hợp lệ
+    //         val = val.replace(/[^0-9.]/g, '');
+    //
+    //         // Tách phần nguyên & phần thập phân
+    //         let parts = val.split('.');
+    //
+    //         let intPart = parts[0];
+    //         let decPart = parts[1] || '';
+    //
+    //         // Format phần nguyên với dấu phân tách hàng nghìn
+    //         intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //
+    //         // Chỉ giữ lại 1 dấu "." và phần thập phân (nếu có)
+    //         val = intPart + (decPart ? "." + decPart.replace(/[^0-9]/g, '') : '');
+    //
+    //         $(this).val(val);
+    //     });
+    // }
+
     function init_only_number() {
-        $('.onlyNumber').on('input', function () {
-            let val = $(this).val();
-
-            // Xoá hết ký tự không hợp lệ
-            val = val.replace(/[^0-9.]/g, '');
-
-            // Tách phần nguyên & phần thập phân
-            let parts = val.split('.');
-
-            let intPart = parts[0];
-            let decPart = parts[1] || '';
-
-            // Format phần nguyên với dấu phân tách hàng nghìn
-            intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-            // Chỉ giữ lại 1 dấu "." và phần thập phân (nếu có)
-            val = intPart + (decPart ? "." + decPart.replace(/[^0-9]/g, '') : '');
-
-            $(this).val(val);
+        $('.onlyNumber').on('keypress', function (e) {
+            const char = String.fromCharCode(e.which);
+            if (!/[0-9,.]/.test(char)) {
+                e.preventDefault(); // Chặn ký tự không hợp lệ
+            }
+        }).on('input', function () {
+            $(this).val(function (i, val) {
+                return val.replace(/[^0-9,.]/g, ''); // Xoá ký tự không hợp lệ
+            });
         });
     }
 </script>
@@ -284,17 +297,17 @@
     });
 
     function init_number_format_input() {
-        document.querySelectorAll('.onlyNumber').forEach(el => {
-            const anElement = AutoNumeric.getAutoNumericElement(el);
-            if (anElement) {
-                anElement.remove();
-            }
-        });
-
-        const instances = AutoNumeric.multiple('.onlyNumber', {
-            digitGroupSeparator: ',',
-            decimalPlaces: 3
-        });
+        // document.querySelectorAll('.onlyNumber').forEach(el => {
+        //     const anElement = AutoNumeric.getAutoNumericElement(el);
+        //     if (anElement) {
+        //         anElement.remove();
+        //     }
+        // });
+        //
+        // const instances = AutoNumeric.multiple('.onlyNumber', {
+        //     digitGroupSeparator: ',',
+        //     decimalPlaces: 3
+        // });
 
         const elements = document.querySelectorAll('.onlyNumber');
 
