@@ -226,8 +226,8 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th scope="col" colspan="4">Tổng:</th>
-                        <th scope="col" colspan="2">{{ parseNumber($datas->sum('so_tien')) }} VND</th>
+                        <th scope="col" colspan="5">Tổng:</th>
+                        <th scope="col" colspan="5">{{ parseNumber($datas->sum('so_tien')) }} VND</th>
                     </tr>
                     </tfoot>
                 </table>

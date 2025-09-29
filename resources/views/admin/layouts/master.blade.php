@@ -50,6 +50,24 @@
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+    <!-- DataTables core -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- Buttons extension -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+
+    <!-- Export to Excel/CSV/PDF -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+    <!-- Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+
     <style>
         .table-responsive {
             overflow-x: auto !important;
@@ -214,29 +232,41 @@
     });
 
     function init_datatable(page_size = 10) {
+        if ($.fn.DataTable.isDataTable('.datatable_wrapper')) {
+            $('.datatable_wrapper').DataTable().destroy();
+        }
+
         $('.datatable_wrapper').DataTable({
-            "paging": true,
-            "pageLength": page_size,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "responsive": true,
-            "language": {
-                "search": "",
-                "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
-                "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
-                "infoEmpty": "Không có dữ liệu để hiển thị",
-                "infoFiltered": "(lọc từ _MAX_ bản ghi)",
-                "lengthMenu": "Số lượng _MENU_",
-                "paginate": {
-                    "first": "Đầu",
-                    "last": "Cuối",
-                    "next": "Tiếp",
-                    "previous": "Trước"
+            paging: true,
+            pageLength: page_size,
+            searching: true,
+            ordering: true,
+            info: true,
+            responsive: true,
+            language: {
+                search: "",
+                zeroRecords: "Không tìm thấy dữ liệu phù hợp",
+                info: "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                infoEmpty: "Không có dữ liệu để hiển thị",
+                infoFiltered: "(lọc từ _MAX_ bản ghi)",
+                lengthMenu: "Số lượng _MENU_",
+                paginate: {
+                    first: "Đầu",
+                    last: "Cuối",
+                    next: "Tiếp",
+                    previous: "Trước"
                 }
             },
-            "columnDefs": [
-                {"orderable": false, "targets": 0},
+            columnDefs: [
+                { orderable: false, targets: 0 },
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="bi bi-file-earmark-excel"></i> Xuất Excel',
+                    className: 'btn btn-success'
+                },
             ],
             initComplete: function () {
                 $('.dataTables_filter input').attr('placeholder', 'Tìm kiếm');
@@ -288,8 +318,6 @@
 <script src="{{ asset('admin/vendor/simple-datatables/simple-datatables.js') }}"></script>
 <script src="{{ asset('admin/vendor/tinymce/tinymce.min.js') }}"></script>
 <script src="{{ asset('admin/vendor/php-email-form/validate.js') }}"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
 <!-- Template Main JS File -->
 <script src="{{ asset('admin/js/main.js') }}"></script>
