@@ -166,14 +166,20 @@
                                        class="btn btn-primary btn-sm">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <form action="{{ route('admin.so.quy.delete', $data->id) }}"
-                                          method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                    @if($data->allow_change)
+                                        <form action="{{ route('admin.so.quy.delete', $data->id) }}"
+                                              method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" class="btn btn-danger btn-sm" disabled>
                                             <i class="bi bi-trash"></i>
                                         </button>
-                                    </form>
+                                    @endif
                                 </div>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>

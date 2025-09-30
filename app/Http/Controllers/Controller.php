@@ -31,7 +31,7 @@ class Controller extends BaseController
                 return $query->where('loai_quy_id', $loai_quy_search);
             })
             ->where('so_tien', '>', 0)
-            ->orderByDesc('id')
+            ->orderByDesc('created_at')
             ->get();
 
         $ton_dau = get_ton_dau($start_date, $end_date);

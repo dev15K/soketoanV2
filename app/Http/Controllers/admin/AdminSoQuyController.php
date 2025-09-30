@@ -126,6 +126,7 @@ class AdminSoQuyController extends Controller
             $soquy->nhom_quy_id = $nhom_quy_id;
             $soquy->loai_noi_nhan = $loai_noi_nhan;
             $soquy->noi_nhan = $noi_nhan;
+            $soquy->allow_change = true;
 
             $soquy->save();
 
