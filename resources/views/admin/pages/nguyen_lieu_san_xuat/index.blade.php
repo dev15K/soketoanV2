@@ -207,6 +207,8 @@
 
                                         <input type="hidden" name="gia_lo_san_xuat[]"
                                                value="">
+                                        <input type="hidden" name="idx[]"
+                                               value="">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control onlyNumber"
