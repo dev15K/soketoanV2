@@ -65,6 +65,12 @@ class AdminNguyenLieuSanXuatController extends Controller
             return redirect()->back()->with('error', 'Không tìm thấy');
         }
 
+        $others = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
+            ->where('phieu_san_xuat_id', $nguyen_lieu_san_xuat->phieu_san_xuat_id)
+            ->where('id', '!=', $nguyen_lieu_san_xuat->id)
+            ->orderByDesc('id')
+            ->get();
+
         $phieu_san_xuats = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
             ->orderByDesc('id')
             ->get();
@@ -73,7 +79,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat', 'phieu_san_xuats', 'nsus'));
+        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat', 'phieu_san_xuats', 'nsus', 'others'));
     }
 
     public function store(Request $request)
@@ -114,16 +120,21 @@ class AdminNguyenLieuSanXuatController extends Controller
         $don_gias = $request->input('gia_lo_san_xuat');
         $tong_tiens = $request->input('tong_tien');
         $chi_tiet_khacs = $request->input('chi_tiet_khac');
+        $idxs = $request->input('idx');
         $trang_thai = TrangThaiPhieuSanXuat::ACTIVE();
 
         foreach ($ten_nguyen_lieus as $key => $ten_nguyen_lieu) {
-            $nguyenLieuSanXuat = new NguyenLieuSanXuat();
-
+            $idx = $idxs[$key];
             $ngay = $ngays[$key];
             $khoi_luong = $khoi_luongs[$key];
             $don_gia = $don_gias[$key];
             $tong_tien = $tong_tiens[$key];
             $chi_tiet_khac = $chi_tiet_khacs[$key] ?? '';
+
+            $nguyenLieuSanXuat = new NguyenLieuSanXuat();
+            if ($idx) {
+                $nguyenLieuSanXuat = NguyenLieuSanXuat::find($idx);
+            }
 
             $oldPhieuSanXuatId = $nguyenLieuSanXuat->phieu_san_xuat_id;
             $oldKhoiLuong = $nguyenLieuSanXuat->khoi_luong;
@@ -244,18 +255,19 @@ class AdminNguyenLieuSanXuatController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy');
             }
 
-            $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
+            $nguyen_lieu_san_xuat = $this->saveDataCreate($nguyen_lieu_san_xuat, $request);
             if (!$nguyen_lieu_san_xuat) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'Số lượng không đủ');
             }
-            $nguyen_lieu_san_xuat->save();
 
             DB::commit();
             return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa thành công');
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $e) {
+            dd($e);
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
