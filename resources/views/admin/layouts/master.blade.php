@@ -256,6 +256,7 @@
             ordering: true,
             info: true,
             responsive: true,
+            order: [],
             language: {
                 search: "",
                 zeroRecords: "Không tìm thấy dữ liệu phù hợp",
