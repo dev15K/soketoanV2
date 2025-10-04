@@ -24,7 +24,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         $queries = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED());
 
         $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
-        $end_date   = $request->input('end_date') ?? Carbon::now()->toDateString();
+        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [
@@ -164,12 +164,15 @@ class AdminNguyenLieuSanXuatController extends Controller
                 $nguyenLieuSanXuat->code = $code;
             }
 
-            if (!$tong_tien || $tong_tien <= 0 || !is_numeric($tong_tien) || $tong_tien == '') {
-                $don_gia = $phieuSanXuat->don_gia;
-                $tong_tien = $don_gia * $khoi_luong;
-            } else {
-                $don_gia = $tong_tien / $khoi_luong;
-            }
+//            if (!$tong_tien || $tong_tien <= 0 || !is_numeric($tong_tien) || $tong_tien == '') {
+//                $don_gia = 0;
+//                $tong_tien = $don_gia * $khoi_luong;
+//            } else {
+//                $don_gia = $tong_tien / $khoi_luong;
+//            }
+
+            $don_gia = 0;
+            $tong_tien = $don_gia * $khoi_luong;
 
             $nguyenLieuSanXuat->ten_nguyen_lieu = $ten_nguyen_lieu;
             $nguyenLieuSanXuat->don_gia = $don_gia;
@@ -188,20 +191,30 @@ class AdminNguyenLieuSanXuatController extends Controller
             if ($oldPhieuSanXuatId != $phieu_san_xuat_id) {
                 if ($phieuSanXuat) {
                     $phieuSanXuat->khoi_luong_da_dung += $khoi_luong;
+                    $phieuSanXuat->gia_tri_ton_kho += $khoi_luong * $don_gia;
                     $phieuSanXuat->save();
                 }
 
                 $phieuSanXuat = PhieuSanXuat::find($oldPhieuSanXuatId);
                 if ($phieuSanXuat) {
                     $phieuSanXuat->khoi_luong_da_dung -= $oldKhoiLuong;
+                    $phieuSanXuat->gia_tri_ton_kho -= $oldKhoiLuong * $don_gia;
+                    $phieuSanXuat->is_completed = false;
                     $phieuSanXuat->save();
                 }
             } else {
                 $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);
                 if ($phieuSanXuat) {
                     $phieuSanXuat->khoi_luong_da_dung += $khoi_luong - $oldKhoiLuong;
+                    $phieuSanXuat->gia_tri_ton_kho += ($khoi_luong - $oldKhoiLuong) * $don_gia;
                     $phieuSanXuat->save();
                 }
+            }
+
+            if ($type_submit == 'save') {
+                $nguyenLieuSanXuat->is_completed = true;
+            } else {
+                $nguyenLieuSanXuat->is_completed = false;
             }
 
             $nguyenLieuSanXuat->save();
@@ -210,7 +223,28 @@ class AdminNguyenLieuSanXuatController extends Controller
         if ($type_submit == 'save') {
             $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);
             $phieuSanXuat->khoi_luong_da_dung = $phieuSanXuat->tong_khoi_luong;
+            $phieuSanXuat->gia_tri_ton_kho = 0;
+            $phieuSanXuat->is_completed = true;
             $phieuSanXuat->save();
+
+            $nguyenLieuSanXuats = NguyenLieuSanXuat::where('phieu_san_xuat_id', $phieu_san_xuat_id)
+                ->where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
+                ->get();
+
+            $tong = 0;
+
+            foreach ($nguyenLieuSanXuats as $nguyenLieuSanXuat) {
+                $tong += $nguyenLieuSanXuat->khoi_luong;
+            }
+
+            $don_gia = $phieuSanXuat->tong_tien / $tong;
+
+            foreach ($nguyenLieuSanXuats as $nguyenLieuSanXuat) {
+                $nguyenLieuSanXuat->don_gia = $don_gia;
+                $nguyenLieuSanXuat->tong_tien = $don_gia * $nguyenLieuSanXuat->khoi_luong;
+
+                $nguyenLieuSanXuat->save();
+            }
         }
 
         return true;
@@ -264,10 +298,8 @@ class AdminNguyenLieuSanXuatController extends Controller
             DB::commit();
             return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa thành công');
         } catch (\Exception $e) {
-            dd($e);
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         } catch (\Throwable $e) {
-            dd($e);
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
