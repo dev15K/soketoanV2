@@ -223,7 +223,7 @@
                                     </td>
                                     <td>
                                         <input type="text" class="form-control onlyNumber"
-                                               name="tong_tien[]" value="">
+                                               name="tong_tien[]" value="" readonly>
                                     </td>
                                     <td>
 

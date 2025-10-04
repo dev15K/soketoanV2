@@ -1,4 +1,4 @@
-@php use App\Enums\TrangThaiNguyenLieuSanXuat;use Carbon\Carbon; @endphp
+@php use Carbon\Carbon; @endphp
 @extends('admin.layouts.master')
 @section('title')
     Kho Thành phẩm sản xuất
@@ -212,7 +212,7 @@
                                     </td>
                                     <td>
                                         <input type="text" class="form-control onlyNumber"
-                                               name="tong_tien[]" value="">
+                                               name="tong_tien[]" value="" readonly>
                                     </td>
                                     <td>
 
@@ -287,11 +287,8 @@
                                 <col width="8%">
                                 <col width="8%">
                                 <col width="8%">
-                                <col width="6%">
-                                <col width="6%">
-                                <col width="6%">
-                                <col width="6%">
-                                <col width="6%">
+                                <col width="8%">
+                                <col width="8%">
                             </colgroup>
                             <thead>
                             <tr>
@@ -308,10 +305,7 @@
                                 <th scope="col">Đơn giá</th>
                                 <th scope="col">Tổng tiền lô SX</th>
                                 <th scope="col">Giá trị tồn kho</th>
-                                <th scope="col">Màu sắc</th>
-                                <th scope="col">Mùi thơm</th>
                                 <th scope="col">Chi tiết khác</th>
-                                <th scope="col">Bảo quản</th>
                                 <th scope="col">Nhân viên SX</th>
                             </tr>
                             </thead>
@@ -351,7 +345,10 @@
                                         </div>
                                     </td>
                                     <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                    <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
+                                    <td>
+                                        <span
+                                            class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->PhieuSanXuat->so_lo_san_xuat }}</span>
+                                    </td>
                                     <td>{{ $data->ten_nguyen_lieu }}</td>
                                     <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
                                     <td>{{ parseNumber($data->khoi_luong_da_dung, 0) }} kg</td>
@@ -362,10 +359,7 @@
                                         {{ parseNumber($data->don_gia * ($data->khoi_luong - $data->khoi_luong_da_dung), 0) }}
                                         VND
                                     </td>
-                                    <td>{{ $data->mau_sac }}</td>
-                                    <td>{{ $data->mui_thom }}</td>
                                     <td>{{ $data->chi_tiet_khac }}</td>
-                                    <td>{{ $data->bao_quan }}</td>
                                     <td>{{ $data->NhanVien->full_name }}</td>
                                 </tr>
                             @endforeach
@@ -382,9 +376,6 @@
                                 <th scope="col">{{ parseNumber($datas->sum('khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }}
                                     kg
                                 </th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>

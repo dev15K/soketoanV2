@@ -127,27 +127,14 @@
                                 <input type="date" class="form-control" id="ngay" name="ngay"
                                        value="{{ old('ngay', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="trang_thai">Trạng thái</label>
-                                <select id="trang_thai" name="trang_thai" class="form-control">
-                                    <option value="{{ \App\Enums\TrangThaiPhieuSanXuat::ACTIVE() }}"
-                                        {{ old('trang_thai') == \App\Enums\TrangThaiPhieuSanXuat::ACTIVE() ? 'selected' : '' }}>
-                                        {{ \App\Enums\TrangThaiPhieuSanXuat::ACTIVE() }}
-                                    </option>
-                                    <option value="{{ \App\Enums\TrangThaiPhieuSanXuat::INACTIVE() }}"
-                                        {{ old('trang_thai') == \App\Enums\TrangThaiPhieuSanXuat::INACTIVE() ? 'selected' : '' }}>
-                                        {{ \App\Enums\TrangThaiPhieuSanXuat::INACTIVE() }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
 
-                        <div class="form-group col-md-12">
-                            <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
-                            <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
-                                   name="thoi_gian_hoan_thanh_san_xuat"
-                                   value="{{ old('thoi_gian_hoan_thanh_san_xuat', \Carbon\Carbon::now()->format('Y-m-d')) }}"
-                                   required>
+                            <div class="form-group col-md-6">
+                                <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
+                                <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
+                                       name="thoi_gian_hoan_thanh_san_xuat"
+                                       value="{{ old('thoi_gian_hoan_thanh_san_xuat', \Carbon\Carbon::now()->format('Y-m-d')) }}"
+                                       required>
+                            </div>
                         </div>
 
                         <div class="mt-2">
@@ -263,7 +250,7 @@
             </div>
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                   <div class="table-responsive pt-3">
+                    <div class="table-responsive pt-3">
                         <table class="table datatable_wrapper table-hover table-sm">
                             <colgroup>
                                 <col width="5%">
@@ -278,6 +265,7 @@
                                 <col width="250px">
                                 <col width="250px">
                                 <col width="250px">
+                                <col width="150px">
                                 <col width="150px">
                                 <col width="150px">
                             </colgroup>
@@ -299,6 +287,7 @@
                                 <th scope="col">Giá trị tồn kho</th>
                                 <th scope="col">Nhân sự xử lý</th>
                                 <th scope="col">Thời gian dự kiến hoàn thành SX</th>
+                                <th scope="col">Trạng thái</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -336,9 +325,15 @@
                                         </div>
                                     </td>
                                     <td>{{ Carbon::parse($data->ngay)->format('d/m/Y') }}</td>
-                                    <td>{{ $data->code }}</td>
+                                    <td>
+                                        <span
+                                            class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->code }}</span>
+                                    </td>
                                     <td>{{ $data->ten_phieu }}</td>
-                                    <td>{{ $data->so_lo_san_xuat }}</td>
+                                    <td>
+                                        <span
+                                            class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->so_lo_san_xuat }}</span>
+                                    </td>
                                     <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
                                     <td>{{ parseNumber($data->khoi_luong_da_dung) }} kg</td>
                                     <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
@@ -347,6 +342,9 @@
                                     <td>{{ parseNumber($data->gia_tri_ton_kho, 0) }} VND</td>
                                     <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
                                     <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
+                                    <td>
+                                        <span class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->is_completed ? 'Hoàn thành' : 'Chưa hoàn thành' }}</span>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -363,6 +361,7 @@
                                 <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }}
                                     kg
                                 </th>
+                                <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
