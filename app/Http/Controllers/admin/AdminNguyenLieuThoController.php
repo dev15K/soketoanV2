@@ -249,6 +249,9 @@ class AdminNguyenLieuThoController extends Controller
                         $loai_quy->save();
                     }
                 }
+
+                $soquy->loai_quy_id = $new_quy_id;
+                $soquy->save();
             }
         }
     }
