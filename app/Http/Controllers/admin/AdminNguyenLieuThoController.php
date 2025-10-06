@@ -24,8 +24,8 @@ class AdminNguyenLieuThoController extends Controller
 
         $queries = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED());
 
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $start_date = $request->input('start_date') ?? \Illuminate\Support\Carbon::now()->startOfMonth()->toDateString();
+        $end_date   = $request->input('end_date') ?? Carbon::now()->toDateString();
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [
@@ -249,6 +249,9 @@ class AdminNguyenLieuThoController extends Controller
                         $loai_quy->save();
                     }
                 }
+
+                $soquy->loai_quy_id = $new_quy_id;
+                $soquy->save();
             }
         }
     }

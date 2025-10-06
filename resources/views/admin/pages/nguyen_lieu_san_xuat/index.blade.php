@@ -1,4 +1,4 @@
-@php use App\Enums\TrangThaiNguyenLieuSanXuat;use Carbon\Carbon; @endphp
+@php use Carbon\Carbon; @endphp
 @extends('admin.layouts.master')
 @section('title')
     Kho Thành phẩm sản xuất
@@ -96,7 +96,8 @@
                         <h5 class="card-title">Thêm mới Kho Thành phẩm sản xuất</h5>
                         <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
                     </div>
-                    <form method="post" action="{{ route('admin.nguyen.lieu.san.xuat.store') }}" class="d-none">
+                    <form method="post" action="{{ route('admin.nguyen.lieu.san.xuat.store') }}" id="form-create"
+                          class="d-none">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -159,11 +160,16 @@
                                 </tbody>
                             </table>
                         </div>
-                       <div class="">
-                           <button type="button" class="btn btn-primary mt-2">Lưu tạm</button>
-                           <button type="submit" class="btn btn-warning mt-2">Hoàn thành</button>
-                           <button type="reset" class="btn btn-danger mt-2">Huỷ</button>
-                       </div>
+
+                        <input type="hidden" name="type_submit" id="type_submit">
+
+                        <div class="">
+                            <button type="button" onclick="pre_submit_form(-1)" class="btn btn-primary mt-2">Lưu tạm
+                            </button>
+                            <button type="button" onclick="pre_submit_form(1)" class="btn btn-warning mt-2">Hoàn thành
+                            </button>
+                            <button type="reset" class="btn btn-danger mt-2">Huỷ</button>
+                        </div>
                     </form>
 
                 </div>
@@ -201,10 +207,12 @@
 
                                         <input type="hidden" name="gia_lo_san_xuat[]"
                                                value="">
+                                        <input type="hidden" name="idx[]"
+                                               value="">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control onlyNumber"
-                                               name="tong_tien[]" value="">
+                                               name="tong_tien[]" value="" readonly>
                                     </td>
                                     <td>
 
@@ -214,6 +222,45 @@
                                 </tr>`;
 
                 $('#tbodyFormCreate').append(html);
+
+                init_number_format_input();
+            }
+
+            function pre_submit_form(num) {
+                num = parseInt(num);
+                let type_submit = num === 1 ? 'save' : 'temp';
+                $('#type_submit').val(type_submit);
+
+                let valid = true;
+
+                $('input[name="ten_nguyen_lieu[]"]').each(function () {
+                    let name = $(this).val();
+                    if (!name) {
+                        valid = false;
+                        return false;
+                    }
+                })
+
+                if (!valid) {
+                    alert('Vui lòng nhập tên nguyên liệu!');
+                    return false;
+                }
+
+                $('input[name="khoi_luong[]"]').each(function () {
+                    let qty = $(this).val();
+                    if (!qty) {
+                        valid = false;
+                        return false;
+                    }
+                })
+
+                if (!valid) {
+                    alert('Vui lòng nhập khối lượng!');
+                    return false;
+                }
+
+
+                $('#form-create').submit();
             }
         </script>
 
@@ -240,11 +287,8 @@
                                 <col width="8%">
                                 <col width="8%">
                                 <col width="8%">
-                                <col width="6%">
-                                <col width="6%">
-                                <col width="6%">
-                                <col width="6%">
-                                <col width="6%">
+                                <col width="8%">
+                                <col width="8%">
                             </colgroup>
                             <thead>
                             <tr>
@@ -261,10 +305,7 @@
                                 <th scope="col">Đơn giá</th>
                                 <th scope="col">Tổng tiền lô SX</th>
                                 <th scope="col">Giá trị tồn kho</th>
-                                <th scope="col">Màu sắc</th>
-                                <th scope="col">Mùi thơm</th>
                                 <th scope="col">Chi tiết khác</th>
-                                <th scope="col">Bảo quản</th>
                                 <th scope="col">Nhân viên SX</th>
                             </tr>
                             </thead>
@@ -304,7 +345,10 @@
                                         </div>
                                     </td>
                                     <td>{{ Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                    <td>{{ $data->PhieuSanXuat->so_lo_san_xuat }}</td>
+                                    <td>
+                                        <span
+                                            class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->PhieuSanXuat->so_lo_san_xuat }}</span>
+                                    </td>
                                     <td>{{ $data->ten_nguyen_lieu }}</td>
                                     <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
                                     <td>{{ parseNumber($data->khoi_luong_da_dung, 0) }} kg</td>
@@ -315,10 +359,7 @@
                                         {{ parseNumber($data->don_gia * ($data->khoi_luong - $data->khoi_luong_da_dung), 0) }}
                                         VND
                                     </td>
-                                    <td>{{ $data->mau_sac }}</td>
-                                    <td>{{ $data->mui_thom }}</td>
                                     <td>{{ $data->chi_tiet_khac }}</td>
-                                    <td>{{ $data->bao_quan }}</td>
                                     <td>{{ $data->NhanVien->full_name }}</td>
                                 </tr>
                             @endforeach
@@ -335,9 +376,6 @@
                                 <th scope="col">{{ parseNumber($datas->sum('khoi_luong') - $datas->sum('khoi_luong_da_dung'), 0) }}
                                     kg
                                 </th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>

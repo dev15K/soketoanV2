@@ -447,7 +447,7 @@ class AdminBanHangController extends Controller
                 'cong_no' => $total - $tong_giam_gia - $banhang->da_thanht_toan,
             ]);
 
-            $soQuy = SoQuy::where('gia_tri_id', $banhang->id)->first();
+            $soQuy = SoQuy::where('gia_tri_id', $banhang->id)->where('loai', 1)->first();
             $this->insertBanHang($banhang, true, $soQuy->id, $request->input('loai_quy_id'));
             DB::commit();
 
@@ -734,7 +734,7 @@ class AdminBanHangController extends Controller
             $banhang->cong_no = $total - $da_thanht_toan;
             $banhang->save();
 
-            $idUpdate = SoQuy::where('gia_tri_id', $banhang->id)->first();
+            $idUpdate = SoQuy::where('gia_tri_id', $banhang->id)->where('loai', 1)->first();
             $this->insertBanHang($banhang, true, $idUpdate->id, $loai_quy_id);
 
             DB::commit();

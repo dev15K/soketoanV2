@@ -26,8 +26,9 @@ class AdminPhieuSanXuatController extends Controller
 
         $queries = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED());
 
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
+        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
+
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [
                 \Carbon\Carbon::parse($start_date)->format('Y-m-d'),
@@ -171,7 +172,7 @@ class AdminPhieuSanXuatController extends Controller
             $phieuSanXuat->code = $code;
         }
 
-        $trang_thai = $request->input('trang_thai');
+        $trang_thai = TrangThaiPhieuSanXuat::ACTIVE();
 
         $phieuSanXuat->so_lo_san_xuat = $so_lo_san_xuat;
         $phieuSanXuat->nguyen_lieu_id = $nguyen_lieu_id;
@@ -314,12 +315,14 @@ class AdminPhieuSanXuatController extends Controller
                     return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
                 }
 
+                $trang_thai = TrangThaiPhieuSanXuat::ACTIVE();
+
                 $phieuSanXuat->fill([
                     'code' => $phieuSanXuat->code ?: $request->input('code'),
                     'ngay' => Carbon::parse($request->input('ngay'))->format('Y-m-d'),
                     'so_lo_san_xuat' => $request->input('so_lo_san_xuat'),
                     'nguyen_lieu_id' => 0,
-                    'trang_thai' => $request->input('trang_thai'),
+                    'trang_thai' => $trang_thai,
                     'tong_khoi_luong' => 0, // Tạm thời
                     'nhan_su_xu_li_id' => $request->input('nhan_su_xu_li'),
                     'thoi_gian_hoan_thanh_san_xuat' => $request->input('thoi_gian_hoan_thanh_san_xuat'),

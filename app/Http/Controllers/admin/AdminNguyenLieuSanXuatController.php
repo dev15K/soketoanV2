@@ -23,12 +23,12 @@ class AdminNguyenLieuSanXuatController extends Controller
 
         $queries = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED());
 
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
+        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [
-                \Carbon\Carbon::parse($start_date)->format('Y-m-d'),
+                Carbon::parse($start_date)->format('Y-m-d'),
                 Carbon::parse($end_date)->format('Y-m-d')
             ]);
         } elseif ($start_date) {
@@ -65,6 +65,12 @@ class AdminNguyenLieuSanXuatController extends Controller
             return redirect()->back()->with('error', 'Không tìm thấy');
         }
 
+        $others = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
+            ->where('phieu_san_xuat_id', $nguyen_lieu_san_xuat->phieu_san_xuat_id)
+            ->where('id', '!=', $nguyen_lieu_san_xuat->id)
+            ->orderByDesc('id')
+            ->get();
+
         $phieu_san_xuats = PhieuSanXuat::where('trang_thai', '!=', TrangThaiPhieuSanXuat::DELETED())
             ->orderByDesc('id')
             ->get();
@@ -73,7 +79,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat', 'phieu_san_xuats', 'nsus'));
+        return view('admin.pages.nguyen_lieu_san_xuat.detail', compact('nguyen_lieu_san_xuat', 'phieu_san_xuats', 'nsus', 'others'));
     }
 
     public function store(Request $request)
@@ -106,6 +112,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         $mau_sac = $request->input('mau_sac') ?? '';
         $mui_thom = $request->input('mui_thom') ?? '';
         $bao_quan = $request->input('bao_quan') ?? '';
+        $type_submit = $request->input('type_submit') ?? '';
 
         $ngays = $request->input('ngay');
         $ten_nguyen_lieus = $request->input('ten_nguyen_lieu');
@@ -113,16 +120,21 @@ class AdminNguyenLieuSanXuatController extends Controller
         $don_gias = $request->input('gia_lo_san_xuat');
         $tong_tiens = $request->input('tong_tien');
         $chi_tiet_khacs = $request->input('chi_tiet_khac');
+        $idxs = $request->input('idx');
         $trang_thai = TrangThaiPhieuSanXuat::ACTIVE();
 
         foreach ($ten_nguyen_lieus as $key => $ten_nguyen_lieu) {
-            $nguyenLieuSanXuat = new NguyenLieuSanXuat();
-
+            $idx = $idxs[$key];
             $ngay = $ngays[$key];
             $khoi_luong = $khoi_luongs[$key];
             $don_gia = $don_gias[$key];
             $tong_tien = $tong_tiens[$key];
             $chi_tiet_khac = $chi_tiet_khacs[$key] ?? '';
+
+            $nguyenLieuSanXuat = new NguyenLieuSanXuat();
+            if ($idx) {
+                $nguyenLieuSanXuat = NguyenLieuSanXuat::find($idx);
+            }
 
             $oldPhieuSanXuatId = $nguyenLieuSanXuat->phieu_san_xuat_id;
             $oldKhoiLuong = $nguyenLieuSanXuat->khoi_luong;
@@ -152,12 +164,15 @@ class AdminNguyenLieuSanXuatController extends Controller
                 $nguyenLieuSanXuat->code = $code;
             }
 
-            if (!$tong_tien || $tong_tien <= 0 || !is_numeric($tong_tien) || $tong_tien == '') {
-                $don_gia = $phieuSanXuat->don_gia;
-                $tong_tien = $don_gia * $khoi_luong;
-            } else {
-                $don_gia = $tong_tien / $khoi_luong;
-            }
+//            if (!$tong_tien || $tong_tien <= 0 || !is_numeric($tong_tien) || $tong_tien == '') {
+//                $don_gia = 0;
+//                $tong_tien = $don_gia * $khoi_luong;
+//            } else {
+//                $don_gia = $tong_tien / $khoi_luong;
+//            }
+
+            $don_gia = 0;
+            $tong_tien = $don_gia * $khoi_luong;
 
             $nguyenLieuSanXuat->ten_nguyen_lieu = $ten_nguyen_lieu;
             $nguyenLieuSanXuat->don_gia = $don_gia;
@@ -176,24 +191,62 @@ class AdminNguyenLieuSanXuatController extends Controller
             if ($oldPhieuSanXuatId != $phieu_san_xuat_id) {
                 if ($phieuSanXuat) {
                     $phieuSanXuat->khoi_luong_da_dung += $khoi_luong;
+                    $phieuSanXuat->gia_tri_ton_kho += $khoi_luong * $don_gia;
                     $phieuSanXuat->save();
                 }
 
                 $phieuSanXuat = PhieuSanXuat::find($oldPhieuSanXuatId);
                 if ($phieuSanXuat) {
                     $phieuSanXuat->khoi_luong_da_dung -= $oldKhoiLuong;
+                    $phieuSanXuat->gia_tri_ton_kho -= $oldKhoiLuong * $don_gia;
+                    $phieuSanXuat->is_completed = false;
                     $phieuSanXuat->save();
                 }
             } else {
                 $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);
                 if ($phieuSanXuat) {
                     $phieuSanXuat->khoi_luong_da_dung += $khoi_luong - $oldKhoiLuong;
+                    $phieuSanXuat->gia_tri_ton_kho += ($khoi_luong - $oldKhoiLuong) * $don_gia;
                     $phieuSanXuat->save();
                 }
             }
 
+            if ($type_submit == 'save') {
+                $nguyenLieuSanXuat->is_completed = true;
+            } else {
+                $nguyenLieuSanXuat->is_completed = false;
+            }
+
             $nguyenLieuSanXuat->save();
         }
+
+        if ($type_submit == 'save') {
+            $phieuSanXuat = PhieuSanXuat::find($phieu_san_xuat_id);
+            $phieuSanXuat->khoi_luong_da_dung = $phieuSanXuat->tong_khoi_luong;
+            $phieuSanXuat->gia_tri_ton_kho = 0;
+            $phieuSanXuat->is_completed = true;
+            $phieuSanXuat->save();
+
+            $nguyenLieuSanXuats = NguyenLieuSanXuat::where('phieu_san_xuat_id', $phieu_san_xuat_id)
+                ->where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
+                ->get();
+
+            $tong = 0;
+
+            foreach ($nguyenLieuSanXuats as $nguyenLieuSanXuat) {
+                $tong += $nguyenLieuSanXuat->khoi_luong;
+            }
+
+            $don_gia = $phieuSanXuat->tong_tien / $tong;
+
+            foreach ($nguyenLieuSanXuats as $nguyenLieuSanXuat) {
+                $nguyenLieuSanXuat->don_gia = $don_gia;
+                $nguyenLieuSanXuat->tong_tien = $don_gia * $nguyenLieuSanXuat->khoi_luong;
+
+                $nguyenLieuSanXuat->save();
+            }
+        }
+
         return true;
     }
 
@@ -236,12 +289,11 @@ class AdminNguyenLieuSanXuatController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy');
             }
 
-            $nguyen_lieu_san_xuat = $this->saveData($nguyen_lieu_san_xuat, $request);
+            $nguyen_lieu_san_xuat = $this->saveDataCreate($nguyen_lieu_san_xuat, $request);
             if (!$nguyen_lieu_san_xuat) {
                 DB::rollBack();
                 return redirect()->back()->with('error', 'Số lượng không đủ');
             }
-            $nguyen_lieu_san_xuat->save();
 
             DB::commit();
             return redirect()->route('admin.nguyen.lieu.san.xuat.index')->with('success', 'Chỉnh sửa thành công');

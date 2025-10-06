@@ -4,7 +4,7 @@
 
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Thêm mới sổ quỹ</h5>
+                <h5 class="card-title">Thêm mới phiếu thu/chi</h5>
                 <button class="btn btn-sm btn-primary btnShowOrHide" type="button">Mở rộng</button>
             </div>
             <form method="post" action="{{ route('admin.so.quy.store') }}" class="d-none">
@@ -36,7 +36,7 @@
                         <select class="form-control" name="loai_quy_id" id="loai_quy_id" required>
                             @foreach($loai_quies as $loai_quy)
                                 <option
-                                        value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                    value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
                                     {{ $loai_quy->ten_loai_quy }} - Tổng
                                     tiền: {{ parseNumber($loai_quy->tong_tien_quy) }} VND
                                 </option>
@@ -48,7 +48,7 @@
                         <select class="form-control" name="nhom_quy_id" id="nhom_quy_id">
                             @foreach($nhom_quies as $nhom_quy)
                                 <option
-                                        value="{{ $nhom_quy->id }}" {{ old('loai_quy_id') == $nhom_quy->id ? 'selected' : '' }}>
+                                    value="{{ $nhom_quy->id }}" {{ old('loai_quy_id') == $nhom_quy->id ? 'selected' : '' }}>
                                     {{ $nhom_quy->ten_nhom }}
                                 </option>
                             @endforeach
@@ -162,18 +162,20 @@
                         <tr>
                             <td>
                                 <div class="d-flex gap-2 justify-content-center">
-                                    <a href="{{ route('admin.so.quy.detail', $data->id) }}"
-                                       class="btn btn-primary btn-sm">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <form action="{{ route('admin.so.quy.delete', $data->id) }}"
-                                          method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm btnDelete">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    @if($data->allow_change)
+                                        <a href="{{ route('admin.so.quy.detail', $data->id) }}"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <form action="{{ route('admin.so.quy.delete', $data->id) }}"
+                                              method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm btnDelete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
@@ -226,8 +228,8 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th scope="col" colspan="4">Tổng:</th>
-                        <th scope="col" colspan="2">{{ parseNumber($datas->sum('so_tien')) }} VND</th>
+                        <th scope="col" colspan="5">Tổng:</th>
+                        <th scope="col" colspan="5">{{ parseNumber($datas->sum('so_tien')) }} VND</th>
                     </tr>
                     </tfoot>
                 </table>

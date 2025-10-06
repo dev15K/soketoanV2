@@ -23,8 +23,9 @@ class AdminNguyenLieuTinhController extends Controller
 
         $queries = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED());
 
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
+        $end_date   = $request->input('end_date') ?? Carbon::now()->toDateString();
+
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [
                 \Carbon\Carbon::parse($start_date)->format('Y-m-d'),

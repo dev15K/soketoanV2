@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Carbon;
 
 class Controller extends BaseController
 {
@@ -16,8 +17,8 @@ class Controller extends BaseController
 
     protected function get_data_so_quy_index(Request $request, $view_prefix = '')
     {
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
+        $end_date   = $request->input('end_date') ?? Carbon::now()->toDateString();
         $loai_quy_search = $request->input('loai_quy_search');
 
         $datas = SoQuy::where('deleted_at', null)
@@ -31,7 +32,7 @@ class Controller extends BaseController
                 return $query->where('loai_quy_id', $loai_quy_search);
             })
             ->where('so_tien', '>', 0)
-            ->orderByDesc('id')
+            ->orderBy('id', 'desc')
             ->get();
 
         $ton_dau = get_ton_dau($start_date, $end_date);

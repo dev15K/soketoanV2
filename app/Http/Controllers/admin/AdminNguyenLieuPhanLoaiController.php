@@ -7,8 +7,8 @@ use App\Enums\TrangThaiNguyenLieuTho;
 use App\Http\Controllers\Controller;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuTho;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AdminNguyenLieuPhanLoaiController extends Controller
@@ -20,8 +20,8 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
         $queries = NguyenLieuPhanLoai::where('nguyen_lieu_phan_loais.trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED());
 
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
+        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [

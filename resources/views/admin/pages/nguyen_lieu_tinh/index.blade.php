@@ -201,7 +201,7 @@
             <select class="form-select" name="ten_nguyen_lieus[]"></select>
         </td>
         <td>
-            <input type="text" min="0" name="khoi_luongs[]" class="form-control" required>
+            <input type="text" min="0" name="khoi_luongs[]" class="form-control onlyNumber" required>
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm" onclick="removeItems(this)">
@@ -217,6 +217,7 @@
             function plusItem() {
                 $('#tbodyListNL').append(baseHtml);
                 appendSelect2();
+                init_number_format_input();
             }
 
             function appendSelect2() {

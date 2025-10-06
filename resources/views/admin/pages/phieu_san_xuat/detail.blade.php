@@ -78,25 +78,15 @@
                                            value="{{ \Illuminate\Support\Carbon::parse($phieu_san_xuat->ngay)->format('Y-m-d') }}"
                                            required>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="trang_thai">Trạng thái</label>
-                                    <select id="trang_thai" name="trang_thai" class="form-control">
-                                        <option
-                                            {{ $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::ACTIVE() ? 'selected' : '' }}
-                                            value="{{ TrangThaiPhieuSanXuat::ACTIVE() }}">{{ TrangThaiPhieuSanXuat::ACTIVE() }}</option>
-                                        <option
-                                            {{ $phieu_san_xuat->trang_thai == TrangThaiPhieuSanXuat::INACTIVE() ? 'selected' : '' }}
-                                            value="{{ TrangThaiPhieuSanXuat::INACTIVE() }}">{{ TrangThaiPhieuSanXuat::INACTIVE() }}</option>
-                                    </select>
-                                </div>
-                            </div>
 
-                            <div class="form-group col-md-12">
-                                <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
-                                <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
-                                       name="thoi_gian_hoan_thanh_san_xuat"
-                                       value="{{ \Illuminate\Support\Carbon::parse($phieu_san_xuat->thoi_gian_hoan_thanh_san_xuat)->format('Y-m-d') }}"
-                                       required>
+
+                                <div class="form-group col-md-6">
+                                    <label for="thoi_gian_hoan_thanh_san_xuat">Thời gian dự kiến hoàn thành SX</label>
+                                    <input type="date" class="form-control" id="thoi_gian_hoan_thanh_san_xuat"
+                                           name="thoi_gian_hoan_thanh_san_xuat"
+                                           value="{{ \Illuminate\Support\Carbon::parse($phieu_san_xuat->thoi_gian_hoan_thanh_san_xuat)->format('Y-m-d') }}"
+                                           required>
+                                </div>
                             </div>
 
                             <div class="mt-2">
@@ -182,7 +172,7 @@
             <input type="text" name="ten_nguyen_lieus[]" class="form-control" required>
         </td>
         <td>
-            <input type="text" min="0" name="khoi_luongs[]" class="form-control" required>
+            <input type="text" min="0" name="khoi_luongs[]" class="form-control onlyNumber" required>
         </td>
         <td>
             <button type="button" class="btn btn-danger btn-sm" onclick="removeItems(this)">
@@ -194,6 +184,7 @@
             function plusItem() {
                 $('#tbodyListNL').append(baseHtml);
                 appendSelect2();
+                init_number_format_input();
             }
 
             function appendSelect2() {

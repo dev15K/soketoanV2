@@ -23,8 +23,8 @@ class AdminNguyenLieuThanhPhamController extends Controller
 
         $queries = NguyenLieuThanhPham::where('trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED());
 
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
+        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [
@@ -48,6 +48,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
         $datas = $queries->orderByDesc('id')->get();
 
         $nlsanxuats = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
+            ->where('is_completed', true)
             ->orderByDesc('id')
             ->get();
 
@@ -67,6 +68,7 @@ class AdminNguyenLieuThanhPhamController extends Controller
         }
 
         $nlsanxuats = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
+            ->where('is_completed', true)
             ->orderByDesc('id')
             ->get();
 
