@@ -25,7 +25,7 @@ class AdminNguyenLieuThoController extends Controller
         $queries = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED());
 
         $start_date = $request->input('start_date') ?? \Illuminate\Support\Carbon::now()->startOfMonth()->toDateString();
-        $end_date   = $request->input('end_date') ?? Carbon::now()->toDateString();
+        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [
@@ -111,7 +111,6 @@ class AdminNguyenLieuThoController extends Controller
 
             $nguyen_lieu_tho->save();
 
-
             $new_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
 
             $this->insertSoQuy($nguyen_lieu_tho, false, null, $new_id);
@@ -194,7 +193,7 @@ class AdminNguyenLieuThoController extends Controller
     /**
      * @throws \Throwable
      */
-    private function insertSoQuy(NguyenLieuTho $nguyenLieuTho, $so_quy_id = null, $old_quy_id = null, $new_quy_id = null)
+    private function insertSoQuy(NguyenLieuTho $nguyenLieuTho, $so_quy_id, $old_quy_id, $new_quy_id, $old_thanh_toan = null)
     {
         if (!$so_quy_id) {
             $code = $this->generateSoQuyCode();
@@ -220,9 +219,11 @@ class AdminNguyenLieuThoController extends Controller
 
             $old_so_tien = $soquy->so_tien;
 
+            $new_thanh_toan = $nguyenLieuTho->so_tien_thanh_toan;
+
             if ($soquy) {
                 $soquy->loai = 0;
-                $soquy->so_tien = $nguyenLieuTho->so_tien_thanh_toan;
+                $soquy->so_tien = $new_thanh_toan;
                 $soquy->ngay = Carbon::now();
                 $soquy->gia_tri_id = $nguyenLieuTho->id;
                 $soquy->noi_dung = 'Phiếu chi mua hàng cho nguyên liệu thô: #' . $nguyenLieuTho->id . ' - MDH: ' . $nguyenLieuTho->code;
@@ -232,7 +233,7 @@ class AdminNguyenLieuThoController extends Controller
                     $loai_quy = LoaiQuy::find($soquy->loai_quy_id);
 
                     if ($loai_quy) {
-                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $soquy->so_tien;
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $old_thanh_toan;
                         $loai_quy->save();
                     }
 
@@ -245,7 +246,7 @@ class AdminNguyenLieuThoController extends Controller
                 } else {
                     $loai_quy = LoaiQuy::find($new_quy_id);
                     if ($loai_quy) {
-                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $soquy->so_tien + $old_so_tien;
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $soquy->so_tien + $old_thanh_toan;
                         $loai_quy->save();
                     }
                 }
@@ -293,6 +294,7 @@ class AdminNguyenLieuThoController extends Controller
             }
 
             $old_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
+            $old_thanh_toan = $nguyen_lieu_tho->so_tien_thanh_toan;
 
             $nguyen_lieu_tho = $this->saveData($nguyen_lieu_tho, $request);
 
@@ -304,7 +306,7 @@ class AdminNguyenLieuThoController extends Controller
 
             $new_id = $nguyen_lieu_tho->phuong_thuc_thanh_toan;
 
-            $this->insertSoQuy($nguyen_lieu_tho, true, $old_id, $new_id);
+            $this->insertSoQuy($nguyen_lieu_tho, true, $old_id, $new_id, $old_thanh_toan);
 
             return redirect()->route('admin.nguyen.lieu.tho.index')->with('success', 'Chỉnh sửa nguyên liệu thô thành công');
         } catch (\Exception $e) {
