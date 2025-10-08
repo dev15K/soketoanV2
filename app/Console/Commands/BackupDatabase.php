@@ -25,6 +25,26 @@ class BackupDatabase extends Command
      */
     public function handle()
     {
-        //
+        $database = env('DB_DATABASE');
+        $username = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
+        $host = env('DB_HOST');
+
+        $date = date('Y-m-d_H-i-s');
+        $fileName = "backup-{$date}.sql";
+        $path = storage_path("app/backups/{$fileName}");
+
+        $command = "mysqldump -h {$host} -u {$username} -p{$password} {$database} > {$path}";
+
+        $returnVar = null;
+        $output = null;
+
+        exec($command, $output, $returnVar);
+
+        if ($returnVar === 0) {
+            $this->info("Backup successful: {$fileName}");
+        } else {
+            $this->error("Backup failed");
+        }
     }
 }
