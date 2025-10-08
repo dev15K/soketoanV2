@@ -15,7 +15,6 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 {
     public function index(Request $request)
     {
-        $ngay = $request->input('ngay');
         $keyword = $request->input('keyword');
 
         $queries = NguyenLieuPhanLoai::where('nguyen_lieu_phan_loais.trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED());
@@ -24,14 +23,14 @@ class AdminNguyenLieuPhanLoaiController extends Controller
         $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
 
         if ($start_date && $end_date) {
-            $queries->whereBetween('ngay', [
+            $queries->whereBetween('nguyen_lieu_phan_loais.ngay', [
                 Carbon::parse($start_date)->format('Y-m-d'),
                 Carbon::parse($end_date)->format('Y-m-d')
             ]);
         } elseif ($start_date) {
-            $queries->whereDate('ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+            $queries->whereDate('nguyen_lieu_phan_loais.ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
         } elseif ($end_date) {
-            $queries->whereDate('ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
+            $queries->whereDate('nguyen_lieu_phan_loais.ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
         }
 
         if ($keyword) {
