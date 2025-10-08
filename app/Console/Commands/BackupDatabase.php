@@ -32,13 +32,16 @@ class BackupDatabase extends Command
 
         $date = date('Y-m-d_H-i-s');
         $fileName = "backup-{$date}.sql";
+
         $backupPath = storage_path('app/backups');
 
         if (!is_dir($backupPath)) {
             mkdir($backupPath, 0775, true);
         }
 
-        $command = "mysqldump -h {$host} -u {$username} -p{$password} {$database} > {$backupPath}";
+        $path = storage_path("app/backups/{$fileName}");
+
+        $command = "mysqldump -h {$host} -u {$username} -p{$password} {$database} > {$path}";
 
         $returnVar = null;
         $output = null;
