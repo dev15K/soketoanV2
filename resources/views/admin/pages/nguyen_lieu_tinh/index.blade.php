@@ -49,12 +49,13 @@
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="code_search" name="code"
+                                           onkeypress="handleEnter(event)"
                                            placeholder="Tìm kiếm theo mã lô hàng" value="{{ $code_search }}">
-
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 d-flex justify-content-end align-items-center">
+                        <div class="col-md-2 d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn btn-outline-primary btn_reload" type="button">Làm mới</button>
                             <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
@@ -71,6 +72,13 @@
                 const code_search = $('#code_search').val();
 
                 window.location.href = "{{ route('admin.nguyen.lieu.tinh.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&code=" + code_search;
+            }
+
+            function handleEnter(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    searchTable();
+                }
             }
         </script>
 
@@ -280,7 +288,7 @@
             </div>
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                   <div class="table-responsive pt-3">
+                    <div class="table-responsive pt-3">
                         <table class="table datatable_wrapper table-hover vw-100">
                             <colgroup>
                                 <col width="50px">

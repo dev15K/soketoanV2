@@ -48,8 +48,8 @@
                             <div class="col-md-3 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="keyword" name="keyword"
+                                           onkeypress="handleEnter(event)"
                                            placeholder="Tên nguyên liệu" value="{{ $keyword }}">
-
                                 </div>
                             </div>
                             <div class="col-md-3 form-group">
@@ -68,7 +68,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 d-flex justify-content-end align-items-center">
+                        <div class="col-md-2 d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn btn-outline-primary btn_reload" type="button">Làm mới</button>
                             <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
@@ -85,6 +86,13 @@
                 const keyword = $('#keyword').val();
                 const so_lo_san_xuat = $('#phieu_san_xuat_id').val();
                 window.location.href = "{{ route('admin.nguyen.lieu.san.xuat.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&keyword=" + keyword + "&phieu_san_xuat_id=" + so_lo_san_xuat;
+            }
+
+            function handleEnter(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    searchTable();
+                }
             }
         </script>
 

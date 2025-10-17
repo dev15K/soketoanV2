@@ -47,6 +47,7 @@
                             <div class="col-md-3 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="keyword" name="keyword"
+                                           onkeypress="handleEnter(event)"
                                            placeholder="Tên nguyên liệu thô, mã đơn hàng" value="{{ $keyword }}">
 
                                 </div>
@@ -63,7 +64,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 d-flex justify-content-end align-items-center">
+                        <div class="col-md-2 d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn btn-outline-primary btn_reload" type="button">Làm mới</button>
                             <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
@@ -79,6 +81,13 @@
                 const keyword = $('#keyword').val();
                 const nha_cung_cap_id = $('#nha_cung_cap_id_search').val();
                 window.location.href = "{{ route('admin.nguyen.lieu.tho.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&keyword=" + keyword + "&nha_cung_cap_id=" + nha_cung_cap_id;
+            }
+
+            function handleEnter(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    searchTable();
+                }
             }
         </script>
 
@@ -110,7 +119,7 @@
                                 <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control selectCustom">
                                     @foreach($nccs as $ncc)
                                         <option
-                                                value="{{ $ncc->id }}" {{ old('nha_cung_cap_id') == $ncc->id ? 'selected' : '' }}>
+                                            value="{{ $ncc->id }}" {{ old('nha_cung_cap_id') == $ncc->id ? 'selected' : '' }}>
                                             {{ $ncc->ten }}
                                         </option>
                                     @endforeach
@@ -169,7 +178,7 @@
                                         id="phuong_thuc_thanh_toan">
                                     @foreach($loai_quies as $loai_quy)
                                         <option
-                                                value="{{ $loai_quy->id }}" {{ old('phuong_thuc_thanh_toan') == $loai_quy->id ? 'selected' : '' }}>
+                                            value="{{ $loai_quy->id }}" {{ old('phuong_thuc_thanh_toan') == $loai_quy->id ? 'selected' : '' }}>
                                             {{ $loai_quy->ten_loai_quy }}: {{ parseNumber($loai_quy->tong_tien_quy) }}
                                             VND
                                         </option>
@@ -195,7 +204,7 @@
                                 <select id="nhan_su_xu_li" name="nhan_su_xu_li" class="form-control selectCustom">
                                     @foreach($nsus as $nsu)
                                         <option
-                                                value="{{ $nsu->full_name }}" {{ old('nhan_su_xu_li') == $nsu->full_name ? 'selected' : '' }}>
+                                            value="{{ $nsu->full_name }}" {{ old('nhan_su_xu_li') == $nsu->full_name ? 'selected' : '' }}>
                                             {{ $nsu->full_name }}/{{ $nsu->email }}
                                         </option>
                                     @endforeach
@@ -210,11 +219,11 @@
                                 <label for="trang_thai">Trạng thái</label>
                                 <select id="trang_thai" name="trang_thai" class="form-control">
                                     <option value="{{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}"
-                                            {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}>
+                                        {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() ? 'selected' : '' }}>
                                         {{ \App\Enums\TrangThaiNguyenLieuTho::ACTIVE() }}
                                     </option>
                                     <option value="{{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}"
-                                            {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}>
+                                        {{ old('trang_thai') == \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() ? 'selected' : '' }}>
                                         {{ \App\Enums\TrangThaiNguyenLieuTho::INACTIVE() }}
                                     </option>
                                 </select>
@@ -370,22 +379,24 @@
                                 <th scope="col">{{ parseNumber($datas->sum('khoi_luong'), 0) }} kg</th>
                                 <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
                                 <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_ban'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong') - $datas->sum('khoi_luong_da_phan_loai') - $datas->sum('khoi_luong_da_ban'), 0) }} kg</th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                               <th scope="col"></th>
-                           </tr>
-                           </tfoot>
-                       </table>
-                   </div>
+                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong') - $datas->sum('khoi_luong_da_phan_loai') - $datas->sum('khoi_luong_da_ban'), 0) }}
+                                    kg
+                                </th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
 
                 </div>
 

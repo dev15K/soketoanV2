@@ -27,11 +27,11 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
 
-{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.9/autoNumeric.min.js"--}}
-{{--            integrity="sha512-cVa6IRDb7tSr/KZqJkq/FgnWMwBaRfi49qe3CVW4DhYMU30vHAXsIgbWu17w/OuVa0jyGly6/kJvcIzr8vFrDQ=="--}}
-{{--            crossorigin="anonymous" referrerpolicy="no-referrer"></script>--}}
+    {{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.9/autoNumeric.min.js"--}}
+    {{--            integrity="sha512-cVa6IRDb7tSr/KZqJkq/FgnWMwBaRfi49qe3CVW4DhYMU30vHAXsIgbWu17w/OuVa0jyGly6/kJvcIzr8vFrDQ=="--}}
+    {{--            crossorigin="anonymous" referrerpolicy="no-referrer"></script>--}}
 
-{{--    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>--}}
+    {{--    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>--}}
 
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
@@ -190,6 +190,10 @@
                 });
             }
         })
+
+        $('.btn_reload').click(function () {
+            window.location.href = window.location.pathname;
+        })
     })
 
     // function init_only_number() {
@@ -272,7 +276,7 @@
                 }
             },
             columnDefs: [
-                { orderable: false, targets: 0 },
+                {orderable: false, targets: 0},
             ],
             dom: 'Bfrtip',
             buttons: [

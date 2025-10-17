@@ -49,12 +49,14 @@
                             <div class="col-md-4 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="keyword" name="keyword"
+                                           onkeypress="handleEnter(event)"
                                            placeholder="Số LÔ SX, Mã Phiếu" value="{{ $keyword }}">
 
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 d-flex justify-content-end align-items-center">
+                        <div class="col-md-2 d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn btn-outline-primary btn_reload" type="button">Làm mới</button>
                             <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
@@ -70,6 +72,13 @@
                 const end_date = $('#end_date').val();
                 const keyword = $('#keyword').val();
                 window.location.href = "{{ route('admin.phieu.san.xuat.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&keyword=" + keyword;
+            }
+
+            function handleEnter(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    searchTable();
+                }
             }
         </script>
 
@@ -343,7 +352,8 @@
                                     <td>{{ $data->nhan_su_xu_li?->full_name }}</td>
                                     <td>{{ Carbon::parse($data->thoi_gian_hoan_thanh_san_xuat)->format('d/m/Y') }}</td>
                                     <td>
-                                        <span class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->is_completed ? 'Hoàn thành' : 'Chưa hoàn thành' }}</span>
+                                        <span
+                                            class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->is_completed ? 'Hoàn thành' : 'Chưa hoàn thành' }}</span>
                                     </td>
                                 </tr>
                             @endforeach

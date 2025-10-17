@@ -50,9 +50,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 d-flex justify-content-end align-items-center">
-                                        <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm
-                                            kiếm
+                                    <div class="col-md-2 d-flex justify-content-end align-items-center gap-2">
+                                        <button class="btn btn-outline-primary btn_reload" type="button">Làm mới
+                                        </button>
+                                        <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm
                                         </button>
                                     </div>
                                 </div>

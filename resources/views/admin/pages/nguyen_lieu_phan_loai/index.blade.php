@@ -46,10 +46,12 @@
                             </div>
                             <div class="col-md-4 form-group">
                                 <input type="text" class="form-control" id="keyword" name="keyword"
+                                       onkeypress="handleEnter(event)"
                                        placeholder="Tên nguyên liệu thô, mã đơn hàng" value="{{ $keyword }}">
                             </div>
                         </div>
-                        <div class="col-md-2 d-flex justify-content-end align-items-center">
+                        <div class="col-md-2 d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn btn-outline-primary btn_reload" type="button">Làm mới</button>
                             <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
@@ -65,6 +67,13 @@
                 const end_date = $('#end_date').val();
                 const keyword = $('#keyword').val();
                 window.location.href = "{{ route('admin.nguyen.lieu.phan.loai.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&keyword=" + keyword;
+            }
+
+            function handleEnter(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    searchTable();
+                }
             }
         </script>
 
