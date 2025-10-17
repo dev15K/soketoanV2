@@ -19,6 +19,13 @@ class AdminNguyenLieuThoController extends Controller
 {
     public function index(Request $request)
     {
+        $nguyenLieuThos = NguyenLieuTho::all();
+        foreach ($nguyenLieuThos as $nguyenLieuTho){
+            $nguyenLieuTho->cong_no = $nguyenLieuTho->chi_phi_mua;
+            $nguyenLieuTho->so_tien_thanh_toan = 0;
+            $nguyenLieuTho->save();
+        }
+
         $keyword = $request->input('keyword');
         $nha_cung_cap_id = $request->input('nha_cung_cap_id');
 
@@ -273,12 +280,20 @@ class AdminNguyenLieuThoController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu thô');
             }
 
-            NguyenLieuTho::where('id', $id)
-                ->where('khoi_luong_da_phan_loai', null)
-                ->orWhere('khoi_luong_da_phan_loai', 0)
+            if ($nguyen_lieu_tho->khoi_luong_da_phan_loai) {
+                return redirect()->back()->with('error', 'Không thể xoá xoá nguyên liệu thô đã phân loại');
+            }
+
+            $success = NguyenLieuTho::where('id', $id)
+//                ->where('khoi_luong_da_phan_loai', null)
+//                ->orWhere('khoi_luong_da_phan_loai', 0)
                 ->update(['trang_thai' => TrangThaiNguyenLieuTho::DELETED()]);
 
-            return redirect()->back()->with('success', 'Đã xoá nguyên liệu thô thành công');
+            if ($success) {
+                return redirect()->back()->with('success', 'Đã xoá nguyên liệu thô thành công');
+            }
+
+            return redirect()->back()->with('error', 'Đã xảy ra lỗi trong quá trình xoá nguyên liệu thô');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
