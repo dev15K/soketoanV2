@@ -19,8 +19,13 @@ class AdminNguyenLieuPhanLoaiController extends Controller
 
         $queries = NguyenLieuPhanLoai::where('nguyen_lieu_phan_loais.trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED());
 
-        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
-        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if (!$keyword && !$start_date && !$end_date) {
+            $start_date = Carbon::now()->startOfMonth()->toDateString();
+            $end_date = Carbon::now()->endOfMonth()->toDateString();
+        }
 
         if ($start_date && $end_date) {
             $queries->whereBetween('nguyen_lieu_phan_loais.ngay', [

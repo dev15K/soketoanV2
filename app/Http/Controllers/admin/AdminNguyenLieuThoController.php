@@ -19,20 +19,18 @@ class AdminNguyenLieuThoController extends Controller
 {
     public function index(Request $request)
     {
-        $nguyenLieuThos = NguyenLieuTho::all();
-        foreach ($nguyenLieuThos as $nguyenLieuTho){
-            $nguyenLieuTho->cong_no = $nguyenLieuTho->chi_phi_mua;
-            $nguyenLieuTho->so_tien_thanh_toan = 0;
-            $nguyenLieuTho->save();
-        }
-
         $keyword = $request->input('keyword');
         $nha_cung_cap_id = $request->input('nha_cung_cap_id');
 
         $queries = NguyenLieuTho::where('trang_thai', '!=', TrangThaiNguyenLieuTho::DELETED());
 
-        $start_date = $request->input('start_date') ?? \Illuminate\Support\Carbon::now()->startOfMonth()->toDateString();
-        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if (!$keyword && !$nha_cung_cap_id && !$start_date && !$end_date) {
+            $start_date = \Illuminate\Support\Carbon::now()->startOfMonth()->toDateString();
+            $end_date = \Illuminate\Support\Carbon::now()->endOfMonth()->toDateString();
+        }
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [

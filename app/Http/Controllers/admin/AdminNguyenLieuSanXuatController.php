@@ -23,8 +23,13 @@ class AdminNguyenLieuSanXuatController extends Controller
 
         $queries = NguyenLieuSanXuat::where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED());
 
-        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
-        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if (!$keyword && !$start_date && !$end_date) {
+            $start_date = Carbon::now()->startOfMonth()->toDateString();
+            $end_date = Carbon::now()->endOfMonth()->toDateString();
+        }
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [

@@ -23,8 +23,13 @@ class AdminNguyenLieuThanhPhamController extends Controller
 
         $queries = NguyenLieuThanhPham::where('trang_thai', '!=', TrangThaiNguyenLieuThanhPham::DELETED());
 
-        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
-        $end_date = $request->input('end_date') ?? Carbon::now()->toDateString();
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        if (!$san_pham_id_search && !$nguyen_lieu_san_xuat_id_search && !$start_date && !$end_date) {
+            $start_date = Carbon::now()->startOfMonth()->toDateString();
+            $end_date = Carbon::now()->endOfMonth()->toDateString();
+        }
 
         if ($start_date && $end_date) {
             $queries->whereBetween('ngay', [
