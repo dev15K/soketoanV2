@@ -357,7 +357,7 @@
                                     <td>{{ $data->dieu_kien_luu_tru }}</td>
                                     <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
                                     <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
-                                    <td>{{ parseNumber(floatval($data->so_tien_thanh_toan, 0) ?? 0, 0) }} VND</td>
+                                    <td>{{ parseNumber(floatval($data->so_tien_thanh_toan) ?? 0, 0) }} VND</td>
                                     <td>{{ parseNumber($data->cong_no, 0) }} VND</td>
                                     <td>{{ $data->nhan_su_xu_li }}</td>
                                     <td>{{ \Carbon\Carbon::parse($data->thoi_gian_phan_loai)->format('d-m-Y') }}</td>
