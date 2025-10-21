@@ -310,7 +310,7 @@
                                 <th scope="col">Khối lượng(kg)</th>
                                 <th scope="col">Khối lượng đã dùng</th>
                                 <th scope="col">Khối lượng tồn</th>
-                                <th scope="col">Đơn giá</th>
+                                <th scope="col">Đơn giá/kg</th>
                                 <th scope="col">Tổng tiền lô SX</th>
                                 <th scope="col">Giá trị tồn kho</th>
                                 <th scope="col">Chi tiết khác</th>
@@ -358,9 +358,9 @@
                                             class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->PhieuSanXuat->so_lo_san_xuat }}</span>
                                     </td>
                                     <td>{{ $data->ten_nguyen_lieu }}</td>
-                                    <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->khoi_luong_da_dung, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_dung, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong, 4) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_da_dung, 4) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_dung, 4) }} kg</td>
                                     <td>{{ parseNumber($data->don_gia, 0) }} VND</td>
                                     <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
                                     <td>

@@ -289,7 +289,7 @@
                                 <th scope="col">Tên nguyên liệu</th>
                                 <th scope="col">Số LÔ SX</th>
                                 <th scope="col">Tổng KL(kg)</th>
-                                <th scope="col">KL đã dùng(kg)</th>
+                                <th scope="col">KL đã thành phẩm(kg)</th>
                                 <th scope="col">KL tồn(kg)</th>
                                 <th scope="col">Đơn giá</th>
                                 <th scope="col">Tổng tiền</th>
