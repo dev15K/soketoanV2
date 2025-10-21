@@ -161,13 +161,13 @@
                                                     {{ $data->khachHang->dia_chi }}
                                                 @endif
                                             </td>
-                                            <td>{{ parseNumber($data->tong_tien) }} VND</td>
-                                            <td>{{ parseNumber($data->giam_gia) }} VND</td>
-                                            <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
+                                            <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
+                                            <td>{{ parseNumber($data->giam_gia, 0) }} VND</td>
+                                            <td>{{ parseNumber($data->da_thanht_toan, 0) }} VND</td>
                                             <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                                             <td>
                                                 <div class="d-flex justify-content-center gap-2">
-                                                    <span>{{ parseNumber($data->cong_no) }} VND</span>
+                                                    <span>{{ parseNumber($data->cong_no, 0) }} VND</span>
                                                     @if($data->cong_no > 0)
                                                         <button class="btn btn-danger btn-sm" type="button"
                                                                 data-bs-toggle="modal"

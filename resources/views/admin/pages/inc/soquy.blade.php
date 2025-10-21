@@ -38,7 +38,7 @@
                                 <option
                                     value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
                                     {{ $loai_quy->ten_loai_quy }} - Tổng
-                                    tiền: {{ parseNumber($loai_quy->tong_tien_quy) }} VND
+                                    tiền: {{ parseNumber($loai_quy->tong_tien_quy, 0) }} VND
                                 </option>
                             @endforeach
                         </select>
@@ -103,28 +103,28 @@
                     <div class="item_ " style="width: 20%">
                         <h5>Quỹ đầu kỳ</h5>
                         <div class="p-3 border rounded-3">
-                            <span class="text-danger">{{ parseNumber($ton_dau) }} VND</span>
+                            <span class="text-danger">{{ parseNumber($ton_dau, 0) }} VND</span>
                         </div>
                     </div>
 
                     <div class="item_ " style="width: 20%">
                         <h5>Tổng thu</h5>
                         <div class="p-3 border rounded-3">
-                            <span class="text-danger">{{ parseNumber($thu) }} VND</span>
+                            <span class="text-danger">{{ parseNumber($thu, 0) }} VND</span>
                         </div>
                     </div>
 
                     <div class="item_ " style="width: 20%">
                         <h5>Tổng chi</h5>
                         <div class="p-3 border rounded-3">
-                            <span class="text-danger">{{ parseNumber($chi) }} VND</span>
+                            <span class="text-danger">{{ parseNumber($chi, 0) }} VND</span>
                         </div>
                     </div>
 
                     <div class="item_ " style="width: 20%">
                         <h5>Quỹ cuối kỳ</h5>
                         <div class="p-3 border rounded-3">
-                            <span class="text-danger">{{ parseNumber($ton_cuoi) }} VND</span>
+                            <span class="text-danger">{{ parseNumber($ton_cuoi, 0) }} VND</span>
                         </div>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                                 @endif
                             </td>
                             <td>{{ $data->nhomQuy?->ten_nhom }}</td>
-                            <td>{{ parseNumber($data->so_tien) }} VND</td>
+                            <td>{{ parseNumber($data->so_tien, 0) }} VND</td>
                             <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
                             <td>
                                 @php
@@ -229,7 +229,7 @@
                     <tfoot>
                     <tr>
                         <th scope="col" colspan="5">Tổng:</th>
-                        <th scope="col" colspan="5">{{ parseNumber($datas->sum('so_tien')) }} VND</th>
+                        <th scope="col" colspan="5">{{ parseNumber($datas->sum('so_tien'), 0) }} VND</th>
                     </tr>
                     </tfoot>
                 </table>

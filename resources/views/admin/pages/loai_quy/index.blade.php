@@ -98,7 +98,7 @@
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
                                     <td>{{ $data->ten_loai_quy }}</td>
-                                    <td>{{ parseNumber($data->tong_tien_quy) }} VND</td>
+                                    <td>{{ parseNumber($data->tong_tien_quy, 0) }} VND</td>
                                 </tr>
                             @endforeach
                             </tbody>

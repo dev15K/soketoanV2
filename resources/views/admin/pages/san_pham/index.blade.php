@@ -151,8 +151,8 @@
                                     <td>{{ $data->ten_san_pham }}</td>
                                     <td>{{ $data->don_vi_tinh }}</td>
                                     <td>{{ $data->khoi_luong_rieng }}</td>
-                                    <td>{{ parseNumber($data->gia_xuat_kho) }} VND</td>
-                                    <td>{{ parseNumber($data->gia_ban) }} VND</td>
+                                    <td>{{ parseNumber($data->gia_xuat_kho, 0) }} VND</td>
+                                    <td>{{ parseNumber($data->gia_ban, 0) }} VND</td>
                                     <td>{{ parseNumber($data->ton_kho) }}</td>
                                 </tr>
                             @endforeach

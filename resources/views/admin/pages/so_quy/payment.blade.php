@@ -45,8 +45,9 @@
                                 <select class="form-control" name="loai_quy_id" id="loai_quy_id" required>
                                     @foreach($loai_quies as $loai_quy)
                                         <option
-                                                value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
-                                            {{ $loai_quy->ten_loai_quy }} - Tổng tiền: {{ parseNumber($loai_quy->tong_tien_quy) }} VND
+                                            value="{{ $loai_quy->id }}" {{ old('loai_quy_id') == $loai_quy->id ? 'selected' : '' }}>
+                                            {{ $loai_quy->ten_loai_quy }} - Tổng
+                                            tiền: {{ parseNumber($loai_quy->tong_tien_quy, 0) }} VND
                                         </option>
                                     @endforeach
                                 </select>
@@ -65,7 +66,7 @@
                                     <option value="">Tất cả</option>
                                     @foreach($nguyenLieuThos as $nguyenLieuTho)
                                         <option
-                                                value="{{ $nguyenLieuTho->id }}" {{ old('nguyen_lieu_tho_id') == $nguyenLieuTho->id ? 'selected' : '' }}>
+                                            value="{{ $nguyenLieuTho->id }}" {{ old('nguyen_lieu_tho_id') == $nguyenLieuTho->id ? 'selected' : '' }}>
                                             {{ $nguyenLieuTho->NhaCungCap->ten }} - Mã đơn
                                             hàng: {{ $nguyenLieuTho->code }} - Công
                                             nợ: {{ parseNumber($nguyenLieuTho->cong_no, 0) }} VND
@@ -75,11 +76,11 @@
                             </div>
 
                         </div>
-{{--                        <div class="form-group">--}}
-{{--                            <label for="noi_dung">Nội dung</label>--}}
-{{--                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5"--}}
-{{--                                      required>{{ old('noi_dung') }}</textarea>--}}
-{{--                        </div>--}}
+                        {{--                        <div class="form-group">--}}
+                        {{--                            <label for="noi_dung">Nội dung</label>--}}
+                        {{--                            <textarea name="noi_dung" id="noi_dung" class="form-control" rows="5"--}}
+                        {{--                                      required>{{ old('noi_dung') }}</textarea>--}}
+                        {{--                        </div>--}}
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
 

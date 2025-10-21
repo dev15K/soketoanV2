@@ -115,7 +115,7 @@
                                             <option
                                                 {{ $nguyen_lieu_tho->phuong_thuc_thanh_toan == $loai_quy->id ? 'selected' : '' }}
                                                 value="{{ $loai_quy->id }}">{{ $loai_quy->ten_loai_quy }}
-                                                : {{ parseNumber($loai_quy->tong_tien_quy) }} VND
+                                                : {{ parseNumber($loai_quy->tong_tien_quy, 0) }} VND
                                             </option>
                                         @endforeach
                                     </select>

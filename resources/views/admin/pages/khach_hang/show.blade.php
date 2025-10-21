@@ -31,14 +31,14 @@
                     <tr>
                         <td>{{ \Carbon\Carbon::parse($payment_->created_at)->format('d-m-Y') }}</td>
                         <td>{{ $payment_->loaiQuy->ten_loai_quy }}</td>
-                        <td>{{ parseNumber($payment_->da_thanht_toan) }} VND</td>
+                        <td>{{ parseNumber($payment_->da_thanht_toan, 0) }} VND</td>
                     </tr>
                 @endforeach
                 </tbody>
                 <tfoot>
                 <tr>
                     <th scope="col" colspan="2">Tổng:</th>
-                    <th scope="col" colspan="1">{{ parseNumber($histories->sum('da_thanht_toan')) }} VND</th>
+                    <th scope="col" colspan="1">{{ parseNumber($histories->sum('da_thanht_toan'), 0) }} VND</th>
                 </tr>
                 </tfoot>
             </table>
@@ -119,10 +119,10 @@
                                 {{ $data->khachHang->dia_chi }}
                             @endif
                         </td>
-                        <td>{{ parseNumber($data->tong_tien) }} VND</td>
-                        <td>{{ parseNumber($data->da_thanht_toan) }} VND</td>
+                        <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
+                        <td>{{ parseNumber($data->da_thanht_toan, 0) }} VND</td>
                         <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
-                        <td>{{ parseNumber($data->cong_no) }} VND</td>
+                        <td>{{ parseNumber($data->cong_no, 0) }} VND</td>
                     </tr>
                 @endforeach
                 </tbody>

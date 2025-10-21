@@ -84,7 +84,7 @@
                                     <tr>
                                         <th scope="col" colspan="3">Tổng:</th>
                                         <th scope="col"
-                                            colspan="2">{{ parseNumber($payment_histories->sum('so_tien')) }} VND
+                                            colspan="2">{{ parseNumber($payment_histories->sum('so_tien'), 0) }} VND
                                         </th>
                                     </tr>
                                     </tfoot>
@@ -161,7 +161,7 @@
                                             </td>
                                             <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
                                             <td>{{ $data->loaiQuy->ten_loai_quy }}</td>
-                                            <td>{{ parseNumber(floatval($data->so_tien_thanh_toan) ?? 0, 0) }} VND</td>
+                                            <td>{{ parseNumber(floatval($data->so_tien_thanh_toan, 0) ?? 0, 0) }} VND</td>
                                             <td>{{ parseNumber($data->cong_no, 0) }} VND</td>
                                             <td>{{ $data->nhan_su_xu_li }}</td>
                                             <td>{{ \Carbon\Carbon::parse($data->thoi_gian_phan_loai)->format('d-m-Y') }}</td>
