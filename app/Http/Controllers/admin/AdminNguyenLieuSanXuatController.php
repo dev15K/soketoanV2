@@ -27,8 +27,13 @@ class AdminNguyenLieuSanXuatController extends Controller
         $end_date = $request->input('end_date');
 
         if (!$keyword && !$start_date && !$end_date) {
-            $start_date = Carbon::now()->startOfMonth()->toDateString();
-            $end_date = Carbon::now()->endOfMonth()->toDateString();
+            $start_date2 = Carbon::now()->startOfMonth()->toDateString();
+            $end_date2 = Carbon::now()->endOfMonth()->toDateString();
+
+            $queries->whereBetween('ngay', [
+                \Carbon\Carbon::parse($start_date2)->format('Y-m-d'),
+                Carbon::parse($end_date2)->format('Y-m-d')
+            ]);
         }
 
         if ($start_date && $end_date) {

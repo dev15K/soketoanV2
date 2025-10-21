@@ -139,7 +139,7 @@ if (!function_exists('updateTonKho')) {
 }
 
 if (!function_exists('parseNumber')) {
-    function parseNumber($num): ?string
+    function parseNumber($num, $path = 3): ?string
     {
         if (!is_numeric($num)) {
             return 0;
@@ -160,7 +160,7 @@ if (!function_exists('parseNumber')) {
         $decimalPart = rtrim($decimalPart, '0');
 
         // Đếm số chữ số thập phân còn lại (tối đa 3)
-        $decimalLength = min(strlen($decimalPart), 3);
+        $decimalLength = min(strlen($decimalPart), $path);
 
         return number_format($num, $decimalLength);
     }

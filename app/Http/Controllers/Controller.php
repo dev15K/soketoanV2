@@ -17,9 +17,16 @@ class Controller extends BaseController
 
     protected function get_data_so_quy_index(Request $request, $view_prefix = '')
     {
-        $start_date = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
-        $end_date   = $request->input('end_date') ?? Carbon::now()->toDateString();
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
         $loai_quy_search = $request->input('loai_quy_search');
+
+        $start_date2 = null;
+        $end_date2 = null;
+        if (!$loai_quy_search && !$start_date && !$end_date) {
+            $start_date2 = Carbon::now()->startOfMonth()->toDateString();
+            $end_date2 = Carbon::now()->endOfMonth()->toDateString();
+        }
 
         $datas = SoQuy::where('deleted_at', null)
             ->when($start_date, function ($query) use ($start_date) {
@@ -27,6 +34,12 @@ class Controller extends BaseController
             })
             ->when($end_date, function ($query) use ($end_date) {
                 return $query->whereDate('created_at', '<=', $end_date);
+            })
+            ->when($start_date2, function ($query) use ($start_date2) {
+                return $query->whereDate('created_at', '>=', $start_date2);
+            })
+            ->when($end_date2, function ($query) use ($end_date2) {
+                return $query->whereDate('created_at', '<=', $end_date2);
             })
             ->when($loai_quy_search, function ($query) use ($loai_quy_search) {
                 return $query->where('loai_quy_id', $loai_quy_search);
