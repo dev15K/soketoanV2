@@ -1,4 +1,4 @@
-@php use App\Enums\TrangThaiNguyenLieuTho;use App\Enums\TrangThaiNguyenLieuTinh;use Carbon\Carbon; @endphp
+@php use App\Enums\TrangThaiNguyenLieuTinh;use Carbon\Carbon; @endphp
 @php @endphp
 @extends('admin.layouts.master')
 @section('title')
@@ -46,12 +46,25 @@
                                            value="{{ $end_date }}" name="end_date">
                                 </div>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="code_search" name="code"
                                            onkeypress="handleEnter(event)"
                                            placeholder="Tìm kiếm theo mã lô hàng" value="{{ $code_search }}">
                                 </div>
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <select name="nguyen_lieu_phan_loai" id="nguyen_lieu_phan_loai"
+                                        class="form-select selectCustom">
+                                    <option value="">-- Chọn --</option>
+                                    @foreach($nlphanloais as $nlphanloai)
+                                        <option {{ $nguyen_lieu_phan_loai == $nlphanloai->id ? 'selected' : '' }}
+                                                value="{{ $nlphanloai->id }}">
+                                            {{ $nlphanloai->nguyenLieuTho->code }}
+                                            - {{ $nlphanloai->nguyenLieuTho->ten_nguyen_lieu }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-2 d-flex justify-content-end align-items-center gap-2">
@@ -70,8 +83,9 @@
                 const start_date = $('#start_date').val();
                 const end_date = $('#end_date').val();
                 const code_search = $('#code_search').val();
+                const nguyen_lieu_phan_loai = $('#nguyen_lieu_phan_loai').val();
 
-                window.location.href = "{{ route('admin.nguyen.lieu.tinh.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&code=" + code_search;
+                window.location.href = "{{ route('admin.nguyen.lieu.tinh.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&code=" + code_search + "&nguyen_lieu_phan_loai=" + nguyen_lieu_phan_loai;
             }
 
             function handleEnter(event) {
@@ -362,9 +376,9 @@
                                     <td>{{ $data->ma_phieu }}</td>
                                     <td>{{ $data->ten_nguyen_lieu }}</td>
                                     <td>{{ $data->code }}</td>
-                                    <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->so_luong_da_dung, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->tong_khoi_luong - $data->so_luong_da_dung, 0) }} kg</td>
+                                    <td>{{ parseNumber($data->tong_khoi_luong, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->so_luong_da_dung, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->tong_khoi_luong - $data->so_luong_da_dung, 3) }} kg</td>
                                     <td>{{ parseNumber($data->gia_tien, 0) }} VND</td>
                                     <td>{{ parseNumber($data->tong_tien, 0) }} VND</td>
                                     <td>{{ parseNumber($data->gia_tri_ton_kho, 0) }} VND</td>
@@ -380,9 +394,9 @@
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
-                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('so_luong_da_dung'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('so_luong_da_dung'), 0) }}
+                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('so_luong_da_dung'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('so_luong_da_dung'), 3) }}
                                     kg
                                 </th>
                                 <th scope="col"></th>

@@ -285,22 +285,22 @@
                                     </td>
                                     <td>{{ $data->nguyenLieuTho->code }}</td>
                                     <td>{{ \Carbon\Carbon::parse($data->ngay)->format('d-m-Y') }}</td>
-                                    <td>{{ parseNumber($data->nu_cao_cap, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->nu_vip, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->nhang, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->vong, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->tam_dai, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->tam_ngan, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->nuoc_cat, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->keo, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->nau_dau, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->tam_nhanh_sao, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->chi_phi_mua, 0) }} VND</td>
-                                    <td>{{ parseNumber($data->tong_khoi_luong, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->khoi_luong_ban_dau, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->khoi_luong_hao_hut, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_phan_loai, 0) }}kg
+                                    <td>{{ parseNumber($data->nu_cao_cap, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->nu_vip, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->nhang, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->vong, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->tam_dai, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->tam_ngan, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->nuoc_cat, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->keo, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->nau_dau, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->tam_nhanh_sao, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->chi_phi_mua, 3) }} VND</td>
+                                    <td>{{ parseNumber($data->tong_khoi_luong, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_ban_dau, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_hao_hut, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_phan_loai, 3) }}kg
                                     </td>
                                     <td>{{ parseNumber($data->gia_truoc_phan_loai, 0) }} VND</td>
                                     <td>{{ parseNumber($data->gia_sau_phan_loai, 0) }} VND</td>
@@ -314,22 +314,22 @@
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
-                                <th scope="col">{{ parseNumber($datas->sum('nu_cao_cap'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('nu_vip'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('nhang'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('vong'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('tam_dai'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('tam_ngan'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('nuoc_cat'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('keo'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('nau_dau'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('tam_nhanh_sao'), 0) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nu_cao_cap'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nu_vip'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nhang'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('vong'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tam_dai'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tam_ngan'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nuoc_cat'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('keo'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('nau_dau'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tam_nhanh_sao'), 3) }} kg</th>
                                 <th scope="col"></th>
-                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_hao_hut'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_phan_loai'), 0) }} kg</th>
-                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_phan_loai'), 0) }}
+                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_ban_dau'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_hao_hut'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('khoi_luong_da_phan_loai'), 3) }} kg</th>
+                                <th scope="col">{{ parseNumber($datas->sum('tong_khoi_luong') - $datas->sum('khoi_luong_da_phan_loai'), 3) }}
                                     kg
                                 </th>
                                 <th scope="col"></th>

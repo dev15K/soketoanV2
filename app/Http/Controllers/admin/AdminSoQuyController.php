@@ -34,7 +34,6 @@ class AdminSoQuyController extends Controller
             $ma_phieu = $this->generateCode();
             $ngay = $request->input('ngay');
             $so_tien = $request->input('so_tien');
-            $noi_dung = $request->input('noi_dung');
             $loai_quy_id = $request->input('loai_quy_id');
 
             $nguyen_lieu_tho_id = $request->input('nguyen_lieu_tho_id');
@@ -67,9 +66,11 @@ class AdminSoQuyController extends Controller
             $soquy->noi_dung = $noi_dung;
             $soquy->loai = $loai;
             $soquy->loai_quy_id = $loai_quy_id;
+            $soquy->gia_tri_id = $nguyen_lieu_tho_id;
             $soquy->save();
 
             $nguyenLieuTho->cong_no = $nguyenLieuTho->cong_no - $so_tien;
+            $nguyenLieuTho->so_tien_thanh_toan = $nguyenLieuTho->so_tien_thanh_toan + $so_tien;
             $nguyenLieuTho->save();
 
             $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $so_tien;

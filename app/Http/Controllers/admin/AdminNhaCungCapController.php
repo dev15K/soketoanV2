@@ -5,7 +5,6 @@ namespace App\Http\Controllers\admin;
 use App\Enums\TrangThaiNguyenLieuTho;
 use App\Enums\TrangThaiNhaCungCap;
 use App\Http\Controllers\Controller;
-use App\Models\BanHang;
 use App\Models\NguyenLieuTho;
 use App\Models\NhaCungCaps;
 use App\Models\SoQuy;
@@ -13,13 +12,22 @@ use Illuminate\Http\Request;
 
 class AdminNhaCungCapController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $datas = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED())
-            ->orderByDesc('id')
-            ->get();
+        $keyword = $request->input('keyword');
 
-        return view('admin.pages.nha_cung_cap.index', compact('datas'));
+        $q = NhaCungCaps::where('trang_thai', '!=', TrangThaiNhaCungCap::DELETED());
+
+        if (!empty($keyword)) {
+            $q->where(function ($query) use ($keyword) {
+                $query->where('ten', 'like', '%' . $keyword . '%')
+                    ->orWhere('so_dien_thoai', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        $datas = $q->orderByDesc('id')->get();
+
+        return view('admin.pages.nha_cung_cap.index', compact('datas', 'keyword'));
     }
 
     public function detail($id)

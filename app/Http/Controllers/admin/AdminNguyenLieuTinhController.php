@@ -20,38 +20,44 @@ class AdminNguyenLieuTinhController extends Controller
     {
         $ngay = $request->input('ngay');
         $code_search = $request->input('code');
+        $nguyen_lieu_phan_loai = $request->input('nguyen_lieu_phan_loai');
 
-        $queries = NguyenLieuTinh::where('trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED());
+        $queries = NguyenLieuTinh::where('nguyen_lieu_tinhs.trang_thai', '!=', TrangThaiNguyenLieuTinh::DELETED());
 
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        if (!$code_search && !$start_date && !$end_date) {
+        if (!$code_search && !$nguyen_lieu_phan_loai && !$start_date && !$end_date) {
             $start_date2 = Carbon::now()->startOfMonth()->toDateString();
             $end_date2 = Carbon::now()->endOfMonth()->toDateString();
 
-            $queries->whereBetween('ngay', [
+            $queries->whereBetween('nguyen_lieu_tinhs.ngay', [
                 Carbon::parse($start_date2)->format('Y-m-d'),
                 Carbon::parse($end_date2)->format('Y-m-d')
             ]);
         }
 
         if ($start_date && $end_date) {
-            $queries->whereBetween('ngay', [
+            $queries->whereBetween('nguyen_lieu_tinhs.ngay', [
                 \Carbon\Carbon::parse($start_date)->format('Y-m-d'),
                 Carbon::parse($end_date)->format('Y-m-d')
             ]);
         } elseif ($start_date) {
-            $queries->whereDate('ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+            $queries->whereDate('nguyen_lieu_tinhs.ngay', '>=', Carbon::parse($start_date)->format('Y-m-d'));
         } elseif ($end_date) {
-            $queries->whereDate('ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
+            $queries->whereDate('nguyen_lieu_tinhs.ngay', '<=', Carbon::parse($end_date)->format('Y-m-d'));
         }
 
         if ($code_search) {
-            $queries->where('code', 'like', '%' . $code_search . '%');
+            $queries->where('nguyen_lieu_tinhs.code', 'like', '%' . $code_search . '%');
         }
 
-        $datas = $queries->orderByDesc('id')->get();
+        if ($nguyen_lieu_phan_loai) {
+            $queries->join('nguyen_lieu_tinh_chi_tiets', 'nguyen_lieu_tinh_chi_tiets.nguyen_lieu_tinh_id', '=', 'nguyen_lieu_tinhs.id')
+                ->where('nguyen_lieu_tinh_chi_tiets.nguyen_lieu_phan_loai_id', $nguyen_lieu_phan_loai);
+        }
+
+        $datas = $queries->select('nguyen_lieu_tinhs.*')->orderByDesc('nguyen_lieu_tinhs.id')->get();
 
         $nlphanloais = NguyenLieuPhanLoai::where('trang_thai', '!=', TrangThaiNguyenLieuPhanLoai::DELETED())
             ->orderByDesc('id')
@@ -63,8 +69,9 @@ class AdminNguyenLieuTinhController extends Controller
 
 
         return view('admin.pages.nguyen_lieu_tinh.index', compact('datas', 'nlphanloais', 'code', 'ma_phieu', 'ngay',
-            'code_search', 'start_date', 'end_date'));
+            'code_search', 'start_date', 'end_date', 'nguyen_lieu_phan_loai'));
     }
+
 
     private function generateLHXCode()
     {
@@ -407,6 +414,9 @@ class AdminNguyenLieuTinhController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy phiếu sản xuất');
             }
 
+            $tong_khoi_luong = 0;
+            $gia_tien = 0;
+
             $nguyen_lieu_tinh->fill([
                 'code' => $nguyen_lieu_tinh->code ?: $request->input('code'),
                 'ngay' => Carbon::parse($request->input('ngay'))->format('Y-m-d'),
@@ -416,7 +426,6 @@ class AdminNguyenLieuTinhController extends Controller
             ]);
             $nguyen_lieu_tinh->save();
 
-            $tong_khoi_luong = 0;
             $nguyen_lieu_phan_loai_ids = $request->input('nguyen_lieu_phan_loai_ids');
             $ten_nguyen_lieus = $request->input('ten_nguyen_lieus');
             $khoi_luongs = $request->input('khoi_luongs');
@@ -436,6 +445,8 @@ class AdminNguyenLieuTinhController extends Controller
                     DB::rollBack();
                     return redirect()->back()->with('error', 'Không tìm thấy nguyên liệu.')->withInput();
                 }
+
+                $so_tien = $khoi_luong * $nguyenLieu->gia_sau_phan_loai;
 
                 $chiTietCu = NguyenLieuTinhChiTiet::where('nguyen_lieu_tinh_id', $nguyen_lieu_tinh->id)
                     ->where('nguyen_lieu_phan_loai_id', $nguyen_lieu_id)
@@ -461,7 +472,7 @@ class AdminNguyenLieuTinhController extends Controller
                     'nguyen_lieu_tinh_id' => $nguyen_lieu_tinh->id,
                     'ten_nguyen_lieu' => $ten_nguyen_lieu,
                     'khoi_luong' => $khoi_luong,
-                    'so_tien' => $khoi_luong * $nguyenLieu->gia_sau_phan_loai,
+                    'so_tien' => $so_tien,
                 ]);
 
                 if (isset($mapping[$ten])) {
@@ -470,6 +481,7 @@ class AdminNguyenLieuTinhController extends Controller
                 }
 
                 $tong_khoi_luong += $khoi_luong;
+                $gia_tien += $so_tien;
 
                 $nguyenLieu->khoi_luong_da_phan_loai += $khoi_luong - $tong_khoi_luong_cu;
                 $nguyenLieu->save();
@@ -480,6 +492,9 @@ class AdminNguyenLieuTinhController extends Controller
             }
 
             $nguyen_lieu_tinh->tong_khoi_luong = $tong_khoi_luong;
+            $nguyen_lieu_tinh->gia_tien = $gia_tien / $tong_khoi_luong;
+            $nguyen_lieu_tinh->tong_tien = $gia_tien;
+            $nguyen_lieu_tinh->gia_tri_ton_kho = $gia_tien / $tong_khoi_luong * ($tong_khoi_luong - $nguyen_lieu_tinh->so_luong_da_dung);
             $nguyen_lieu_tinh->save();
 
             foreach ($no_ids as $no_id) {

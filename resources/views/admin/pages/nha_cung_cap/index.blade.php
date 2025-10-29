@@ -27,18 +27,36 @@
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
                     <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm theo tên nhà cung cấp</label></h5>
-                    <div class="col-md-4">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" id="inlineFormInputGroup"
-                                   placeholder="Tìm kiếm theo tên nhà cung cấp">
-
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="keyword" name="keyword" value="{{ $keyword }}"
+                                       onkeypress="handleEnter(event)"  placeholder="Tìm kiếm theo tên nhà cung cấp">
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex justify-content-end align-items-center gap-2">
+                            <button class="btn btn-outline-primary btn_reload" type="button">Làm mới</button>
+                            <button class="btn btn-primary" onclick="searchTable()" type="button">Tìm kiếm</button>
                         </div>
                     </div>
-
                 </div>
 
             </div>
         </div>
+
+            <script>
+                function searchTable() {
+                    const keyword = $('#keyword').val();
+                    window.location.href = "{{ route('admin.nha.cung.cap.index') }}?keyword=" + keyword;
+                }
+
+                function handleEnter(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        searchTable();
+                    }
+                }
+            </script>
 
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
