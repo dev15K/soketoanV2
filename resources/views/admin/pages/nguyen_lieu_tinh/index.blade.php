@@ -315,6 +315,7 @@
                                 <col width="10%">
                                 <col width="10%">
                                 <col width="10%">
+                                <col width="10%">
                                 <col width="x">
                                 <col width="10%">
                                 <col width="10%">
@@ -329,6 +330,7 @@
                                 <th scope="col">Mã phiếu</th>
                                 <th scope="col">Tên nguyên liệu</th>
                                 <th scope="col">Mã lô hàng</th>
+                                <th scope="col">Nguồn gốc</th>
                                 <th scope="col">Tổng khối lượng</th>
                                 <th scope="col">Khối lượng đã dùng</th>
                                 <th scope="col">Khối lượng tồn</th>
@@ -376,6 +378,7 @@
                                     <td>{{ $data->ma_phieu }}</td>
                                     <td>{{ $data->ten_nguyen_lieu }}</td>
                                     <td>{{ $data->code }}</td>
+                                    <td>{{ $data->get_list_child($data) }}</td>
                                     <td>{{ parseNumber($data->tong_khoi_luong, 3) }} kg</td>
                                     <td>{{ parseNumber($data->so_luong_da_dung, 3) }} kg</td>
                                     <td>{{ parseNumber($data->tong_khoi_luong - $data->so_luong_da_dung, 3) }} kg</td>
@@ -389,6 +392,7 @@
                             <tfoot class="bg-primary bg-opacity-10">
                             <tr>
                                 <th scope="col">Tổng:</th>
+                                <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
