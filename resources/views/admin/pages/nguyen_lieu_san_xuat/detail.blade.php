@@ -81,7 +81,7 @@
                                     <tr>
                                         <th scope="col"></th>
                                         <th scope="col">Ngày</th>
-                                        <th scope="col">Tên nguyên liệu</th>
+                                        <th scope="col">Tên thành phẩm</th>
                                         <th scope="col">Khối lượng(kg)</th>
                                         <th scope="col">Tổng tiền lô SX</th>
                                         <th scope="col">Chi tiết khác</th>

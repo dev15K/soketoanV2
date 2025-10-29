@@ -49,7 +49,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="keyword" name="keyword"
                                            onkeypress="handleEnter(event)"
-                                           placeholder="Tên nguyên liệu" value="{{ $keyword }}">
+                                           placeholder="Tên thành phẩm" value="{{ $keyword }}">
                                 </div>
                             </div>
                             <div class="col-md-3 form-group">
@@ -157,7 +157,7 @@
                                 <tr>
                                     <th scope="col"></th>
                                     <th scope="col">Ngày</th>
-                                    <th scope="col">Tên nguyên liệu</th>
+                                    <th scope="col">Tên thành phẩm</th>
                                     <th scope="col">Khối lượng(kg)</th>
                                     <th scope="col">Tổng tiền lô SX</th>
                                     <th scope="col">Chi tiết khác</th>
@@ -306,7 +306,7 @@
                                 <th scope="col">Hành động</th>
                                 <th scope="col">Ngày</th>
                                 <th scope="col">Lô Sản Xuất</th>
-                                <th scope="col">Tên nguyên liệu</th>
+                                <th scope="col">Tên thành phẩm</th>
                                 <th scope="col">Khối lượng(kg)</th>
                                 <th scope="col">Khối lượng đã dùng</th>
                                 <th scope="col">Khối lượng tồn</th>

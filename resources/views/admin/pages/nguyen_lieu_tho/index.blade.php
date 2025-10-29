@@ -346,10 +346,10 @@
                                     <td>{{ $data->ten_nguyen_lieu }}</td>
                                     <td>{{ $data->loai }}</td>
                                     <td>{{ $data->nguon_goc }}</td>
-                                    <td>{{ parseNumber($data->khoi_luong, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->khoi_luong_da_ban, 0) }} kg</td>
-                                    <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_phan_loai - $data->khoi_luong_da_ban, 0) }}
+                                    <td>{{ parseNumber($data->khoi_luong, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_da_phan_loai, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong_da_ban, 3) }} kg</td>
+                                    <td>{{ parseNumber($data->khoi_luong - $data->khoi_luong_da_phan_loai - $data->khoi_luong_da_ban, 3) }}
                                         kg
                                     </td>
                                     <td>{{ $data->kich_thuoc }}</td>
