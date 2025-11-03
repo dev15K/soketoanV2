@@ -95,7 +95,7 @@
 
                 <div class="card-body pt-3">
                    <div class="table-responsive pt-3">
-                        <table class="table table-hover datatable_wrapper vw-100">
+                        <table class="table table-hover datatable_wrapper w-100">
                             <colgroup>
                                 <col width="3%">
                                 <col width="8%">

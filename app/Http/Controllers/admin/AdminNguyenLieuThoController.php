@@ -215,6 +215,7 @@ class AdminNguyenLieuThoController extends Controller
             $soquy->noi_dung = 'Phiếu chi mua hàng cho nguyên liệu thô: #' . $nguyenLieuTho->id . ' - MDH: ' . $nguyenLieuTho->code;
             $soquy->ma_phieu = $code;
             $soquy->loai_quy_id = $new_quy_id;
+            $soquy->loai_noi_nhan = 'ncc';
             $soquy->save();
 
             $loai_quy = LoaiQuy::find($new_quy_id);
@@ -236,6 +237,7 @@ class AdminNguyenLieuThoController extends Controller
                 $soquy->so_tien = $new_thanh_toan;
                 $soquy->ngay = Carbon::now();
                 $soquy->gia_tri_id = $nguyenLieuTho->id;
+                $soquy->loai_noi_nhan = 'ncc';
                 $soquy->noi_dung = 'Phiếu chi mua hàng cho nguyên liệu thô: #' . $nguyenLieuTho->id . ' - MDH: ' . $nguyenLieuTho->code;
                 $soquy->save();
 
@@ -291,6 +293,22 @@ class AdminNguyenLieuThoController extends Controller
 //                ->where('khoi_luong_da_phan_loai', null)
 //                ->orWhere('khoi_luong_da_phan_loai', 0)
                 ->update(['trang_thai' => TrangThaiNguyenLieuTho::DELETED()]);
+
+            $soquy = SoQuy::where('gia_tri_id', $id)->where('loai', 0)->first();
+            if ($soquy) {
+                $loai_quy = LoaiQuy::find($soquy->loai_quy_id);;
+                if ($loai_quy) {
+                    if ($soquy->loai == 1) {
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy - $soquy->so_tien;
+                        $loai_quy->save();
+                    } else {
+                        $loai_quy->tong_tien_quy = $loai_quy->tong_tien_quy + $soquy->so_tien;
+                        $loai_quy->save();
+                    }
+                }
+
+                $soquy->delete();
+            }
 
             if ($success) {
                 return redirect()->back()->with('success', 'Đã xoá nguyên liệu thô thành công');

@@ -54,7 +54,7 @@
                             </div>
                             <div class="col-md-3 form-group">
                                 <div class="form-group">
-                                    <select name="nha_cung_cap_id" id="nha_cung_cap_id_search" class="form-control">
+                                    <select name="nha_cung_cap_id" id="nha_cung_cap_id_search" class="form-control selectCustom">
                                         <option value="">Lựa chọn NCC</option>
                                         @foreach($nccs as $ncc)
                                             <option {{ $ncc->id == $nha_cung_cap_id ? 'selected' : '' }}

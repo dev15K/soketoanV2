@@ -303,7 +303,7 @@
             <div class="card recent-sales overflow-auto">
                 <div class="card-body">
                     <div class="table-responsive pt-3">
-                        <table class="table datatable_wrapper table-hover vw-100">
+                        <table class="table datatable_wrapper table-hover w-100">
                             <colgroup>
                                 <col width="50px">
                                 <col width="100px">
