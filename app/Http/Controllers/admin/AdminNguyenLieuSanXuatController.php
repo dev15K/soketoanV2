@@ -26,7 +26,7 @@ class AdminNguyenLieuSanXuatController extends Controller
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        if (!$keyword && !$start_date && !$end_date) {
+        if (!$keyword && !$phieu_san_xuat_id && !$start_date && !$end_date) {
             $start_date2 = Carbon::now()->startOfMonth()->toDateString();
             $end_date2 = Carbon::now()->endOfMonth()->toDateString();
 

@@ -29,8 +29,8 @@
                 <div class="card-body">
                     <h5 class="card-title"><label for="inlineFormInputGroup">Tìm kiếm</label>
                     </h5>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex justify-content-start align-items-center gap-4 w-100">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="d-flex justify-content-start align-items-center gap-4 col-md-8">
                             <div class="col-md-3 form-group">
                                 <div class="d-flex justify-content-start align-items-center gap-2">
                                     <label for="start_date">Từ ngày: </label>
@@ -54,7 +54,7 @@
                             </div>
                             <div class="col-md-3 form-group">
                                 <div class="form-group">
-                                    <select id="phieu_san_xuat_id" name="phieu_san_xuat_id"
+                                    <select id="phieu_san_xuat_id_search" name="phieu_san_xuat_id_search"
                                             class="form-control selectCustom">
                                         <option value="">Lựa chọn</option>
                                         @foreach($phieu_san_xuats as $phieu_san_xuat)
@@ -84,7 +84,7 @@
                 const start_date = $('#start_date').val();
                 const end_date = $('#end_date').val();
                 const keyword = $('#keyword').val();
-                const so_lo_san_xuat = $('#phieu_san_xuat_id').val();
+                const so_lo_san_xuat = $('#phieu_san_xuat_id_search').val();
                 window.location.href = "{{ route('admin.nguyen.lieu.san.xuat.index') }}?start_date=" + start_date + "&end_date=" + end_date + "&keyword=" + keyword + "&phieu_san_xuat_id=" + so_lo_san_xuat;
             }
 

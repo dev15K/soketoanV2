@@ -268,6 +268,7 @@
                                 <col width="150px">
                                 <col width="150px">
                                 <col width="150px">
+                                <col width="150px">
                                 <col width="200px">
                                 <col width="150px">
                                 <col width="150px">
@@ -288,6 +289,7 @@
                                 <th scope="col">Mã phiếu</th>
                                 <th scope="col">Tên nguyên liệu</th>
                                 <th scope="col">Số LÔ SX</th>
+                                <th scope="col">Nguồn gốc</th>
                                 <th scope="col">Tổng KL(kg)</th>
                                 <th scope="col">KL đã thành phẩm(kg)</th>
                                 <th scope="col">KL tồn(kg)</th>
@@ -343,6 +345,7 @@
                                         <span
                                             class="{{ $data->is_completed ? '' : 'text-danger' }}">{{ $data->so_lo_san_xuat }}</span>
                                     </td>
+                                    <td>{{ $data->get_list_child() }}</td>
                                     <td>{{ parseNumber($data->tong_khoi_luong) }} kg</td>
                                     <td>{{ parseNumber($data->khoi_luong_da_dung) }} kg</td>
                                     <td>{{ parseNumber($data->tong_khoi_luong - $data->khoi_luong_da_dung) }} kg</td>
@@ -361,6 +364,7 @@
                             <tfoot class="bg-primary bg-opacity-10">
                             <tr>
                                 <th scope="col">Tổng:</th>
+                                <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>

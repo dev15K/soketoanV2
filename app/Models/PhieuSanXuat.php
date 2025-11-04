@@ -32,4 +32,21 @@ class PhieuSanXuat extends Model
     {
         return $this->belongsTo(User::class, 'nhan_su_xu_li_id', 'id');
     }
+
+    public function get_list_child(): string
+    {
+        $phieuSanXuatChiTiets = PhieuSanXuatChiTiet::where('phieu_san_xuat_id', $this->id)->get();
+
+        $arr = array();
+
+        foreach ($phieuSanXuatChiTiets as $phieuSanXuatChiTiet) {
+            $tinh = NguyenLieuTinh::find($phieuSanXuatChiTiet->nguyen_lieu_id);
+
+            if ($tinh) {
+                $arr[] = $tinh->code;
+            }
+        }
+
+        return implode(', ', $arr);
+    }
 }
