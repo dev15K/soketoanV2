@@ -181,8 +181,10 @@ class AdminNguyenLieuSanXuatController extends Controller
 //                $don_gia = $tong_tien / $khoi_luong;
 //            }
 
+            $tong_tien = $phieuSanXuat->tong_tien;
+
             $don_gia = 0;
-            $tong_tien = $don_gia * $khoi_luong;
+//            $tong_tien = $don_gia * $khoi_luong;
 
             $nguyenLieuSanXuat->ten_nguyen_lieu = $ten_nguyen_lieu;
             $nguyenLieuSanXuat->don_gia = $don_gia;
@@ -250,8 +252,8 @@ class AdminNguyenLieuSanXuatController extends Controller
             $don_gia = $phieuSanXuat->tong_tien / $tong;
 
             foreach ($nguyenLieuSanXuats as $nguyenLieuSanXuat) {
-                $nguyenLieuSanXuat->don_gia = $don_gia;
-                $nguyenLieuSanXuat->tong_tien = $don_gia * $nguyenLieuSanXuat->khoi_luong;
+                $nguyenLieuSanXuat->don_gia = $phieuSanXuat->tong_tien / $nguyenLieuSanXuat->khoi_luong;
+                $nguyenLieuSanXuat->tong_tien = $phieuSanXuat->tong_tien;
 
                 $nguyenLieuSanXuat->save();
             }
@@ -279,6 +281,22 @@ class AdminNguyenLieuSanXuatController extends Controller
                 $phieuSanXuat = PhieuSanXuat::find($nguyen_lieu_san_xuat->phieu_san_xuat_id);
                 if ($phieuSanXuat) {
                     $phieuSanXuat->khoi_luong_da_dung -= $nguyen_lieu_san_xuat->khoi_luong;
+
+                    if ($phieuSanXuat->is_completed == 1) {
+                        $phieuSanXuat->is_completed = 0;
+
+                        $ngLieus = NguyenLieuSanXuat::where('phieu_san_xuat_id', $phieuSanXuat->id)
+                            ->where('trang_thai', '!=', TrangThaiNguyenLieuSanXuat::DELETED())
+                            ->get();
+
+                        $kl = 0;
+                        foreach ($ngLieus as $ngLieu) {
+                            $kl += $ngLieu->khoi_luong;
+                        }
+
+                        $phieuSanXuat->khoi_luong_da_dung = $kl;
+                    }
+
                     $phieuSanXuat->save();
                 }
             }
