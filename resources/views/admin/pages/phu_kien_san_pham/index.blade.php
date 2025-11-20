@@ -1,14 +1,14 @@
 @extends('admin.layouts.master')
 @section('title')
-    Loại Phụ Kiện
+    Kho Phụ Kiện
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Loại Phụ Kiện</h1>
+        <h1>Kho Phụ Kiện</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Trang quản trị</a></li>
-                <li class="breadcrumb-item active">Loại Phụ Kiện</li>
+                <li class="breadcrumb-item active">Kho Phụ Kiện</li>
             </ol>
         </nav>
     </div>
@@ -29,34 +29,11 @@
 
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">Thêm mới Loại Phụ Kiện</h5>
+                        <h5 class="card-title">Thêm mới Kho Phụ Kiện</h5>
                     </div>
-                    <form method="post" action="{{ route('admin.loai.phu.kien.store') }}">
+                    <form method="post" action="{{ route('admin.loai.quy.store') }}">
                         @csrf
-                        <div class="form-group">
-                            <label for="ten_phu_kien">Tên Loại Phụ Kiện</label>
-                            <input type="text" id="ten_phu_kien" name="ten_phu_kien" class="form-control"
-                                   value="{{ old('ten_phu_kien') }}" required>
-                        </div>
 
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="ma_phu_kien">Mã Phụ Kiện</label>
-                                <input type="text" id="ma_phu_kien" name="ma_phu_kien" class="form-control"
-                                       value="{{ old('ma_phu_kien') }}" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="don_vi_tinh">Đơn vị tính</label>
-                                <input type="text" id="don_vi_tinh" name="don_vi_tinh" class="form-control"
-                                       value="{{ old('don_vi_tinh') }}" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="ten_phu_kien">Mô tả phụ kiện</label>
-                            <textarea name="mo_ta_phu_kien" id="mo_ta_phu_kien" class="form-control"
-                                      rows="10"></textarea>
-                        </div>
 
                         <button type="submit" class="btn btn-primary mt-2">Thêm mới</button>
                     </form>
@@ -104,11 +81,11 @@
                                                            value="{{ $data->id }}"></th>
                                     <td>
                                         <div class="d-flex gap-2 justify-content-center">
-                                            <a href="{{ route('admin.loai.phu.kien.detail', $data->id) }}"
+                                            <a href="{{ route('admin.loai.quy.detail', $data->id) }}"
                                                class="btn btn-primary btn-sm">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                            <form action="{{ route('admin.loai.phu.kien.delete', $data->id) }}"
+                                            <form action="{{ route('admin.loai.quy.delete', $data->id) }}"
                                                   method="post">
                                                 @csrf
                                                 @method('DELETE')
@@ -120,7 +97,7 @@
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</td>
                                     <td>{{ $data->ten_phu_kien }}</td>
-                                    <td>{{ $data->ma_phu_kien }}</td>
+                                    <td>{{ $data->ten_loai_quy }}</td>
                                     <td>{{ $data->don_vi_tinh }}</td>
                                 </tr>
                             @endforeach
