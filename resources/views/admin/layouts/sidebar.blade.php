@@ -76,6 +76,24 @@
         </li><!-- End Attributes Nav -->
 
         <li class="nav-item">
+            <a class="nav-link {{ Request::routeIs('admin.loai.phu.kien.*') ? '' : 'collapsed' }}"
+               data-bs-target="#phukiens-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-menu-up"></i><span>Phụ kiện sản phẩm</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="phukiens-nav"
+                class="nav-content collapse {{ Request::routeIs('admin.loai.phu.kien.*') ? 'show' : '' }}"
+                data-bs-parent="#sidebar-nav">
+                <li>
+                    <a class="{{ Request::routeIs('admin.loai.phu.kien.index') || Request::routeIs('admin.loai.phu.kien.detail') ? 'active' : '' }}"
+                       href="{{ route('admin.loai.phu.kien.index') }}">
+                        <i class="bi bi-circle"></i><span>Danh sách</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Attributes Nav -->
+
+        <li class="nav-item">
             <a class="nav-link {{ Request::routeIs('admin.nha.cung.cap.*') ? '' : 'collapsed' }}"
                data-bs-target="#properties-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-journal-text"></i><span>Quản lí nhà cung cấp</span><i

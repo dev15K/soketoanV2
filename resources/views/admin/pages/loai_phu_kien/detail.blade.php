@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label for="ten_phu_kien">Mô tả phụ kiện</label>
                             <textarea name="mo_ta_phu_kien" id="mo_ta_phu_kien" class="form-control"
-                                      rows="10">{{ $loai_phu_kien->ma_phu_kien }}</textarea>
+                                      rows="10">{{ $loai_phu_kien->mo_ta_phu_kien }}</textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary mt-2">Lưu thay đổi</button>

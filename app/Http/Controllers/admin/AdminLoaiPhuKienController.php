@@ -40,6 +40,21 @@ class AdminLoaiPhuKienController extends Controller
         }
     }
 
+    private function saveData(LoaiPhuKien $loai_phu_kien, Request $request)
+    {
+        $ten_phu_kien = $request->input('ten_phu_kien');
+        $ma_phu_kien = $request->input('ma_phu_kien');
+        $don_vi_tinh = $request->input('don_vi_tinh');
+        $mo_ta_phu_kien = $request->input('mo_ta_phu_kien');
+
+        $loai_phu_kien->ten_phu_kien = $ten_phu_kien;
+        $loai_phu_kien->ma_phu_kien = $ma_phu_kien ?? '';
+        $loai_phu_kien->don_vi_tinh = $don_vi_tinh ?? '';
+        $loai_phu_kien->mo_ta_phu_kien = $mo_ta_phu_kien ?? '';
+
+        return $loai_phu_kien;
+    }
+
     public function store(Request $request)
     {
         try {
@@ -52,21 +67,6 @@ class AdminLoaiPhuKienController extends Controller
         } catch (\Exception $exception) {
             return redirect()->back()->with('error', $exception->getMessage())->withInput();
         }
-    }
-
-    private function saveData(LoaiPhuKien $loai_phu_kien, Request $request)
-    {
-        $ten_phu_kien = $request->input('ten_phu_kien');
-        $ma_phu_kien = $request->input('ma_phu_kien');
-        $don_vi_tinh = $request->input('don_vi_tinh');
-        $mo_ta_phu_kien = $request->input('mo_ta_phu_kien');
-
-        $loai_phu_kien->ten_phu_kien = $ten_phu_kien;
-        $loai_phu_kien->ma_phu_kien = $ma_phu_kien;
-        $loai_phu_kien->don_vi_tinh = $don_vi_tinh;
-        $loai_phu_kien->mo_ta_phu_kien = $mo_ta_phu_kien;
-
-        return $loai_phu_kien;
     }
 
     public function delete($id)
