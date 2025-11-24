@@ -17,6 +17,7 @@ class AdminNguyenLieuSanXuatController extends Controller
 {
     public function index(Request $request)
     {
+
         $ngay_search = $request->input('ngay');
         $keyword = $request->input('keyword');
         $phieu_san_xuat_id = $request->input('phieu_san_xuat_id');
@@ -252,7 +253,7 @@ class AdminNguyenLieuSanXuatController extends Controller
             $don_gia = $phieuSanXuat->tong_tien / $tong;
 
             foreach ($nguyenLieuSanXuats as $nguyenLieuSanXuat) {
-                $nguyenLieuSanXuat->don_gia = $phieuSanXuat->tong_tien / $nguyenLieuSanXuat->khoi_luong;
+                $nguyenLieuSanXuat->don_gia = $don_gia;
                 $nguyenLieuSanXuat->tong_tien = $phieuSanXuat->tong_tien;
 
                 $nguyenLieuSanXuat->save();

@@ -239,6 +239,12 @@
                 let type_submit = num === 1 ? 'save' : 'temp';
                 $('#type_submit').val(type_submit);
 
+                if (num === 1) {
+                    if (!confirm('Bạn chắc chắn muốn hoàn thành phiếu sản xuất?')) {
+                        return false;
+                    }
+                }
+
                 let valid = true;
 
                 $('input[name="ten_nguyen_lieu[]"]').each(function () {
