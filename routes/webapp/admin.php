@@ -14,6 +14,7 @@
 use App\Http\Controllers\admin\AdminBanHangController;
 use App\Http\Controllers\admin\AdminHomeController;
 use App\Http\Controllers\admin\AdminKhachHangController;
+use App\Http\Controllers\admin\AdminKhoPhuKienController;
 use App\Http\Controllers\admin\AdminLoaiPhuKienController;
 use App\Http\Controllers\admin\AdminLoaiQuyController;
 use App\Http\Controllers\admin\AdminNguyenLieuPhanLoaiController;
@@ -189,6 +190,14 @@ Route::group(['prefix' => 'loai-phu-kien'], function () {
     Route::post('/store', [AdminLoaiPhuKienController::class, 'store'])->name('admin.loai.phu.kien.store');
     Route::put('/update/{id}', [AdminLoaiPhuKienController::class, 'update'])->name('admin.loai.phu.kien.update');
     Route::delete('/delete/{id}', [AdminLoaiPhuKienController::class, 'delete'])->name('admin.loai.phu.kien.delete');
+});
+
+Route::group(['prefix' => 'kho-phu-kien'], function () {
+    Route::get('/index', [AdminKhoPhuKienController::class, 'index'])->name('admin.kho.phu.kien.index');
+    Route::get('/detail/{id}', [AdminKhoPhuKienController::class, 'detail'])->name('admin.kho.phu.kien.detail');
+    Route::post('/store', [AdminKhoPhuKienController::class, 'store'])->name('admin.kho.phu.kien.store');
+    Route::put('/update/{id}', [AdminKhoPhuKienController::class, 'update'])->name('admin.kho.phu.kien.update');
+    Route::delete('/delete/{id}', [AdminKhoPhuKienController::class, 'delete'])->name('admin.kho.phu.kien.delete');
 });
 
 Route::group(['prefix' => 'api'], function () {
