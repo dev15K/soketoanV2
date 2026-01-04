@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Models\BanHang;
 use App\Models\BanHangChiTiet;
 use App\Models\KhachHang;
+use App\Models\KhoPhuKien;
+use App\Models\LichSuKhoPhuKien;
 use App\Models\LoaiQuy;
 use App\Models\NguyenLieuPhanLoai;
 use App\Models\NguyenLieuSanXuat;
@@ -165,7 +167,7 @@ class AdminBanHangController extends Controller
                     'tong_tien' => $tongTien,
                 ]);
 
-                if (!$this->capNhatKho($banhang->loai_san_pham, $sanPhamId, $soLuong)) {
+                if (!$this->capNhatKho($banhang->loai_san_pham, $sanPhamId, $soLuong, $ma_don_hang)) {
                     $banhang->delete();
                     DB::rollBack();
                     return back()->with('error', 'Số lượng không đủ!');
@@ -184,7 +186,6 @@ class AdminBanHangController extends Controller
             DB::commit();
             return back()->with('success', 'Thêm mới hóa đơn bán hàng thành công');
         } catch (\Throwable $e) {
-            dd($e);
             DB::rollBack();
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -204,7 +205,7 @@ class AdminBanHangController extends Controller
         return view('admin.pages.ban_hang.create', compact('ma_don_hang', 'khachhangs', 'loai_quies'));
     }
 
-    private function capNhatKho($loaiSanPham, $sanPhamId, $soLuong)
+    private function capNhatKho($loaiSanPham, $sanPhamId, $soLuong, $ma_don_hang = null)
     {
         switch ($loaiSanPham) {
             case LoaiSanPham::NGUYEN_LIEU_THO():
@@ -257,6 +258,17 @@ class AdminBanHangController extends Controller
                     $sanPham = SanPham::find($item->san_pham_id);
                     $sanPham->ton_kho -= $soLuong;
                     $sanPham->save();
+
+                    $khoPhuKiens = KhoPhuKien::where('san_pham_id', $item->san_pham_id)->get();
+                    foreach ($khoPhuKiens as $phuKien) {
+                        $phuKien->so_luong -= $soLuong;
+                        $phuKien->so_luong_da_ban += $soLuong;
+
+                        $ls = new LichSuKhoPhuKien();
+                        $ls->so_luong = $soLuong;
+                        $ls->kho_phu_kien_id = $phuKien->id;
+                        $ls->ghi_chu = 'Bán hàng cho đơn hàng: ' . $ma_don_hang;
+                    }
                     return true;
                 }
                 break;
@@ -283,7 +295,7 @@ class AdminBanHangController extends Controller
                 $sanPhamId = $bh->san_pham_id;
                 $soLuong = $bh->so_luong;
 
-                $this->rollback_item($loaiSanPham, $sanPhamId, $soLuong);
+                $this->rollback_item($loaiSanPham, $sanPhamId, $soLuong, $banhang->ma_don_hang);
 
                 $bh->delete();
             }
@@ -314,7 +326,7 @@ class AdminBanHangController extends Controller
         }
     }
 
-    private function rollback_item($loaiSanPham, $sanPhamId, $soLuong)
+    private function rollback_item($loaiSanPham, $sanPhamId, $soLuong, $ma = null)
     {
         switch ($loaiSanPham) {
             case LoaiSanPham::NGUYEN_LIEU_THO():
@@ -349,6 +361,18 @@ class AdminBanHangController extends Controller
                 $sanPham = SanPham::find($item->san_pham_id);
                 $sanPham->ton_kho += $soLuong;
                 $sanPham->save();
+
+                $khoPhuKiens = KhoPhuKien::where('san_pham_id', $item->san_pham_id)->get();
+                foreach ($khoPhuKiens as $phuKien) {
+                    $phuKien->so_luong += $soLuong;
+                    $phuKien->so_luong_da_ban -= $soLuong;
+
+                    $ghi_chu = 'Bán hàng cho đơn hàng: ' . $ma;
+                    $ls = LichSuKhoPhuKien::where('ghi_chu', $ghi_chu)->where('kho_phu_kien_id', $phuKien->id)->first();
+                    if ($ls) {
+                        $ls->delete();
+                    }
+                }
                 break;
         }
     }
@@ -414,7 +438,7 @@ class AdminBanHangController extends Controller
                 $sanPhamId = $bh->san_pham_id;
                 $soLuong = $bh->so_luong;
 
-                $this->rollback_item($loai_san_pham, $sanPhamId, $soLuong);
+                $this->rollback_item($loai_san_pham, $sanPhamId, $soLuong, $banhang->ma_don_hang);
 
                 $bh->delete();
             }
@@ -433,7 +457,7 @@ class AdminBanHangController extends Controller
                     ['gia_ban' => $giaBan, 'so_luong' => $soLuong, 'tong_tien' => $tongTien, 'discount_amount' => $giamGia]
                 );
 
-                if (!$this->capNhatKho($banhang->loai_san_pham, $sanPhamId, $soLuong)) {
+                if (!$this->capNhatKho($banhang->loai_san_pham, $sanPhamId, $soLuong, $banhang->ma_don_hang)) {
                     $banhang->delete();
                     DB::rollBack();
                     return back()->with('error', 'Số lượng không đủ!');

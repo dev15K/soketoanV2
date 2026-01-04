@@ -31,6 +31,8 @@ class AdminLichSuKhoPhuKienController extends Controller
 
             $kho_phu_kien_id = $request->input('kho_phu_kien_id');
             $so_luong = $request->input('so_luong');
+            $ghi_chu = $request->input('ghi_chu');
+            $created_at = $request->input('created_at');
 
             $kho = KhoPhuKien::find($kho_phu_kien_id);
 
@@ -40,7 +42,8 @@ class AdminLichSuKhoPhuKienController extends Controller
 
             $ls->kho_phu_kien_id = $kho_phu_kien_id;
             $ls->so_luong = $so_luong;
-            $ls->loai_phu_kien_id = $kho->loai_phu_kien_id;
+            $ls->ghi_chu = $ghi_chu;
+            $ls->created_at = $created_at;
             $ls->save();
 
             $kho = KhoPhuKien::find($ls->kho_phu_kien_id);

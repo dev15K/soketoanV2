@@ -37,7 +37,9 @@ class AdminKhoPhuKienController extends Controller
 
         $loaiPhuKiens = LoaiPhuKien::where('deleted_at', null)->orderByDesc('id')->get();
 
-        return view('admin.pages.phu_kien_san_pham.detail', compact('kho', 'products', 'loaiPhuKiens'));
+        $lichSuPhuKien = LichSuKhoPhuKien::where('kho_phu_kien_id', $id)->orderByDesc('id')->get();
+
+        return view('admin.pages.phu_kien_san_pham.detail', compact('kho', 'products', 'loaiPhuKiens', 'lichSuPhuKien'));
     }
 
     public function store(Request $request)
@@ -80,6 +82,35 @@ class AdminKhoPhuKienController extends Controller
         return $created;
     }
 
+    private function save(KhoPhuKien $khoPhuKien, Request $request)
+    {
+        $san_pham_id = $request->input('san_pham_id');
+        $loai_phu_kien_id = $request->input('loai_phu_kien_id');
+        $so_luong = $request->input('so_luong');
+
+        $khoPhuKien->san_pham_id = $san_pham_id;
+        $khoPhuKien->loai_phu_kien_id = $loai_phu_kien_id;
+        $khoPhuKien->so_luong = $so_luong;
+        if (!$khoPhuKien->so_luong_da_ban) $khoPhuKien->so_luong_da_ban = 0;
+
+        return $khoPhuKien;
+    }
+
+    private function updateOrCreateKho(KhoPhuKien $khoPhuKien, Request $request, int $type)
+    {
+        if ($type == 1) {
+            $lishSuKho = new LichSuKhoPhuKien();
+
+            $lishSuKho->kho_phu_kien_id = $khoPhuKien->id;
+            $lishSuKho->so_luong = $khoPhuKien->so_luong;
+            $lishSuKho->ghi_chu = 'Lần đầu tạo phụ kiện cho sản phẩm: ' . $khoPhuKien->sanpham->ten_san_pham;
+            $lishSuKho->save();
+            return $lishSuKho;
+        } else {
+            return false;
+        }
+    }
+
     public function update($id, Request $request)
     {
         try {
@@ -94,34 +125,6 @@ class AdminKhoPhuKienController extends Controller
             return redirect(route('admin.kho.phu.kien.index'))->with('success', 'Chỉnh sửa kho phụ kiện thành công');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage())->withInput();
-        }
-    }
-
-    private function save(KhoPhuKien $khoPhuKien, Request $request)
-    {
-        $san_pham_id = $request->input('san_pham_id');
-        $loai_phu_kien_id = $request->input('loai_phu_kien_id');
-        $so_luong = $request->input('so_luong');
-
-        $khoPhuKien->san_pham_id = $san_pham_id;
-        $khoPhuKien->loai_phu_kien_id = $loai_phu_kien_id;
-        $khoPhuKien->so_luong = $so_luong;
-
-        return $khoPhuKien;
-    }
-
-    private function updateOrCreateKho(KhoPhuKien $khoPhuKien, Request $request, int $type)
-    {
-        if ($type == 1) {
-            $lishSuKho = new LichSuKhoPhuKien();
-
-            $lishSuKho->kho_phu_kien_id = $khoPhuKien->id;
-            $lishSuKho->loai_phu_kien_id = $khoPhuKien->loai_phu_kien_id;
-            $lishSuKho->so_luong = $khoPhuKien->so_luong;
-            $lishSuKho->save();
-            return $lishSuKho;
-        } else {
-            return false;
         }
     }
 
