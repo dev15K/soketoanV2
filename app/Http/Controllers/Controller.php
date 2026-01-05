@@ -49,9 +49,11 @@ class Controller extends BaseController
             ->get();
 
         $ton_dau = get_ton_dau($start_date, $end_date);
-        $ton_cuoi = get_ton_cuoi($start_date, $end_date);
+
         $thu = get_thu($start_date, $end_date);
         $chi = get_chi($start_date, $end_date);
+
+        $ton_cuoi = $ton_dau + $thu - $chi;
 
         $ma_phieu = $this->generateCode();
 

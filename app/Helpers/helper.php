@@ -248,15 +248,22 @@ if (!function_exists('formatNumber')) {
 if (!function_exists('get_ton_dau')) {
     function get_data_so_quy($start_date, $end_date)
     {
-        return SoQuy::where('deleted_at', null)
-            ->when($start_date, function ($query) use ($start_date) {
-                return $query->whereDate('created_at', '>=', $start_date);
-            })
-            ->when($end_date, function ($query) use ($end_date) {
-                return $query->whereDate('created_at', '<=', $end_date);
-            })
-            ->orderByDesc('id')
-            ->get();
+        $q = SoQuy::where('deleted_at', null);
+
+        if ($start_date) {
+            $q->whereDate('created_at', '>=', $start_date);
+        } else {
+            $q->whereDate('created_at', '>=', date('Y-m-d'));
+        }
+
+        if ($end_date) {
+            $q->whereDate('created_at', '<=', $end_date);
+        } else {
+            $q->whereDate('created_at', '<=', date('Y-m-d'));
+        }
+
+        $datas = $q->orderByDesc('id')->get();
+        return $datas;
     }
 
     function get_ton_dau($start_date, $end_date): ?string
